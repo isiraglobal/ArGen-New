@@ -1,16 +1,21 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>ArGen — AI Performance Evaluation</title>
-  <meta name="description" content="ArGen measures real AI output quality across your team in 48 hours. No courses. No theory. Just a clear score and a report your leadership can act on.">
+  <meta name="description"
+    content="ArGen measures real AI output quality across your team in 48 hours. No courses. No theory. Just a clear score and a report your leadership can act on.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="icon" type="image/png" href="ArGen Logo.png">
   <link href="https://fonts.googleapis.com/css2?family=VT323&family=Roboto+Mono:wght@300;400;500;600;700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
 </head>
+
 <body>
+  <canvas id="particleCanvas" class="particle-canvas"></canvas>
 
   <!-- BOOT LOADER -->
   <div id="loader" class="loader">
@@ -18,7 +23,9 @@
       <div class="loader-lines" id="loaderLines"></div>
       <div class="loader-bar-wrap">
         <span class="loader-label">LOADING ARGEN_SYS</span>
-        <div class="loader-bar"><div class="loader-fill" id="loaderFill"></div></div>
+        <div class="loader-bar">
+          <div class="loader-fill" id="loaderFill"></div>
+        </div>
         <span class="loader-pct" id="loaderPct">0%</span>
       </div>
     </div>
@@ -35,7 +42,9 @@
   <!-- NAV -->
   <header id="nav" class="nav">
     <div class="nav-inner">
-      <a href="#hero" class="nav-logo">ArGen<span class="blink">_</span></a>
+      <a href="#hero" class="nav-logo">
+        <img src="ArGen Logo.png" alt="ArGen" class="logo-img">
+      </a>
       <nav class="nav-links">
         <a href="#how" class="nav-link">How_It_Works</a>
         <a href="#pricing" class="nav-link">Pricing</a>
@@ -76,11 +85,14 @@
         <a href="#how" class="btn btn-ghost">See How It Works →</a>
       </div>
       <div class="hero-stats reveal">
-        <div class="stat"><span class="stat-num" data-count="48">0</span><span class="stat-label">hrs delivery</span></div>
+        <div class="stat"><span class="stat-num" data-count="48">0</span><span class="stat-label">hrs delivery</span>
+        </div>
         <div class="stat-sep">|</div>
-        <div class="stat"><span class="stat-num" data-count="4">0</span><span class="stat-label">scoring dimensions</span></div>
+        <div class="stat"><span class="stat-num" data-count="4">0</span><span class="stat-label">scoring
+            dimensions</span></div>
         <div class="stat-sep">|</div>
-        <div class="stat"><span class="stat-num" data-count="5">0</span><span class="stat-label">real challenges</span></div>
+        <div class="stat"><span class="stat-num" data-count="5">0</span><span class="stat-label">real challenges</span>
+        </div>
       </div>
     </div>
     <div class="scroll-indicator">
@@ -98,17 +110,20 @@
         <div class="card card-cream reveal-card">
           <span class="card-num">01</span>
           <h3 class="card-h3">You deployed<br>AI tools</h3>
-          <p class="card-p">Licenses bought. Workshops done. Everyone has ChatGPT, Copilot, Claude access. The investment is real.</p>
+          <p class="card-p">Licenses bought. Workshops done. Everyone has ChatGPT, Copilot, Claude access. The
+            investment is real.</p>
         </div>
         <div class="card card-cream reveal-card">
           <span class="card-num">02</span>
           <h3 class="card-h3">Usage looks<br>good</h3>
-          <p class="card-p">Dashboards show logins. People say they're using it. Engagement metrics look healthy on paper.</p>
+          <p class="card-p">Dashboards show logins. People say they're using it. Engagement metrics look healthy on
+            paper.</p>
         </div>
         <div class="card card-cream reveal-card">
           <span class="card-num">03</span>
           <h3 class="card-h3">But can you<br>prove ROI?</h3>
-          <p class="card-p">When the board asks "is AI actually making us better?"—you don't have a number. ArGen gives you one.</p>
+          <p class="card-p">When the board asks "is AI actually making us better?"—you don't have a number. ArGen gives
+            you one.</p>
         </div>
       </div>
     </div>
@@ -127,9 +142,11 @@
           <div class="step-content">
             <span class="step-tag">&gt; challenge.deploy()</span>
             <h3 class="step-h3">Your team gets 5 real business challenges</h3>
-            <p class="step-p">Not quizzes. Not tutorials. Real tasks that mirror actual work — strategy docs, data analysis, client communications. Delivered via email, completed in their own time.</p>
+            <p class="step-p">Not quizzes. Not tutorials. Real tasks that mirror actual work — strategy docs, data
+              analysis, client communications. Delivered via email, completed in their own time.</p>
             <div class="step-terminal">
-              <div class="term-bar"><span class="term-dot"></span><span class="term-dot"></span><span class="term-dot"></span></div>
+              <div class="term-bar"><span class="term-dot"></span><span class="term-dot"></span><span
+                  class="term-dot"></span></div>
               <code>$ argen send --team="marketing" --challenges=5<br>✓ Challenges deployed to 5 recipients<br>✓ Deadline set: 48hrs</code>
             </div>
           </div>
@@ -139,9 +156,11 @@
           <div class="step-content">
             <span class="step-tag">&gt; response.collect()</span>
             <h3 class="step-h3">They submit AI-assisted responses</h3>
-            <p class="step-p">Each person uses whatever AI tools they prefer. The output is what matters — not which tool they used. We capture the thinking process, not just the result.</p>
+            <p class="step-p">Each person uses whatever AI tools they prefer. The output is what matters — not which
+              tool they used. We capture the thinking process, not just the result.</p>
             <div class="step-terminal">
-              <div class="term-bar"><span class="term-dot"></span><span class="term-dot"></span><span class="term-dot"></span></div>
+              <div class="term-bar"><span class="term-dot"></span><span class="term-dot"></span><span
+                  class="term-dot"></span></div>
               <code>$ argen status --team="marketing"<br>■■■■■■■■░░ 4/5 responses received<br>⏱ 23hrs remaining</code>
             </div>
           </div>
@@ -151,9 +170,11 @@
           <div class="step-content">
             <span class="step-tag">&gt; claude.score()</span>
             <h3 class="step-h3">Claude scores each on 4 dimensions</h3>
-            <p class="step-p">Clarity. Constraint Application. Critical Thinking. Communication. Each dimension scored 0-25. No human bias. No subjectivity. Consistent, reproducible evaluation.</p>
+            <p class="step-p">Clarity. Constraint Application. Critical Thinking. Communication. Each dimension scored
+              0-25. No human bias. No subjectivity. Consistent, reproducible evaluation.</p>
             <div class="step-terminal">
-              <div class="term-bar"><span class="term-dot"></span><span class="term-dot"></span><span class="term-dot"></span></div>
+              <div class="term-bar"><span class="term-dot"></span><span class="term-dot"></span><span
+                  class="term-dot"></span></div>
               <code>$ argen evaluate --model="claude-3.5"<br>Processing responses... ████████████ 100%<br>✓ 4 dimensions × 5 challenges × 5 people<br>✓ 100 data points generated</code>
             </div>
           </div>
@@ -163,9 +184,11 @@
           <div class="step-content">
             <span class="step-tag">&gt; report.generate()</span>
             <h3 class="step-h3">You get a full report in 48 hours</h3>
-            <p class="step-p">Individual scores. Team averages. Weakest dimensions highlighted. Actionable recommendations. A document your C-suite can actually use to make decisions.</p>
+            <p class="step-p">Individual scores. Team averages. Weakest dimensions highlighted. Actionable
+              recommendations. A document your C-suite can actually use to make decisions.</p>
             <div class="step-terminal">
-              <div class="term-bar"><span class="term-dot"></span><span class="term-dot"></span><span class="term-dot"></span></div>
+              <div class="term-bar"><span class="term-dot"></span><span class="term-dot"></span><span
+                  class="term-dot"></span></div>
               <code>$ argen report --format="pdf,notion"<br>✓ Team avg: 72/100<br>✓ Weakest: Constraint Application (14/25)<br>✓ Report delivered to admin@company.com</code>
             </div>
           </div>
@@ -199,7 +222,8 @@
   <section id="challenges" class="section section-black">
     <div class="container">
       <span class="section-tag reveal">[CHALLENGE_BANK]</span>
-      <h2 class="section-h2 reveal">5 Challenges<span class="green">.</span> 4 Dimensions<span class="green">.</span><br>1 Clear Answer<span class="green">.</span></h2>
+      <h2 class="section-h2 reveal">5 Challenges<span class="green">.</span> 4 Dimensions<span
+          class="green">.</span><br>1 Clear Answer<span class="green">.</span></h2>
       <div class="accordion" id="accordion">
         <div class="acc-item reveal">
           <button class="acc-trigger" aria-expanded="false">
@@ -210,7 +234,8 @@
           <div class="acc-panel">
             <div class="acc-grid">
               <div><strong>Tests:</strong> Strategic thinking + AI prompt engineering</div>
-              <div><strong>Example:</strong> "You are a marketing manager. Use AI to draft a go-to-market plan for a new SaaS feature launch in 48 hours. Show your process."</div>
+              <div><strong>Example:</strong> "You are a marketing manager. Use AI to draft a go-to-market plan for a new
+                SaaS feature launch in 48 hours. Show your process."</div>
               <div><strong>Why:</strong> Separates copy-pasters from strategic thinkers.</div>
             </div>
           </div>
@@ -224,7 +249,8 @@
           <div class="acc-panel">
             <div class="acc-grid">
               <div><strong>Tests:</strong> Data interpretation + AI-assisted insight extraction</div>
-              <div><strong>Example:</strong> "Given this dataset of 6 months of sales data, use AI to identify the top 3 actionable insights and present them to a VP."</div>
+              <div><strong>Example:</strong> "Given this dataset of 6 months of sales data, use AI to identify the top 3
+                actionable insights and present them to a VP."</div>
               <div><strong>Why:</strong> Reveals who can turn data into decisions vs. who gets generic summaries.</div>
             </div>
           </div>
@@ -238,7 +264,8 @@
           <div class="acc-panel">
             <div class="acc-grid">
               <div><strong>Tests:</strong> Professional writing + AI editing workflows</div>
-              <div><strong>Example:</strong> "Draft a client-facing project update email for a delayed deliverable. Use AI to refine tone and structure."</div>
+              <div><strong>Example:</strong> "Draft a client-facing project update email for a delayed deliverable. Use
+                AI to refine tone and structure."</div>
               <div><strong>Why:</strong> Tests real-world communication under constraint.</div>
             </div>
           </div>
@@ -252,7 +279,8 @@
           <div class="acc-panel">
             <div class="acc-grid">
               <div><strong>Tests:</strong> Lateral thinking + iterative AI prompting</div>
-              <div><strong>Example:</strong> "Your company needs to cut costs by 15% without layoffs. Use AI to generate and evaluate 5 options with trade-off analysis."</div>
+              <div><strong>Example:</strong> "Your company needs to cut costs by 15% without layoffs. Use AI to generate
+                and evaluate 5 options with trade-off analysis."</div>
               <div><strong>Why:</strong> Shows who uses AI as a thinking partner vs. an answer machine.</div>
             </div>
           </div>
@@ -266,7 +294,8 @@
           <div class="acc-panel">
             <div class="acc-grid">
               <div><strong>Tests:</strong> Implementation skill + AI code/automation leverage</div>
-              <div><strong>Example:</strong> "Automate a weekly report that pulls from 3 data sources. Show your AI-assisted workflow and final output."</div>
+              <div><strong>Example:</strong> "Automate a weekly report that pulls from 3 data sources. Show your
+                AI-assisted workflow and final output."</div>
               <div><strong>Why:</strong> Measures practical AI application, not theoretical knowledge.</div>
             </div>
           </div>
@@ -279,31 +308,36 @@
   <section id="scoring" class="section section-cream">
     <div class="container">
       <span class="section-tag reveal">[SCORING_RUBRIC]</span>
-      <h2 class="section-h2 reveal">Transparent scoring<span class="green">.</span><br>No black boxes<span class="green">.</span></h2>
+      <h2 class="section-h2 reveal">Transparent scoring<span class="green">.</span><br>No black boxes<span
+          class="green">.</span></h2>
       <div class="card-grid card-grid-4">
         <div class="card card-cream reveal-card">
           <span class="card-num">C1</span>
           <h3 class="card-h3">Clarity</h3>
           <p class="card-score">0 — 25 pts</p>
-          <p class="card-p">Is the output clear, structured, and immediately actionable? A 20/25 reads like a polished brief. A 10/25 needs significant rework.</p>
+          <p class="card-p">Is the output clear, structured, and immediately actionable? A 20/25 reads like a polished
+            brief. A 10/25 needs significant rework.</p>
         </div>
         <div class="card card-cream reveal-card">
           <span class="card-num">C2</span>
           <h3 class="card-h3">Constraint<br>Application</h3>
           <p class="card-score">0 — 25 pts</p>
-          <p class="card-p">Did they follow the brief's constraints? High scorers nail scope, format, and audience. Low scorers ignore half the requirements.</p>
+          <p class="card-p">Did they follow the brief's constraints? High scorers nail scope, format, and audience. Low
+            scorers ignore half the requirements.</p>
         </div>
         <div class="card card-cream reveal-card">
           <span class="card-num">C3</span>
           <h3 class="card-h3">Critical<br>Thinking</h3>
           <p class="card-score">0 — 25 pts</p>
-          <p class="card-p">Does the response show original analysis or just AI regurgitation? Top scorers challenge AI output and add judgment layers.</p>
+          <p class="card-p">Does the response show original analysis or just AI regurgitation? Top scorers challenge AI
+            output and add judgment layers.</p>
         </div>
         <div class="card card-cream reveal-card">
           <span class="card-num">C4</span>
           <h3 class="card-h3">Communication</h3>
           <p class="card-score">0 — 25 pts</p>
-          <p class="card-p">Is it audience-appropriate? Does it persuade? Best responses adapt tone and structure for the specific stakeholder.</p>
+          <p class="card-p">Is it audience-appropriate? Does it persuade? Best responses adapt tone and structure for
+            the specific stakeholder.</p>
         </div>
       </div>
     </div>
@@ -313,7 +347,8 @@
   <section id="pricing" class="section section-black">
     <div class="container">
       <span class="section-tag reveal">[PRICING_TABLE]</span>
-      <h2 class="section-h2 reveal">Simple pricing<span class="green">.</span><br>No contracts<span class="green">.</span></h2>
+      <h2 class="section-h2 reveal">Simple pricing<span class="green">.</span><br>No contracts<span
+          class="green">.</span></h2>
       <p class="section-sub reveal">Start free. Scale when ready.</p>
       <div class="pricing-grid">
         <div class="price-card reveal-card">
@@ -373,28 +408,51 @@
       <h2 class="section-h2 reveal">Frequently asked<span class="green">.</span></h2>
       <div class="accordion" id="faqAccordion">
         <div class="acc-item acc-item-cream reveal">
-          <button class="acc-trigger" aria-expanded="false"><span class="acc-title">How long does the evaluation take?</span><span class="acc-plus">+</span></button>
-          <div class="acc-panel"><p>48 hours from when your team submits all responses. Most teams complete challenges within 24 hours of receiving them.</p></div>
+          <button class="acc-trigger" aria-expanded="false"><span class="acc-title">How long does the evaluation
+              take?</span><span class="acc-plus">+</span></button>
+          <div class="acc-panel">
+            <p>48 hours from when your team submits all responses. Most teams complete challenges within 24 hours of
+              receiving them.</p>
+          </div>
         </div>
         <div class="acc-item acc-item-cream reveal">
-          <button class="acc-trigger" aria-expanded="false"><span class="acc-title">Can we customize challenges?</span><span class="acc-plus">+</span></button>
-          <div class="acc-panel"><p>On Team Intelligence and Enterprise plans, yes. We tailor challenges to your industry, roles, and specific AI tools deployed.</p></div>
+          <button class="acc-trigger" aria-expanded="false"><span class="acc-title">Can we customize
+              challenges?</span><span class="acc-plus">+</span></button>
+          <div class="acc-panel">
+            <p>On Team Intelligence and Enterprise plans, yes. We tailor challenges to your industry, roles, and
+              specific AI tools deployed.</p>
+          </div>
         </div>
         <div class="acc-item acc-item-cream reveal">
-          <button class="acc-trigger" aria-expanded="false"><span class="acc-title">Is AI scoring reliable?</span><span class="acc-plus">+</span></button>
-          <div class="acc-panel"><p>Claude's scoring has shown 94% correlation with expert human evaluators across our benchmark dataset. We publish our methodology openly.</p></div>
+          <button class="acc-trigger" aria-expanded="false"><span class="acc-title">Is AI scoring reliable?</span><span
+              class="acc-plus">+</span></button>
+          <div class="acc-panel">
+            <p>Claude's scoring has shown 94% correlation with expert human evaluators across our benchmark dataset. We
+              publish our methodology openly.</p>
+          </div>
         </div>
         <div class="acc-item acc-item-cream reveal">
-          <button class="acc-trigger" aria-expanded="false"><span class="acc-title">What if we disagree with a score?</span><span class="acc-plus">+</span></button>
-          <div class="acc-panel"><p>Every score comes with detailed reasoning. If you disagree, we offer a manual review on paid plans at no extra charge.</p></div>
+          <button class="acc-trigger" aria-expanded="false"><span class="acc-title">What if we disagree with a
+              score?</span><span class="acc-plus">+</span></button>
+          <div class="acc-panel">
+            <p>Every score comes with detailed reasoning. If you disagree, we offer a manual review on paid plans at no
+              extra charge.</p>
+          </div>
         </div>
         <div class="acc-item acc-item-cream reveal">
-          <button class="acc-trigger" aria-expanded="false"><span class="acc-title">Do you offer refunds?</span><span class="acc-plus">+</span></button>
-          <div class="acc-panel"><p>If the report doesn't deliver actionable insights, we'll refund 100% of the fee. No questions asked.</p></div>
+          <button class="acc-trigger" aria-expanded="false"><span class="acc-title">Do you offer refunds?</span><span
+              class="acc-plus">+</span></button>
+          <div class="acc-panel">
+            <p>If the report doesn't deliver actionable insights, we'll refund 100% of the fee. No questions asked.</p>
+          </div>
         </div>
         <div class="acc-item acc-item-cream reveal">
-          <button class="acc-trigger" aria-expanded="false"><span class="acc-title">Can we run this internally?</span><span class="acc-plus">+</span></button>
-          <div class="acc-panel"><p>You could. But building the challenge bank, scoring rubric, and benchmark data took us 6 months. ArGen gets you there in 48 hours.</p></div>
+          <button class="acc-trigger" aria-expanded="false"><span class="acc-title">Can we run this
+              internally?</span><span class="acc-plus">+</span></button>
+          <div class="acc-panel">
+            <p>You could. But building the challenge bank, scoring rubric, and benchmark data took us 6 months. ArGen
+              gets you there in 48 hours.</p>
+          </div>
         </div>
       </div>
     </div>
@@ -427,14 +485,37 @@
   </section>
 
   <!-- ═══════════ FINAL CTA ═══════════ -->
-  <section id="cta-final" class="section section-green">
+  <section id="cta-final" class="section section-cta">
     <div class="container container-narrow cta-center">
       <span class="section-tag reveal">[EXECUTE]</span>
-      <h2 class="cta-h2 reveal">Find out if your team<br>is actually using AI well<span style="color:#000">.</span></h2>
+      <h2 class="cta-h2 reveal">Find out if your team<br>is actually using AI well<span class="green">.</span></h2>
       <p class="cta-sub reveal">Free pilot. 5 people. 48 hours. Real answers.</p>
-      <a href="https://tally.so" target="_blank" class="btn btn-dark btn-lg reveal">Start Your Free Pilot →</a>
+      <a href="https://tally.so/r/VL9D0M" target="_blank" class="btn btn-primary btn-lg reveal">Start Your Free Pilot →</a>
     </div>
   </section>
+
+  <!-- ═══════════ FLOATING AI BAR ═══════════ -->
+  <div class="ai-bar-container">
+    <div id="aiBarResponse" class="ai-bar-response">
+      <div class="ai-response-content" id="aiResponseContent"></div>
+      <button class="ai-response-close" id="aiBarClose">✕</button>
+    </div>
+    <div class="ai-bar-glass">
+      <div class="ai-bar-input-wrap">
+        <svg class="ai-mic-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z"></path>
+          <path d="M19 10v2a7 7 0 0 1-14 0v-2"></path>
+          <line x1="12" x2="12" y1="19" y2="22"></line>
+        </svg>
+        <input type="text" id="aiBarInput" class="ai-bar-input" placeholder="TAP AND ASK AI" autocomplete="off">
+      </div>
+      <button id="aiBarSubmit" class="ai-bar-submit" aria-label="Ask AI">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+        </svg>
+      </button>
+    </div>
+  </div>
 
   <!-- ═══════════ FOOTER ═══════════ -->
   <footer class="footer">
@@ -475,4 +556,5 @@
   <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.7/dist/ScrollTrigger.min.js"></script>
   <script src="script.js"></script>
 </body>
+
 </html>

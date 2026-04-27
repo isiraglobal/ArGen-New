@@ -1,0 +1,825 @@
+Create a complete Next.js 14 website design system for ArGen — AI Performance Intelligence platform.
+
+═══════════════════════════════════════════════════════════════
+BRAND IDENTITY & PHILOSOPHY
+═══════════════════════════════════════════════════════════════
+
+Brand Personality: Technical sophistication meets premium minimalism. Command-line aesthetic with modern polish. Data-driven confidence. B2B SaaS authority.
+
+Target Audience: CEOs, CTOs, COOs, Founders of 30-300 person companies who deployed AI tools and need to prove ROI.
+
+Visual Tone: Bold. Clean. Technical. Premium. Slightly brutalist. High-contrast. Developer-friendly aesthetic that executives trust.
+
+═══════════════════════════════════════════════════════════════
+COLOR SYSTEM (EXACT SPECIFICATIONS)
+═══════════════════════════════════════════════════════════════
+
+PRIMARY BRAND COLORS:
+--argen-blue: #4A6EE0          /* Logo blue - primary brand color */
+--argen-cream: #F5F3ED         /* Logo cream - secondary brand color */
+--pure-black: #000000          /* Pure black for dark sections */
+--pure-white: #FFFFFF          /* Pure white for cards/highlights */
+
+ACCENT COLORS (Use sparingly):
+--emerald-cta: #22C55E         /* ONLY for CTA buttons and success states */
+--emerald-hover: #16A34A       /* Emerald button hover state */
+--purple-accent: #7C3AED       /* AI/tech accents, particles, gradients */
+--purple-dark: #6D28D9         /* Purple hover states */
+--cyan-accent: #06B6D4         /* Links, highlights, icons */
+--cyan-dark: #0891B2           /* Cyan hover states */
+--gold-premium: #F59E0B        /* Premium badges, enterprise tier only */
+
+TEXT COLORS:
+--text-dark: #1F2937           /* Primary text on light backgrounds */
+--text-medium: #4B5563         /* Secondary text on light backgrounds */
+--text-light: #9CA3AF          /* Tertiary text, captions */
+--text-on-dark: #F5F3ED        /* Text on black backgrounds (cream) */
+--text-on-dark-secondary: rgba(245,243,237,0.7)  /* Secondary text on dark */
+
+BACKGROUND COLORS:
+--bg-light: #F5F3ED            /* Light sections (cream) */
+--bg-white: #FFFFFF            /* Cards on light sections */
+--bg-dark: #000000             /* Hero, footer, dark sections (black) */
+--bg-dark-elevated: #1F2937    /* Cards on dark backgrounds */
+--bg-dark-subtle: #111827      /* Subtle dark variation */
+
+BORDER COLORS:
+--border-light: #E5E7EB        /* Borders on light backgrounds */
+--border-dark: rgba(255,255,255,0.1)  /* Borders on dark backgrounds */
+--border-accent: #4A6EE0       /* Blue accent borders (hover states) */
+--border-purple: #7C3AED       /* Purple accent borders */
+
+PARTICLE/EFFECT COLORS:
+--particle-blue: #4A6EE0       /* 60% of particles */
+--particle-purple: #7C3AED     /* 25% of particles */
+--particle-cyan: #06B6D4       /* 15% of particles */
+
+GRADIENT DEFINITIONS:
+--gradient-hero: linear-gradient(135deg, #000000 0%, #1F2937 100%)
+--gradient-cta: linear-gradient(135deg, #22C55E 0%, #16A34A 100%)
+--gradient-blue-purple: linear-gradient(135deg, #4A6EE0 0%, #7C3AED 100%)
+--gradient-accent: linear-gradient(135deg, #06B6D4 0%, #7C3AED 100%)
+--gradient-dark-subtle: linear-gradient(180deg, #000000 0%, #1F2937 100%)
+
+═══════════════════════════════════════════════════════════════
+TYPOGRAPHY SYSTEM
+═══════════════════════════════════════════════════════════════
+
+FONT FAMILIES:
+Primary: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif
+Monospace: 'Roboto Mono', 'Fira Code', 'Courier New', monospace
+Display: 'Space Grotesk', 'Inter', sans-serif (for hero headings)
+
+FONT SIZES & HIERARCHY:
+--text-xs: 12px / 0.75rem      /* Fine print, captions */
+--text-sm: 14px / 0.875rem     /* Small body text, labels */
+--text-base: 16px / 1rem       /* Base body text */
+--text-lg: 18px / 1.125rem     /* Large body, subheadings */
+--text-xl: 20px / 1.25rem      /* Section subheads */
+--text-2xl: 24px / 1.5rem      /* Card headings */
+--text-3xl: 30px / 1.875rem    /* Section headings */
+--text-4xl: 36px / 2.25rem     /* Page headings */
+--text-5xl: 48px / 3rem        /* Hero headings (desktop) */
+--text-6xl: 60px / 3.75rem     /* Hero headings (large screens) */
+--text-7xl: 72px / 4.5rem      /* Massive hero text (optional) */
+
+FONT WEIGHTS:
+--font-light: 300              /* Rarely used */
+--font-normal: 400             /* Body text */
+--font-medium: 500             /* Emphasis, UI elements */
+--font-semibold: 600           /* Subheadings, button text */
+--font-bold: 700               /* Headings */
+--font-extrabold: 800          /* Hero headings, logo */
+--font-black: 900              /* Rarely used, max impact */
+
+LINE HEIGHTS:
+--leading-tight: 1.2           /* Headings, hero text */
+--leading-snug: 1.375          /* Subheadings */
+--leading-normal: 1.5          /* Body text */
+--leading-relaxed: 1.625       /* Large body text, readability */
+--leading-loose: 2             /* Rarely used */
+
+LETTER SPACING:
+--tracking-tighter: -0.05em    /* Hero headings */
+--tracking-tight: -0.025em     /* Large headings */
+--tracking-normal: 0           /* Body text */
+--tracking-wide: 0.025em       /* Labels, small caps */
+--tracking-wider: 0.05em       /* Buttons (uppercase) */
+
+TYPOGRAPHY USAGE RULES:
+Hero Headlines (H1): 
+  font-family: 'Space Grotesk' or 'Inter'
+  font-size: 48px - 72px (responsive)
+  font-weight: 700-800
+  line-height: 1.2
+  letter-spacing: -0.025em
+  color: #F5F3ED (on dark) or #1F2937 (on light)
+
+Section Headlines (H2):
+  font-family: 'Inter'
+  font-size: 36px - 48px
+  font-weight: 700
+  line-height: 1.3
+  color: #4A6EE0 (blue) or #1F2937 (dark)
+
+Subsection Headlines (H3):
+  font-size: 24px - 30px
+  font-weight: 600
+  line-height: 1.4
+  color: #1F2937
+
+Body Text:
+  font-family: 'Inter'
+  font-size: 16px - 18px
+  font-weight: 400
+  line-height: 1.6
+  color: #4B5563 (on light) or #F5F3ED (on dark)
+
+Code/Terminal Text:
+  font-family: 'Roboto Mono'
+  font-size: 14px - 16px
+  background: #1F2937
+  color: #22C55E
+  padding: 2px 6px
+  border-radius: 4px
+
+═══════════════════════════════════════════════════════════════
+SPACING & LAYOUT SYSTEM
+═══════════════════════════════════════════════════════════════
+
+SPACING SCALE (Tailwind-compatible):
+--space-1: 4px / 0.25rem
+--space-2: 8px / 0.5rem
+--space-3: 12px / 0.75rem
+--space-4: 16px / 1rem
+--space-5: 20px / 1.25rem
+--space-6: 24px / 1.5rem
+--space-8: 32px / 2rem
+--space-10: 40px / 2.5rem
+--space-12: 48px / 3rem
+--space-16: 64px / 4rem
+--space-20: 80px / 5rem
+--space-24: 96px / 6rem
+--space-32: 128px / 8rem
+--space-40: 160px / 10rem
+
+SECTION PADDING:
+Desktop: 120px vertical (space-32 top + space-32 bottom)
+Tablet: 80px vertical (space-20 top + space-20 bottom)
+Mobile: 60px vertical (space-16 top + space-16 bottom)
+
+CONTAINER WIDTHS:
+--container-sm: 640px         /* Small content blocks */
+--container-md: 768px         /* Medium content */
+--container-lg: 1024px        /* Standard content width */
+--container-xl: 1280px        /* Wide content, main container */
+--container-2xl: 1536px       /* Maximum width for very wide screens */
+
+GRID GAPS:
+--gap-sm: 16px               /* Tight grid spacing */
+--gap-md: 24px               /* Standard grid spacing */
+--gap-lg: 32px               /* Generous grid spacing */
+--gap-xl: 48px               /* Wide grid spacing */
+
+COMPONENT PADDING:
+Cards: 40px (desktop), 24px (mobile)
+Buttons: 16px vertical, 32px horizontal
+Input fields: 12px vertical, 16px horizontal
+Navbar: 24px vertical, 32px horizontal
+
+═══════════════════════════════════════════════════════════════
+COMPONENT STYLING
+═══════════════════════════════════════════════════════════════
+
+BUTTONS:
+
+Primary CTA (Emerald):
+  background: linear-gradient(135deg, #22C55E 0%, #16A34A 100%)
+  color: #FFFFFF
+  font-weight: 600
+  font-size: 16px
+  padding: 16px 32px
+  border-radius: 8px
+  border: none
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1)
+  box-shadow: 0 4px 12px rgba(34, 197, 94, 0.25)
+  
+  hover:
+    transform: translateY(-2px) scale(1.02)
+    box-shadow: 0 8px 24px rgba(34, 197, 94, 0.35)
+  
+  active:
+    transform: translateY(0) scale(0.98)
+
+Secondary (Blue Outline):
+  background: transparent
+  color: #4A6EE0
+  font-weight: 600
+  padding: 16px 32px
+  border: 2px solid #4A6EE0
+  border-radius: 8px
+  transition: all 0.3s ease
+  
+  hover:
+    background: #4A6EE0
+    color: #FFFFFF
+    box-shadow: 0 4px 12px rgba(74, 110, 224, 0.25)
+
+Ghost/Text Button:
+  background: transparent
+  color: #F5F3ED (on dark) or #4A6EE0 (on light)
+  font-weight: 500
+  padding: 12px 24px
+  border: none
+  text-decoration: underline
+  text-decoration-thickness: 2px
+  text-underline-offset: 4px
+  
+  hover:
+    color: #22C55E
+    text-decoration-color: #22C55E
+
+Small Button:
+  padding: 12px 24px
+  font-size: 14px
+  border-radius: 6px
+
+Large Button:
+  padding: 20px 40px
+  font-size: 18px
+  border-radius: 10px
+
+CARDS:
+
+Standard Card (Light Background):
+  background: #FFFFFF
+  border: 2px solid transparent
+  border-radius: 16px
+  padding: 40px
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06)
+  transition: all 0.3s ease
+  
+  hover:
+    border-color: #4A6EE0
+    box-shadow: 0 12px 32px rgba(74, 110, 224, 0.15)
+    transform: translateY(-4px)
+
+Brutalist Card (Pricing Tiers):
+  background: #FFFFFF
+  border: 3px solid #000000
+  border-radius: 0 (sharp corners)
+  padding: 40px
+  box-shadow: 8px 8px 0 rgba(0, 0, 0, 0.1)
+  transition: all 0.3s ease
+  
+  hover:
+    box-shadow: 12px 12px 0 rgba(74, 110, 224, 0.3)
+    transform: translate(-2px, -2px)
+
+Glassmorphic Card (Stats/Data):
+  background: rgba(255, 255, 255, 0.8)
+  backdrop-filter: blur(12px)
+  border: 1px solid rgba(255, 255, 255, 0.2)
+  border-radius: 20px
+  padding: 32px
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1)
+
+Dark Card (on dark backgrounds):
+  background: #1F2937
+  border: 1px solid rgba(255, 255, 255, 0.1)
+  border-radius: 16px
+  padding: 40px
+  
+  hover:
+    border-color: #7C3AED
+    box-shadow: 0 8px 24px rgba(124, 58, 237, 0.2)
+
+NAVIGATION:
+
+Navbar:
+  position: fixed
+  top: 0
+  width: 100%
+  height: 80px
+  background: rgba(0, 0, 0, 0.8) (default)
+  backdrop-filter: blur(12px)
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1)
+  padding: 0 32px
+  z-index: 1000
+  
+  scrolled state:
+    background: rgba(0, 0, 0, 0.95)
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3)
+
+Logo in Navbar:
+  "Ar" = #4A6EE0 (blue)
+  "Gen" = #F5F3ED (cream)
+  font-size: 24px
+  font-weight: 800
+
+Nav Links:
+  color: #F5F3ED
+  font-size: 16px
+  font-weight: 500
+  padding: 8px 16px
+  transition: color 0.2s ease
+  
+  hover:
+    color: #22C55E
+
+FORMS:
+
+Input Fields:
+  background: #FFFFFF (on light) or #1F2937 (on dark)
+  border: 2px solid #E5E7EB
+  border-radius: 8px
+  padding: 12px 16px
+  font-size: 16px
+  color: #1F2937
+  transition: border-color 0.2s ease
+  
+  focus:
+    border-color: #4A6EE0
+    outline: none
+    box-shadow: 0 0 0 3px rgba(74, 110, 224, 0.1)
+  
+  error:
+    border-color: #EF4444
+  
+  success:
+    border-color: #22C55E
+
+Textarea:
+  Same as input, but:
+    min-height: 120px
+    resize: vertical
+
+Select Dropdown:
+  Same as input, with:
+    background-image: chevron-down icon
+    background-position: right 12px center
+    padding-right: 40px
+
+ACCORDION:
+
+Accordion Item:
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1) (dark) or #E5E7EB (light)
+  padding: 24px 0
+  
+Accordion Header:
+  display: flex
+  justify-content: space-between
+  align-items: center
+  cursor: pointer
+  font-size: 20px
+  font-weight: 600
+  color: #F5F3ED (dark) or #1F2937 (light)
+  
+  hover:
+    color: #4A6EE0
+
+Accordion Icon:
+  width: 24px
+  height: 24px
+  transition: transform 0.3s ease
+  
+  expanded:
+    transform: rotate(180deg)
+
+Accordion Content:
+  padding-top: 16px
+  font-size: 16px
+  line-height: 1.6
+  color: rgba(245, 243, 237, 0.8) (dark) or #4B5563 (light)
+
+═══════════════════════════════════════════════════════════════
+EFFECTS & ANIMATIONS
+═══════════════════════════════════════════════════════════════
+
+TRANSITIONS:
+Default: all 0.3s cubic-bezier(0.4, 0, 0.2, 1)
+Fast: all 0.15s ease
+Slow: all 0.5s ease
+Bounce: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55)
+
+SHADOWS:
+--shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05)
+--shadow-md: 0 4px 12px rgba(0, 0, 0, 0.08)
+--shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.12)
+--shadow-xl: 0 12px 32px rgba(0, 0, 0, 0.15)
+--shadow-2xl: 0 24px 48px rgba(0, 0, 0, 0.2)
+
+GLOW EFFECTS:
+Blue glow: 0 0 20px rgba(74, 110, 224, 0.4)
+Purple glow: 0 0 20px rgba(124, 58, 237, 0.4)
+Emerald glow: 0 0 20px rgba(34, 197, 94, 0.4)
+
+HOVER TRANSFORMS:
+Cards: translateY(-4px)
+Buttons: translateY(-2px) scale(1.02)
+Icons: scale(1.1) rotate(5deg)
+
+LOADING ANIMATIONS:
+Spinner: 
+  border: 3px solid rgba(74, 110, 224, 0.2)
+  border-top: 3px solid #4A6EE0
+  animation: spin 0.8s linear infinite
+
+Skeleton:
+  background: linear-gradient(90deg, #E5E7EB 25%, #F3F4F6 50%, #E5E7EB 75%)
+  animation: shimmer 1.5s infinite
+
+Pulse:
+  animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite
+  @keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.5; }
+  }
+
+═══════════════════════════════════════════════════════════════
+PAGE SECTION PATTERNS
+═══════════════════════════════════════════════════════════════
+
+HERO SECTION (Homepage):
+  background: #000000 with particle animation
+  padding: 160px 0 120px (to account for fixed navbar)
+  text-align: center
+  
+  headline:
+    color: #F5F3ED
+    font-size: 60px (desktop), 36px (mobile)
+    font-weight: 700
+    line-height: 1.2
+    max-width: 900px
+    margin: 0 auto 24px
+  
+  subheadline:
+    color: rgba(245, 243, 237, 0.7)
+    font-size: 20px
+    max-width: 700px
+    margin: 0 auto 40px
+  
+  CTA button:
+    emerald gradient
+    large size (20px 40px padding)
+
+ALTERNATING SECTIONS:
+Pattern: Dark → Light → Dark → Light
+
+Light Section:
+  background: #F5F3ED (cream)
+  padding: 120px 0
+  
+  headings: #4A6EE0 (blue) or #1F2937 (dark)
+  body text: #4B5563 (medium gray)
+  cards: #FFFFFF background
+
+Dark Section:
+  background: #000000 or gradient(#000000 → #1F2937)
+  padding: 120px 0
+  
+  headings: #F5F3ED (cream) or #4A6EE0 (blue)
+  body text: rgba(245, 243, 237, 0.8)
+  cards: #1F2937 background
+
+PRICING SECTION:
+  background: #F5F3ED
+  4-column grid (stack on mobile)
+  
+  Featured tier (Team Intelligence):
+    border: 3px solid #F59E0B (gold)
+    box-shadow: 0 8px 32px rgba(245, 158, 11, 0.2)
+    "Most Popular" badge in gold
+
+FAQ SECTION:
+  background: #000000
+  accordion component
+  purple accent on active items
+
+FOOTER:
+  background: #000000
+  border-top: 1px solid rgba(255, 255, 255, 0.1)
+  padding: 60px 0 40px
+  
+  logo: same as navbar
+  links: #F5F3ED, hover #22C55E
+  copyright: rgba(245, 243, 237, 0.5)
+
+═══════════════════════════════════════════════════════════════
+PARTICLE HERO ANIMATION SPECS
+═══════════════════════════════════════════════════════════════
+
+Particle Count: 800-1000
+Particle Colors: 
+  60% #4A6EE0 (blue)
+  25% #7C3AED (purple)
+  15% #06B6D4 (cyan)
+Particle Size: 2-4px
+Particle Opacity: 0.6-0.9
+
+Physics:
+  Cursor repulsion radius: 60-80px
+  Repulsion strength: 0.5
+  Drift speed: 0.3-0.8 px/frame
+  Brownian motion: enabled
+
+Wave Animation:
+  Amplitude: 80px
+  Wavelength: 400px
+  Speed: 0.02
+  Direction: left to right
+
+Text Formation:
+  Font: 'Space Grotesk' bold
+  Text: "Is your team actually using AI—or just going through the motions?"
+  Particle arrangement: letters formed by particle positions
+  "ArGen" colors: blue + cream particles
+  Emergence timing: 6-8 seconds after load
+
+Cursor Interaction:
+  Repulsion: particles push away within radius
+  Return: smooth elastic ease back to position
+  Scatter on headline hover: particles briefly disperse then reform
+
+═══════════════════════════════════════════════════════════════
+LOADING SCREEN ANIMATION
+═══════════════════════════════════════════════════════════════
+
+Timeline:
+0.0s → Black screen, "ArGen" logo fades in
+1.0s → Logo fully visible, hold
+2.0s → "Gen" letters begin fading (opacity 100% → 0%)
+2.5s → "Gen" fully transparent
+3.0s → "A" morphs to ">" chevron shape
+3.0s → "r" morphs to "_" underscore
+3.5s → Transform complete: ">_" cursor visible
+4.0s → Underscore begins blinking (0.5s on, 0.5s off)
+4.0s+ → Loading loop continues until app ready
+
+Colors:
+  ">" chevron: #4A6EE0 (blue)
+  "_" underscore: #F5F3ED (cream)
+  Background: #000000 (black)
+
+Effects:
+  Subtle blue glow on chevron: 0 0 12px rgba(74, 110, 224, 0.3)
+  Cursor blink: linear steps animation
+
+Optional:
+  Loading text below: "Initializing AI engine..." in Roboto Mono, #F5F3ED, 14px
+
+═══════════════════════════════════════════════════════════════
+CHATBOT WIDGET STYLING
+═══════════════════════════════════════════════════════════════
+
+Widget Button (Closed State):
+  position: fixed
+  bottom: 24px
+  right: 24px
+  width: 64px
+  height: 64px
+  border-radius: 50%
+  background: linear-gradient(135deg, #22C55E, #06B6D4)
+  box-shadow: 0 8px 24px rgba(34, 197, 94, 0.3)
+  cursor: pointer
+  z-index: 999
+  
+  animation: pulse 2s infinite
+  
+  icon: white sparkle/chat icon, 28px
+
+Widget Panel (Open State):
+  position: fixed
+  bottom: 24px
+  right: 24px
+  width: 400px (desktop), 100vw (mobile)
+  height: 600px (desktop), 80vh (mobile)
+  background: #FFFFFF
+  border-radius: 16px (desktop), 16px 16px 0 0 (mobile)
+  box-shadow: 0 12px 48px rgba(0, 0, 0, 0.2)
+  z-index: 999
+  
+  animation: slideUp 0.3s ease
+
+Header:
+  background: linear-gradient(135deg, #4A6EE0, #7C3AED)
+  color: #FFFFFF
+  padding: 20px 24px
+  border-radius: 16px 16px 0 0
+  
+  title: "ArGen Assistant" in Inter semibold, 18px
+  close button: white X icon, top-right
+
+Chat Messages Area:
+  background: #F5F3ED
+  padding: 24px
+  height: calc(100% - 140px)
+  overflow-y: auto
+
+User Message Bubble:
+  background: #FFFFFF
+  color: #1F2937
+  padding: 12px 16px
+  border-radius: 16px 16px 4px 16px
+  margin-left: auto
+  max-width: 80%
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05)
+
+Bot Message Bubble:
+  background: linear-gradient(135deg, #4A6EE0, #7C3AED)
+  color: #FFFFFF
+  padding: 12px 16px
+  border-radius: 16px 16px 16px 4px
+  max-width: 80%
+
+Suggested Action Buttons:
+  background: transparent
+  border: 2px solid #4A6EE0
+  color: #4A6EE0
+  padding: 8px 16px
+  border-radius: 20px
+  font-size: 14px
+  margin: 4px
+  
+  hover:
+    background: #4A6EE0
+    color: #FFFFFF
+
+Input Area:
+  position: absolute
+  bottom: 0
+  width: 100%
+  background: #FFFFFF
+  border-top: 1px solid #E5E7EB
+  padding: 16px 24px
+  
+  input field:
+    background: #F5F3ED
+    border: none
+    padding: 12px 16px
+    border-radius: 24px
+    width: calc(100% - 60px)
+  
+  send button:
+    background: linear-gradient(135deg, #22C55E, #16A34A)
+    color: #FFFFFF
+    width: 40px
+    height: 40px
+    border-radius: 50%
+    border: none
+
+Typing Indicator:
+  3 dots bouncing animation
+  color: rgba(74, 110, 224, 0.6)
+
+═══════════════════════════════════════════════════════════════
+RESPONSIVE BREAKPOINTS
+═══════════════════════════════════════════════════════════════
+
+Mobile: 0px - 640px
+  - Single column layouts
+  - Font sizes reduced by ~25%
+  - Section padding: 60px 0
+  - Container padding: 16px sides
+  - Cards stack vertically
+  - Navbar collapses to hamburger menu
+
+Tablet: 641px - 1024px
+  - 2-column grids where appropriate
+  - Font sizes reduced by ~15%
+  - Section padding: 80px 0
+  - Container padding: 24px sides
+
+Desktop: 1025px - 1536px
+  - Full 3-4 column grids
+  - Standard font sizes
+  - Section padding: 120px 0
+  - Container: 1280px max-width
+
+Large Desktop: 1537px+
+  - Container: 1536px max-width
+  - Extra horizontal spacing
+
+Mobile-Specific Adjustments:
+  Hero headline: 36px (vs 60px desktop)
+  Hero padding: 100px 0 60px (vs 160px 0 120px)
+  Card padding: 24px (vs 40px desktop)
+  Button padding: 14px 24px (vs 16px 32px)
+  Grid gap: 16px (vs 32px desktop)
+
+═══════════════════════════════════════════════════════════════
+ACCESSIBILITY REQUIREMENTS
+═══════════════════════════════════════════════════════════════
+
+Color Contrast:
+  All text must meet WCAG AA standards (4.5:1 minimum)
+  Large text (18px+) must meet 3:1 minimum
+  Interactive elements: 3:1 minimum
+
+Focus States:
+  All interactive elements must have visible focus ring
+  Focus ring: 2px solid #4A6EE0, 2px offset
+  Never remove outline without replacement
+
+Keyboard Navigation:
+  Tab order follows logical reading order
+  All interactive elements accessible via keyboard
+  Skip to content link for screen readers
+
+Alt Text:
+  All images require descriptive alt text
+  Decorative images: alt=""
+  Logo: alt="ArGen - AI Performance Intelligence"
+
+ARIA Labels:
+  Buttons: descriptive labels
+  Forms: proper label associations
+  Navigation: role="navigation"
+  Main content: role="main"
+
+Motion:
+  Respect prefers-reduced-motion
+  Disable particles and animations if user prefers reduced motion
+  Critical content never relies on animation
+
+═══════════════════════════════════════════════════════════════
+TAILWIND CONFIG SNIPPET
+═══════════════════════════════════════════════════════════════
+
+module.exports = {
+  theme: {
+    extend: {
+      colors: {
+        argen: {
+          blue: '#4A6EE0',
+          cream: '#F5F3ED',
+          emerald: '#22C55E',
+          'emerald-dark': '#16A34A',
+          purple: '#7C3AED',
+          'purple-dark': '#6D28D9',
+          cyan: '#06B6D4',
+          'cyan-dark': '#0891B2',
+          gold: '#F59E0B',
+        },
+        dark: {
+          DEFAULT: '#000000',
+          elevated: '#1F2937',
+          subtle: '#111827',
+        }
+      },
+      fontFamily: {
+        sans: ['Inter', 'system-ui', 'sans-serif'],
+        mono: ['Roboto Mono', 'Fira Code', 'monospace'],
+        display: ['Space Grotesk', 'Inter', 'sans-serif'],
+      },
+      fontSize: {
+        'hero': ['60px', { lineHeight: '1.2', letterSpacing: '-0.025em' }],
+        'hero-mobile': ['36px', { lineHeight: '1.2' }],
+      },
+      boxShadow: {
+        'glow-blue': '0 0 20px rgba(74, 110, 224, 0.4)',
+        'glow-purple': '0 0 20px rgba(124, 58, 237, 0.4)',
+        'glow-emerald': '0 0 20px rgba(34, 197, 94, 0.4)',
+      },
+      animation: {
+        'pulse-slow': 'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+        'shimmer': 'shimmer 1.5s infinite',
+      },
+    },
+  },
+}
+
+═══════════════════════════════════════════════════════════════
+IMPLEMENTATION PRIORITY
+═══════════════════════════════════════════════════════════════
+
+Phase 1 (Week 1):
+✓ Color system implementation
+✓ Typography system
+✓ Button components
+✓ Card components
+✓ Navbar component
+✓ Hero section with particle animation
+✓ Loading screen animation
+
+Phase 2 (Week 2):
+✓ All page layouts (Home, How It Works, Pricing)
+✓ Responsive breakpoints
+✓ Form components
+✓ Accordion component
+✓ Footer
+
+Phase 3 (Week 3):
+✓ Chatbot widget
+✓ Dashboard layout
+✓ Animation polish
+✓ Accessibility audit
+✓ Performance optimization
+
+═══════════════════════════════════════════════════════════════
+END OF DESIGN SYSTEM SPECIFICATION
+═══════════════════════════════════════════════════════════════
+
+This is the complete, production-ready design system for ArGen.
+Every color, spacing, component, and animation is specified.
+Implement exactly as documented for consistent, premium results.
