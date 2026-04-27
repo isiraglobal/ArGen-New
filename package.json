@@ -1,0 +1,21 @@
+{
+  "name": "argen-new",
+  "version": "1.0.0",
+  "description": "ArGen — AI Performance Evaluation",
+  "main": "index.html",
+  "scripts": {
+    "dev": "npx http-server -p 3000",
+    "build": "echo 'No build step needed for static HTML'",
+    "lint": "echo 'No linter configured'"
+  },
+  "keywords": [
+    "argen",
+    "ai",
+    "evaluation"
+  ],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@vercel/analytics": "^2.0.1"
+  }
+}
