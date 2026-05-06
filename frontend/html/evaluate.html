@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Evaluate — ArGen</title>
+  <link rel="icon" type="image/png" href="../images/ArGen Logo.png">
+  <link href="https://fonts.googleapis.com/css2?family=VT323&family=Roboto+Mono:wght@300;400;500;600;700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+  <div class="scanlines"></div>
+  <div class="noise-overlay"></div>
+  <div id="cursor" class="cursor-dot"></div>
+  <div id="cursorRing" class="cursor-ring"></div>
+
+  <header id="nav" class="nav nav-center">
+    <div class="nav-inner">
+      <a href="index.html" class="nav-logo">
+        <img src="../images/ArGen Logo.png" alt="ArGen" class="logo-img">
+      </a>
+      <nav class="nav-links">
+        <a href="index.html#how" class="nav-link">How_It_Works</a>
+        <a href="pricing.html" class="nav-link">Pricing</a>
+        <a href="about.html" class="nav-link">About</a>
+        <a href="blog.html" class="nav-link">Blog</a>
+      </nav>
+      <a href="evaluate.html" class="nav-cta">Run_Pilot →</a>
+      <button class="nav-burger" id="burger" aria-label="Menu">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </header>
+
+  <div id="mobileMenu" class="mobile-menu">
+    <a href="index.html#how" class="mm-link">01 // How_It_Works</a>
+    <a href="pricing.html" class="mm-link">02 // Pricing</a>
+    <a href="about.html" class="mm-link">03 // About</a>
+    <a href="blog.html" class="mm-link">04 // Blog</a>
+    <a href="evaluate.html" class="mm-link mm-cta">→ Run_Free_Pilot</a>
+  </div>
+
+  <section class="section section-cream" style="padding-top: calc(var(--nav-h) + 80px); min-height: 100vh;">
+    <div class="container container-narrow">
+      <span class="section-tag">[START_HERE]</span>
+      <h1 class="section-h2" style="font-size: 3rem;">Start Your Free Pilot</h1>
+      <p class="section-sub" style="margin-bottom: 2rem;"><strong>See what your team's AI performance actually looks like—no risk, no cost.</strong> In 48 hours, you'll have a report that shows exactly where your AI investment is working and where it's not.</p>
+      
+      <div style="background: var(--charcoal); padding: 1.5rem; border-radius: 12px; margin-bottom: 2rem; color: var(--white);">
+        <h3 style="margin-bottom: 0.5rem;">What happens next:</h3>
+        <ol style="margin: 1rem 0; padding-left: 1.5rem;">
+          <li><strong>24 hours:</strong> We send your 5 chosen people an email with challenges</li>
+          <li><strong>24 hours:</strong> They complete challenges using their normal AI tools (ChatGPT, Claude, Copilot, etc.)</li>
+          <li><strong>48 hours:</strong> You get a PDF report with individual + team scores across 4 dimensions</li>
+          <li><strong>Immediately:</strong> You can see who your AI champions are and where training would unlock value</li>
+        </ol>
+      </div>
+      
+      <div style="border: 1px solid var(--border-light); background: var(--white); padding: 2rem; border-radius: 8px;">
+        <iframe src="https://tally.so/r/VL9D0M" width="100%" height="600" frameborder="0" marginheight="0" marginwidth="0" title="ArGen Pilot Signup"></iframe>
+      </div>
+
+      <div style="margin-top: 3rem; padding-top: 2rem; border-top: 1px solid var(--border-dark);">
+        <h3 style="margin-bottom: 1rem;">Why teams choose ArGen for their pilot:</h3>
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.5rem;">
+          <div>
+            <h4 style="color: var(--green); margin-bottom: 0.5rem;">✓ No Training Required</h4>
+            <p>Your team just does their normal work with AI. No special setup.</p>
+          </div>
+          <div>
+            <h4 style="color: var(--green); margin-bottom: 0.5rem;">✓ Real-World Challenges</h4>
+            <p>Not generic quizzes. Challenges that mirror actual work your team does.</p>
+          </div>
+          <div>
+            <h4 style="color: var(--green); margin-bottom: 0.5rem;">✓ Objective Scoring</h4>
+            <p>AI evaluates consistency. No human bias. No politics.</p>
+          </div>
+          <div>
+            <h4 style="color: var(--green); margin-bottom: 0.5rem;">✓ Actionable Report</h4>
+            <p>Not just scores—recommendations for where to train, hire, and optimize.</p>
+          </div>
+          <div>
+            <h4 style="color: var(--green); margin-bottom: 0.5rem;">✓ Board Ready</h4>
+            <p>Show stakeholders concrete data on your AI capability vs. competition.</p>
+          </div>
+          <div>
+            <h4 style="color: var(--green); margin-bottom: 0.5rem;">✓ Risk Free</h4>
+            <p>Completely free. No credit card. No obligation to upgrade.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="ai-bar-container">
+    <div id="aiBarResponse" class="ai-bar-response">
+      <div class="ai-response-content" id="aiResponseContent"></div>
+      <button class="ai-response-close" id="aiBarClose">✕</button>
+    </div>
+    <div class="ai-bar-glass">
+      <div class="ai-bar-input-wrap">
+        <svg class="ai-mic-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z"></path>
+          <path d="M19 10v2a7 7 0 0 1-14 0v-2"></path>
+          <line x1="12" x2="12" y1="19" y2="22"></line>
+        </svg>
+        <input type="text" id="aiBarInput" class="ai-bar-input" placeholder="TAP AND ASK AI" autocomplete="off">
+      </div>
+      <button id="aiBarSubmit" class="ai-bar-submit" aria-label="Ask AI">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+        </svg>
+      </button>
+    </div>
+  </div>
+
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-col">
+          <span class="footer-label">ArGen_</span>
+          <p class="footer-desc">AI performance evaluation for teams that want proof, not promises.</p>
+        </div>
+        <div class="footer-col">
+          <span class="footer-label">Links</span>
+          <a href="index.html#how" class="footer-link">How It Works</a>
+          <a href="pricing.html" class="footer-link">Pricing</a>
+          <a href="about.html" class="footer-link">About</a>
+          <a href="blog.html" class="footer-link">Blog</a>
+        </div>
+        <div class="footer-col">
+          <span class="footer-label">Connect</span>
+          <a href="contact.html" class="footer-link">Contact</a>
+          <a href="mailto:isiraglobal@gmail.com" class="footer-link">isiraglobal@gmail.com</a>
+          <a href="#" class="footer-link">LinkedIn</a>
+          <a href="#" class="footer-link">Twitter/X</a>
+        </div>
+        <div class="footer-col">
+          <span class="footer-label">Legal</span>
+          <a href="privacy.html" class="footer-link">Privacy Policy</a>
+          <a href="terms.html" class="footer-link">Terms of Service</a>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <span>© 2026 ArGen. All rights reserved.</span>
+        <span class="footer-made">Built with obsession<span class="blink">_</span></span>
+      </div>
+    </div>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/lenis@1.1.18/dist/lenis.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.7/dist/dist/gsap.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.7/dist/ScrollTrigger.min.js"></script>
+  <script src="../js/script.js"></script>
+</body>
+</html>

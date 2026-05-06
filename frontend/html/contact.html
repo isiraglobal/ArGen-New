@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Contact — ArGen</title>
+  <link rel="icon" type="image/png" href="../images/ArGen Logo.png">
+  <link href="https://fonts.googleapis.com/css2?family=VT323&family=Roboto+Mono:wght@300;400;500;600;700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+  <div class="scanlines"></div>
+  <div class="noise-overlay"></div>
+  <div id="cursor" class="cursor-dot"></div>
+  <div id="cursorRing" class="cursor-ring"></div>
+
+  <header id="nav" class="nav nav-center">
+    <div class="nav-inner">
+      <a href="index.html" class="nav-logo">
+        <img src="../images/ArGen Logo.png" alt="ArGen" class="logo-img">
+      </a>
+      <nav class="nav-links">
+        <a href="index.html#how" class="nav-link">How_It_Works</a>
+        <a href="pricing.html" class="nav-link">Pricing</a>
+        <a href="about.html" class="nav-link">About</a>
+        <a href="blog.html" class="nav-link">Blog</a>
+      </nav>
+      <a href="evaluate.html" class="nav-cta">Run_Pilot →</a>
+      <button class="nav-burger" id="burger" aria-label="Menu">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </header>
+
+  <div id="mobileMenu" class="mobile-menu">
+    <a href="index.html#how" class="mm-link">01 // How_It_Works</a>
+    <a href="pricing.html" class="mm-link">02 // Pricing</a>
+    <a href="about.html" class="mm-link">03 // About</a>
+    <a href="blog.html" class="mm-link">04 // Blog</a>
+    <a href="evaluate.html" class="mm-link mm-cta">→ Run_Free_Pilot</a>
+  </div>
+
+  <section class="section section-cream" style="padding-top: calc(var(--nav-h) + 80px); min-height: 100vh;">
+    <div class="container">
+      <div class="contact-grid" style="display: grid; grid-template-columns: 1fr 1.2fr; gap: 4rem; align-items: start;">
+        <div class="contact-info">
+          <span class="section-tag">[CONTACT]</span>
+          <h1 class="section-h2" style="font-size: 3.5rem;">Get in touch</h1>
+          <p class="section-sub" style="margin-bottom: 3rem;">Ready to measure your team's AI potential? Have questions about our methodology? Reach out.</p>
+          
+          <div class="contact-methods" style="display: flex; flex-direction: column; gap: 2rem;">
+            <div class="method card" style="padding: 1.5rem; background: var(--charcoal); border-color: var(--border-light);">
+              <span class="stat-label" style="color: var(--argen-blue);">EMAIL_DIRECT</span>
+              <a href="mailto:isiraglobal@gmail.com" class="card-h3" style="display: block; margin-top: 0.5rem; font-size: 1.2rem; color: var(--white);">isiraglobal@gmail.com</a>
+            </div>
+            <div class="method card" style="padding: 1.5rem; background: var(--charcoal); border-color: var(--border-light);">
+              <span class="stat-label" style="color: var(--purple-accent);">SOCIAL_CHANNELS</span>
+              <div style="display: flex; gap: 1.5rem; margin-top: 1rem;">
+                <a href="#" class="footer-link" style="font-family: var(--font-mono);">LinkedIn</a>
+                <a href="#" class="footer-link" style="font-family: var(--font-mono);">Twitter/X</a>
+                <a href="#" class="footer-link" style="font-family: var(--font-mono);">GitHub</a>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="contact-form-wrap card reveal-card" style="padding: 3rem; background: var(--white); border-color: var(--argen-blue);">
+          <h3 class="card-h3" style="color: var(--black); margin-bottom: 2rem; font-family: var(--font-display); font-size: 2rem;">Message System</h3>
+          <form id="contactForm" style="display: flex; flex-direction: column; gap: 1.5rem;">
+            <div class="form-group">
+              <label style="display: block; font-family: var(--font-mono); font-size: 0.75rem; color: var(--text-sec-dark); margin-bottom: 0.5rem;">NAME_INPUT</label>
+              <input type="text" placeholder="Your Name" required style="width: 100%; padding: 12px; border: 1px solid var(--border-dark); border-radius: 4px; font-family: var(--font-body);">
+            </div>
+            <div class="form-group">
+              <label style="display: block; font-family: var(--font-mono); font-size: 0.75rem; color: var(--text-sec-dark); margin-bottom: 0.5rem;">EMAIL_INPUT</label>
+              <input type="email" placeholder="work@company.com" required style="width: 100%; padding: 12px; border: 1px solid var(--border-dark); border-radius: 4px; font-family: var(--font-body);">
+            </div>
+            <div class="form-group">
+              <label style="display: block; font-family: var(--font-mono); font-size: 0.75rem; color: var(--text-sec-dark); margin-bottom: 0.5rem;">SUBJECT_SELECT</label>
+              <select style="width: 100%; padding: 12px; border: 1px solid var(--border-dark); border-radius: 4px; font-family: var(--font-body); background: var(--white);">
+                <option>General Inquiry</option>
+                <option>Enterprise Demo</option>
+                <option>Partnership</option>
+                <option>Support</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label style="display: block; font-family: var(--font-mono); font-size: 0.75rem; color: var(--text-sec-dark); margin-bottom: 0.5rem;">MESSAGE_BODY</label>
+              <textarea placeholder="Tell us about your team..." rows="4" style="width: 100%; padding: 12px; border: 1px solid var(--border-dark); border-radius: 4px; font-family: var(--font-body); resize: none;"></textarea>
+            </div>
+            <button type="submit" class="btn btn-primary btn-full" style="margin-top: 1rem;">Transmit Message</button>
+          </form>
+        </div>
+      </div>
+
+      <!-- Calendly Section -->
+      <div class="calendly-section reveal" style="margin-top: 8rem; text-align: center;">
+        <span class="section-tag">[SCHEDULER]</span>
+        <h2 class="section-h2">Book a 15-Min Briefing</h2>
+        <p class="section-sub" style="max-width: 600px; margin: 0 auto 3rem;">Prefer a quick chat? Pick a time that works for you and we'll walk you through the ArGen process live.</p>
+        <div class="card" style="height: 600px; border: 2px dashed var(--border-dark); background: rgba(0,0,0,0.02); display: flex; align-items: center; justify-content: center;">
+          <div style="text-align: center;">
+            <p style="color: var(--text-sec-dark); margin-bottom: 1.5rem;">Calendly Widget Integration Point</p>
+            <button class="btn btn-dark">Open Scheduler</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="ai-bar-container">
+    <div id="aiBarResponse" class="ai-bar-response">
+      <div class="ai-response-content" id="aiResponseContent"></div>
+      <button class="ai-response-close" id="aiBarClose">✕</button>
+    </div>
+    <div class="ai-bar-glass">
+      <div class="ai-bar-input-wrap">
+        <svg class="ai-mic-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z"></path>
+          <path d="M19 10v2a7 7 0 0 1-14 0v-2"></path>
+          <line x1="12" x2="12" y1="19" y2="22"></line>
+        </svg>
+        <input type="text" id="aiBarInput" class="ai-bar-input" placeholder="TAP AND ASK AI" autocomplete="off">
+      </div>
+      <button id="aiBarSubmit" class="ai-bar-submit" aria-label="Ask AI">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+        </svg>
+      </button>
+    </div>
+  </div>
+
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-col">
+          <span class="footer-label">ArGen_</span>
+          <p class="footer-desc">AI performance evaluation for teams that want proof, not promises.</p>
+        </div>
+        <div class="footer-col">
+          <span class="footer-label">Links</span>
+          <a href="index.html#how" class="footer-link">How It Works</a>
+          <a href="pricing.html" class="footer-link">Pricing</a>
+          <a href="about.html" class="footer-link">About</a>
+          <a href="blog.html" class="footer-link">Blog</a>
+        </div>
+        <div class="footer-col">
+          <span class="footer-label">Connect</span>
+          <a href="contact.html" class="footer-link">Contact</a>
+          <a href="mailto:isiraglobal@gmail.com" class="footer-link">isiraglobal@gmail.com</a>
+          <a href="#" class="footer-link">LinkedIn</a>
+          <a href="#" class="footer-link">Twitter/X</a>
+        </div>
+        <div class="footer-col">
+          <span class="footer-label">Legal</span>
+          <a href="privacy.html" class="footer-link">Privacy Policy</a>
+          <a href="terms.html" class="footer-link">Terms of Service</a>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <span>© 2026 ArGen. All rights reserved.</span>
+        <span class="footer-made">Built with obsession<span class="blink">_</span></span>
+      </div>
+    </div>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/lenis@1.1.18/dist/lenis.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.7/dist/gsap.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.7/dist/ScrollTrigger.min.js"></script>
+  <script src="../js/script.js"></script>
+</body>
+</html>

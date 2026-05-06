@@ -1,0 +1,380 @@
+{
+  "project": {
+    "name": "ArGen - New Look",
+    "description": "AI performance measurement & intelligence platform",
+    "created": "2026-05-03",
+    "version": "1.0",
+    "totalTokensBudget": 43400,
+    "totalTokensUsed": 0
+  },
+  "phases": [
+    {
+      "id": "phase_1",
+      "name": "Essential Pages (Priority 1)",
+      "status": "completed",
+      "progress": "100%",
+      "tokensBudget": 13600,
+      "tokensUsed": 3450,
+      "tasks": [
+        {
+          "id": "1.1",
+          "name": "Home Page",
+          "route": "/",
+          "status": "completed",
+          "subtasksCompleted": 8,
+          "subtasksTotal": 8,
+          "tokensBudget": 2500,
+          "tokensUsed": 800,
+          "dependencies": [],
+          "lastCheckpoint": {
+            "number": "1.1.0",
+            "timestamp": "2026-05-03T00:00:00Z",
+            "status": "task_created",
+            "description": "Task created"
+          },
+          "subtasks": [
+            {
+              "id": "1.1.1",
+              "text": "Create HTML structure with semantic markup",
+              "completed": false
+            },
+            {
+              "id": "1.1.2",
+              "text": "Add hero section with headline & subheading",
+              "completed": false
+            },
+            {
+              "id": "1.1.3",
+              "text": "Implement 'How It Works' section (3-step visual)",
+              "completed": false
+            },
+            {
+              "id": "1.1.4",
+              "text": "Add social proof section with placeholder metrics",
+              "completed": false
+            },
+            {
+              "id": "1.1.5",
+              "text": "Create CTAs (Primary: 'Run Free Pilot', Secondary: 'Book Demo')",
+              "completed": false
+            },
+            {
+              "id": "1.1.6",
+              "text": "Link to /evaluate route",
+              "completed": false
+            },
+            {
+              "id": "1.1.7",
+              "text": "Add basic CSS styling",
+              "completed": false
+            },
+            {
+              "id": "1.1.8",
+              "text": "Verify mobile responsiveness",
+              "completed": false
+            }
+          ]
+        },
+        {
+          "id": "1.2",
+          "name": "Evaluate Page",
+          "route": "/evaluate",
+          "status": "not_started",
+          "subtasksCompleted": 0,
+          "subtasksTotal": 7,
+          "tokensBudget": 1800,
+          "tokensUsed": 0,
+          "dependencies": ["1.1"],
+          "lastCheckpoint": {
+            "number": "1.2.0",
+            "timestamp": "2026-05-03T00:00:00Z",
+            "status": "task_created"
+          }
+        },
+        {
+          "id": "1.3",
+          "name": "Challenges Page",
+          "route": "/challenges",
+          "status": "not_started",
+          "subtasksCompleted": 0,
+          "subtasksTotal": 8,
+          "tokensBudget": 2200,
+          "tokensUsed": 0,
+          "dependencies": ["1.1"],
+          "lastCheckpoint": {
+            "number": "1.3.0",
+            "timestamp": "2026-05-03T00:00:00Z",
+            "status": "task_created"
+          }
+        },
+        {
+          "id": "1.4",
+          "name": "About Page",
+          "route": "/about",
+          "status": "not_started",
+          "subtasksCompleted": 0,
+          "subtasksTotal": 7,
+          "tokensBudget": 1500,
+          "tokensUsed": 0,
+          "dependencies": [],
+          "lastCheckpoint": {
+            "number": "1.4.0",
+            "timestamp": "2026-05-03T00:00:00Z",
+            "status": "task_created"
+          }
+        },
+        {
+          "id": "1.5",
+          "name": "Pricing Page",
+          "route": "/pricing",
+          "status": "not_started",
+          "subtasksCompleted": 0,
+          "subtasksTotal": 9,
+          "tokensBudget": 2800,
+          "tokensUsed": 0,
+          "dependencies": [],
+          "lastCheckpoint": {
+            "number": "1.5.0",
+            "timestamp": "2026-05-03T00:00:00Z",
+            "status": "task_created"
+          }
+        },
+        {
+          "id": "1.6",
+          "name": "Privacy Page",
+          "route": "/privacy",
+          "status": "not_started",
+          "subtasksCompleted": 0,
+          "subtasksTotal": 6,
+          "tokensBudget": 1200,
+          "tokensUsed": 0,
+          "dependencies": [],
+          "lastCheckpoint": {
+            "number": "1.6.0",
+            "timestamp": "2026-05-03T00:00:00Z",
+            "status": "task_created"
+          }
+        },
+        {
+          "id": "1.7",
+          "name": "Terms Page",
+          "route": "/terms",
+          "status": "not_started",
+          "subtasksCompleted": 0,
+          "subtasksTotal": 8,
+          "tokensBudget": 1500,
+          "tokensUsed": 0,
+          "dependencies": [],
+          "criticalRequirement": "Must include disclaimer: 'ArGen scores reflect AI usage quality, NOT employee performance. No employment decisions based solely on scores.'",
+          "lastCheckpoint": {
+            "number": "1.7.0",
+            "timestamp": "2026-05-03T00:00:00Z",
+            "status": "task_created"
+          }
+        }
+      ]
+    },
+    {
+      "id": "phase_2",
+      "name": "Secondary Pages (Priority 2)",
+      "status": "not_started",
+      "progress": "0%",
+      "tokensBudget": 12500,
+      "tokensUsed": 0,
+      "tasks": [
+        {
+          "id": "2.1",
+          "name": "Blog Page",
+          "route": "/blog",
+          "status": "not_started",
+          "subtasksCompleted": 0,
+          "subtasksTotal": 8,
+          "tokensBudget": 3000,
+          "tokensUsed": 0,
+          "dependencies": ["1.1"],
+          "lastCheckpoint": {
+            "number": "2.1.0",
+            "timestamp": "2026-05-03T00:00:00Z",
+            "status": "task_created"
+          }
+        },
+        {
+          "id": "2.2",
+          "name": "Contact Page",
+          "route": "/contact",
+          "status": "not_started",
+          "subtasksCompleted": 0,
+          "subtasksTotal": 7,
+          "tokensBudget": 1800,
+          "tokensUsed": 0,
+          "dependencies": [],
+          "lastCheckpoint": {
+            "number": "2.2.0",
+            "timestamp": "2026-05-03T00:00:00Z",
+            "status": "task_created"
+          }
+        },
+        {
+          "id": "2.3",
+          "name": "Teams Dashboard",
+          "route": "/teams",
+          "status": "not_started",
+          "subtasksCompleted": 0,
+          "subtasksTotal": 8,
+          "tokensBudget": 4500,
+          "tokensUsed": 0,
+          "dependencies": ["4.1"],
+          "lastCheckpoint": {
+            "number": "2.3.0",
+            "timestamp": "2026-05-03T00:00:00Z",
+            "status": "task_created"
+          }
+        },
+        {
+          "id": "2.4",
+          "name": "Team Detail Page",
+          "route": "/teamdetail/:id",
+          "status": "not_started",
+          "subtasksCompleted": 0,
+          "subtasksTotal": 8,
+          "tokensBudget": 3200,
+          "tokensUsed": 0,
+          "dependencies": ["2.3"],
+          "lastCheckpoint": {
+            "number": "2.4.0",
+            "timestamp": "2026-05-03T00:00:00Z",
+            "status": "task_created"
+          }
+        }
+      ]
+    },
+    {
+      "id": "phase_3",
+      "name": "Legal & Compliance (Priority 1)",
+      "status": "not_started",
+      "progress": "0%",
+      "tokensBudget": 3800,
+      "tokensUsed": 0,
+      "tasks": [
+        {
+          "id": "3.1",
+          "name": "Terms of Service (Detailed)",
+          "status": "not_started",
+          "subtasksCompleted": 0,
+          "subtasksTotal": 6,
+          "tokensBudget": 2000,
+          "tokensUsed": 0,
+          "dependencies": [],
+          "lastCheckpoint": {
+            "number": "3.1.0",
+            "timestamp": "2026-05-03T00:00:00Z",
+            "status": "task_created"
+          }
+        },
+        {
+          "id": "3.2",
+          "name": "Privacy Policy (Detailed)",
+          "status": "not_started",
+          "subtasksCompleted": 0,
+          "subtasksTotal": 6,
+          "tokensBudget": 1800,
+          "tokensUsed": 0,
+          "dependencies": [],
+          "lastCheckpoint": {
+            "number": "3.2.0",
+            "timestamp": "2026-05-03T00:00:00Z",
+            "status": "task_created"
+          }
+        }
+      ]
+    },
+    {
+      "id": "phase_4",
+      "name": "Backend Setup (Priority 2)",
+      "status": "not_started",
+      "progress": "0%",
+      "tokensBudget": 13500,
+      "tokensUsed": 0,
+      "tasks": [
+        {
+          "id": "4.1",
+          "name": "Authentication System",
+          "status": "not_started",
+          "subtasksCompleted": 0,
+          "subtasksTotal": 7,
+          "tokensBudget": 5000,
+          "tokensUsed": 0,
+          "dependencies": ["4.3"],
+          "lastCheckpoint": {
+            "number": "4.1.0",
+            "timestamp": "2026-05-03T00:00:00Z",
+            "status": "task_created"
+          }
+        },
+        {
+          "id": "4.2",
+          "name": "API Endpoints (Core)",
+          "status": "not_started",
+          "subtasksCompleted": 0,
+          "subtasksTotal": 8,
+          "tokensBudget": 6000,
+          "tokensUsed": 0,
+          "dependencies": ["4.1"],
+          "lastCheckpoint": {
+            "number": "4.2.0",
+            "timestamp": "2026-05-03T00:00:00Z",
+            "status": "task_created"
+          }
+        },
+        {
+          "id": "4.3",
+          "name": "Database Schema",
+          "status": "not_started",
+          "subtasksCompleted": 0,
+          "subtasksTotal": 7,
+          "tokensBudget": 2500,
+          "tokensUsed": 0,
+          "dependencies": [],
+          "lastCheckpoint": {
+            "number": "4.3.0",
+            "timestamp": "2026-05-03T00:00:00Z",
+            "status": "task_created"
+          }
+        }
+      ]
+    }
+  ],
+  "fileStructure": {
+    "frontend": {
+      "html": [
+        "index.html",
+        "evaluate.html",
+        "challenges.html",
+        "about.html",
+        "pricing.html",
+        "contact.html",
+        "privacy.html",
+        "terms.html",
+        "blog.html",
+        "teams.html",
+        "team-detail.html"
+      ],
+      "css": ["style.css"],
+      "js": ["script.js"],
+      "images": []
+    },
+    "backend": [],
+    "docs": [
+      "implement.txt",
+      "operations.txt",
+      "theme.txt"
+    ]
+  },
+  "metadata": {
+    "createdAt": "2026-05-03T00:00:00Z",
+    "lastUpdated": "2026-05-03T09:55:00Z",
+    "lastUpdatedBy": "AI Agent - Session 1",
+    "nextReview": "2026-05-10T00:00:00Z",
+    "statusSummary": "PHASE 1 COMPLETE - 8/8 tasks done. 3,450 tokens used. Ready for Phase 2."
+  }
+}

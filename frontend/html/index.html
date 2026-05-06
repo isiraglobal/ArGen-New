@@ -1,0 +1,654 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ArGen — AI Performance Evaluation</title>
+  <meta name="description"
+    content="ArGen measures real AI output quality across your team in 48 hours. No courses. No theory. Just a clear score and a report your leadership can act on.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="icon" type="image/png" href="../images/ArGen Logo.png">
+  <link
+    href="https://fonts.googleapis.com/css2?family=VT323&family=Roboto+Mono:wght@300;400;500;600;700&family=Share+Tech+Mono&display=swap"
+    rel="stylesheet">
+  <link rel="stylesheet" href="../css/style.css">
+</head>
+
+<body>
+  <canvas id="particleCanvas" class="particle-canvas"></canvas>
+
+  <!-- BOOT LOADER -->
+  <div id="loader" class="loader">
+    <div class="loader-terminal">
+      <div class="loader-lines" id="loaderLines"></div>
+      <div class="loader-bar-wrap">
+        <span class="loader-label">LOADING ARGEN_SYS</span>
+        <div class="loader-bar">
+          <div class="loader-fill" id="loaderFill"></div>
+        </div>
+        <span class="loader-pct" id="loaderPct">0%</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- SCANLINE + NOISE -->
+  <div class="scanlines"></div>
+  <div class="noise-overlay"></div>
+
+  <!-- CURSOR -->
+  <div id="cursor" class="cursor-dot"></div>
+  <div id="cursorRing" class="cursor-ring"></div>
+
+  <!-- NAV -->
+  <header id="nav" class="nav">
+    <div class="nav-inner">
+      <a href="#hero" class="nav-logo">
+        <img src="../images/ArGen Logo.png" alt="ArGen" class="logo-img">
+      </a>
+      <nav class="nav-links">
+        <a href="index.html#how" class="nav-link">How_It_Works</a>
+        <a href="pricing.html" class="nav-link">Pricing</a>
+        <a href="about.html" class="nav-link">About</a>
+        <a href="blog.html" class="nav-link">Blog</a>
+      </nav>
+      <a href="evaluate.html" class="nav-cta">Run_Pilot →</a>
+      <button class="nav-burger" id="burger" aria-label="Menu">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </header>
+
+  <!-- MOBILE MENU -->
+  <div id="mobileMenu" class="mobile-menu">
+    <a href="index.html#how" class="mm-link">01 // How_It_Works</a>
+    <a href="pricing.html" class="mm-link">02 // Pricing</a>
+    <a href="about.html" class="mm-link">03 // About</a>
+    <a href="blog.html" class="mm-link">04 // Blog</a>
+    <a href="evaluate.html" class="mm-link mm-cta">→ Run_Free_Pilot</a>
+  </div>
+
+  <!-- ═══════════ HERO ═══════════ -->
+  <section id="hero" class="section section-black hero">
+    <div class="container">
+      <div class="hero-prompt reveal">
+        <span class="prompt-prefix">&gt; argen --evaluate</span>
+      </div>
+      <h1 class="hero-h1" id="heroTitle">
+        <span class="line-wrap"><span class="line-inner reveal-line">Stop guessing if your</span></span>
+        <span class="line-wrap"><span class="line-inner reveal-line">AI investment is paying off.</span></span>
+        <span class="line-wrap"><span class="line-inner reveal-line">Measure. Act. Compete.</span></span>
+      </h1>
+      <p class="hero-sub reveal">
+        Get a comprehensive AI capability audit in 48 hours. See exactly where your team wins with AI, where they struggle, and what concrete actions unlock 20-40% productivity gains.<br>
+        <strong>One report. Clear ROI. Competitive advantage.</strong>
+      </p>
+      <div class="hero-cta reveal">
+        <a href="evaluate.html" class="btn btn-green btn-lg reveal">Get Your Audit Report</a>
+        <a href="mailto:isiraglobal@gmail.com" class="btn btn-ghost reveal">See Pricing & ROI Model</a>
+      </div>
+      <div class="hero-stats reveal">
+        <div class="stat"><span class="stat-num" data-count="40">0</span><span class="stat-label">% avg productivity uplift</span>
+        </div>
+        <div class="stat-sep">|</div>
+        <div class="stat"><span class="stat-num" data-count="48">0</span><span class="stat-label">hrs to ROI clarity</span></div>
+        <div class="stat-sep">|</div>
+        <div class="stat"><span class="stat-num" data-count="12">0</span><span class="stat-label">teams already measured</span>
+        </div>
+      </div>
+    </div>
+    <div class="scroll-indicator">
+      <div class="scroll-line"></div>
+      <span class="scroll-text">SCROLL</span>
+    </div>
+  </section>
+
+  <!-- ═══════════ PROBLEM ═══════════ -->
+  <section id="problem" class="section section-cream">
+    <div class="container">
+      <span class="section-tag reveal">[PROBLEM_STATEMENT]</span>
+      <h2 class="section-h2 reveal">The gap nobody<br>is measuring<span class="green">.</span></h2>
+      <div class="card-grid card-grid-3">
+        <div class="card card-cream reveal-card">
+          <span class="card-num">01</span>
+          <h3 class="card-h3">You deployed<br>AI tools</h3>
+          <p class="card-p">Licenses bought. Workshops done. Everyone has ChatGPT, Copilot, Claude access. The
+            investment is real.</p>
+        </div>
+        <div class="card card-cream reveal-card">
+          <span class="card-num">02</span>
+          <h3 class="card-h3">Usage looks<br>good</h3>
+          <p class="card-p">Dashboards show logins. People say they're using it. Engagement metrics look healthy on
+            paper.</p>
+        </div>
+        <div class="card card-cream reveal-card">
+          <span class="card-num">03</span>
+          <h3 class="card-h3">But can you<br>prove ROI?</h3>
+          <p class="card-p">When the board asks "is AI actually making us better?"—you don't have a number. ArGen gives
+            you one.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════ HOW IT WORKS — PINNED SCROLL ═══════════ -->
+  <section id="how" class="section section-black how-section">
+    <div class="container">
+      <span class="section-tag reveal">[PROCESS // 4_STEPS]</span>
+      <h2 class="section-h2 reveal">How ArGen works<span class="green">.</span></h2>
+    </div>
+    <div class="how-scroll-wrap">
+      <div class="how-track" id="howTrack">
+        <div class="how-step">
+          <div class="step-num-big">01</div>
+          <div class="step-content">
+            <span class="step-tag">&gt; challenge.deploy()</span>
+            <h3 class="step-h3">Your team gets 5 real business challenges</h3>
+            <p class="step-p">Not quizzes. Not tutorials. Real tasks that mirror actual work — strategy docs, data
+              analysis, client communications. Delivered via email, completed in their own time.</p>
+            <div class="step-terminal">
+              <div class="term-bar"><span class="term-dot"></span><span class="term-dot"></span><span
+                  class="term-dot"></span></div>
+              <code>$ argen send --team="marketing" --challenges=5<br>✓ Challenges deployed to 5 recipients<br>✓ Deadline set: 48hrs</code>
+            </div>
+          </div>
+        </div>
+        <div class="how-step">
+          <div class="step-num-big">02</div>
+          <div class="step-content">
+            <span class="step-tag">&gt; response.collect()</span>
+            <h3 class="step-h3">They submit AI-assisted responses</h3>
+            <p class="step-p">Each person uses whatever AI tools they prefer. The output is what matters — not which
+              tool they used. We capture the thinking process, not just the result.</p>
+            <div class="step-terminal">
+              <div class="term-bar"><span class="term-dot"></span><span class="term-dot"></span><span
+                  class="term-dot"></span></div>
+              <code>$ argen status --team="marketing"<br>■■■■■■■■░░ 4/5 responses received<br>⏱ 23hrs remaining</code>
+            </div>
+          </div>
+        </div>
+        <div class="how-step">
+          <div class="step-num-big">03</div>
+          <div class="step-content">
+            <span class="step-tag">&gt; claude.score()</span>
+            <h3 class="step-h3">Claude scores each on 4 dimensions</h3>
+            <p class="step-p">Clarity. Constraint Application. Critical Thinking. Communication. Each dimension scored
+              0-25. No human bias. No subjectivity. Consistent, reproducible evaluation.</p>
+            <div class="step-terminal">
+              <div class="term-bar"><span class="term-dot"></span><span class="term-dot"></span><span
+                  class="term-dot"></span></div>
+              <code>$ argen evaluate --model="claude-3.5"<br>Processing responses... ████████████ 100%<br>✓ 4 dimensions × 5 challenges × 5 people<br>✓ 100 data points generated</code>
+            </div>
+          </div>
+        </div>
+        <div class="how-step">
+          <div class="step-num-big">04</div>
+          <div class="step-content">
+            <span class="step-tag">&gt; report.generate()</span>
+            <h3 class="step-h3">You get a full report in 48 hours</h3>
+            <p class="step-p">Individual scores. Team averages. Weakest dimensions highlighted. Actionable
+              recommendations. A document your C-suite can actually use to make decisions.</p>
+            <div class="step-terminal">
+              <div class="term-bar"><span class="term-dot"></span><span class="term-dot"></span><span
+                  class="term-dot"></span></div>
+              <code>$ argen report --format="pdf,notion"<br>✓ Team avg: 72/100<br>✓ Weakest: Constraint Application (14/25)<br>✓ Report delivered to admin@company.com</code>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════ POST-PURCHASE VALUE ═══════════ -->
+  <section class="section section-black">
+    <div class="container">
+      <span class="section-tag reveal">[ROI // WHAT_HAPPENS_NEXT]</span>
+      <h2 class="section-h2 reveal">What you actually do<br>with the report<span class="green">.</span></h2>
+      <p class="section-sub reveal">This is where the value gets real.</p>
+      <div class="card-grid card-grid-3">
+        <div class="card card-black reveal-card">
+          <span class="card-num">01</span>
+          <h3 class="card-h3">Identify Your<br>AI Leaders</h3>
+          <p class="card-p">See exactly who in your team uses AI effectively. These people become your AI champions. They mentor others. They unlock 20-40% productivity gains in their functions.</p>
+          <p class="card-outcome"><strong>Outcome:</strong> Organic skill transfer + faster adoption across team.</p>
+        </div>
+        <div class="card card-black reveal-card">
+          <span class="card-num">02</span>
+          <h3 class="card-h3">Spot Skill Gaps<br>Precisely</h3>
+          <p class="card-p">Discover weaknesses in Constraint Application? They're using AI but ignoring requirements. Critical Thinking low? They're trusting AI output without verification. Targeted training works.</p>
+          <p class="card-outcome"><strong>Outcome:</strong> 60% faster upskilling. Measurable improvement in next quarter.</p>
+        </div>
+        <div class="card card-black reveal-card">
+          <span class="card-num">03</span>
+          <h3 class="card-h3">Prove ROI to<br>Finance & Board</h3>
+          <p class="card-p">You invested in AI licenses. You don't know if people are using them effectively. This report shows the real performance gap. When you fix it, you can quantify the savings.</p>
+          <p class="card-outcome"><strong>Outcome:</strong> Board-ready metrics. Budget justification. Competitive leverage.</p>
+        </div>
+        <div class="card card-black reveal-card">
+          <span class="card-num">04</span>
+          <h3 class="card-h3">Plan Your Next<br>Hires Smarter</h3>
+          <p class="card-p">Now you know what "AI-fluent" looks like in YOUR company. You can screen for it in interviews. Hire people who hit 70+ on your benchmarks from day one.</p>
+          <p class="card-outcome"><strong>Outcome:</strong> Better talent acquisition. Higher-performing teams from hire date.</p>
+        </div>
+        <div class="card card-black reveal-card">
+          <span class="card-num">05</span>
+          <h3 class="card-h3">Track Progress<br>Over Time</h3>
+          <p class="card-p">Run the evaluation again in 6 months. See if training worked. See if hiring improved the baseline. Benchmark against industry (available on paid plans).</p>
+          <p class="card-outcome"><strong>Outcome:</strong> Ongoing measurement of strategic AI adoption.</p>
+        </div>
+        <div class="card card-black reveal-card">
+          <span class="card-num">06</span>
+          <h3 class="card-h3">Competitive<br>Intelligence</h3>
+          <p class="card-p">Your team's AI performance IS your competitive advantage. Know your score. Know their score. Move fast where they move slow. Differentiate where they struggle.</p>
+          <p class="card-outcome"><strong>Outcome:</strong> Measurable speed + capability advantage in market.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════ VALUE MULTIPLIER ═══════════ -->
+  <section class="section section-cream">
+    <div class="container container-narrow">
+      <span class="section-tag reveal">[INVESTMENT_MATH]</span>
+      <h2 class="section-h2 reveal">The math is simple<span class="green">.</span></h2>
+      <div class="value-table reveal">
+        <div class="value-row">
+          <div class="value-label">One high performer gains 2 hours/week via better AI use</div>
+          <div class="value-calc">× 50 people × 52 weeks = 5,200 hours</div>
+          <div class="value-result">$260,000+ in annualized productivity (at $50/hour)</div>
+        </div>
+        <div class="value-row">
+          <div class="value-label">Avoid ONE bad hire who can't use AI effectively</div>
+          <div class="value-calc">= Saved recruiting cost + Saved ramp-up cost + Saved turnover</div>
+          <div class="value-result">$40,000–80,000 saved</div>
+        </div>
+        <div class="value-row">
+          <div class="value-label">Justify your $200k AI licenses investment to the board</div>
+          <div class="value-calc">× Confidence in ROI = Continue / Expand vs. Cut</div>
+          <div class="value-result">Multi-million dollar decision influenced</div>
+        </div>
+      </div>
+      <p class="value-note reveal">
+        <strong>A $1,500 ArGen report pays for itself before your team finishes implementing recommendations.</strong>
+      </p>
+    </div>
+  </section>
+
+  <!-- ═══════════ WHO THIS IS FOR ═══════════ -->
+  <section id="about" class="section section-cream">
+    <div class="container container-narrow">
+      <span class="section-tag reveal">[TARGET_AUDIENCE]</span>
+      <h2 class="section-h2 reveal">Built for leaders who<br>need answers<span class="green">.</span></h2>
+      <div class="audience-block reveal">
+        <p class="audience-text">
+          Built for <strong>CEOs, COOs, and Founders</strong> of 30–300 person teams
+          who deployed AI tools in the last 12 months
+          and need to answer one question:
+        </p>
+        <blockquote class="audience-quote">
+          <span class="quote-mark">"</span>Is it actually working?<span class="quote-mark">"</span>
+        </blockquote>
+      </div>
+      <div class="audience-cta reveal">
+        <a href="#scoring" class="btn btn-dark">See the Scoring Rubric →</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════ CHALLENGES (Accordion) ═══════════ -->
+  <section id="challenges" class="section section-black">
+    <div class="container">
+      <span class="section-tag reveal">[CHALLENGE_BANK]</span>
+      <h2 class="section-h2 reveal">5 Challenges<span class="green">.</span> 4 Dimensions<span
+          class="green">.</span><br>1 Clear Answer<span class="green">.</span></h2>
+      <div class="accordion" id="accordion">
+        <div class="acc-item reveal">
+          <button class="acc-trigger" aria-expanded="false">
+            <span class="acc-num">01</span>
+            <span class="acc-title">Strategy</span>
+            <span class="acc-plus">+</span>
+          </button>
+          <div class="acc-panel">
+            <div class="acc-grid">
+              <div><strong>Tests:</strong> Strategic thinking + AI prompt engineering</div>
+              <div><strong>Example:</strong> "You are a marketing manager. Use AI to draft a go-to-market plan for a new
+                SaaS feature launch in 48 hours. Show your process."</div>
+              <div><strong>Why:</strong> Separates copy-pasters from strategic thinkers.</div>
+            </div>
+          </div>
+        </div>
+        <div class="acc-item reveal">
+          <button class="acc-trigger" aria-expanded="false">
+            <span class="acc-num">02</span>
+            <span class="acc-title">Data Analysis</span>
+            <span class="acc-plus">+</span>
+          </button>
+          <div class="acc-panel">
+            <div class="acc-grid">
+              <div><strong>Tests:</strong> Data interpretation + AI-assisted insight extraction</div>
+              <div><strong>Example:</strong> "Given this dataset of 6 months of sales data, use AI to identify the top 3
+                actionable insights and present them to a VP."</div>
+              <div><strong>Why:</strong> Reveals who can turn data into decisions vs. who gets generic summaries.</div>
+            </div>
+          </div>
+        </div>
+        <div class="acc-item reveal">
+          <button class="acc-trigger" aria-expanded="false">
+            <span class="acc-num">03</span>
+            <span class="acc-title">Communication</span>
+            <span class="acc-plus">+</span>
+          </button>
+          <div class="acc-panel">
+            <div class="acc-grid">
+              <div><strong>Tests:</strong> Professional writing + AI editing workflows</div>
+              <div><strong>Example:</strong> "Draft a client-facing project update email for a delayed deliverable. Use
+                AI to refine tone and structure."</div>
+              <div><strong>Why:</strong> Tests real-world communication under constraint.</div>
+            </div>
+          </div>
+        </div>
+        <div class="acc-item reveal">
+          <button class="acc-trigger" aria-expanded="false">
+            <span class="acc-num">04</span>
+            <span class="acc-title">Creative Problem Solving</span>
+            <span class="acc-plus">+</span>
+          </button>
+          <div class="acc-panel">
+            <div class="acc-grid">
+              <div><strong>Tests:</strong> Lateral thinking + iterative AI prompting</div>
+              <div><strong>Example:</strong> "Your company needs to cut costs by 15% without layoffs. Use AI to generate
+                and evaluate 5 options with trade-off analysis."</div>
+              <div><strong>Why:</strong> Shows who uses AI as a thinking partner vs. an answer machine.</div>
+            </div>
+          </div>
+        </div>
+        <div class="acc-item reveal">
+          <button class="acc-trigger" aria-expanded="false">
+            <span class="acc-num">05</span>
+            <span class="acc-title">Technical Execution</span>
+            <span class="acc-plus">+</span>
+          </button>
+          <div class="acc-panel">
+            <div class="acc-grid">
+              <div><strong>Tests:</strong> Implementation skill + AI code/automation leverage</div>
+              <div><strong>Example:</strong> "Automate a weekly report that pulls from 3 data sources. Show your
+                AI-assisted workflow and final output."</div>
+              <div><strong>Why:</strong> Measures practical AI application, not theoretical knowledge.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════ SCORING RUBRIC ═══════════ -->
+  <section id="scoring" class="section section-cream">
+    <div class="container">
+      <span class="section-tag reveal">[SCORING_RUBRIC]</span>
+      <h2 class="section-h2 reveal">Transparent scoring<span class="green">.</span><br>No black boxes<span
+          class="green">.</span></h2>
+      <div class="card-grid card-grid-4">
+        <div class="card card-cream reveal-card">
+          <span class="card-num">C1</span>
+          <h3 class="card-h3">Clarity</h3>
+          <p class="card-score">0 — 25 pts</p>
+          <p class="card-p">Is the output clear, structured, and immediately actionable? A 20/25 reads like a polished
+            brief. A 10/25 needs significant rework.</p>
+        </div>
+        <div class="card card-cream reveal-card">
+          <span class="card-num">C2</span>
+          <h3 class="card-h3">Constraint<br>Application</h3>
+          <p class="card-score">0 — 25 pts</p>
+          <p class="card-p">Did they follow the brief's constraints? High scorers nail scope, format, and audience. Low
+            scorers ignore half the requirements.</p>
+        </div>
+        <div class="card card-cream reveal-card">
+          <span class="card-num">C3</span>
+          <h3 class="card-h3">Critical<br>Thinking</h3>
+          <p class="card-score">0 — 25 pts</p>
+          <p class="card-p">Does the response show original analysis or just AI regurgitation? Top scorers challenge AI
+            output and add judgment layers.</p>
+        </div>
+        <div class="card card-cream reveal-card">
+          <span class="card-num">C4</span>
+          <h3 class="card-h3">Communication</h3>
+          <p class="card-score">0 — 25 pts</p>
+          <p class="card-p">Is it audience-appropriate? Does it persuade? Best responses adapt tone and structure for
+            the specific stakeholder.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════ PRICING ═══════════ -->
+  <section id="pricing" class="section section-black">
+    <div class="container">
+      <span class="section-tag reveal">[PRICING_TABLE]</span>
+      <h2 class="section-h2 reveal">Pricing built<br>for ROI<span class="green">.</span></h2>
+      <p class="section-sub reveal">No per-seat nonsense. You pay once. You get clarity forever. Most teams pay for themselves in 6–8 weeks via productivity gains.</p>
+      <div class="pricing-grid">
+        <div class="price-card reveal-card">
+          <span class="price-tier">Pilot Evaluation</span>
+          <div class="price-amount">₹0</div>
+          <p class="price-desc">Try it risk-free with 5 people</p>
+          <ul class="price-list">
+            <li>5-person audit</li>
+            <li>Full report</li>
+            <li>48-hour turnaround</li>
+            <li>No credit card</li>
+          </ul>
+          <a href="evaluate.html" class="btn btn-primary btn-full">Start Pilot</a>
+          <p class="price-subtext">See the value. Then invest.</p>
+        </div>
+        <div class="price-card price-card-pop reveal-card">
+          <span class="price-badge">✓ RECOMMENDED</span>
+          <span class="price-tier">Team Snapshot</span>
+          <div class="price-amount">$1,500 USD<span class="price-freq">/one-time</span></div>
+          <p class="price-desc">Full team measurement + actionable strategy</p>
+          <ul class="price-list">
+            <li>Up to 25 people measured</li>
+            <li>Comprehensive PDF report</li>
+            <li>Notion dashboard + scores</li>
+            <li>Competitive benchmark data</li>
+            <li>Email support included</li>
+            <li>Implementation recommendations</li>
+          </ul>
+          <a href="mailto:isiraglobal@gmail.com?subject=Team Snapshot Pricing" class="btn btn-green btn-full">Get Pricing Quote</a>
+          <p class="price-subtext">Most companies pick this. <strong>ROI in 6-8 weeks.</strong></p>
+        </div>
+        <div class="price-card reveal-card">
+          <span class="price-tier">Quarterly Track</span>
+          <div class="price-amount">₹12,999<span class="price-freq">/month</span></div>
+          <p class="price-desc">Ongoing measurement. Ongoing improvement.</p>
+          <ul class="price-list">
+            <li>4 evaluations per year</li>
+            <li>Track progress over time</li>
+            <li>Role-specific challenges</li>
+            <li>Cohort benchmarking</li>
+            <li>Priority support</li>
+            <li>Custom recommendations</li>
+          </ul>
+          <a href="mailto:isiraglobal@gmail.com?subject=Quarterly Track Pricing" class="btn btn-primary btn-full">Discuss</a>
+          <p class="price-subtext">For teams treating AI fluency as a continuous capability.</p>
+        </div>
+        <div class="price-card reveal-card">
+          <span class="price-tier">Enterprise</span>
+          <div class="price-amount">Custom</div>
+          <p class="price-desc">Unlimited scale + full integration</p>
+          <ul class="price-list">
+            <li>Unlimited team members</li>
+            <li>API access for your HRIS</li>
+            <li>White-label reports</li>
+            <li>Dedicated account manager</li>
+            <li>Quarterly executive briefings</li>
+            <li>Custom integrations</li>
+          </ul>
+          <a href="mailto:isiraglobal@gmail.com?subject=Enterprise Inquiry" class="btn btn-primary btn-full">Contact Sales</a>
+          <p class="price-subtext">For organizations with 300+ people or custom requirements.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════ FAQ ═══════════ -->
+  <section id="faq" class="section section-cream">
+    <div class="container container-narrow">
+      <span class="section-tag reveal">[FAQ]</span>
+      <h2 class="section-h2 reveal">Frequently asked<span class="green">.</span></h2>
+      <div class="accordion" id="faqAccordion">
+        <div class="acc-item acc-item-cream reveal">
+          <button class="acc-trigger" aria-expanded="false"><span class="acc-title">How long does the evaluation
+              take?</span><span class="acc-plus">+</span></button>
+          <div class="acc-panel">
+            <p>48 hours from when your team submits all responses. Most teams complete challenges within 24 hours of
+              receiving them.</p>
+          </div>
+        </div>
+        <div class="acc-item acc-item-cream reveal">
+          <button class="acc-trigger" aria-expanded="false"><span class="acc-title">Can we customize
+              challenges?</span><span class="acc-plus">+</span></button>
+          <div class="acc-panel">
+            <p>On Team Intelligence and Enterprise plans, yes. We tailor challenges to your industry, roles, and
+              specific AI tools deployed.</p>
+          </div>
+        </div>
+        <div class="acc-item acc-item-cream reveal">
+          <button class="acc-trigger" aria-expanded="false"><span class="acc-title">Is AI scoring reliable?</span><span
+              class="acc-plus">+</span></button>
+          <div class="acc-panel">
+            <p>Claude's scoring has shown 94% correlation with expert human evaluators across our benchmark dataset. We
+              publish our methodology openly.</p>
+          </div>
+        </div>
+        <div class="acc-item acc-item-cream reveal">
+          <button class="acc-trigger" aria-expanded="false"><span class="acc-title">What if we disagree with a
+              score?</span><span class="acc-plus">+</span></button>
+          <div class="acc-panel">
+            <p>Every score comes with detailed reasoning. If you disagree, we offer a manual review on paid plans at no
+              extra charge.</p>
+          </div>
+        </div>
+        <div class="acc-item acc-item-cream reveal">
+          <button class="acc-trigger" aria-expanded="false"><span class="acc-title">Do you offer refunds?</span><span
+              class="acc-plus">+</span></button>
+          <div class="acc-panel">
+            <p>If the report doesn't deliver actionable insights, we'll refund 100% of the fee. No questions asked.</p>
+          </div>
+        </div>
+        <div class="acc-item acc-item-cream reveal">
+          <button class="acc-trigger" aria-expanded="false"><span class="acc-title">Can we run this
+              internally?</span><span class="acc-plus">+</span></button>
+          <div class="acc-panel">
+            <p>You could. But building the challenge bank, scoring rubric, and benchmark data took us 6 months. ArGen
+              gets you there in 48 hours.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════ SOCIAL PROOF ═══════════ -->
+  <section class="section section-black">
+    <div class="container">
+      <div class="proof-marquee">
+        <div class="marquee-track">
+          <div class="marquee-content">
+            <span>STRATEGY</span><span class="mdot">◆</span>
+            <span>DATA ANALYSIS</span><span class="mdot">◆</span>
+            <span>COMMUNICATION</span><span class="mdot">◆</span>
+            <span>CRITICAL THINKING</span><span class="mdot">◆</span>
+            <span>TECHNICAL EXECUTION</span><span class="mdot">◆</span>
+            <span>STRATEGY</span><span class="mdot">◆</span>
+            <span>DATA ANALYSIS</span><span class="mdot">◆</span>
+            <span>COMMUNICATION</span><span class="mdot">◆</span>
+            <span>CRITICAL THINKING</span><span class="mdot">◆</span>
+            <span>TECHNICAL EXECUTION</span><span class="mdot">◆</span>
+          </div>
+        </div>
+      </div>
+      <div class="proof-stat reveal">
+        <span class="proof-num" data-count="12">0</span>
+        <span class="proof-label">teams evaluated across India & Southeast Asia</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════ FINAL CTA ═══════════ -->
+  <section id="cta-final" class="section section-cta">
+    <div class="container container-narrow cta-center">
+      <span class="section-tag reveal">[DECISION_TIME]</span>
+      <h2 class="cta-h2 reveal">You're either measuring<br>AI performance or ignoring it<span class="green">.</span></h2>
+      <p class="cta-sub reveal">One $0 pilot + one $1,500 report. That's the difference between strategy and luck.</p>
+      <div class="cta-buttons reveal">
+        <a href="evaluate.html" class="btn btn-primary btn-lg">Start Free Pilot (5 People)</a>
+        <a href="mailto:isiraglobal@gmail.com?subject=ArGen Enterprise Inquiry" class="btn btn-ghost btn-lg">Talk to Sales</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════ FLOATING AI BAR ═══════════ -->
+  <div class="ai-bar-container">
+    <div id="aiBarResponse" class="ai-bar-response">
+      <div class="ai-response-content" id="aiResponseContent"></div>
+      <button class="ai-response-close" id="aiBarClose">✕</button>
+    </div>
+    <div class="ai-bar-glass">
+      <div class="ai-bar-input-wrap">
+        <svg class="ai-mic-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z"></path>
+          <path d="M19 10v2a7 7 0 0 1-14 0v-2"></path>
+          <line x1="12" x2="12" y1="19" y2="22"></line>
+        </svg>
+        <input type="text" id="aiBarInput" class="ai-bar-input" placeholder="TAP AND ASK AI" autocomplete="off">
+      </div>
+      <button id="aiBarSubmit" class="ai-bar-submit" aria-label="Ask AI">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+        </svg>
+      </button>
+    </div>
+  </div>
+
+  <!-- ═══════════ FOOTER ═══════════ -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-col">
+          <span class="footer-label">ArGen_</span>
+          <p class="footer-desc">AI performance evaluation for teams that want proof, not promises.</p>
+        </div>
+        <div class="footer-col">
+          <span class="footer-label">Links</span>
+          <a href="index.html#how" class="footer-link">How It Works</a>
+          <a href="pricing.html" class="footer-link">Pricing</a>
+          <a href="about.html" class="footer-link">About</a>
+          <a href="blog.html" class="footer-link">Blog</a>
+        </div>
+        <div class="footer-col">
+          <span class="footer-label">Connect</span>
+          <a href="contact.html" class="footer-link">Contact</a>
+          <a href="mailto:isiraglobal@gmail.com" class="footer-link">isiraglobal@gmail.com</a>
+          <a href="https://www.linkedin.com/company/argen-prompting" class="footer-link">LinkedIn</a>
+          <a href="https://www.threads.com/@argen_prompt" class="footer-link">Threads</a>
+        </div>
+        <div class="footer-col">
+          <span class="footer-label">Legal</span>
+          <a href="privacy.html" class="footer-link">Privacy Policy</a>
+          <a href="terms.html" class="footer-link">Terms of Service</a>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <span>© 2026 ArGen. All rights reserved.</span>
+        <span class="footer-made">Built with obsession<span class="blink">_</span></span>
+      </div>
+    </div>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/lenis@1.1.18/dist/lenis.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.7/dist/gsap.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.7/dist/ScrollTrigger.min.js"></script>
+  <script src="../js/script.js"></script>
+</body>
+
+</html>
