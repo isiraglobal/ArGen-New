@@ -245,6 +245,7 @@
     
     if (hasInteracted && allFaded) {
       particleCanvas.style.display = 'none';
+      document.dispatchEvent(new Event('particlesFaded'));
       return; // Stop animation loop once everything is faded
     }
     
@@ -392,10 +393,20 @@
     gsap.registerPlugin(ScrollTrigger);
 
     // ── Hero entrance ──
-    const heroTL = gsap.timeline({ delay: 0.15 });
+    const heroTL = gsap.timeline({ paused: true });
     heroTL
-      .to('.hero .reveal', { y: 0, opacity: 1, duration: 1, stagger: 0.14, ease: 'power4.out' })
-      .to('.reveal-line', { y: '0%', duration: 0.9, stagger: 0.12, ease: 'power4.out' }, '<0.1');
+      .to('.nav', { y: 0, opacity: 1, duration: 0.8, ease: 'power4.out' })
+      .to('.hero .reveal', { y: 0, opacity: 1, duration: 1, stagger: 0.14, ease: 'power4.out' }, '<0.2')
+      .to('.reveal-line', { y: '0%', duration: 0.9, stagger: 0.12, ease: 'power4.out' }, '<0.1')
+      .to('.ai-bar-container', { y: 0, opacity: 1, duration: 0.8, ease: 'power4.out' }, '<0.2');
+
+    if (document.getElementById('particleCanvas')) {
+      document.addEventListener('particlesFaded', () => {
+        heroTL.play();
+      });
+    } else {
+      heroTL.play();
+    }
 
     // ── Generic scroll reveals ──
     gsap.utils.toArray('.reveal').forEach(el => {
@@ -418,17 +429,23 @@
     // ── HORIZONTAL SCROLL PIN (How It Works) ──
     const howTrack = document.getElementById('howTrack');
     if (howTrack) {
-      const scrollDist = howTrack.scrollWidth - window.innerWidth;
+      const stepsCount = howTrack.querySelectorAll('.how-step').length;
+      const scrollDist = howTrack.scrollWidth - window.innerWidth + 200; // Added extra padding for the last item
       const mainAnim = gsap.to(howTrack, {
         x: -scrollDist,
         ease: 'none',
         scrollTrigger: {
           trigger: '.how-section',
           start: 'top top',
-          end: '+=' + (scrollDist + 1000),
+          end: '+=' + (scrollDist + 2000), // Increased to make scrolling feel more paced and delayed
           pin: true,
           scrub: 1.5,
           anticipatePin: 1,
+          snap: {
+            snapTo: 1 / (stepsCount - 1),
+            duration: { min: 0.2, max: 0.5 },
+            ease: 'power1.inOut'
+          }
         }
       });
 

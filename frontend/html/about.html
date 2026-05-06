@@ -30,28 +30,67 @@
   </header>
 
   <div id="mobileMenu" class="mobile-menu">
-    <a href="/#how" class="mm-link">01 How It Works</a>
-    <a href="/pricing" class="mm-link">02 Pricing</a>
-    <a href="/about" class="mm-link">03 About</a>
-    <a href="/blog" class="mm-link">04 Blog</a>
+    <a href="/#how" class="mm-link">How It Works</a>
+    <a href="/pricing" class="mm-link">Pricing</a>
+    <a href="/about" class="mm-link">About</a>
     <a href="/evaluate" class="mm-link mm-cta">→ Run Free Pilot</a>
   </div>
 
-  <section class="section section-black" style="padding-top: calc(var(--nav-h) + 80px); min-height: 100vh;">
-    <div class="container container-narrow">
-      <span class="section-tag reveal">[ABOUT_US]</span>
-      <h1 class="section-h2 reveal" style="font-size: 3rem;">Why ArGen <i class="soul-text">exists</i>.</h1>
+  <section class="section section-black" style="padding-top: calc(var(--nav-h) + 80px); min-height: 100vh; display: flex; align-items: center; justify-content: center; overflow: hidden; position: relative;">
+    
+    <!-- Background Decor -->
+    <div style="position: absolute; top: 20%; left: 10%; width: 300px; height: 300px; background: rgba(34, 197, 94, 0.1); border-radius: 50%; filter: blur(100px); animation: float 8s infinite alternate;"></div>
+    <div style="position: absolute; bottom: 10%; right: 10%; width: 400px; height: 400px; background: rgba(74, 110, 224, 0.1); border-radius: 50%; filter: blur(120px); animation: float 10s infinite alternate-reverse;"></div>
+
+    <div class="container container-narrow reveal" style="position: relative; z-index: 10;">
+      <span class="section-tag">[ARGEN_MANIFESTO]</span>
+      <h1 class="hero-h1" style="font-size: 3.5rem; text-align: left; margin-bottom: 2rem;">Why ArGen <i class="soul-text">exists</i>.</h1>
       
-      <div class="card" style="margin-top: 2rem; background: var(--black); border-color: var(--border-light); color: var(--white); padding: 2rem;">
-        <h3 class="card-h3" style="color: var(--argen-blue); font-family: var(--font-display); font-size: 2rem;">The Problem</h3>
-        <p class="card-p" style="margin-bottom: 2rem; color: var(--white); line-height: 1.8;">Companies are deploying AI at scale, but have zero visibility into whether their teams are actually using it effectively. Training courses don't provide actionable metrics, and subjective peer reviews are flawed. Leadership needs a standardized, rapid assessment to measure real AI capability.</p>
+      <!-- Web Window Look -->
+      <div class="web-window">
+        <div class="web-window-header">
+          <div class="window-controls">
+            <div class="window-dot dot-red"></div>
+            <div class="window-dot dot-yellow"></div>
+            <div class="window-dot dot-green"></div>
+          </div>
+          <div style="margin-left: auto; font-family: var(--font-mono); font-size: 0.8rem; color: rgba(255,255,255,0.4);">
+            argen-sys-log.txt — 80x24
+          </div>
+        </div>
         
-        <h3 class="card-h3" style="color: var(--argen-blue); font-family: var(--font-display); font-size: 2rem;">Our Vision</h3>
-        <p class="card-p" style="color: var(--white); line-height: 1.8;">Building the global standard for AI Performance Intelligence. We believe that what gets measured gets managed, and right now, AI usage is an unmanaged black box.</p>
+        <div class="web-window-content">
+          <h3 style="color: var(--green); font-family: var(--font-mono); font-size: 1.2rem; margin-bottom: 1rem; display: flex; align-items: center; gap: 0.5rem;">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="4 17 10 11 4 5"></polyline><line x1="12" y1="19" x2="20" y2="19"></line></svg>
+            1. THE PROBLEM
+          </h3>
+          <p style="margin-bottom: 2.5rem; line-height: 1.8; color: var(--white); font-size: 1.1rem;">
+            Companies are deploying AI at scale, investing millions in licenses, and expecting immediate productivity boosts. Yet, when the board asks, <i class="soul-text">"Is it actually working?"</i>, the answers are purely anecdotal. 
+            <br><br>
+            Training courses don't provide actionable metrics, and subjective peer reviews are deeply flawed. Leadership needs a standardized, rapid, and unbiased assessment to measure real AI capability. We saw a massive blind spot in enterprise technology management, and we decided to build the lens.
+          </p>
+          
+          <h3 style="color: var(--argen-blue); font-family: var(--font-mono); font-size: 1.2rem; margin-bottom: 1rem; display: flex; align-items: center; gap: 0.5rem;">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
+            2. OUR VISION
+          </h3>
+          <p style="margin-bottom: 2.5rem; line-height: 1.8; color: var(--white); font-size: 1.1rem;">
+            We are building the definitive global standard for <strong style="color: var(--cyan-accent);">AI Performance Intelligence</strong>. We believe that what gets measured gets managed. Right now, AI usage is an unmanaged black box. Our goal is to transform "gut feeling" into a hard, competitive metric.
+          </p>
+
+          <h3 style="color: var(--cream); font-family: var(--font-mono); font-size: 1.2rem; margin-bottom: 1rem; display: flex; align-items: center; gap: 0.5rem;">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon></svg>
+            3. THE ENGINE
+          </h3>
+          <p style="margin-bottom: 0; line-height: 1.8; color: var(--white); font-size: 1.1rem;">
+            The proprietary ArGen Engine doesn't just score outputs; it analyzes the workflow, constraint adherence, and critical thinking displayed in real-world simulated environments. It operates devoid of human bias, returning a crystalline 0-100 capability score in 48 hours.
+          </p>
+        </div>
       </div>
     </div>
   </section>
 
+  <!-- FLOATING AI BAR -->
   <div class="ai-bar-container">
     <div id="aiBarResponse" class="ai-bar-response">
       <div class="ai-response-content" id="aiResponseContent"></div>
@@ -74,36 +113,32 @@
     </div>
   </div>
 
+  <!-- FOOTER -->
   <footer class="footer">
     <div class="container">
       <div class="footer-grid">
-        <div class="footer-col">
-          <img src="../images/ArGen Logo.png" alt="ArGen" style="height: 40px; margin-bottom: 1rem;">
-          <p class="footer-desc">AI performance evaluation for teams that want proof, not promises.</p>
+        <div class="footer-brand">
+          <img src="../images/ArGen Logo.png" alt="ArGen" class="footer-logo">
+          <p class="footer-tagline">Measure AI. Act with certainty.<br>The standard for enterprise capability.</p>
         </div>
         <div class="footer-col">
           <span class="footer-label">Links</span>
-          <a href="/#how" class="footer-link">How It Works</a>
-          <a href="/pricing" class="footer-link">Pricing</a>
           <a href="/about" class="footer-link">About</a>
-          <a href="/blog" class="footer-link">Blog</a>
-        </div>
-        <div class="footer-col">
-          <span class="footer-label">Connect</span>
-          <a href="/contact" class="footer-link">Contact</a>
-          <a href="mailto:isiraglobal@gmail.com" class="footer-link">isiraglobal@gmail.com</a>
-          <a href="#" class="footer-link">LinkedIn</a>
-          <a href="#" class="footer-link">Twitter/X</a>
-        </div>
-        <div class="footer-col">
-          <span class="footer-label">Legal</span>
+          <a href="/pricing" class="footer-link">Pricing</a>
+          <a href="/evaluate" class="footer-link">Run Pilot</a>
           <a href="/privacy" class="footer-link">Privacy Policy</a>
           <a href="/terms" class="footer-link">Terms of Service</a>
         </div>
+        <div class="footer-col">
+          <span class="footer-label">Connect</span>
+          <a href="https://linkedin.com" target="_blank" class="footer-link">LinkedIn</a>
+          <a href="https://x.com" target="_blank" class="footer-link">Twitter / X</a>
+          <a href="mailto:isiraglobal@gmail.com" class="footer-link">Contact</a>
+        </div>
       </div>
       <div class="footer-bottom">
-        <span>© 2026 ArGen. All rights reserved.</span>
-        <span class="footer-made">Built with obsession<span class="blink">_</span></span>
+        <span>© 2026 Isira Global. All rights reserved.</span>
+        <span>Made with intention.</span>
       </div>
     </div>
   </footer>

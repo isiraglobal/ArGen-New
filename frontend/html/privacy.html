@@ -8,19 +8,17 @@
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="../css/style.css">
 </head>
-<body>
-  <!-- Removed Overlays -->
+<body class="legal-page">
 
-  <header id="nav" class="nav nav-center">
+  <header id="nav" class="nav nav-center" style="opacity: 1; transform: translateY(0);">
     <div class="nav-inner">
-      <a href="index.html" class="nav-logo">
+      <a href="/" class="nav-logo">
         <img src="../images/ArGen Logo.png" alt="ArGen" class="logo-img">
       </a>
       <nav class="nav-links">
         <a href="/#how" class="nav-link">How It Works</a>
         <a href="/pricing" class="nav-link">Pricing</a>
         <a href="/about" class="nav-link">About</a>
-        <a href="/blog" class="nav-link">Blog</a>
       </nav>
       <a href="/evaluate" class="nav-cta">Run Pilot →</a>
       <button class="nav-burger" id="burger" aria-label="Menu">
@@ -30,105 +28,106 @@
   </header>
 
   <div id="mobileMenu" class="mobile-menu">
-    <a href="/#how" class="mm-link">01 How It Works</a>
-    <a href="/pricing" class="mm-link">02 Pricing</a>
-    <a href="/about" class="mm-link">03 About</a>
-    <a href="/blog" class="mm-link">04 Blog</a>
+    <a href="/#how" class="mm-link">How It Works</a>
+    <a href="/pricing" class="mm-link">Pricing</a>
+    <a href="/about" class="mm-link">About</a>
     <a href="/evaluate" class="mm-link mm-cta">→ Run Free Pilot</a>
   </div>
 
-  <section class="section section-cream" style="padding-top: calc(var(--nav-h) + 80px); min-height: 100vh;">
+  <section class="section section-black" style="padding-top: 12rem; padding-bottom: 4rem;">
     <div class="container container-narrow">
-      <span class="section-tag">[LEGAL]</span>
-      <h1 class="section-h2" style="font-size: 3rem;">Privacy Policy</h1>
-      
-      <div class="card card-cream" style="margin-top: 2rem;">
-        <h3 class="card-h3" style="font-family: var(--font-display); font-size: 1.5rem;">1. Data Collection & Usage</h3>
-        <p class="card-p" style="margin-bottom: 2rem;">We collect challenge responses strictly to generate evaluation reports for your organization. This includes text prompts, model outputs, and metadata related to the evaluation environment. All individual response data is anonymized after 90 days to be used securely in aggregate benchmarks for the AI performance index.</p>
-        
-        <h3 class="card-h3" style="font-family: var(--font-display); font-size: 1.5rem;">2. GDPR Compliance</h3>
-        <p class="card-p" style="margin-bottom: 2rem;">We fully comply with GDPR standards for European customers. You have the right to access, rectify, or erase your personal data. You may request full data deletion at any time by contacting our support team at isiraglobal@gmail.com. We process data under the legal basis of "Contractual Necessity" to provide the evaluation services.</p>
-
-        <h3 class="card-h3" style="font-family: var(--font-display); font-size: 1.5rem;">3. CCPA Compliance</h3>
-        <p class="card-p" style="margin-bottom: 2rem;">California residents have the right to know what personal information is being collected, the right to delete that information, and the right to opt-out of the sale of personal information. Note: ArGen does not sell your personal data to third parties.</p>
-
-        <h3 class="card-h3" style="font-family: var(--font-display); font-size: 1.5rem;">4. Data Retention Policy</h3>
-        <p class="card-p" style="margin-bottom: 2rem;">Raw prompt and output data are stored for 180 days for the purpose of historical comparison and report validation. After this period, data is either permanently deleted or fully anonymized for benchmarking purposes.</p>
-
-        <h3 class="card-h3" style="font-family: var(--font-display); font-size: 1.5rem;">5. Third-Party Integrations</h3>
-        <p class="card-p" style="margin-bottom: 2rem;">We use third-party services to facilitate our operations:
-          <ul style="margin-left: 1.5rem; margin-top: 1rem;">
-            <li><strong>Stripe:</strong> For payment processing (we do not store credit card details).</li>
-            <li><strong>Postmark/SendGrid:</strong> For system communications and report delivery.</li>
-            <li><strong>OpenAI/Anthropic:</strong> For secondary validation of outputs (anonymized data only).</li>
-          </ul>
-        </p>
-
-        <h3 class="card-h3" style="font-family: var(--font-display); font-size: 1.5rem;">6. Cookie Policy</h3>
-        <p class="card-p">We use essential cookies to maintain session security and performance. We do not use tracking cookies for advertising purposes.</p>
-      </div>
+      <span class="section-tag">[LEGAL_DOCUMENT]</span>
+      <h1 class="hero-h1" style="font-size: 3.5rem; text-align: left; margin-bottom: 1rem;">Privacy Policy</h1>
+      <p class="hero-sub" style="text-align: left; opacity: 0.7;">Effective Date: May 6, 2026. Last Updated: May 6, 2026.</p>
     </div>
   </section>
 
-  <div class="ai-bar-container">
-    <div id="aiBarResponse" class="ai-bar-response">
-      <div class="ai-response-content" id="aiResponseContent"></div>
-      <button class="ai-response-close" id="aiBarClose">✕</button>
-    </div>
-    <div class="ai-bar-glass">
-      <div class="ai-bar-input-wrap">
-        <svg class="ai-mic-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z"></path>
-          <path d="M19 10v2a7 7 0 0 1-14 0v-2"></path>
-          <line x1="12" x2="12" y1="19" y2="22"></line>
-        </svg>
-        <input type="text" id="aiBarInput" class="ai-bar-input" placeholder="TAP AND ASK AI" autocomplete="off">
-      </div>
-      <button id="aiBarSubmit" class="ai-bar-submit" aria-label="Ask AI">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
-        </svg>
-      </button>
-    </div>
-  </div>
+  <section class="section section-cream" style="padding-top: 4rem; padding-bottom: 6rem;">
+    <div class="container container-narrow" style="font-family: var(--font-body); color: var(--text-main); font-size: 1.1rem; line-height: 1.8;">
+      
+      <p>At ArGen ("we," "us," or "our"), we respect your privacy and are committed to protecting it through our compliance with this comprehensive Privacy Policy. This document describes the types of information we may collect from you or that you may provide when you visit the website `argen.isiraglobal.com` (our "Website") and use our AI performance evaluation platform (our "Services"). Furthermore, it details our practices for collecting, using, maintaining, protecting, and disclosing that information.</p>
 
+      <h3 style="margin-top: 3rem; margin-bottom: 1rem; font-family: var(--font-display); font-size: 2rem;">1. Information We Collect and How We Collect It</h3>
+      <p>We collect several types of information from and about users of our Website and Services, including:</p>
+      <ul style="margin-left: 1.5rem; margin-bottom: 1.5rem;">
+        <li><strong>Personal Identifiable Information (PII):</strong> We may collect data by which you may be personally identified, such as name, postal address, e-mail address, telephone number, employer details, and job title ("personal information").</li>
+        <li><strong>Evaluation Data:</strong> When utilizing our Services to evaluate your team's AI capabilities, we collect the prompts submitted, AI responses generated, and behavioral data regarding how the AI was engaged (e.g., iterative prompting, context establishment, time taken per task).</li>
+        <li><strong>Technical and Usage Data:</strong> As you navigate through and interact with our Website, we may use automatic data collection technologies to collect certain information about your equipment, browsing actions, and patterns. This includes details of your visits to our Website (e.g., traffic data, location data, logs) and information about your computer and internet connection (e.g., your IP address, operating system, and browser type).</li>
+      </ul>
+
+      <h3 style="margin-top: 3rem; margin-bottom: 1rem; font-family: var(--font-display); font-size: 2rem;">2. How We Use Your Information</h3>
+      <p>We use information that we collect about you or that you provide to us, including any personal information, for a myriad of critical operational and developmental functions:</p>
+      <ul style="margin-left: 1.5rem; margin-bottom: 1.5rem;">
+        <li>To present our Website, its contents, and our platform to you efficiently and securely.</li>
+        <li>To generate AI capability audit reports, analytics, and performance benchmarks as per your service agreement.</li>
+        <li>To fulfill any other purpose for which you provide it (e.g., responding to support requests, sending invoices).</li>
+        <li>To carry out our obligations and enforce our rights arising from any contracts entered into between you and us, including for billing and collection.</li>
+        <li>To notify you about changes to our Website, our Terms of Service, or any products or services we offer or provide though it.</li>
+        <li>To improve our proprietary evaluation models securely. <strong>Note:</strong> We strictly anonymize and aggregate all evaluation data before utilizing it to train or refine our internal "ArGen Engine." Your proprietary company data is never used to train generalized AI models.</li>
+      </ul>
+
+      <h3 style="margin-top: 3rem; margin-bottom: 1rem; font-family: var(--font-display); font-size: 2rem;">3. Disclosure of Your Information</h3>
+      <p>We do not sell your personal information to third parties. We may disclose aggregated information about our users, and information that does not identify any individual, without restriction. However, we may disclose personal information that we collect or you provide as described in this privacy policy:</p>
+      <ul style="margin-left: 1.5rem; margin-bottom: 1.5rem;">
+        <li>To contractors, service providers, and other third parties we use to support our business (e.g., cloud hosting via Vercel/AWS, secure payment processing via Stripe, and database management).</li>
+        <li>To a buyer or other successor in the event of a merger, divestiture, restructuring, reorganization, dissolution, or other sale or transfer of some or all of ArGen's assets.</li>
+        <li>To fulfill the purpose for which you provide it. For example, if you invite a team member to take an evaluation, we will transmit the necessary email invitation.</li>
+        <li>To comply with any court order, law, or legal process, including responding to any government or regulatory request.</li>
+      </ul>
+
+      <h3 style="margin-top: 3rem; margin-bottom: 1rem; font-family: var(--font-display); font-size: 2rem;">4. Data Security and Retention</h3>
+      <p>We have implemented rigorous, industry-standard measures designed to secure your personal information from accidental loss and from unauthorized access, use, alteration, and disclosure. All information you provide to us is stored on our secure servers behind enterprise-grade firewalls. Any payment transactions and sensitive evaluation data are encrypted using SSL/TLS technology in transit and AES-256 encryption at rest.</p>
+      <p>The safety and security of your information also depends on you. Where we have given you (or where you have chosen) a password for access to certain parts of our Website, you are responsible for keeping this password confidential.</p>
+      <p>We retain your evaluation and personal data only for as long as is necessary for the purposes set out in this Privacy Policy, and to comply with our legal obligations, resolve disputes, and enforce our legal agreements and policies.</p>
+
+      <h3 style="margin-top: 3rem; margin-bottom: 1rem; font-family: var(--font-display); font-size: 2rem;">5. Your Data Rights</h3>
+      <p>Depending on your location (e.g., the European Economic Area under GDPR, or California under CCPA), you may have certain rights regarding your personal data. These rights may include:</p>
+      <ul style="margin-left: 1.5rem; margin-bottom: 1.5rem;">
+        <li>The right to access, update, or to delete the information we have on you.</li>
+        <li>The right of rectification if your information is inaccurate or incomplete.</li>
+        <li>The right to object to our processing of your Personal Data.</li>
+        <li>The right of restriction, requesting that we restrict the processing of your personal information.</li>
+        <li>The right to data portability, allowing you to be provided with a copy of the information we have on you in a structured, machine-readable format.</li>
+      </ul>
+      <p>To exercise any of these rights, please contact our Data Protection Officer at <strong>isiraglobal@gmail.com</strong>.</p>
+
+      <h3 style="margin-top: 3rem; margin-bottom: 1rem; font-family: var(--font-display); font-size: 2rem;">6. Changes to Our Privacy Policy</h3>
+      <p>It is our policy to post any changes we make to our privacy policy on this page with a notice that the privacy policy has been updated on the Website home page. If we make material changes to how we treat our users' personal information, we will notify you by email to the primary email address specified in your account and/or through a notice on the Website home page. The date the privacy policy was last revised is identified at the top of the page.</p>
+
+    </div>
+  </section>
+
+  <!-- FOOTER -->
   <footer class="footer">
     <div class="container">
       <div class="footer-grid">
-        <div class="footer-col">
-          <img src="../images/ArGen Logo.png" alt="ArGen" style="height: 40px; margin-bottom: 1rem;">
-          <p class="footer-desc">AI performance evaluation for teams that want proof, not promises.</p>
+        <div class="footer-brand">
+          <img src="../images/ArGen Logo.png" alt="ArGen" class="footer-logo">
+          <p class="footer-tagline">Measure AI. Act with certainty.<br>The standard for enterprise capability.</p>
         </div>
         <div class="footer-col">
           <span class="footer-label">Links</span>
-          <a href="/#how" class="footer-link">How It Works</a>
-          <a href="/pricing" class="footer-link">Pricing</a>
           <a href="/about" class="footer-link">About</a>
-          <a href="/blog" class="footer-link">Blog</a>
-        </div>
-        <div class="footer-col">
-          <span class="footer-label">Connect</span>
-          <a href="/contact" class="footer-link">Contact</a>
-          <a href="mailto:isiraglobal@gmail.com" class="footer-link">isiraglobal@gmail.com</a>
-          <a href="#" class="footer-link">LinkedIn</a>
-          <a href="#" class="footer-link">Twitter/X</a>
-        </div>
-        <div class="footer-col">
-          <span class="footer-label">Legal</span>
+          <a href="/pricing" class="footer-link">Pricing</a>
+          <a href="/evaluate" class="footer-link">Run Pilot</a>
           <a href="/privacy" class="footer-link">Privacy Policy</a>
           <a href="/terms" class="footer-link">Terms of Service</a>
         </div>
+        <div class="footer-col">
+          <span class="footer-label">Connect</span>
+          <a href="https://linkedin.com" target="_blank" class="footer-link">LinkedIn</a>
+          <a href="https://x.com" target="_blank" class="footer-link">Twitter / X</a>
+          <a href="mailto:isiraglobal@gmail.com" class="footer-link">Contact</a>
+        </div>
       </div>
       <div class="footer-bottom">
-        <span>© 2026 ArGen. All rights reserved.</span>
-        <span class="footer-made">Built with obsession<span class="blink">_</span></span>
+        <span>© 2026 Isira Global. All rights reserved.</span>
+        <span>Made with intention.</span>
       </div>
     </div>
   </footer>
 
-  <script src="https://cdn.jsdelivr.net/npm/lenis@1.1.18/dist/lenis.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.7/dist/gsap.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.7/dist/ScrollTrigger.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
   <script src="../js/script.js"></script>
 </body>
 </html>

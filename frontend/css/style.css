@@ -1254,6 +1254,7 @@ a, button {
   align-items: center;
   gap: 1rem;
   pointer-events: none;
+  opacity: 0;
 }
 
 .ai-bar-glass {
@@ -1359,6 +1360,13 @@ a, button {
   position: relative;
   max-height: 400px;
   overflow-y: auto;
+}
+
+.faq-answer {
+  color: var(--cyan-accent);
+  opacity: 0.9;
+  font-size: 1.1rem;
+  line-height: 1.6;
 }
 
 .ai-bar-response.show {
