@@ -3,11 +3,16 @@
  * Handles all communication with the Node.js backend
  */
 
-const API_BASE_URL = 'http://localhost:5000/api';
+// Check if we have a production API URL set, otherwise fallback to localhost
+const API_BASE_URL = window.ARGEN_API_URL || 
+    (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1' 
+        ? 'http://localhost:5000/api' 
+        : 'https://argen-backend.vercel.app/api'); // Placeholder for production URL
 
 const api = {
     // Helper for fetch with auth
     async request(endpoint, options = {}) {
+        console.log(`[API] Requesting ${endpoint}...`);
         const token = localStorage.getItem('argen_token');
         const headers = {
             'Content-Type': 'application/json',
@@ -18,10 +23,16 @@ const api = {
             headers['Authorization'] = `Bearer ${token}`;
         }
 
-        const response = await fetch(`${API_BASE_URL}${endpoint}`, {
-            ...options,
-            headers,
-        });
+        let response;
+        try {
+            response = await fetch(`${API_BASE_URL}${endpoint}`, {
+                ...options,
+                headers,
+            });
+        } catch (error) {
+            console.error(`[API] Network Error for ${endpoint}:`, error);
+            throw new Error('Connection failed. Is the backend server running?');
+        }
 
         if (response.status === 401) {
             // Token expired or invalid

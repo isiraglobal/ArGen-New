@@ -1,0 +1,21 @@
+{
+  "version": 2,
+  "public": true,
+  "name": "argen-frontend",
+  "rewrites": [
+    { "source": "/", "destination": "/frontend/html/index.html" },
+    { "source": "/login", "destination": "/frontend/html/login.html" },
+    { "source": "/teams", "destination": "/frontend/html/teams.html" },
+    { "source": "/team/:id", "destination": "/frontend/html/team-detail.html" },
+    { "source": "/evaluate", "destination": "/frontend/html/evaluate.html" },
+    { "source": "/(css|js|images)/(.*)", "destination": "/frontend/$1/$2" }
+  ],
+  "headers": [
+    {
+      "source": "/(.*)",
+      "headers": [
+        { "key": "Access-Control-Allow-Origin", "value": "*" }
+      ]
+    }
+  ]
+}
