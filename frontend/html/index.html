@@ -11,7 +11,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="icon" type="image/png" href="../images/ArGen Logo.png">
   <link
-    href="https://fonts.googleapis.com/css2?family=VT323&family=Roboto+Mono:wght@300;400;500;600;700&family=Share+Tech+Mono&display=swap"
+    href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono&family=Instrument+Serif:ital@0;1&display=swap"
     rel="stylesheet">
   <link rel="stylesheet" href="../css/style.css">
 </head>
@@ -33,13 +33,7 @@
     </div>
   </div>
 
-  <!-- SCANLINE + NOISE -->
-  <div class="scanlines"></div>
-  <div class="noise-overlay"></div>
-
-  <!-- CURSOR -->
-  <div id="cursor" class="cursor-dot"></div>
-  <div id="cursorRing" class="cursor-ring"></div>
+  <!-- Removed Cursor & Overlays -->
 
   <!-- NAV -->
   <header id="nav" class="nav">
@@ -48,12 +42,12 @@
         <img src="../images/ArGen Logo.png" alt="ArGen" class="logo-img">
       </a>
       <nav class="nav-links">
-        <a href="index.html#how" class="nav-link">How_It_Works</a>
-        <a href="pricing.html" class="nav-link">Pricing</a>
-        <a href="about.html" class="nav-link">About</a>
-        <a href="blog.html" class="nav-link">Blog</a>
+        <a href="#how" class="nav-link">How It Works</a>
+        <a href="/pricing" class="nav-link">Pricing</a>
+        <a href="/about" class="nav-link">About</a>
+        <a href="/blog" class="nav-link">Blog</a>
       </nav>
-      <a href="evaluate.html" class="nav-cta">Run_Pilot →</a>
+      <a href="/evaluate" class="nav-cta">Run Pilot →</a>
       <button class="nav-burger" id="burger" aria-label="Menu">
         <span></span><span></span><span></span>
       </button>
@@ -62,11 +56,11 @@
 
   <!-- MOBILE MENU -->
   <div id="mobileMenu" class="mobile-menu">
-    <a href="index.html#how" class="mm-link">01 // How_It_Works</a>
-    <a href="pricing.html" class="mm-link">02 // Pricing</a>
-    <a href="about.html" class="mm-link">03 // About</a>
-    <a href="blog.html" class="mm-link">04 // Blog</a>
-    <a href="evaluate.html" class="mm-link mm-cta">→ Run_Free_Pilot</a>
+    <a href="/#how" class="mm-link">How It Works</a>
+    <a href="/pricing" class="mm-link">Pricing</a>
+    <a href="/about" class="mm-link">About</a>
+    <a href="/blog" class="mm-link">Blog</a>
+    <a href="/evaluate" class="mm-link mm-cta">→ Run Free Pilot</a>
   </div>
 
   <!-- ═══════════ HERO ═══════════ -->
@@ -77,15 +71,15 @@
       </div>
       <h1 class="hero-h1" id="heroTitle">
         <span class="line-wrap"><span class="line-inner reveal-line">Stop guessing if your</span></span>
-        <span class="line-wrap"><span class="line-inner reveal-line">AI investment is paying off.</span></span>
-        <span class="line-wrap"><span class="line-inner reveal-line">Measure. Act. Compete.</span></span>
+        <span class="line-wrap"><span class="line-inner reveal-line">AI investment is <i class="soul-text">paying off.</i></span></span>
+        <span class="line-wrap"><span class="line-inner reveal-line"><i class="soul-text">Measure.</i> Act. <i class="soul-text">Compete.</i></span></span>
       </h1>
       <p class="hero-sub reveal">
         Get a comprehensive AI capability audit in 48 hours. See exactly where your team wins with AI, where they struggle, and what concrete actions unlock 20-40% productivity gains.<br>
         <strong>One report. Clear ROI. Competitive advantage.</strong>
       </p>
       <div class="hero-cta reveal">
-        <a href="evaluate.html" class="btn btn-green btn-lg reveal">Get Your Audit Report</a>
+        <a href="/evaluate" class="btn btn-green btn-lg reveal">Get Your Audit Report</a>
         <a href="mailto:isiraglobal@gmail.com" class="btn btn-ghost reveal">See Pricing & ROI Model</a>
       </div>
       <div class="hero-stats reveal">
@@ -108,12 +102,12 @@
   <section id="problem" class="section section-cream">
     <div class="container">
       <span class="section-tag reveal">[PROBLEM_STATEMENT]</span>
-      <h2 class="section-h2 reveal">The gap nobody<br>is measuring<span class="green">.</span></h2>
+      <h2 class="section-h2 reveal">The gap <i class="soul-text">nobody</i><br>is measuring<span class="green">.</span></h2>
       <div class="card-grid card-grid-3">
         <div class="card card-cream reveal-card">
           <span class="card-num">01</span>
           <h3 class="card-h3">You deployed<br>AI tools</h3>
-          <p class="card-p">Licenses bought. Workshops done. Everyone has ChatGPT, Copilot, Claude access. The
+          <p class="card-p">Licenses bought. Workshops done. Your team has full access to the frontier models. The
             investment is real.</p>
         </div>
         <div class="card card-cream reveal-card">
@@ -136,7 +130,7 @@
   <section id="how" class="section section-black how-section">
     <div class="container">
       <span class="section-tag reveal">[PROCESS // 4_STEPS]</span>
-      <h2 class="section-h2 reveal">How ArGen works<span class="green">.</span></h2>
+      <h2 class="section-h2 reveal">How ArGen <i class="soul-text">actually</i> works<span class="green">.</span></h2>
     </div>
     <div class="how-scroll-wrap">
       <div class="how-track" id="howTrack">
@@ -171,14 +165,14 @@
         <div class="how-step">
           <div class="step-num-big">03</div>
           <div class="step-content">
-            <span class="step-tag">&gt; claude.score()</span>
-            <h3 class="step-h3">Claude scores each on 4 dimensions</h3>
+            <span class="step-tag">&gt; argen.evaluate()</span>
+            <h3 class="step-h3">ArGen Engine scores on 4 dimensions</h3>
             <p class="step-p">Clarity. Constraint Application. Critical Thinking. Communication. Each dimension scored
               0-25. No human bias. No subjectivity. Consistent, reproducible evaluation.</p>
             <div class="step-terminal">
               <div class="term-bar"><span class="term-dot"></span><span class="term-dot"></span><span
                   class="term-dot"></span></div>
-              <code>$ argen evaluate --model="claude-3.5"<br>Processing responses... ████████████ 100%<br>✓ 4 dimensions × 5 challenges × 5 people<br>✓ 100 data points generated</code>
+              <code>$ argen evaluate --model="argen-engine-v3"<br>Processing responses... ████████████ 100%<br>✓ 4 dimensions × 5 challenges × 5 people<br>✓ 100 data points generated</code>
             </div>
           </div>
         </div>
@@ -204,40 +198,40 @@
   <section class="section section-black">
     <div class="container">
       <span class="section-tag reveal">[ROI // WHAT_HAPPENS_NEXT]</span>
-      <h2 class="section-h2 reveal">What you actually do<br>with the report<span class="green">.</span></h2>
-      <p class="section-sub reveal">This is where the value gets real.</p>
-      <div class="card-grid card-grid-3">
-        <div class="card card-black reveal-card">
+      <h2 class="section-h2 reveal">What you <i class="soul-text">actually do</i><br>with the report<span class="green">.</span></h2>
+      <p class="section-sub reveal">This is where the investment transforms into <span class="highlight-blue">measurable impact</span>.</p>
+      <div class="lateral-scroll-container reveal">
+        <div class="card lateral-card reveal-card">
           <span class="card-num">01</span>
           <h3 class="card-h3">Identify Your<br>AI Leaders</h3>
           <p class="card-p">See exactly who in your team uses AI effectively. These people become your AI champions. They mentor others. They unlock 20-40% productivity gains in their functions.</p>
           <p class="card-outcome"><strong>Outcome:</strong> Organic skill transfer + faster adoption across team.</p>
         </div>
-        <div class="card card-black reveal-card">
+        <div class="card lateral-card reveal-card">
           <span class="card-num">02</span>
           <h3 class="card-h3">Spot Skill Gaps<br>Precisely</h3>
           <p class="card-p">Discover weaknesses in Constraint Application? They're using AI but ignoring requirements. Critical Thinking low? They're trusting AI output without verification. Targeted training works.</p>
           <p class="card-outcome"><strong>Outcome:</strong> 60% faster upskilling. Measurable improvement in next quarter.</p>
         </div>
-        <div class="card card-black reveal-card">
+        <div class="card lateral-card reveal-card">
           <span class="card-num">03</span>
           <h3 class="card-h3">Prove ROI to<br>Finance & Board</h3>
           <p class="card-p">You invested in AI licenses. You don't know if people are using them effectively. This report shows the real performance gap. When you fix it, you can quantify the savings.</p>
           <p class="card-outcome"><strong>Outcome:</strong> Board-ready metrics. Budget justification. Competitive leverage.</p>
         </div>
-        <div class="card card-black reveal-card">
+        <div class="card lateral-card reveal-card">
           <span class="card-num">04</span>
           <h3 class="card-h3">Plan Your Next<br>Hires Smarter</h3>
           <p class="card-p">Now you know what "AI-fluent" looks like in YOUR company. You can screen for it in interviews. Hire people who hit 70+ on your benchmarks from day one.</p>
           <p class="card-outcome"><strong>Outcome:</strong> Better talent acquisition. Higher-performing teams from hire date.</p>
         </div>
-        <div class="card card-black reveal-card">
+        <div class="card lateral-card reveal-card">
           <span class="card-num">05</span>
           <h3 class="card-h3">Track Progress<br>Over Time</h3>
           <p class="card-p">Run the evaluation again in 6 months. See if training worked. See if hiring improved the baseline. Benchmark against industry (available on paid plans).</p>
           <p class="card-outcome"><strong>Outcome:</strong> Ongoing measurement of strategic AI adoption.</p>
         </div>
-        <div class="card card-black reveal-card">
+        <div class="card lateral-card reveal-card">
           <span class="card-num">06</span>
           <h3 class="card-h3">Competitive<br>Intelligence</h3>
           <p class="card-p">Your team's AI performance IS your competitive advantage. Know your score. Know their score. Move fast where they move slow. Differentiate where they struggle.</p>
@@ -251,7 +245,7 @@
   <section class="section section-cream">
     <div class="container container-narrow">
       <span class="section-tag reveal">[INVESTMENT_MATH]</span>
-      <h2 class="section-h2 reveal">The math is simple<span class="green">.</span></h2>
+      <h2 class="section-h2 reveal">The math is <i class="soul-text">undeniably</i> simple<span class="green">.</span></h2>
       <div class="value-table reveal">
         <div class="value-row">
           <div class="value-label">One high performer gains 2 hours/week via better AI use</div>
@@ -279,7 +273,7 @@
   <section id="about" class="section section-cream">
     <div class="container container-narrow">
       <span class="section-tag reveal">[TARGET_AUDIENCE]</span>
-      <h2 class="section-h2 reveal">Built for leaders who<br>need answers<span class="green">.</span></h2>
+      <h2 class="section-h2 reveal">Built for leaders who<br><i class="soul-text">must</i> have answers<span class="green">.</span></h2>
       <div class="audience-block reveal">
         <p class="audience-text">
           Built for <strong>CEOs, COOs, and Founders</strong> of 30–300 person teams
@@ -287,7 +281,7 @@
           and need to answer one question:
         </p>
         <blockquote class="audience-quote">
-          <span class="quote-mark">"</span>Is it actually working?<span class="quote-mark">"</span>
+          <span class="quote-mark">"</span>Is it <i class="soul-text">actually</i> working?<span class="quote-mark">"</span>
         </blockquote>
       </div>
       <div class="audience-cta reveal">
@@ -430,7 +424,7 @@
       <div class="pricing-grid">
         <div class="price-card reveal-card">
           <span class="price-tier">Pilot Evaluation</span>
-          <div class="price-amount">₹0</div>
+          <div class="price-amount">$0</div>
           <p class="price-desc">Try it risk-free with 5 people</p>
           <ul class="price-list">
             <li>5-person audit</li>
@@ -438,7 +432,7 @@
             <li>48-hour turnaround</li>
             <li>No credit card</li>
           </ul>
-          <a href="evaluate.html" class="btn btn-primary btn-full">Start Pilot</a>
+          <a href="/evaluate" class="btn btn-primary btn-full">Start Pilot</a>
           <p class="price-subtext">See the value. Then invest.</p>
         </div>
         <div class="price-card price-card-pop reveal-card">
@@ -459,7 +453,7 @@
         </div>
         <div class="price-card reveal-card">
           <span class="price-tier">Quarterly Track</span>
-          <div class="price-amount">₹12,999<span class="price-freq">/month</span></div>
+          <div class="price-amount">$199<span class="price-freq">/month</span></div>
           <p class="price-desc">Ongoing measurement. Ongoing improvement.</p>
           <ul class="price-list">
             <li>4 evaluations per year</li>
@@ -517,7 +511,7 @@
           <button class="acc-trigger" aria-expanded="false"><span class="acc-title">Is AI scoring reliable?</span><span
               class="acc-plus">+</span></button>
           <div class="acc-panel">
-            <p>Claude's scoring has shown 94% correlation with expert human evaluators across our benchmark dataset. We
+            <p>ArGen's proprietary scoring has shown 94% correlation with expert human evaluators across our benchmark dataset. We
               publish our methodology openly.</p>
           </div>
         </div>
@@ -581,7 +575,7 @@
       <h2 class="cta-h2 reveal">You're either measuring<br>AI performance or ignoring it<span class="green">.</span></h2>
       <p class="cta-sub reveal">One $0 pilot + one $1,500 report. That's the difference between strategy and luck.</p>
       <div class="cta-buttons reveal">
-        <a href="evaluate.html" class="btn btn-primary btn-lg">Start Free Pilot (5 People)</a>
+        <a href="/evaluate" class="btn btn-primary btn-lg">Start Free Pilot (5 People)</a>
         <a href="mailto:isiraglobal@gmail.com?subject=ArGen Enterprise Inquiry" class="btn btn-ghost btn-lg">Talk to Sales</a>
       </div>
     </div>
@@ -615,27 +609,27 @@
     <div class="container">
       <div class="footer-grid">
         <div class="footer-col">
-          <span class="footer-label">ArGen_</span>
+          <img src="../images/ArGen Logo.png" alt="ArGen" style="height: 40px; margin-bottom: 1rem;">
           <p class="footer-desc">AI performance evaluation for teams that want proof, not promises.</p>
         </div>
         <div class="footer-col">
           <span class="footer-label">Links</span>
-          <a href="index.html#how" class="footer-link">How It Works</a>
-          <a href="pricing.html" class="footer-link">Pricing</a>
-          <a href="about.html" class="footer-link">About</a>
-          <a href="blog.html" class="footer-link">Blog</a>
+          <a href="/#how" class="footer-link">How It Works</a>
+          <a href="/pricing" class="footer-link">Pricing</a>
+          <a href="/about" class="footer-link">About</a>
+          <a href="/blog" class="footer-link">Blog</a>
         </div>
         <div class="footer-col">
           <span class="footer-label">Connect</span>
-          <a href="contact.html" class="footer-link">Contact</a>
+          <a href="/contact" class="footer-link">Contact</a>
           <a href="mailto:isiraglobal@gmail.com" class="footer-link">isiraglobal@gmail.com</a>
-          <a href="https://www.linkedin.com/company/argen-prompting" class="footer-link">LinkedIn</a>
-          <a href="https://www.threads.com/@argen_prompt" class="footer-link">Threads</a>
+          <a href="#" class="footer-link">LinkedIn</a>
+          <a href="#" class="footer-link">Twitter/X</a>
         </div>
         <div class="footer-col">
           <span class="footer-label">Legal</span>
-          <a href="privacy.html" class="footer-link">Privacy Policy</a>
-          <a href="terms.html" class="footer-link">Terms of Service</a>
+          <a href="/privacy" class="footer-link">Privacy Policy</a>
+          <a href="/terms" class="footer-link">Terms of Service</a>
         </div>
       </div>
       <div class="footer-bottom">

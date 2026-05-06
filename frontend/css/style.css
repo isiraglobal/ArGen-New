@@ -3,37 +3,53 @@
    ═══════════════════════════════════════ */
 
 :root {
-  --argen-blue: #4A6EE0;
+  /* ArGen Brand Colors - Extracted from Logo */
+  --argen-blue: #2B60E2;
+  --argen-blue-glow: rgba(43, 96, 226, 0.3);
   --argen-cream: #F5F3ED;
-  --pure-black: #000000;
+  --pure-black: #0B0E14;
   --pure-white: #FFFFFF;
-  --emerald-cta: #22C55E;
-  --emerald-hover: #16A34A;
-  --purple-accent: #7C3AED;
+  
+  /* Status Colors */
+  --emerald-cta: #10B981;
+  --emerald-hover: #059669;
+  --purple-accent: #8B5CF6;
   --cyan-accent: #06B6D4;
+  --argen-blue-deep: #1E40AF;
 
-  --black: #000000;
+  /* Theme Shorthands */
+  --black: #0B0E14;
   --cream: #F5F3ED;
-  --green: #4A6EE0;
   --charcoal: #1F2937;
   --white: #FFFFFF;
 
-  --text-dark: #1F2937;
-  --text-medium: #4B5563;
+  /* Text Colors */
+  --text-dark: #0F172A;
+  --text-medium: #475569;
   --text-on-dark: #F5F3ED;
   --text-sec: rgba(245, 243, 237, 0.7);
-  --text-sec-dark: #4B5563;
+  --text-sec-dark: #64748B;
 
-  --border-light: rgba(255, 255, 255, 0.1);
-  --border-dark: #E5E7EB;
+  /* Borders & Shadows */
+  --border-light: rgba(255, 255, 255, 0.08);
+  --border-dark: #E2E8F0;
+  --shadow-sm: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+  --shadow-lg: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
 
-  --font-display: 'VT323', monospace;
-  --font-body: 'Roboto Mono', 'Courier New', monospace;
-  --font-mono: 'Share Tech Mono', monospace;
+  /* Typography - Modern Rounded */
+  --font-display: 'Plus Jakarta Sans', 'Inter', sans-serif;
+  --font-body: 'Inter', sans-serif;
+  --font-mono: 'JetBrains Mono', 'Roboto Mono', monospace;
+  --font-soul: 'Instrument Serif', serif;
 
+  /* Layout */
   --ease: cubic-bezier(0.16, 1, 0.3, 1);
-  --bounce: cubic-bezier(0.68, -0.55, 0.265, 1.55);
+  --radius-sm: 8px;
+  --radius-md: 16px;
+  --radius-lg: 24px;
+  --radius-xl: 32px;
   --nav-h: 80px;
+  --bounce: cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
 *,
@@ -60,13 +76,12 @@ body {
   color: var(--white);
   overflow-x: hidden;
   -webkit-font-smoothing: antialiased;
-  cursor: none;
+  cursor: default;
 }
 
 a {
   color: inherit;
   text-decoration: none;
-  cursor: none;
 }
 
 button {
@@ -74,7 +89,6 @@ button {
   background: none;
   color: inherit;
   font: inherit;
-  cursor: none;
 }
 
 img {
@@ -116,83 +130,71 @@ strong {
   }
 }
 
-/* ═══════════ SCANLINES + NOISE ═══════════ */
-.scanlines {
-  position: fixed;
-  inset: 0;
-  z-index: 9998;
-  pointer-events: none;
-  background: repeating-linear-gradient(0deg, transparent, transparent 2px,
-      rgba(0, 0, 0, 0.03) 2px, rgba(0, 0, 0, 0.03) 4px);
+/* ═══════════ SOUL UTILITIES ═══════════ */
+.soul-text {
+  font-family: var(--font-soul);
+  font-style: italic;
+  font-size: 1.1em;
+  color: var(--argen-blue);
+  background: linear-gradient(120deg, var(--argen-blue) 0%, var(--cyan-accent) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  display: inline-block;
+  transform: rotate(-1deg);
+  margin: 0 0.1em;
 }
 
-.noise-overlay {
-  position: fixed;
-  inset: 0;
-  z-index: 9997;
-  pointer-events: none;
-  opacity: 0.04;
-  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
-  background-size: 256px;
+.section-cream .soul-text {
+  color: var(--argen-blue-deep);
+  background: linear-gradient(120deg, var(--argen-blue-deep) 0%, var(--purple-accent) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
 }
 
-/* ═══════════ CURSOR ═══════════ */
-.cursor-dot {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 6px;
-  height: 6px;
-  background: var(--green);
-  border-radius: 0;
-  pointer-events: none;
-  z-index: 10001;
-  transform: translate(-50%, -50%);
-  mix-blend-mode: difference;
-  transition: width .25s var(--ease), height .25s var(--ease), background .2s;
+.highlight-blue {
+  color: var(--argen-blue);
+  font-weight: 700;
+  text-shadow: 0 0 20px var(--argen-blue-glow);
 }
 
-.cursor-ring {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 36px;
-  height: 36px;
-  border: 1.5px solid var(--green);
-  border-radius: 0;
-  pointer-events: none;
-  z-index: 10000;
-  transform: translate(-50%, -50%);
-  transition: width .35s var(--ease), height .35s var(--ease), border-color .2s;
+.text-glow {
+  text-shadow: 0 0 15px rgba(255, 255, 255, 0.3);
 }
 
-body.cursor-hover .cursor-dot {
-  width: 10px;
-  height: 10px;
-  background: var(--white);
+/* LATERAL SCROLLING */
+.lateral-scroll-container {
+  overflow-x: auto;
+  overflow-y: hidden;
+  display: flex;
+  gap: 2rem;
+  padding: 2rem 0;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none; /* Firefox */
+  padding-left: clamp(1.2rem, 4vw, 3rem);
+  padding-right: clamp(1.2rem, 4vw, 3rem);
+  margin: 0 calc(-1 * clamp(1.2rem, 4vw, 3rem));
 }
 
-body.cursor-hover .cursor-ring {
-  width: 50px;
-  height: 50px;
-  border-color: var(--white);
+.lateral-scroll-container::-webkit-scrollbar {
+  display: none; /* Chrome/Safari */
 }
 
-@media (hover: none) {
+.lateral-card {
+  flex: 0 0 350px;
+  max-width: 85vw;
+}
 
-  .cursor-dot,
-  .cursor-ring {
-    display: none;
-  }
+/* ═══════════ VISUAL OVERLAYS ═══════════ */
+.scanlines, .noise-overlay, .cursor-dot, .cursor-ring {
+  display: none !important;
+}
 
-  body {
-    cursor: auto;
-  }
+body {
+  cursor: auto;
+}
 
-  a,
-  button {
-    cursor: pointer;
-  }
+a, button {
+  cursor: pointer;
 }
 
 /* ═══════════ CANVAS BACKGROUND ═══════════ */
@@ -522,9 +524,15 @@ body.cursor-hover .cursor-ring {
 }
 
 .section-sub {
-  font-size: 1.2rem;
+  font-size: 1.25rem;
+  line-height: 1.6;
   color: var(--text-sec);
-  margin-bottom: 3rem;
+  margin-bottom: 4rem;
+  max-width: 700px;
+}
+
+.section-cream .section-sub {
+  color: var(--text-medium);
 }
 
 /* REVEAL BASE */

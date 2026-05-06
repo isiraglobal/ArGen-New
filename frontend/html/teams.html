@@ -5,29 +5,25 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Teams Dashboard — ArGen</title>
   <link rel="icon" type="image/png" href="../images/ArGen Logo.png">
-  <link href="https://fonts.googleapis.com/css2?family=VT323&family=Roboto+Mono:wght@300;400;500;600;700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="../css/style.css">
 </head>
 <body>
-  <div class="scanlines"></div>
-  <div class="noise-overlay"></div>
-  <div id="cursor" class="cursor-dot"></div>
-  <div id="cursorRing" class="cursor-ring"></div>
-
+  <!-- NAV -->
   <header id="nav" class="nav nav-center scrolled">
     <div class="nav-inner">
-      <a href="index.html" class="nav-logo">
+      <a href="/" class="nav-logo">
         <img src="../images/ArGen Logo.png" alt="ArGen" class="logo-img">
       </a>
       <nav class="nav-links">
-        <a href="index.html#how" class="nav-link">How_It_Works</a>
-        <a href="pricing.html" class="nav-link">Pricing</a>
-        <a href="about.html" class="nav-link">About</a>
-        <a href="blog.html" class="nav-link">Blog</a>
+        <a href="/#how" class="nav-link">How It Works</a>
+        <a href="/pricing" class="nav-link">Pricing</a>
+        <a href="/about" class="nav-link">About</a>
+        <a href="/blog" class="nav-link">Blog</a>
       </nav>
       <div class="user-profile" style="display: flex; align-items: center; gap: 1rem;">
-        <span style="font-family: var(--font-mono); font-size: 0.8rem; color: var(--text-sec);">ADMIN_MODE</span>
-        <div style="width: 32px; height: 32px; background: var(--argen-blue); border-radius: 4px;"></div>
+        <span style="font-family: var(--font-body); font-weight: 600; font-size: 0.8rem; color: var(--text-sec);">ADMIN PANEL</span>
+        <img src="../images/ArGen Logo.png" alt="ArGen" style="width: 32px; height: 32px; border-radius: 4px;">
       </div>
     </div>
   </header>
@@ -37,7 +33,7 @@
       <div class="dashboard-header" style="display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 4rem;">
         <div>
           <span class="section-tag">[DASHBOARD]</span>
-          <h1 class="section-h2" style="font-size: 3rem;">Organization Overview</h1>
+          <h1 class="section-h2" style="font-size: 3.5rem;">Organization <i class="soul-text">Teams</i></h1>
           <p class="section-sub" id="dashboardSummary" style="margin-bottom: 0;">Loading organization data...</p>
         </div>
         <button class="btn btn-primary" onclick="alert('Team creation flow coming soon')">+ New Evaluation</button>
@@ -45,8 +41,8 @@
 
       <div class="dashboard-grid" id="teamsGrid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); gap: 2rem;">
         <!-- Dynamic teams will be injected here -->
-        <div class="loading-state" style="grid-column: 1/-1; text-align: center; padding: 4rem; font-family: var(--font-mono); color: var(--text-sec);">
-          > FETCHING_TEAMS...
+        <div class="loading-state" style="grid-column: 1/-1; text-align: center; padding: 4rem; color: var(--text-sec);">
+          Fetching evaluation data...
         </div>
       </div>
     </div>
@@ -57,6 +53,10 @@
       <div class="footer-bottom">
         <span id="userSession">Logged in as <strong id="userEmail">...</strong></span>
         <a href="#" onclick="window.argenApi.logout()" style="color: var(--text-sec); font-size: 0.8rem; text-decoration: underline;">System Logout</a>
+      </div>
+      <div class="footer-bottom" style="margin-top: 1rem; border: none; padding: 0;">
+        <span>© 2026 ArGen. All rights reserved.</span>
+        <span class="footer-made">Built with obsession<span class="blink">_</span></span>
       </div>
     </div>
   </footer>
@@ -80,7 +80,7 @@
       try {
         const teams = await window.argenApi.getTeams();
         
-        if (teams.length === 0) {
+        if (!teams || teams.length === 0) {
           teamsGrid.innerHTML = `
             <div style="grid-column: 1/-1; text-align: center; padding: 4rem; background: var(--charcoal); border: 1px dashed var(--border-light); border-radius: 8px;">
               <p style="font-family: var(--font-mono); color: var(--text-sec);">No active evaluations found. Start by creating a new team.</p>
@@ -91,45 +91,45 @@
           return;
         }
 
-        dashboardSummary.textContent = `Managing ${teams.length} active teams | Data synced: Just now`;
+        dashboardSummary.textContent = \`Managing \${teams.length} active teams | Data synced: Just now\`;
         
-        teamsGrid.innerHTML = teams.map(team => `
+        teamsGrid.innerHTML = teams.map(team => \`
           <div class="card reveal-card" style="padding: 2.5rem; background: var(--charcoal); opacity: 1; transform: translateY(0);">
             <div style="display: flex; justify-content: space-between; margin-bottom: 1.5rem;">
-              <h3 class="card-h3" style="color: var(--white);">${team.name}</h3>
-              <span class="step-tag" style="background: rgba(34, 197, 94, 0.1); color: var(--emerald-cta); border: 1px solid var(--emerald-cta);">${team.industry || 'ACTIVE'}</span>
+              <h3 class="card-h3" style="color: var(--white);">\${team.name}</h3>
+              <span class="step-tag" style="background: rgba(34, 197, 94, 0.1); color: var(--emerald-cta); border: 1px solid var(--emerald-cta);">\${team.industry || 'ACTIVE'}</span>
             </div>
             <div class="score-display" style="margin-bottom: 2rem;">
               <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
-                <span style="font-family: var(--font-mono); font-size: 0.8rem; color: var(--text-sec);">AI_SCORE_INDEX</span>
-                <span style="font-family: var(--font-display); font-size: 1.5rem; color: var(--white);">${team.score || '??'}/100</span>
+                <span style="font-family: var(--font-body); font-weight: 600; font-size: 0.8rem; color: var(--text-sec);">AI PERFORMANCE INDEX</span>
+                <span style="font-family: var(--font-display); font-size: 1.5rem; color: var(--white);">\${team.score || '??'}/100</span>
               </div>
               <div style="height: 4px; background: rgba(255,255,255,0.1); border-radius: 2px;">
-                <div style="width: ${team.score || 0}%; height: 100%; background: var(--emerald-cta); border-radius: 2px;"></div>
+                <div style="width: \${team.score || 0}%; height: 100%; background: var(--emerald-cta); border-radius: 2px;"></div>
               </div>
             </div>
             <div class="team-meta" style="display: flex; gap: 2rem; margin-bottom: 2rem;">
               <div>
                 <span class="stat-label">MEMBERS</span>
-                <span style="display: block; color: var(--white); font-family: var(--font-mono);">${team.members ? team.members.length : 0}</span>
+                <span style="display: block; color: var(--white); font-family: var(--font-mono);">\${team.members ? team.members.length : 0}</span>
               </div>
               <div>
                 <span class="stat-label">INDUSTRY</span>
-                <span style="display: block; color: var(--white); font-family: var(--font-mono);">${team.industry || 'N/A'}</span>
+                <span style="display: block; color: var(--white); font-family: var(--font-mono);">\${team.industry || 'N/A'}</span>
               </div>
             </div>
-            <a href="team-detail.html?id=${team._id}" class="btn btn-dark btn-full">View Detailed Analytics</a>
+            <a href="/team-detail?id=\${team._id}" class="btn btn-dark btn-full">View Detailed Analytics</a>
           </div>
-        `).join('');
+        \`).join('');
 
       } catch (err) {
         console.error(err);
-        teamsGrid.innerHTML = `
+        teamsGrid.innerHTML = \`
           <div style="grid-column: 1/-1; text-align: center; padding: 4rem; color: #ef4444; font-family: var(--font-mono);">
             > FATAL_ERROR: FAILED_TO_LOAD_RESOURCES
-            <br><small>${err.message}</small>
+            <br><small>\${err.message}</small>
           </div>
-        `;
+        \`;
       }
     });
   </script>

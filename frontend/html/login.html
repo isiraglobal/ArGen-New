@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Login — ArGen</title>
   <link rel="icon" type="image/png" href="../images/ArGen Logo.png">
-  <link href="https://fonts.googleapis.com/css2?family=VT323&family=Roboto+Mono:wght@300;400;500;600;700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="../css/style.css">
   <style>
     .login-container {
@@ -52,30 +52,29 @@
   </style>
 </head>
 <body class="bg-black">
-  <div class="scanlines"></div>
-  <div class="noise-overlay"></div>
+  <!-- Removed Overlays -->
 
   <section class="section section-black" style="min-height: 100vh; display: flex; align-items: center; justify-content: center;">
     <div class="container">
       <div style="text-align: center; margin-bottom: 3rem;">
-        <a href="index.html">
+        <a href="/">
           <img src="../images/ArGen Logo.png" alt="ArGen" style="width: 60px; margin-bottom: 1rem;">
         </a>
-        <h1 class="section-h2" style="font-size: 2rem; margin-bottom: 0.5rem;">System_Login</h1>
+        <h1 class="section-h2" style="font-size: 2rem; margin-bottom: 0.5rem;">Organization <i class="soul-text">Login</i></h1>
         <p class="section-sub">Enter credentials to access organization dashboard</p>
       </div>
 
       <div class="login-container">
         <form id="loginForm">
           <div class="form-group">
-            <label class="form-label">EMAIL_ADDRESS</label>
+            <label class="form-label">Email Address</label>
             <input type="email" id="email" class="form-input" placeholder="admin@company.com" required>
           </div>
           <div class="form-group">
-            <label class="form-label">PASSWORD</label>
+            <label class="form-label">Password</label>
             <input type="password" id="password" class="form-input" placeholder="••••••••" required>
           </div>
-          <button type="submit" class="btn btn-primary btn-full" id="submitBtn">Initialize Session</button>
+          <button type="submit" class="btn btn-primary btn-full" id="submitBtn">Login to Dashboard</button>
           <div id="errorMsg" class="error-msg"></div>
         </form>
         
@@ -101,7 +100,7 @@
 
       try {
         await window.argenApi.login(email, password);
-        window.location.href = 'teams.html';
+        window.location.href = '/teams';
       } catch (err) {
         errorMsg.textContent = '> ERROR: ' + err.message;
         errorMsg.style.display = 'block';

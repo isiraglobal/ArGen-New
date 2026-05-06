@@ -7,15 +7,12 @@
 
   /* ─────────────── BOOT SEQUENCE ─────────────── */
   const bootLines = [
-    '> ARGEN_SYS v3.1.0 initializing...',
-    '> Loading particle engine...',
-    '> Connecting to Claude API... ✓',
-    '> Challenge bank loaded [5/5]',
-    '> Scoring rubric: 4 dimensions × 25pts',
-    '> Benchmark data: 12 teams indexed',
-    '> Wave formation module ready.',
-    '> System ready.',
-    '> _'
+    'Initializing ArGen Core...',
+    'Calibrating AI Benchmarks...',
+    'Syncing Neural Weights...',
+    'Security Protocols Active.',
+    'ArGen Engine Ready.',
+    ''
   ];
   const loader = document.getElementById('loader');
   const loaderLines = document.getElementById('loaderLines');
@@ -56,7 +53,6 @@
   function initAll() {
     initParticles();
     initLenis();
-    initCursor();
     initNav();
     initAuthUI();
     initMobileMenu();
@@ -265,22 +261,7 @@
   }
 
   /* ─────────────── CURSOR ─────────────── */
-  function initCursor() {
-    const dot = document.getElementById('cursor');
-    const ring = document.getElementById('cursorRing');
-    if (!dot || !ring || 'ontouchstart' in window) return;
-
-    document.addEventListener('mousemove', (e) => {
-      gsap.to(dot, { x: e.clientX, y: e.clientY, duration: 0.08, ease: 'power2.out' });
-      gsap.to(ring, { x: e.clientX, y: e.clientY, duration: 0.25, ease: 'power2.out' });
-    });
-
-    const hovers = document.querySelectorAll('a, button, .acc-trigger, .card, .price-card, .chat-toggle, .chat-sug');
-    hovers.forEach(el => {
-      el.addEventListener('mouseenter', () => document.body.classList.add('cursor-hover'));
-      el.addEventListener('mouseleave', () => document.body.classList.remove('cursor-hover'));
-    });
-  }
+  /* Removed initCursor */
 
   /* ─────────────── NAV ─────────────── */
   function initNav() {
@@ -316,7 +297,7 @@
       }
 
       if (navCta) {
-        navCta.textContent = 'Teams_Panel →';
+        navCta.textContent = 'Teams Panel →';
         navCta.href = 'teams.html';
       }
 
@@ -535,13 +516,14 @@
   // You can change these environment variables in your hosting platform.
   const AI_CONFIG = {
     ENDPOINT: 'https://api.openai.com/v1/chat/completions',
-    API_KEY: 'YOUR_API_KEY_HERE', // <-- Replace via environment variables or CI/CD
+    API_KEY: 'YOUR_API_KEY_HERE', 
     MODEL: 'gpt-4o-mini',
-    SYSTEM_PROMPT: `You are the ArGen System Terminal. You answer concisely in a hacker/terminal style tone. Do not use emojis. Use bullet points if necessary.
-ArGen measures real AI output quality across a team in 48 hours via 5 challenges (Strategy, Data Analysis, Communication, Creative Problem Solving, Technical Execution). 
-Pricing: Free Pilot (5 people), Team Snapshot (₹24,999 for 25 people), Team Intelligence (₹12,999/mo). 
-Dimensions scored: Clarity, Constraint Application, Critical Thinking, Communication. 
-If the user asks something unrelated to ArGen, tell them you only process ArGen-related queries.`
+    SYSTEM_PROMPT: `You are the ArGen Intelligence Agent. You are the digital interface for ArGen's proprietary evaluation engine. 
+Answer concisely and with executive professionalism. 
+ArGen evaluates real-world AI competency across teams via a 48-hour challenge workflow. 
+Our engine analyzes outputs across 4 key dimensions: Clarity, Constraint Application, Critical Thinking, and Communication.
+Pricing: Professional Pilot ($0 for 5 people), Enterprise Snapshot ($1,500 for up to 25 people), Intelligence SaaS ($199/mo). 
+Always refer to the analysis as "ArGen Intelligence" or "Proprietary ArGen Analysis". Never mention 3rd party model names like Claude or GPT unless specifically asked about integrations.`
   };
 
   let chatHistory = [
@@ -574,7 +556,7 @@ If the user asks something unrelated to ArGen, tell them you only process ArGen-
         // Only run actual fetch if key is provided, else fallback to mock for demo purposes
         if (AI_CONFIG.API_KEY === 'YOUR_API_KEY_HERE') {
           setTimeout(() => {
-            const fallbackMsg = "> ERROR: API_KEY NOT CONFIGURED.\n> FALLBACK MODE ENGAGED.\n> Query received: " + text + "\n> Configure API Key in environment variables to enable live agent routing.";
+            const fallbackMsg = "System Notice: The Intelligence Agent is currently in demonstration mode. \n\nPlease connect your API credentials in the ArGen Dashboard to enable live neural processing and proprietary team analysis.";
             responseContent.innerHTML = fallbackMsg.replace(/\n/g, '<br>');
             chatHistory.push({ role: 'assistant', content: fallbackMsg });
           }, 1200);
