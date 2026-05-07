@@ -1,0 +1,520 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Challenges - ArGen | AI Performance Evaluation</title>
+  <meta name="description" content="Explore the real-world AI challenges ArGen uses to evaluate your team's performance. 5 challenge types, 4 scoring dimensions, 48-hour turnaround.">
+  <link rel="icon" type="image/png" href="/images/ArGen Logo.png">
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/css/style.css">
+  <script src="/js/auth-guard.js"></script>
+  <script src="/js/api.js"></script>
+  <style>
+    .challenge-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+      gap: 2rem;
+      margin-top: 3rem;
+    }
+    .challenge-card {
+      background: var(--charcoal);
+      border: 1px solid var(--border-light);
+      border-radius: 12px;
+      overflow: hidden;
+      position: relative;
+      transition: border-color 0.3s ease, transform 0.3s ease;
+    }
+    .challenge-card:hover {
+      border-color: var(--argen-blue);
+      transform: translateY(-4px);
+    }
+    .challenge-card.locked {
+      opacity: 0.75;
+    }
+    .challenge-card-header {
+      padding: 1.5rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      border-bottom: 1px solid var(--border-light);
+    }
+    .challenge-num {
+      font-family: var(--font-mono);
+      font-size: 0.75rem;
+      color: var(--text-sec);
+      background: rgba(255,255,255,0.05);
+      padding: 4px 10px;
+      border-radius: 4px;
+    }
+    .challenge-difficulty {
+      font-family: var(--font-mono);
+      font-size: 0.7rem;
+      padding: 4px 10px;
+      border-radius: 4px;
+      font-weight: 600;
+    }
+    .diff-easy { background: rgba(34, 197, 94, 0.15); color: var(--green); }
+    .diff-medium { background: rgba(74, 110, 224, 0.15); color: var(--argen-blue); }
+    .diff-hard { background: rgba(124, 58, 237, 0.15); color: var(--purple-accent); }
+    .challenge-body {
+      padding: 1.5rem;
+    }
+    .challenge-type-tag {
+      display: inline-block;
+      font-family: var(--font-mono);
+      font-size: 0.7rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--cyan-accent);
+      margin-bottom: 0.75rem;
+    }
+    .challenge-title {
+      font-family: var(--font-display);
+      font-size: 1.4rem;
+      color: var(--white);
+      margin-bottom: 0.75rem;
+      line-height: 1.3;
+    }
+    .challenge-desc {
+      font-size: 0.9rem;
+      color: var(--text-sec);
+      line-height: 1.7;
+      margin-bottom: 1.25rem;
+    }
+    .challenge-preview {
+      background: rgba(0,0,0,0.3);
+      border-radius: 8px;
+      padding: 1rem;
+      font-family: var(--font-mono);
+      font-size: 0.8rem;
+      color: var(--text-sec);
+      line-height: 1.6;
+      position: relative;
+    }
+    .challenge-preview.blurred::after {
+      content: '';
+      position: absolute;
+      bottom: 0; left: 0; right: 0;
+      height: 60%;
+      background: linear-gradient(to bottom, transparent, var(--charcoal));
+      border-radius: 0 0 8px 8px;
+    }
+    .locked-overlay {
+      position: absolute;
+      inset: 0;
+      background: rgba(10, 10, 12, 0.55);
+      backdrop-filter: blur(2px);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 1rem;
+      z-index: 10;
+      border-radius: 12px;
+    }
+    .lock-icon {
+      width: 48px; height: 48px;
+      background: rgba(74, 110, 224, 0.15);
+      border: 1px solid var(--argen-blue);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .locked-label {
+      font-family: var(--font-mono);
+      font-size: 0.75rem;
+      color: var(--argen-blue);
+      letter-spacing: 0.1em;
+    }
+    .challenge-dimensions {
+      display: flex;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+      margin-top: 1.25rem;
+    }
+    .dim-tag {
+      font-family: var(--font-mono);
+      font-size: 0.65rem;
+      padding: 3px 8px;
+      border-radius: 3px;
+      border: 1px solid var(--border-light);
+      color: var(--text-sec);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+    /* Hero stat bar */
+    .challenge-hero-stats {
+      display: flex;
+      gap: 3rem;
+      margin-top: 2.5rem;
+      flex-wrap: wrap;
+    }
+    .hero-stat-item {
+      display: flex;
+      flex-direction: column;
+    }
+    .hero-stat-num {
+      font-family: var(--font-display);
+      font-size: 2.5rem;
+      font-weight: 800;
+      color: var(--white);
+      line-height: 1;
+    }
+    .hero-stat-label {
+      font-family: var(--font-mono);
+      font-size: 0.75rem;
+      color: var(--text-sec);
+      margin-top: 0.25rem;
+    }
+
+    @media (max-width: 768px) {
+      .challenge-grid { grid-template-columns: 1fr; }
+      .challenge-hero-stats { gap: 1.5rem; }
+    }
+  </style>
+  <link rel="canonical" href="https://argen.isira.club/challenges">
+</head>
+<body>
+
+  <!-- NAV -->
+  <header id="nav" class="nav nav-center">
+    <div class="nav-inner">
+      <a href="/" class="nav-logo">
+        <img src="/images/ArGen Logo.png" alt="ArGen" class="logo-img">
+      </a>
+      <nav class="nav-links">
+        <a href="/#how" class="nav-link">How It Works</a>
+        <a href="/pricing" class="nav-link">Pricing</a>
+        <a href="/about" class="nav-link">About</a>
+      </nav>
+      <a href="/evaluate" class="nav-cta">Run Pilot →</a>
+      <button class="nav-burger" id="burger" aria-label="Menu">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </header>
+
+  <div class="mobile-menu" id="mobileMenu">
+    <div class="mm-inner">
+      <div class="mm-links">
+        <a href="/" class="mm-link">01 Home</a>
+        <a href="/#how" class="mm-link">02 How It Works</a>
+        <a href="/pricing" class="mm-link">03 Pricing</a>
+        <a href="/about" class="mm-link">05 About</a>
+        <a href="/contact" class="mm-link">06 Contact</a>
+      </div>
+      <div class="mm-footer">
+        <a href="/evaluate" class="btn btn-primary btn-full">Run Evaluation Pilot</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- HERO -->
+  <section class="section section-black" style="padding-top: calc(var(--nav-h) + 80px);">
+    <div class="container">
+      <span class="section-tag reveal">[CHALLENGE_BANK]</span>
+      <h1 class="section-h2 reveal" style="font-size: 3.5rem; max-width: 700px;">
+        Real challenges.<br>
+        <i class="soul-text">Real measurement.</i>
+      </h1>
+      <p class="section-sub reveal" style="max-width: 600px; margin-bottom: 2rem;">
+        These are the actual challenges your team receives during an ArGen evaluation. Not generic quizzes. Not theory. Tasks that mirror the real work your people do every day — powered by whatever AI tools they already use.
+      </p>
+
+      <div class="challenge-hero-stats reveal">
+        <div class="hero-stat-item">
+          <span class="hero-stat-num">5</span>
+          <span class="hero-stat-label">Challenge types</span>
+        </div>
+        <div class="hero-stat-item">
+          <span class="hero-stat-num">4</span>
+          <span class="hero-stat-label">Scoring dimensions</span>
+        </div>
+        <div class="hero-stat-item">
+          <span class="hero-stat-num">48h</span>
+          <span class="hero-stat-label">To your report</span>
+        </div>
+        <div class="hero-stat-item">
+          <span class="hero-stat-num">100</span>
+          <span class="hero-stat-label">Data points per team</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- UNLOCKED PREVIEW SECTION -->
+  <section class="section section-cream">
+    <div class="container">
+      <span class="section-tag reveal">[OPEN_ACCESS]</span>
+      <h2 class="section-h2 reveal">What you can <i class="soul-text">see now</i>.<span class="green">.</span></h2>
+      <p class="section-sub reveal" style="margin-bottom: 0.5rem;">Two challenge types are visible in full detail. The rest require a pilot to unlock.</p>
+
+      <div class="challenge-grid">
+
+        <!-- UNLOCKED: Strategy -->
+        <div class="challenge-card reveal-card">
+          <div class="challenge-card-header">
+            <span class="challenge-num">CHALLENGE_01</span>
+            <span class="challenge-difficulty diff-medium">MEDIUM</span>
+          </div>
+          <div class="challenge-body">
+            <span class="challenge-type-tag">&gt; strategy.execute()</span>
+            <h3 class="challenge-title">Go-to-Market in 48 Hours</h3>
+            <p class="challenge-desc">Tests whether your team can use AI to build and execute strategic plans under time pressure — not just brainstorm.</p>
+            <div class="challenge-preview">
+              <strong style="color: var(--argen-blue);">Prompt:</strong><br>
+              "You are the Marketing Lead at a B2B SaaS company. A competitor just launched a feature that directly undercuts your flagship product. Using AI as your thinking partner, draft an immediate 30-day counter-positioning strategy. Show your prompting process."<br><br>
+              <strong style="color: var(--green);">What we score:</strong> Strategic clarity, AI leverage depth, constraint adherence, decision quality.
+            </div>
+            <div class="challenge-dimensions">
+              <span class="dim-tag">Clarity</span>
+              <span class="dim-tag">Constraint Application</span>
+              <span class="dim-tag">Critical Thinking</span>
+              <span class="dim-tag">Communication</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- UNLOCKED: Communication -->
+        <div class="challenge-card reveal-card">
+          <div class="challenge-card-header">
+            <span class="challenge-num">CHALLENGE_03</span>
+            <span class="challenge-difficulty diff-easy">FOUNDATIONAL</span>
+          </div>
+          <div class="challenge-body">
+            <span class="challenge-type-tag">&gt; communication.refine()</span>
+            <h3 class="challenge-title">The Difficult Client Email</h3>
+            <p class="challenge-desc">Professional writing with AI editing — tests real-world communication under constraint and audience awareness.</p>
+            <div class="challenge-preview">
+              <strong style="color: var(--argen-blue);">Prompt:</strong><br>
+              "A key client is furious about a project delay that's not your fault. Write an email that acknowledges the situation, preserves the relationship, and proposes a clear path forward. Use AI to refine tone, structure, and language. Show your final output and one revision round."<br><br>
+              <strong style="color: var(--green);">What we score:</strong> Audience adaptation, tone precision, clarity of resolution, AI editing leverage.
+            </div>
+            <div class="challenge-dimensions">
+              <span class="dim-tag">Clarity</span>
+              <span class="dim-tag">Communication</span>
+              <span class="dim-tag">Constraint Application</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- LOCKED: Data Analysis -->
+        <div class="challenge-card locked reveal-card">
+          <div class="locked-overlay">
+            <div class="lock-icon">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--argen-blue)" stroke-width="2">
+                <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+                <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+              </svg>
+            </div>
+            <span class="locked-label">CUSTOMER_ONLY</span>
+            <a href="/evaluate" class="btn btn-primary" style="padding: 10px 24px; font-size: 0.85rem;">Unlock with Pilot →</a>
+          </div>
+          <div class="challenge-card-header">
+            <span class="challenge-num">CHALLENGE_02</span>
+            <span class="challenge-difficulty diff-hard">ADVANCED</span>
+          </div>
+          <div class="challenge-body">
+            <span class="challenge-type-tag">&gt; data.analyze()</span>
+            <h3 class="challenge-title">The Hidden Insight Problem</h3>
+            <p class="challenge-desc">Data interpretation with AI-assisted insight extraction — separates who can turn raw data into boardroom-ready decisions.</p>
+            <div class="challenge-preview blurred">
+              <strong style="color: var(--argen-blue);">Prompt:</strong><br>
+              "Given this 6-month sales dataset [attached], identify the three most actionable insights for the VP of Sales. Use AI to accelerate analysis but apply your own judgment to validate outputs. Present your findings in a format suitable for a 5-minute exec briefing."
+            </div>
+            <div class="challenge-dimensions">
+              <span class="dim-tag">Critical Thinking</span>
+              <span class="dim-tag">Clarity</span>
+              <span class="dim-tag">Constraint Application</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- LOCKED: Creative Problem Solving -->
+        <div class="challenge-card locked reveal-card">
+          <div class="locked-overlay">
+            <div class="lock-icon">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--argen-blue)" stroke-width="2">
+                <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+                <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+              </svg>
+            </div>
+            <span class="locked-label">CUSTOMER_ONLY</span>
+            <a href="/evaluate" class="btn btn-primary" style="padding: 10px 24px; font-size: 0.85rem;">Unlock with Pilot →</a>
+          </div>
+          <div class="challenge-card-header">
+            <span class="challenge-num">CHALLENGE_04</span>
+            <span class="challenge-difficulty diff-hard">ADVANCED</span>
+          </div>
+          <div class="challenge-body">
+            <span class="challenge-type-tag">&gt; problem.solve(lateral=true)</span>
+            <h3 class="challenge-title">Cost Reduction Without Layoffs</h3>
+            <p class="challenge-desc">Lateral thinking + iterative AI prompting — reveals who uses AI as a genuine thinking partner versus an answer machine.</p>
+            <div class="challenge-preview blurred">
+              <strong style="color: var(--argen-blue);">Prompt:</strong><br>
+              "Your company needs to reduce operating costs by 15% within 90 days without any layoffs. Use AI to generate and evaluate 5 viable options with trade-off analysis for each. Show your iteration process and explain why you prioritized your top recommendation."
+            </div>
+            <div class="challenge-dimensions">
+              <span class="dim-tag">Critical Thinking</span>
+              <span class="dim-tag">Constraint Application</span>
+              <span class="dim-tag">Communication</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- LOCKED: Technical Execution -->
+        <div class="challenge-card locked reveal-card">
+          <div class="locked-overlay">
+            <div class="lock-icon">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--argen-blue)" stroke-width="2">
+                <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+                <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+              </svg>
+            </div>
+            <span class="locked-label">CUSTOMER_ONLY</span>
+            <a href="/evaluate" class="btn btn-primary" style="padding: 10px 24px; font-size: 0.85rem;">Unlock with Pilot →</a>
+          </div>
+          <div class="challenge-card-header">
+            <span class="challenge-num">CHALLENGE_05</span>
+            <span class="challenge-difficulty diff-medium">MEDIUM</span>
+          </div>
+          <div class="challenge-body">
+            <span class="challenge-type-tag">&gt; execution.automate()</span>
+            <h3 class="challenge-title">The Weekly Automation Build</h3>
+            <p class="challenge-desc">Practical AI application — measures whether your team can actually build AI-leveraged workflows, not just describe them.</p>
+            <div class="challenge-preview blurred">
+              <strong style="color: var(--argen-blue);">Prompt:</strong><br>
+              "Automate a weekly report that pulls from 3 data sources (provided). Show your AI-assisted workflow — the prompts used, the tools combined, and the final output. The report must be ready for non-technical stakeholders."
+            </div>
+            <div class="challenge-dimensions">
+              <span class="dim-tag">Clarity</span>
+              <span class="dim-tag">Constraint Application</span>
+              <span class="dim-tag">Critical Thinking</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Upgrade CTA Card -->
+        <div class="challenge-card reveal-card" style="border: 2px dashed var(--border-light); background: transparent; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 3rem 2rem; min-height: 300px;">
+          <span class="section-tag" style="margin-bottom: 1rem;">[UNLOCK_ALL]</span>
+          <h3 class="card-h3" style="color: var(--white); margin-bottom: 1rem;">Want all 5 challenges + role-specific variants?</h3>
+          <p class="card-p" style="margin-bottom: 2rem;">Enterprise and Quarterly Track plans unlock custom challenge sets tailored to your industry, function, and AI tools deployed.</p>
+          <a href="/evaluate" class="btn btn-green">Start Free Pilot (5 People)</a>
+          <a href="/pricing" class="btn btn-ghost" style="margin-top: 1rem; padding: 10px 20px; font-size: 0.85rem;">View Pricing →</a>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- HOW SCORING WORKS -->
+  <section class="section section-black">
+    <div class="container container-narrow">
+      <span class="section-tag reveal">[SCORING_RUBRIC]</span>
+      <h2 class="section-h2 reveal">How we score<span class="green">.</span> No black boxes<span class="green">.</span></h2>
+      <p class="section-sub reveal" style="margin-bottom: 3rem;">Every challenge is scored across 4 dimensions. Each dimension is worth 25 points — for a total of 100 per challenge, per person.</p>
+
+      <div class="card-grid card-grid-4 reveal">
+        <div class="card card-dark reveal-card">
+          <span class="card-num">C1</span>
+          <h3 class="card-h3">Clarity</h3>
+          <p class="card-score" style="color: var(--green); font-family: var(--font-mono); font-size: 1rem; margin: 0.5rem 0;">0 – 25 pts</p>
+          <p class="card-p">Is the output structured, legible, and immediately actionable? High scorers write like polished professionals. Low scorers need heavy editing.</p>
+        </div>
+        <div class="card card-dark reveal-card">
+          <span class="card-num">C2</span>
+          <h3 class="card-h3">Constraint Application</h3>
+          <p class="card-score" style="color: var(--green); font-family: var(--font-mono); font-size: 1rem; margin: 0.5rem 0;">0 – 25 pts</p>
+          <p class="card-p">Did they follow the brief exactly? High scorers nail scope, format, and audience. Low scorers ignore half the requirements.</p>
+        </div>
+        <div class="card card-dark reveal-card">
+          <span class="card-num">C3</span>
+          <h3 class="card-h3">Critical Thinking</h3>
+          <p class="card-score" style="color: var(--green); font-family: var(--font-mono); font-size: 1rem; margin: 0.5rem 0;">0 – 25 pts</p>
+          <p class="card-p">Does the response show original analysis — or just AI regurgitation? Top scorers challenge AI output and add their own judgment.</p>
+        </div>
+        <div class="card card-dark reveal-card">
+          <span class="card-num">C4</span>
+          <h3 class="card-h3">Communication</h3>
+          <p class="card-score" style="color: var(--green); font-family: var(--font-mono); font-size: 1rem; margin: 0.5rem 0;">0 – 25 pts</p>
+          <p class="card-p">Is it audience-appropriate? Does it persuade? The best responses adapt tone and structure for the specific stakeholder.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="section section-cta">
+    <div class="container container-narrow cta-center">
+      <span class="section-tag reveal">[DECISION_TIME]</span>
+      <h2 class="cta-h2 reveal">Ready to see your team's<br><i class="soul-text">actual</i> AI score<span class="green">?</span></h2>
+      <p class="cta-sub reveal">5 people. 48 hours. Zero cost. Start the pilot today and get a complete capability report — free.</p>
+      <div class="cta-buttons reveal">
+        <a href="/evaluate" class="btn btn-dark btn-lg">Start Free Pilot (5 People)</a>
+        <a href="/pricing" class="btn btn-ghost btn-lg" style="color: var(--black);">See Full Pricing →</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- FLOATING AI BAR -->
+  <div class="ai-bar-container">
+    <div id="aiBarResponse" class="ai-bar-response">
+      <div class="ai-response-content" id="aiResponseContent"></div>
+      <button class="ai-response-close" id="aiBarClose">✕</button>
+    </div>
+    <div class="ai-bar-glass">
+      <div class="ai-bar-input-wrap">
+        <svg class="ai-mic-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z"></path>
+          <path d="M19 10v2a7 7 0 0 1-14 0v-2"></path>
+          <line x1="12" x2="12" y1="19" y2="22"></line>
+        </svg>
+        <input type="text" id="aiBarInput" class="ai-bar-input" placeholder="TAP AND ASK AI" autocomplete="off">
+      </div>
+      <button id="aiBarSubmit" class="ai-bar-submit" aria-label="Ask AI">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+        </svg>
+      </button>
+    </div>
+  </div>
+
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <a href="/" class="footer-logo">ArGen</a>
+          <p class="footer-desc">The enterprise-grade standard for AI engineering evaluation and talent intelligence.</p>
+        </div>
+        <div class="footer-links">
+          <span class="footer-label">Product</span>
+          <a href="/evaluate" class="footer-link">Evaluate</a>
+          <a href="/pricing" class="footer-link">Pricing</a>
+          <a href="/challenges" class="footer-link">Challenges</a>
+        </div>
+        <div class="footer-links">
+          <span class="footer-label">Connect</span>
+          <a href="/about" class="footer-link">About</a>
+          <a href="/contact" class="footer-link">Contact</a>
+        </div>
+        <div class="footer-links">
+          <span class="footer-label">Legal</span>
+          <a href="/privacy" class="footer-link">Privacy</a>
+          <a href="/terms" class="footer-link">Terms</a>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <span>© 2026 ArGen. All rights reserved.</span>
+        <span class="footer-made">Built with obsession<span class="blink">_</span></span>
+      </div>
+    </div>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/lenis@1.1.18/dist/lenis.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.7/dist/gsap.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.7/dist/ScrollTrigger.min.js"></script>
+  <script src="/js/script.js"></script>
+</body>
+</html>

@@ -3,30 +3,49 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Teams Dashboard — ArGen</title>
-  <link rel="icon" type="image/png" href="../images/ArGen Logo.png">
+  <title>Teams Dashboard - ArGen</title>
+  <link rel="icon" type="image/png" href="/images/ArGen Logo.png">
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="../css/style.css">
+  <link rel="stylesheet" href="/css/style.css">
+  <script src="/js/auth-guard.js"></script>
+  <script src="/js/api.js"></script>
+  <link rel="canonical" href="https://argen.isira.club/teams">
 </head>
 <body>
-  <!-- NAV -->
-  <header id="nav" class="nav nav-center scrolled">
+  <header id="nav" class="nav">
     <div class="nav-inner">
       <a href="/" class="nav-logo">
-        <img src="../images/ArGen Logo.png" alt="ArGen" class="logo-img">
+        <img src="/images/ArGen Logo.png" alt="ArGen" class="logo-img">
       </a>
       <nav class="nav-links">
         <a href="/#how" class="nav-link">How It Works</a>
         <a href="/pricing" class="nav-link">Pricing</a>
         <a href="/about" class="nav-link">About</a>
-        <a href="/blog" class="nav-link">Blog</a>
       </nav>
       <div class="user-profile" style="display: flex; align-items: center; gap: 1rem;">
-        <span style="font-family: var(--font-body); font-weight: 600; font-size: 0.8rem; color: var(--text-sec);">ADMIN PANEL</span>
-        <img src="../images/ArGen Logo.png" alt="ArGen" style="width: 32px; height: 32px; border-radius: 4px;">
+        <span class="nav-link" style="font-weight: 600; font-size: 0.8rem; pointer-events: none;">ADMIN PANEL</span>
+        <img src="/images/ArGen Logo.png" alt="ArGen" style="width: 32px; height: 32px; border-radius: 4px;">
       </div>
+      <button class="nav-burger" id="burger" aria-label="Menu">
+        <span></span><span></span><span></span>
+      </button>
     </div>
   </header>
+
+  <div class="mobile-menu" id="mobileMenu">
+    <div class="mm-inner">
+      <div class="mm-links">
+        <a href="/" class="mm-link">01 Home</a>
+        <a href="/#how" class="mm-link">02 How It Works</a>
+        <a href="/pricing" class="mm-link">03 Pricing</a>
+        <a href="/about" class="mm-link">05 About</a>
+        <a href="/contact" class="mm-link">06 Contact</a>
+      </div>
+      <div class="mm-footer">
+        <a href="/evaluate" class="btn btn-primary btn-full">Run Evaluation Pilot</a>
+      </div>
+    </div>
+  </div>
 
   <section class="section section-black" style="padding-top: calc(var(--nav-h) + 60px); min-height: 100vh;">
     <div class="container">
@@ -50,12 +69,30 @@
 
   <footer class="footer">
     <div class="container">
-      <div class="footer-bottom">
-        <span id="userSession">Logged in as <strong id="userEmail">...</strong></span>
-        <a href="#" onclick="window.argenApi.logout()" style="color: var(--text-sec); font-size: 0.8rem; text-decoration: underline;">System Logout</a>
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <a href="/" class="footer-logo">ArGen</a>
+          <p class="footer-desc">The enterprise-grade standard for AI engineering evaluation and talent intelligence.</p>
+        </div>
+        <div class="footer-links">
+          <span class="footer-label">Product</span>
+          <a href="/evaluate" class="footer-link">Evaluate</a>
+          <a href="/pricing" class="footer-link">Pricing</a>
+          <a href="/challenges" class="footer-link">Challenges</a>
+        </div>
+        <div class="footer-links">
+          <span class="footer-label">Connect</span>
+          <a href="/about" class="footer-link">About</a>
+          <a href="/contact" class="footer-link">Contact</a>
+        </div>
+        <div class="footer-links">
+          <span class="footer-label">Legal</span>
+          <a href="/privacy" class="footer-link">Privacy</a>
+          <a href="/terms" class="footer-link">Terms</a>
+        </div>
       </div>
-      <div class="footer-bottom" style="margin-top: 1rem; border: none; padding: 0;">
-        <span>© 2026 ArGen. All rights reserved.</span>
+      <div class="footer-bottom">
+        <div id="userSession">Logged in as <strong id="userEmail">...</strong> | <a href="#" onclick="window.argenApi.logout()" style="color: var(--text-sec); text-decoration: underline;">Logout</a></div>
         <span class="footer-made">Built with obsession<span class="blink">_</span></span>
       </div>
     </div>
@@ -64,8 +101,8 @@
   <script src="https://cdn.jsdelivr.net/npm/lenis@1.1.18/dist/lenis.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.7/dist/gsap.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.7/dist/ScrollTrigger.min.js"></script>
-  <script src="../js/api.js"></script>
-  <script src="../js/script.js"></script>
+  <script src="/js/api.js"></script>
+  <script src="/js/script.js"></script>
   <script>
     document.addEventListener('DOMContentLoaded', async () => {
       const teamsGrid = document.getElementById('teamsGrid');
@@ -118,7 +155,7 @@
                 <span style="display: block; color: var(--white); font-family: var(--font-mono);">\${team.industry || 'N/A'}</span>
               </div>
             </div>
-            <a href="/team-detail?id=\${team._id}" class="btn btn-dark btn-full">View Detailed Analytics</a>
+            <a href="/team/\${team._id}" class="btn btn-dark btn-full">View Detailed Analytics</a>
           </div>
         \`).join('');
 

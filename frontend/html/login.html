@@ -3,111 +3,298 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Login — ArGen</title>
-  <link rel="icon" type="image/png" href="../images/ArGen Logo.png">
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="../css/style.css">
+  <title>Login - ArGen</title>
+  <link rel="icon" type="image/png" href="/images/ArGen Logo.png">
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/css/style.css">
+  
+  <!-- MojoAuth SDK -->
+  <script src="https://cdn.mojoauth.com/js/mojoauth.min.js" type="text/javascript"></script>
+
   <style>
     .login-container {
-      max-width: 450px;
+      width: 100%;
+      max-width: 420px;
       margin: 0 auto;
-      padding: 3rem;
+      padding: clamp(1.5rem, 5vw, 2.5rem);
       background: var(--charcoal);
       border: 1px solid var(--border-light);
-      border-radius: 8px;
-      box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+      border-radius: 12px;
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
     }
-    .form-group {
-      margin-bottom: 1.5rem;
+    
+    @media (max-width: 480px) {
+      .section-h2 {
+        font-size: 1.5rem !important;
+      }
+      .section-sub {
+        font-size: 0.85rem !important;
+      }
     }
-    .form-label {
-      display: block;
-      margin-bottom: 0.5rem;
-      font-family: var(--font-mono);
-      font-size: 0.8rem;
-      color: var(--text-sec);
+
+    #mojoauth-passwordless-form {
+      min-height: 320px;
+      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
     }
-    .form-input {
-      width: 100%;
-      padding: 0.8rem 1rem;
-      background: rgba(255,255,255,0.05);
-      border: 1px solid var(--border-light);
-      border-radius: 4px;
-      color: var(--white);
-      font-family: var(--font-mono);
-      transition: all 0.3s ease;
+    
+    /* MojoAuth Custom Styling Overrides - CINEMATIC EDITION */
+    #mojoauth-passwordless-form .mojo-form {
+      background: transparent !important;
+      padding: 0 !important;
     }
-    .form-input:focus {
-      outline: none;
-      border-color: var(--argen-blue);
-      background: rgba(255,255,255,0.08);
+
+    #mojoauth-passwordless-form input {
+      background: rgba(255, 255, 255, 0.02) !important;
+      border: 1px solid rgba(255, 255, 255, 0.08) !important;
+      color: var(--white) !important;
+      font-family: var(--font-mono) !important;
+      border-radius: 4px !important;
+      padding: 16px !important;
+      font-size: 0.85rem !important;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+      width: 100% !important;
+      margin-bottom: 1rem !important;
+      box-shadow: inset 0 2px 4px rgba(0,0,0,0.2) !important;
     }
-    .error-msg {
-      color: #ef4444;
-      font-size: 0.8rem;
-      font-family: var(--font-mono);
-      margin-top: 1rem;
-      display: none;
+    
+    #mojoauth-passwordless-form input:focus {
+      border-color: var(--argen-blue) !important;
+      background: rgba(43, 96, 226, 0.04) !important;
+      box-shadow: 0 0 0 1px var(--argen-blue), 0 0 20px rgba(43, 96, 226, 0.15) !important;
+      outline: none !important;
+    }
+
+    #mojoauth-passwordless-form button {
+      background: var(--argen-blue) !important;
+      color: white !important;
+      font-family: var(--font-mono) !important;
+      text-transform: uppercase !important;
+      letter-spacing: 3px !important;
+      font-weight: 800 !important;
+      font-size: 0.75rem !important;
+      border-radius: 4px !important;
+      padding: 18px !important;
+      margin-top: 1rem !important;
+      border: none !important;
+      cursor: pointer !important;
+      transition: all 0.4s var(--cb) !important;
+      width: 100% !important;
+      position: relative !important;
+      overflow: hidden !important;
+    }
+
+    #mojoauth-passwordless-form button:hover {
+      background: var(--white) !important;
+      color: var(--black) !important;
+      transform: translateY(-2px) !important;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.5) !important;
+    }
+
+    #mojoauth-passwordless-form button::after {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: linear-gradient(45deg, transparent, rgba(255,255,255,0.1), transparent);
+      transform: rotate(45deg);
+      transition: 0.5s;
+    }
+
+    #mojoauth-passwordless-form button:hover::after {
+      left: 100%;
+    }
+
+    #mojoauth-passwordless-form .mojo-label {
+      color: var(--text-sec) !important;
+      font-family: var(--font-mono) !important;
+      font-size: 0.65rem !important;
+      text-transform: uppercase !important;
+      margin-bottom: 0.6rem !important;
+      letter-spacing: 2px !important;
+      font-weight: 600 !important;
+    }
+
+    #mojoauth-passwordless-form .mojo-link {
+      color: var(--argen-blue) !important;
+      font-family: var(--font-mono) !important;
+      font-size: 0.7rem !important;
+      text-decoration: none !important;
+      transition: opacity 0.3s ease !important;
+    }
+
+    #mojoauth-passwordless-form .mojo-link:hover {
+      opacity: 0.8 !important;
+      text-decoration: underline !important;
+    }
+
+    #mojoauth-passwordless-form .mojo-error {
+      background: rgba(239, 68, 68, 0.1) !important;
+      color: #ef4444 !important;
+      border-radius: 4px !important;
+      padding: 10px !important;
+      font-family: var(--font-mono) !important;
+      font-size: 0.7rem !important;
+      margin-top: 1rem !important;
+      border: 1px solid rgba(239, 68, 68, 0.2) !important;
     }
   </style>
+  <link rel="canonical" href="https://argen.isira.club/login">
+  <script>
+    // Immediate check if already logged in
+    if (localStorage.getItem('argen_token')) {
+      console.log("[Auth] Existing token found, redirecting...");
+      window.location.replace('/teams');
+    }
+  </script>
 </head>
 <body class="bg-black">
-  <!-- Removed Overlays -->
-
-  <section class="section section-black" style="min-height: 100vh; display: flex; align-items: center; justify-content: center;">
-    <div class="container">
-      <div style="text-align: center; margin-bottom: 3rem;">
+  <section class="section section-black" style="min-height: 100dvh; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 2rem 1.5rem;">
+    <div style="width: 100%; max-width: 420px; display: flex; flex-direction: column; align-items: center;">
+      <div style="text-align: center; margin-bottom: 2.5rem; width: 100%;">
         <a href="/">
-          <img src="../images/ArGen Logo.png" alt="ArGen" style="width: 60px; margin-bottom: 1rem;">
+          <img src="/images/ArGen Logo.png" alt="ArGen" style="width: 50px; margin: 0 auto 1rem;">
         </a>
-        <h1 class="section-h2" style="font-size: 2rem; margin-bottom: 0.5rem;">Organization <i class="soul-text">Login</i></h1>
-        <p class="section-sub">Enter credentials to access organization dashboard</p>
+        <h1 class="section-h2" style="margin-bottom: 0.5rem; white-space: nowrap; letter-spacing: -0.02em;">Access <i class="soul-text">Portal</i></h1>
+        <div style="display: inline-block; background: rgba(43, 96, 226, 0.1); border: 1px solid var(--argen-blue); color: var(--argen-blue); padding: 4px 12px; border-radius: 4px; font-family: var(--font-mono); font-size: 0.65rem; margin-bottom: 1rem; letter-spacing: 2px; font-weight: 700;">INVITE ONLY</div>
+        <p class="section-sub" style="font-size: 0.9rem; margin-bottom: 0; line-height: 1.4; opacity: 0.8;">Passwordless secure login for organizations</p>
       </div>
 
-      <div class="login-container">
-        <form id="loginForm">
-          <div class="form-group">
-            <label class="form-label">Email Address</label>
-            <input type="email" id="email" class="form-input" placeholder="admin@company.com" required>
-          </div>
-          <div class="form-group">
-            <label class="form-label">Password</label>
-            <input type="password" id="password" class="form-input" placeholder="••••••••" required>
-          </div>
-          <button type="submit" class="btn btn-primary btn-full" id="submitBtn">Login to Dashboard</button>
-          <div id="errorMsg" class="error-msg"></div>
-        </form>
+      <!-- Login Stage -->
+      <div class="login-container" id="loginStage">
+        <div id="mojoauth-passwordless-form"></div>
         
-        <div style="margin-top: 2rem; text-align: center; font-family: var(--font-mono); font-size: 0.8rem; color: var(--text-sec);">
-          Don't have an account? <a href="#" style="color: var(--argen-blue);">Contact Support</a>
+        <div style="margin-top: 2rem; text-align: center; font-family: var(--font-mono); font-size: 0.75rem; color: var(--text-sec); border-top: 1px solid var(--border-light); padding-top: 1.5rem;">
+          Need an account? <a href="/evaluate" style="color: var(--argen-blue); text-decoration: underline;">Request Pilot</a>
         </div>
+      </div>
+
+      <!-- Onboarding Stage (Hidden by default) -->
+      <div class="login-container" id="onboardStage" style="display: none;">
+        <h3 class="card-h3" style="color: var(--white); margin-bottom: 1rem; font-size: 1.2rem; font-family: var(--font-display);">Complete Profile</h3>
+        <p style="color: var(--text-sec); font-size: 0.8rem; margin-bottom: 2rem; line-height: 1.5;">Welcome to ArGen. Please enter your details and the invite code from your admin.</p>
+        
+        <form id="onboardForm" style="display: flex; flex-direction: column; gap: 1.2rem;">
+          <div class="form-group">
+            <label style="display: block; font-family: var(--font-mono); font-size: 0.7rem; color: var(--text-sec); margin-bottom: 0.4rem; text-transform: uppercase;">Full Name</label>
+            <input type="text" id="onboardName" placeholder="Enter your name" required style="width: 100%; padding: 12px; border: 1px solid var(--border-light); background: rgba(255,255,255,0.03); border-radius: 6px; color: var(--white); font-family: var(--font-body); font-size: 0.9rem;">
+          </div>
+          <div class="form-group">
+            <label style="display: block; font-family: var(--font-mono); font-size: 0.7rem; color: var(--text-sec); margin-bottom: 0.4rem; text-transform: uppercase;">Invite Code</label>
+            <input type="text" id="onboardCode" placeholder="XXXX-XXXX" required style="width: 100%; padding: 12px; border: 1px solid var(--border-light); background: rgba(255,255,255,0.03); border-radius: 6px; color: var(--white); font-family: var(--font-mono); font-size: 0.9rem; text-transform: uppercase; letter-spacing: 1px;">
+          </div>
+          <button type="submit" class="btn btn-primary btn-full" style="margin-top: 0.5rem; padding: 14px;">JOIN ORGANIZATION</button>
+          <div id="onboardError" style="color: #ef4444; font-family: var(--font-mono); font-size: 0.7rem; margin-top: 1rem; text-align: center; display: none; padding: 8px; background: rgba(239, 68, 68, 0.1); border-radius: 4px;"></div>
+        </form>
       </div>
     </div>
   </section>
 
-  <script src="../js/api.js"></script>
+  <script src="/js/api.js"></script>
   <script>
-    document.getElementById('loginForm').addEventListener('submit', async (e) => {
-      e.preventDefault();
-      const email = document.getElementById('email').value;
-      const password = document.getElementById('password').value;
-      const errorMsg = document.getElementById('errorMsg');
-      const submitBtn = document.getElementById('submitBtn');
+    // MojoAuth Configuration
+    const mojoauth = new MojoAuth("6d1801b7-1189-4665-9f92-ccd4a000b6c1", {
+      source: [{ type: "email", feature: "magiclink" }],
+      container_id: "mojoauth-passwordless-form"
+    });
 
-      errorMsg.style.display = 'none';
-      submitBtn.disabled = true;
-      submitBtn.textContent = 'Authenticating...';
+    let currentMojoToken = null;
 
-      try {
-        await window.argenApi.login(email, password);
-        window.location.href = '/teams';
-      } catch (err) {
-        errorMsg.textContent = '> ERROR: ' + err.message;
-        errorMsg.style.display = 'block';
-        submitBtn.disabled = false;
-        submitBtn.textContent = 'Initialize Session';
+    mojoauth.signIn().then(response => {
+      console.log("[MojoAuth] Authentication successful", response);
+      
+      if (response.authenticated) {
+        console.log("[Auth] Verifying token with backend...");
+        const API_URL = (window.argenApi && window.argenApi.baseUrl) || 
+                       (window.location.hostname === 'localhost' ? 'http://localhost:5001/api' : '/api');
+        
+        fetch(`${API_URL}/auth/mojoauth-verify`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ mojoauth_token: response.oauth.access_token })
+        })
+        .then(res => res.json())
+        .then(data => {
+          console.log("[Auth] Backend response:", data);
+          if (data.needsOnboarding) {
+            console.log("[Auth] New user detected, showing onboarding...");
+            currentMojoToken = data.mojoToken;
+            document.getElementById('loginStage').style.display = 'none';
+            document.getElementById('onboardStage').style.display = 'block';
+          } else if (data.token) {
+            console.log("[Auth] Verification success, redirecting...");
+            handleLoginSuccess(data);
+          } else {
+            console.error("[Auth] Verification failed:", data.message);
+            alert(data.message || 'Verification failed');
+          }
+        })
+        .catch(err => {
+          console.error('[Auth] Fetch Error:', err);
+          alert('System connection failed');
+        });
       }
     });
+
+    // Onboarding Form Handler
+    document.getElementById('onboardForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const errorEl = document.getElementById('onboardError');
+      const submitBtn = e.target.querySelector('button');
+      
+      errorEl.style.display = 'none';
+      submitBtn.disabled = true;
+      submitBtn.textContent = 'VERIFYING...';
+
+      const data = {
+        name: document.getElementById('onboardName').value,
+        inviteCode: document.getElementById('onboardCode').value,
+        mojoToken: currentMojoToken
+      };
+
+      try {
+        console.log("[Auth] Joining team with code:", data.inviteCode);
+        const API_URL = (window.argenApi && window.argenApi.baseUrl) || 
+                       (window.location.hostname === 'localhost' ? 'http://localhost:5001/api' : '/api');
+
+        const response = await fetch(`${API_URL}/auth/join-team`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(data)
+        });
+        const result = await response.json();
+        
+        if (result.token) {
+          console.log("[Auth] Join team success!");
+          handleLoginSuccess(result);
+        } else {
+          console.error("[Auth] Join team failed:", result.message);
+          errorEl.textContent = result.message || 'Error joining team';
+          errorEl.style.display = 'block';
+          submitBtn.disabled = false;
+          submitBtn.textContent = 'JOIN ORGANIZATION';
+        }
+      } catch (err) {
+        console.error("[Auth] Join error:", err);
+        errorEl.textContent = 'Connection timeout. Please try again.';
+        errorEl.style.display = 'block';
+        submitBtn.disabled = false;
+        submitBtn.textContent = 'JOIN ORGANIZATION';
+      }
+    });
+
+    // Centralized login success handler
+    function handleLoginSuccess(data) {
+      localStorage.setItem('argen_token', data.token);
+      localStorage.setItem('user', JSON.stringify(data.user));
+      
+      const urlParams = new URLSearchParams(window.location.search);
+      const redirectTo = urlParams.get('redirect') || '/teams';
+      
+      console.log("[Auth] Final redirect to:", redirectTo);
+      window.location.replace(redirectTo);
+    }
   </script>
 </body>
 </html>

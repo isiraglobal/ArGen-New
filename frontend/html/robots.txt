@@ -1,0 +1,8 @@
+User-agent: *
+Allow: /
+Disallow: /api/
+Disallow: /login
+Disallow: /teams
+Disallow: /team/
+
+Sitemap: https://argen.isira.club/sitemap.xml

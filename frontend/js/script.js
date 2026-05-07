@@ -1,5 +1,5 @@
 /* ═══════════════════════════════════════
-   ArGen — Animation Engine v3.0
+   ArGen - Animation Engine v3.0
    Particle Hero + GSAP + Lenis + Chatbot
    ═══════════════════════════════════════ */
 (function () {
@@ -290,7 +290,7 @@
       // User is logged in
       if (!document.getElementById('navDashboardLink')) {
         const dashLink = document.createElement('a');
-        dashLink.href = 'teams.html';
+        dashLink.href = '/teams';
         dashLink.className = 'nav-link';
         dashLink.id = 'navDashboardLink';
         dashLink.textContent = 'Dashboard';
@@ -299,12 +299,12 @@
 
       if (navCta) {
         navCta.textContent = 'Teams Panel →';
-        navCta.href = 'teams.html';
+        navCta.href = '/teams';
       }
 
       if (mobileMenu && !document.getElementById('mobileDashboardLink')) {
         const mDashLink = document.createElement('a');
-        mDashLink.href = 'teams.html';
+        mDashLink.href = '/teams';
         mDashLink.className = 'mm-link';
         mDashLink.id = 'mobileDashboardLink';
         mDashLink.textContent = '05 // Dashboard';
@@ -316,7 +316,7 @@
       // User is not logged in
       if (!document.getElementById('navLoginLink')) {
         const loginLink = document.createElement('a');
-        loginLink.href = 'login.html';
+        loginLink.href = '/login';
         loginLink.className = 'nav-link';
         loginLink.id = 'navLoginLink';
         loginLink.textContent = 'Login';
@@ -325,7 +325,7 @@
       
       if (mobileMenu && !document.getElementById('mobileLoginLink')) {
         const mLoginLink = document.createElement('a');
-        mLoginLink.href = 'login.html';
+        mLoginLink.href = '/login';
         mLoginLink.className = 'mm-link';
         mLoginLink.id = 'mobileLoginLink';
         mLoginLink.textContent = '05 // Login';
@@ -532,9 +532,7 @@
   // Use a proxy server or edge function. 
   // You can change these environment variables in your hosting platform.
   const AI_CONFIG = {
-    ENDPOINT: 'https://api.openai.com/v1/chat/completions',
-    API_KEY: 'YOUR_API_KEY_HERE', 
-    MODEL: 'gpt-4o-mini',
+    ENDPOINT: '/api/ai/ask',
     SYSTEM_PROMPT: `You are the ArGen Intelligence Agent. You are the digital interface for ArGen's proprietary evaluation engine. 
 Answer concisely and with executive professionalism. 
 ArGen evaluates real-world AI competency across teams via a 48-hour challenge workflow. 
@@ -570,33 +568,23 @@ Always refer to the analysis as "ArGen Intelligence" or "Proprietary ArGen Analy
       chatHistory.push({ role: 'user', content: text });
 
       try {
-        // Only run actual fetch if key is provided, else fallback to mock for demo purposes
-        if (AI_CONFIG.API_KEY === 'YOUR_API_KEY_HERE') {
-          setTimeout(() => {
-            const fallbackMsg = "System Notice: The Intelligence Agent is currently in demonstration mode. \n\nPlease connect your API credentials in the ArGen Dashboard to enable live neural processing and proprietary team analysis.";
-            responseContent.innerHTML = fallbackMsg.replace(/\n/g, '<br>');
-            chatHistory.push({ role: 'assistant', content: fallbackMsg });
-          }, 1200);
-          return;
-        }
-
         const res = await fetch(AI_CONFIG.ENDPOINT, {
           method: 'POST',
           headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${AI_CONFIG.API_KEY}`
+            'Content-Type': 'application/json'
           },
           body: JSON.stringify({
-            model: AI_CONFIG.MODEL,
-            messages: chatHistory,
-            max_tokens: 250,
-            temperature: 0.3
+            messages: chatHistory
           })
         });
 
-        if (!res.ok) throw new Error('API Error: ' + res.status);
+        if (!res.ok) {
+          const errData = await res.json();
+          throw new Error(errData.message || 'API Error: ' + res.status);
+        }
+        
         const data = await res.json();
-        const reply = data.choices[0].message.content;
+        const reply = data.reply;
         
         chatHistory.push({ role: 'assistant', content: reply });
         
@@ -609,7 +597,7 @@ Always refer to the analysis as "ArGen Intelligence" or "Proprietary ArGen Analy
 
       } catch (err) {
         console.error(err);
-        responseContent.innerHTML = '> CONNECTION_FAILED: Verify API endpoint and key.';
+        responseContent.innerHTML = `> CONNECTION_FAILED: ${err.message}`;
       }
     }
 

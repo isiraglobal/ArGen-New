@@ -6,10 +6,11 @@
 // Check if we have a production API URL set, otherwise fallback to localhost
 const API_BASE_URL = window.ARGEN_API_URL || 
     (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1' 
-        ? 'http://localhost:5000/api' 
-        : 'https://argen-backend.vercel.app/api'); // Placeholder for production URL
+        ? 'http://localhost:5001/api' 
+        : '/api'); 
 
 const api = {
+    baseUrl: API_BASE_URL,
     // Helper for fetch with auth
     async request(endpoint, options = {}) {
         console.log(`[API] Requesting ${endpoint}...`);
@@ -37,8 +38,8 @@ const api = {
         if (response.status === 401) {
             // Token expired or invalid
             localStorage.removeItem('argen_token');
-            if (!window.location.pathname.includes('login.html')) {
-                window.location.href = 'login.html';
+            if (!window.location.pathname.startsWith('/login')) {
+                window.location.href = '/login';
             }
         }
 
@@ -73,7 +74,7 @@ const api = {
     logout() {
         localStorage.removeItem('argen_token');
         localStorage.removeItem('user');
-        window.location.href = 'index.html';
+        window.location.href = '/';
     },
 
     // Teams

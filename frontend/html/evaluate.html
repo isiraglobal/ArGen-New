@@ -3,18 +3,19 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Evaluate — ArGen</title>
-  <link rel="icon" type="image/png" href="../images/ArGen Logo.png">
+  <title>Evaluate - ArGen</title>
+  <link rel="icon" type="image/png" href="/images/ArGen Logo.png">
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="../css/style.css">
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="canonical" href="https://argen.isira.club/evaluate">
 </head>
 <body>
   <!-- Removed Overlays -->
 
   <header id="nav" class="nav nav-center">
     <div class="nav-inner">
-      <a href="index.html" class="nav-logo">
-        <img src="../images/ArGen Logo.png" alt="ArGen" class="logo-img">
+      <a href="/" class="nav-logo">
+        <img src="/images/ArGen Logo.png" alt="ArGen" class="logo-img">
       </a>
       <nav class="nav-links">
         <a href="/#how" class="nav-link">How It Works</a>
@@ -28,18 +29,26 @@
     </div>
   </header>
 
-  <div id="mobileMenu" class="mobile-menu">
-    <a href="/#how" class="mm-link">How It Works</a>
-    <a href="/pricing" class="mm-link">Pricing</a>
-    <a href="/about" class="mm-link">About</a>
-    <a href="/evaluate" class="mm-link mm-cta">→ Run Free Pilot</a>
+  <div class="mobile-menu" id="mobileMenu">
+    <div class="mm-inner">
+      <div class="mm-links">
+        <a href="/" class="mm-link">01 Home</a>
+        <a href="/#how" class="mm-link">02 How It Works</a>
+        <a href="/pricing" class="mm-link">03 Pricing</a>
+        <a href="/about" class="mm-link">05 About</a>
+        <a href="/contact" class="mm-link">06 Contact</a>
+      </div>
+      <div class="mm-footer">
+        <a href="/evaluate" class="btn btn-primary btn-full">Run Evaluation Pilot</a>
+      </div>
+    </div>
   </div>
 
   <section class="section section-cream" style="padding-top: calc(var(--nav-h) + 80px); min-height: 100vh;">
     <div class="container container-narrow">
       <span class="section-tag reveal">[START_HERE]</span>
       <h1 class="section-h2 reveal" style="font-size: 3rem;">Start Your <i class="soul-text">Free</i> Pilot</h1>
-      <p class="section-sub" style="margin-bottom: 2rem;"><strong>See what your team's AI performance actually looks like—no risk, no cost.</strong> In 48 hours, you'll have a report that shows exactly where your AI investment is working and where it's not.</p>
+      <p class="section-sub" style="margin-bottom: 2rem;"><strong>See what your team's AI performance actually looks like-no risk, no cost.</strong> In 48 hours, you'll have a report that shows exactly where your AI investment is working and where it's not.</p>
       
       <div style="background: var(--charcoal); padding: 1.5rem; border-radius: 12px; margin-bottom: 2rem; color: var(--white);">
         <h3 style="margin-bottom: 0.5rem;">What happens next:</h3>
@@ -51,9 +60,83 @@
         </ol>
       </div>
       
-      <div style="border: 1px solid var(--border-light); background: var(--white); padding: 2rem; border-radius: 8px;">
-        <iframe src="https://tally.so/r/VL9D0M" width="100%" height="600" frameborder="0" marginheight="0" marginwidth="0" title="ArGen Pilot Signup"></iframe>
+      <div style="border: 1px solid var(--border-light); background: var(--white); padding: clamp(1.5rem, 5vw, 3rem); border-radius: 8px;" class="card reveal-card">
+        <h3 class="card-h3" style="color: var(--black); margin-bottom: 2rem; font-family: var(--font-display); font-size: clamp(1.5rem, 4vw, 2rem);">Apply for Pilot</h3>
+        <form id="pilotForm" style="display: flex; flex-direction: column; gap: 1.5rem;">
+          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem;">
+            <div class="form-group">
+              <label style="display: block; font-family: var(--font-mono); font-size: 0.75rem; color: var(--text-sec-dark); margin-bottom: 0.5rem;">YOUR_NAME</label>
+              <input type="text" id="pilot_name" placeholder="John Doe" required style="width: 100%; padding: 12px; border: 1px solid var(--border-dark); border-radius: 4px; font-family: var(--font-body);">
+            </div>
+            <div class="form-group">
+              <label style="display: block; font-family: var(--font-mono); font-size: 0.75rem; color: var(--text-sec-dark); margin-bottom: 0.5rem;">WORK_EMAIL</label>
+              <input type="email" id="pilot_email" placeholder="john@company.com" required style="width: 100%; padding: 12px; border: 1px solid var(--border-dark); border-radius: 4px; font-family: var(--font-body);">
+            </div>
+          </div>
+          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem;">
+            <div class="form-group">
+              <label style="display: block; font-family: var(--font-mono); font-size: 0.75rem; color: var(--text-sec-dark); margin-bottom: 0.5rem;">COMPANY_NAME</label>
+              <input type="text" id="pilot_company" placeholder="Acme Inc." required style="width: 100%; padding: 12px; border: 1px solid var(--border-dark); border-radius: 4px; font-family: var(--font-body);">
+            </div>
+            <div class="form-group">
+              <label style="display: block; font-family: var(--font-mono); font-size: 0.75rem; color: var(--text-sec-dark); margin-bottom: 0.5rem;">TEAM_SIZE</label>
+              <select id="pilot_size" required style="width: 100%; padding: 12px; border: 1px solid var(--border-dark); border-radius: 4px; font-family: var(--font-body); background: var(--white);">
+                <option value="5">Micro (Up to 5)</option>
+                <option value="25">Growth (Up to 25)</option>
+                <option value="100">Scale (Up to 100)</option>
+                <option value="500">Enterprise (100+)</option>
+              </select>
+            </div>
+          </div>
+          <div class="form-group">
+            <label style="display: block; font-family: var(--font-mono); font-size: 0.75rem; color: var(--text-sec-dark); margin-bottom: 0.5rem;">PRIMARY_GOAL</label>
+            <textarea id="pilot_usecase" placeholder="What specific AI engineering outcomes are you looking for?" rows="3" style="width: 100%; padding: 12px; border: 1px solid var(--border-dark); border-radius: 4px; font-family: var(--font-body); resize: none;"></textarea>
+          </div>
+          <button type="submit" class="btn btn-primary btn-full" style="margin-top: 1rem;">Transmit Application</button>
+          <p id="pilotStatus" style="margin-top: 1rem; text-align: center; font-family: var(--font-mono); font-size: 0.8rem; display: none;"></p>
+        </form>
       </div>
+
+      <script>
+        document.getElementById('pilotForm').addEventListener('submit', async (e) => {
+          e.preventDefault();
+          const status = document.getElementById('pilotStatus');
+          status.style.display = 'block';
+          status.textContent = 'TRANSMITTING...';
+          status.style.color = 'var(--argen-blue)';
+
+          const data = {
+            name: document.getElementById('pilot_name').value,
+            email: document.getElementById('pilot_email').value,
+            companyName: document.getElementById('pilot_company').value,
+            teamSize: document.getElementById('pilot_size').value,
+            useCase: document.getElementById('pilot_usecase').value
+          };
+
+          try {
+            const API_URL = (window.argenApi && window.argenApi.baseUrl) || 
+                           (window.location.hostname === 'localhost' ? 'http://localhost:5001/api' : '/api');
+            
+            const response = await fetch(`${API_URL}/requests/submit`, {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify(data)
+            });
+            const result = await response.json();
+            if (result.success) {
+              status.textContent = 'APPLICATION_RECEIVED. WE WILL REACH OUT WITHIN 24 HOURS.';
+              status.style.color = 'var(--green)';
+              document.getElementById('pilotForm').reset();
+            } else {
+              status.textContent = 'TRANSMISSION_ERROR. PLEASE TRY AGAIN.';
+              status.style.color = 'var(--red)';
+            }
+          } catch (err) {
+            status.textContent = 'SYSTEM_OFFLINE. PLEASE CHECK CONNECTION.';
+            status.style.color = 'var(--red)';
+          }
+        });
+      </script>
 
       <div style="margin-top: 3rem; padding-top: 2rem; border-top: 1px solid var(--border-dark);">
         <h3 style="margin-bottom: 1rem;">Why teams choose ArGen for their pilot:</h3>
@@ -72,7 +155,7 @@
           </div>
           <div>
             <h4 style="color: var(--green); margin-bottom: 0.5rem;">✓ Actionable Report</h4>
-            <p>Not just scores—recommendations for where to train, hire, and optimize.</p>
+            <p>Not just scores-recommendations for where to train, hire, and optimize.</p>
           </div>
           <div>
             <h4 style="color: var(--green); margin-bottom: 0.5rem;">✓ Board Ready</h4>
@@ -113,27 +196,29 @@
     <div class="container">
       <div class="footer-grid">
         <div class="footer-brand">
-          <img src="../images/ArGen Logo.png" alt="ArGen" class="footer-logo">
-          <p class="footer-tagline">Measure AI. Act with certainty.<br>The standard for enterprise capability.</p>
+          <a href="/" class="footer-logo">ArGen</a>
+          <p class="footer-desc">The enterprise-grade standard for AI engineering evaluation and talent intelligence.</p>
         </div>
-        <div class="footer-col">
-          <span class="footer-label">Links</span>
-          <a href="/about" class="footer-link">About</a>
+        <div class="footer-links">
+          <span class="footer-label">Product</span>
+          <a href="/evaluate" class="footer-link">Evaluate</a>
           <a href="/pricing" class="footer-link">Pricing</a>
-          <a href="/evaluate" class="footer-link">Run Pilot</a>
-          <a href="/privacy" class="footer-link">Privacy Policy</a>
-          <a href="/terms" class="footer-link">Terms of Service</a>
+          <a href="/challenges" class="footer-link">Challenges</a>
         </div>
-        <div class="footer-col">
+        <div class="footer-links">
           <span class="footer-label">Connect</span>
-          <a href="https://linkedin.com" target="_blank" class="footer-link">LinkedIn</a>
-          <a href="https://x.com" target="_blank" class="footer-link">Twitter / X</a>
-          <a href="mailto:isiraglobal@gmail.com" class="footer-link">Contact</a>
+          <a href="/about" class="footer-link">About</a>
+          <a href="/contact" class="footer-link">Contact</a>
+        </div>
+        <div class="footer-links">
+          <span class="footer-label">Legal</span>
+          <a href="/privacy" class="footer-link">Privacy</a>
+          <a href="/terms" class="footer-link">Terms</a>
         </div>
       </div>
       <div class="footer-bottom">
-        <span>© 2026 Isira Global. All rights reserved.</span>
-        <span>Made with intention.</span>
+        <span>© 2026 ArGen. All rights reserved.</span>
+        <span class="footer-made">Built with obsession<span class="blink">_</span></span>
       </div>
     </div>
   </footer>
@@ -141,6 +226,6 @@
   <script src="https://cdn.jsdelivr.net/npm/lenis@1.1.18/dist/lenis.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.7/dist/gsap.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.7/dist/ScrollTrigger.min.js"></script>
-  <script src="../js/script.js"></script>
+  <script src="/js/script.js"></script>
 </body>
 </html>

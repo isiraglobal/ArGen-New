@@ -20,13 +20,17 @@ const UserSchema = new mongoose.Schema({
     enum: ['Admin', 'User', 'Evaluator'],
     default: 'User'
   },
-  company: {
-    type: String
+  companyId: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Company'
   },
+  companyName: String,
   createdAt: {
     type: Date,
     default: Date.now
-  }
+  },
+  resetPasswordToken: String,
+  resetPasswordExpire: Date
 });
 
 // Hash password before saving

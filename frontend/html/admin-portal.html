@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Portal - ArGen</title>
+  <link rel="icon" type="image/png" href="/images/ArGen Logo.png">
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/css/style.css">
+  <style>
+    .admin-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 1.5rem;
+      margin-top: 2rem;
+    }
+    .request-card {
+      background: var(--charcoal);
+      border: 1px solid var(--border-light);
+      padding: 1.5rem;
+      border-radius: 8px;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      gap: 1.5rem;
+    }
+    .request-info { flex: 1; min-width: 250px; }
+    .request-actions { flex-shrink: 0; }
+    .request-info h3 { color: var(--white); margin-bottom: 0.5rem; }
+    .request-info p { color: var(--text-sec); font-size: 0.9rem; }
+    .status-badge {
+      padding: 4px 12px;
+      border-radius: 20px;
+      font-size: 0.7rem;
+      font-family: var(--font-mono);
+      text-transform: uppercase;
+    }
+    .status-pending { background: rgba(255,165,0,0.1); color: orange; border: 1px solid orange; }
+    .status-approved { background: rgba(0,255,0,0.1); color: var(--green); border: 1px solid var(--green); }
+    .btn-approve { background: var(--argen-blue); color: var(--white); border: none; padding: 8px 16px; border-radius: 4px; cursor: pointer; font-family: var(--font-mono); font-size: 0.8rem; }
+    .btn-approve:disabled { opacity: 0.5; cursor: not-allowed; }
+  </style>
+</head>
+<body class="bg-black">
+  <header class="nav nav-center">
+    <div class="nav-inner">
+      <a href="/" class="nav-logo">
+        <img src="/images/ArGen Logo.png" alt="ArGen" class="logo-img">
+      </a>
+      <div style="color: var(--white); font-family: var(--font-mono); font-size: 0.8rem;">[ADMIN_SYSTEM_v1.0]</div>
+    </div>
+  </header>
+
+  <section class="section" style="padding-top: 120px;">
+    <div class="container">
+      <h1 class="section-h2">Pilot <i class="soul-text">Inbox</i></h1>
+      <p class="section-sub">Review and approve company access requests</p>
+
+      <div id="requestsList" class="admin-grid">
+        <div style="color: var(--text-sec); text-align: center; padding: 4rem;">Initializing secure connection...</div>
+      </div>
+    </div>
+  </section>
+
+  <script>
+    async function fetchRequests() {
+      try {
+        const response = await fetch('/api/requests/all');
+        const data = await response.json();
+        renderRequests(data);
+      } catch (err) {
+        document.getElementById('requestsList').innerHTML = '<div style="color: var(--red);">Error loading requests.</div>';
+      }
+    }
+
+    function renderRequests(requests) {
+      const list = document.getElementById('requestsList');
+      if (requests.length === 0) {
+        list.innerHTML = '<div style="color: var(--text-sec); text-align: center; padding: 4rem;">No pending requests found.</div>';
+        return;
+      }
+
+      list.innerHTML = requests.map(req => `
+        <div class="request-card">
+          <div class="request-info">
+            <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 0.5rem;">
+              <span class="status-badge status-${req.status}">${req.status}</span>
+              <span style="color: var(--text-sec); font-family: var(--font-mono); font-size: 0.7rem;">${new Date(req.createdAt).toLocaleDateString()}</span>
+            </div>
+            <h3>${req.companyName}</h3>
+            <p>${req.name} (${req.email}) • Team: ${req.teamSize}</p>
+            <p style="margin-top: 0.5rem; font-style: italic; color: var(--argen-blue);">"${req.useCase || 'No use case provided'}"</p>
+          </div>
+          <div class="request-actions">
+            ${req.status === 'pending' 
+              ? `<button class="btn-approve" onclick="approveRequest('${req._id}')">APPROVE_ACCESS</button>` 
+              : `<div style="text-align: right;">
+                   <span style="color: var(--green); font-family: var(--font-mono); display: block; margin-bottom: 4px;">APPROVED</span>
+                   <button class="btn-approve" style="background: var(--charcoal); border: 1px solid var(--argen-blue); font-size: 0.6rem; padding: 4px 8px;" onclick="copyCode('${req.inviteCode}')">COPY_CODE: ${req.inviteCode}</button>
+                 </div>`
+            }
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function copyCode(code) {
+      navigator.clipboard.writeText(code);
+      alert('Code copied to clipboard: ' + code);
+    }
+
+    async function approveRequest(id) {
+      if (!confirm('Approve this company and generate an invite code?')) return;
+      
+      try {
+        const response = await fetch(\`/api/requests/approve/\${id}\`, { method: 'POST' });
+        const result = await response.json();
+        if (result.success) {
+          alert('Company Approved! Invite Code: ' + result.inviteCode);
+          fetchRequests(); // Refresh
+        } else {
+          alert('Error: ' + result.message);
+        }
+      } catch (err) {
+        alert('System Error');
+      }
+    }
+
+    fetchRequests();
+  </script>
+</body>
+</html>

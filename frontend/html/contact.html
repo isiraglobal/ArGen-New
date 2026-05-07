@@ -3,24 +3,24 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Contact — ArGen</title>
-  <link rel="icon" type="image/png" href="../images/ArGen Logo.png">
+  <title>Contact - ArGen</title>
+  <link rel="icon" type="image/png" href="/images/ArGen Logo.png">
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="../css/style.css">
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="canonical" href="https://argen.isira.club/contact">
 </head>
 <body>
   <!-- Removed Overlays -->
 
   <header id="nav" class="nav nav-center">
     <div class="nav-inner">
-      <a href="index.html" class="nav-logo">
-        <img src="../images/ArGen Logo.png" alt="ArGen" class="logo-img">
+      <a href="/" class="nav-logo">
+        <img src="/images/ArGen Logo.png" alt="ArGen" class="logo-img">
       </a>
       <nav class="nav-links">
         <a href="/#how" class="nav-link">How It Works</a>
         <a href="/pricing" class="nav-link">Pricing</a>
         <a href="/about" class="nav-link">About</a>
-        <a href="/blog" class="nav-link">Blog</a>
       </nav>
       <a href="/evaluate" class="nav-cta">Run Pilot →</a>
       <button class="nav-burger" id="burger" aria-label="Menu">
@@ -29,12 +29,19 @@
     </div>
   </header>
 
-  <div id="mobileMenu" class="mobile-menu">
-    <a href="/#how" class="mm-link">01 How It Works</a>
-    <a href="/pricing" class="mm-link">02 Pricing</a>
-    <a href="/about" class="mm-link">03 About</a>
-    <a href="/blog" class="mm-link">04 Blog</a>
-    <a href="/evaluate" class="mm-link mm-cta">→ Run Free Pilot</a>
+  <div class="mobile-menu" id="mobileMenu">
+    <div class="mm-inner">
+      <div class="mm-links">
+        <a href="/" class="mm-link">01 Home</a>
+        <a href="/#how" class="mm-link">02 How It Works</a>
+        <a href="/pricing" class="mm-link">03 Pricing</a>
+        <a href="/about" class="mm-link">05 About</a>
+        <a href="/contact" class="mm-link">06 Contact</a>
+      </div>
+      <div class="mm-footer">
+        <a href="/evaluate" class="btn btn-primary btn-full">Run Evaluation Pilot</a>
+      </div>
+    </div>
   </div>
 
   <section class="section section-cream" style="padding-top: calc(var(--nav-h) + 80px); min-height: 100vh;">
@@ -130,28 +137,25 @@
   <footer class="footer">
     <div class="container">
       <div class="footer-grid">
-        <div class="footer-col">
-          <img src="../images/ArGen Logo.png" alt="ArGen" style="height: 40px; margin-bottom: 1rem;">
-          <p class="footer-desc">AI performance evaluation for teams that want proof, not promises.</p>
+        <div class="footer-brand">
+          <a href="/" class="footer-logo">ArGen</a>
+          <p class="footer-desc">The enterprise-grade standard for AI engineering evaluation and talent intelligence.</p>
         </div>
-        <div class="footer-col">
-          <span class="footer-label">Links</span>
-          <a href="/#how" class="footer-link">How It Works</a>
+        <div class="footer-links">
+          <span class="footer-label">Product</span>
+          <a href="/evaluate" class="footer-link">Evaluate</a>
           <a href="/pricing" class="footer-link">Pricing</a>
-          <a href="/about" class="footer-link">About</a>
-          <a href="/blog" class="footer-link">Blog</a>
+          <a href="/challenges" class="footer-link">Challenges</a>
         </div>
-        <div class="footer-col">
+        <div class="footer-links">
           <span class="footer-label">Connect</span>
+          <a href="/about" class="footer-link">About</a>
           <a href="/contact" class="footer-link">Contact</a>
-          <a href="mailto:isiraglobal@gmail.com" class="footer-link">isiraglobal@gmail.com</a>
-          <a href="#" class="footer-link">LinkedIn</a>
-          <a href="#" class="footer-link">Twitter/X</a>
         </div>
-        <div class="footer-col">
+        <div class="footer-links">
           <span class="footer-label">Legal</span>
-          <a href="/privacy" class="footer-link">Privacy Policy</a>
-          <a href="/terms" class="footer-link">Terms of Service</a>
+          <a href="/privacy" class="footer-link">Privacy</a>
+          <a href="/terms" class="footer-link">Terms</a>
         </div>
       </div>
       <div class="footer-bottom">
@@ -164,6 +168,6 @@
   <script src="https://cdn.jsdelivr.net/npm/lenis@1.1.18/dist/lenis.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.7/dist/gsap.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.7/dist/ScrollTrigger.min.js"></script>
-  <script src="../js/script.js"></script>
+  <script src="/js/script.js"></script>
 </body>
 </html>
