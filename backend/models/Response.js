@@ -6,7 +6,12 @@ const ResponseSchema = new mongoose.Schema({
     ref: 'User',
     required: true
   },
-  evaluation: {
+  companyId: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Company',
+    required: true
+  },
+  evaluationId: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'Evaluation',
     required: true
@@ -16,20 +21,34 @@ const ResponseSchema = new mongoose.Schema({
     ref: 'Challenge',
     required: true
   },
-  promptText: {
+  responseText: {
     type: String,
     required: true
   },
-  modelOutput: {
+  scoringStatus: {
     type: String,
-    required: true
+    enum: ['Pending', 'Scored', 'Manual Review', 'Error'],
+    default: 'Pending'
   },
-  score: {
+  scores: {
+    clarity: { type: Number, default: 0 },
+    constraint_application: { type: Number, default: 0 },
+    output_specificity: { type: Number, default: 0 },
+    iteration_quality: { type: Number, default: 0 },
+    total: { type: Number, default: 0 }
+  },
+  justification: String,
+  improvement: String,
+  manualReviewFlag: {
+    type: Boolean,
+    default: false
+  },
+  modelUsed: String,
+  apiCost: {
     type: Number,
     default: 0
   },
-  feedback: String,
-  createdAt: {
+  submittedAt: {
     type: Date,
     default: Date.now
   }

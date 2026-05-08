@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Portal - ArGen</title>
+  <link rel="icon" type="image/png" href="/images/ArGen Logo.png">
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/css/style.css">
+  <style>
+    .admin-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 1.5rem;
+      margin-top: 2rem;
+    }
+    .request-card {
+      background: var(--charcoal);
+      border: 1px solid var(--border-light);
+      padding: 1.5rem;
+      border-radius: 8px;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      gap: 1.5rem;
+    }
+    .request-info { flex: 1; min-width: 250px; }
+    .request-actions { flex-shrink: 0; }
+    .request-info h3 { color: var(--white); margin-bottom: 0.5rem; }
+    .request-info p { color: var(--text-sec); font-size: 0.9rem; }
+    .status-badge {
+      padding: 4px 12px;
+      border-radius: 20px;
+      font-size: 0.7rem;
+      font-family: var(--font-mono);
+      text-transform: uppercase;
+    }
+    .status-pending { background: rgba(255,165,0,0.1); color: orange; border: 1px solid orange; }
+    .status-approved { background: rgba(0,255,0,0.1); color: var(--green); border: 1px solid var(--green); }
+    .btn-approve { background: var(--argen-blue); color: var(--white); border: none; padding: 8px 16px; border-radius: 4px; cursor: pointer; font-family: var(--font-mono); font-size: 0.8rem; }
+    .btn-approve:disabled { opacity: 0.5; cursor: not-allowed; }
+  </style>
+</head>
+<body class="bg-black">
+  <header class="nav nav-center">
+    <div class="nav-inner">
+      <a href="/" class="nav-logo">
+        <img src="/images/ArGen Logo.png" alt="ArGen" class="logo-img">
+      </a>
+      <div style="color: var(--white); font-family: var(--font-mono); font-size: 0.8rem;">[ADMIN_SYSTEM_v1.0]</div>
+    </div>
+  </header>
+
+  <section class="section" style="padding-top: 120px;">
+    <div class="container">
+      <div style="display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 3rem;">
+        <div>
+          <h1 class="section-h2">Control <i class="soul-text">Center</i></h1>
+          <p class="section-sub">App Admin: Manage organizational lifecycles</p>
+        </div>
+        <div style="font-family: var(--font-mono); font-size: 0.7rem; color: var(--text-sec);">
+          [STATUS: ENCRYPTED_OVERWATCH]
+        </div>
+      </div>
+
+      <div class="auth-tabs" style="max-width: 400px; margin-bottom: 2rem;">
+        <div class="auth-tab active" onclick="switchView('companies')">Organizations</div>
+        <div class="auth-tab" onclick="switchView('users')">User Audit</div>
+      </div>
+
+      <div id="companiesView">
+        <div id="companiesList" class="admin-grid">
+          <div style="color: var(--text-sec); text-align: center; padding: 4rem;">Synchronizing organizational data...</div>
+        </div>
+      </div>
+
+      <div id="usersView" style="display: none;">
+        <div id="usersList" class="admin-grid">
+          <div style="color: var(--text-sec); text-align: center; padding: 4rem;">Compiling global user audit...</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <script src="/js/auth-guard.js"></script>
+  <script src="/js/api.js"></script>
+  <script>
+    let currentView = 'companies';
+
+    function switchView(view) {
+      currentView = view;
+      document.querySelectorAll('.auth-tab').forEach((tab, i) => {
+        tab.classList.toggle('active', (i === 0 && view === 'companies') || (i === 1 && view === 'users'));
+      });
+      document.getElementById('companiesView').style.display = view === 'companies' ? 'block' : 'none';
+      document.getElementById('usersView').style.display = view === 'users' ? 'block' : 'none';
+      
+      if (view === 'companies') fetchCompanies();
+      else fetchUsers();
+    }
+
+    async function fetchCompanies() {
+      try {
+        const data = await argenApi.request('/admin/companies');
+        renderCompanies(data);
+      } catch (err) {
+        document.getElementById('companiesList').innerHTML = `<div class="auth-message error">${err.message}</div>`;
+      }
+    }
+
+    async function fetchUsers() {
+      try {
+        const data = await argenApi.request('/admin/users');
+        renderUsers(data);
+      } catch (err) {
+        document.getElementById('usersList').innerHTML = `<div class="auth-message error">${err.message}</div>`;
+      }
+    }
+
+    function renderCompanies(companies) {
+      const list = document.getElementById('companiesList');
+      if (!companies.length) {
+        list.innerHTML = '<div style="color: var(--text-sec); text-align: center; padding: 4rem;">No organizations found.</div>';
+        return;
+      }
+
+      list.innerHTML = companies.map(co => `
+        <div class="request-card" style="margin-bottom: 1rem; background: rgba(255,255,255,0.02);">
+          <div class="request-info">
+            <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 0.5rem;">
+              <span class="status-badge status-${co.status}">${co.status}</span>
+              <span style="color: var(--text-sec); font-family: var(--font-mono); font-size: 0.65rem;">${co.industry} • ${co.size} employees</span>
+            </div>
+            <h3 style="margin: 0.5rem 0;">${co.name}</h3>
+            <p style="font-size: 0.8rem; color: var(--text-sec);">Admin: ${co.primaryContact.name} (${co.primaryContact.email})</p>
+            <p style="font-family: var(--font-mono); font-size: 0.7rem; color: var(--argen-blue); margin-top: 0.5rem;">INVITE_CODE: ${co.inviteCode}</p>
+          </div>
+          <div class="request-actions">
+            ${co.status === 'pending' 
+              ? `<button class="btn-approve" onclick="updateStatus('${co._id}', 'active')">APPROVE</button>` 
+              : co.status === 'active' 
+                ? `<button class="btn-approve" style="background: rgba(239, 68, 68, 0.1); color: #ef4444; border: 1px solid rgba(239, 68, 68, 0.2);" onclick="updateStatus('${co._id}', 'suspended')">SUSPEND</button>`
+                : `<button class="btn-approve" onclick="updateStatus('${co._id}', 'active')">RE-ACTIVATE</button>`
+            }
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function renderUsers(users) {
+      const list = document.getElementById('usersList');
+      list.innerHTML = users.map(user => `
+        <div class="request-card" style="margin-bottom: 1rem; background: rgba(255,255,255,0.02);">
+          <div class="request-info">
+            <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 0.5rem;">
+              <span class="status-badge" style="background: rgba(255,255,255,0.05); color: #fff; border: 1px solid rgba(255,255,255,0.1);">${user.role}</span>
+              <span style="color: var(--text-sec); font-family: var(--font-mono); font-size: 0.65rem;">ID: ${user._id.slice(-6)}</span>
+            </div>
+            <h3 style="margin: 0.5rem 0;">${user.name}</h3>
+            <p style="font-size: 0.8rem; color: var(--text-sec);">${user.email}</p>
+            <p style="font-size: 0.75rem; color: var(--argen-blue); margin-top: 0.5rem;">Company: ${user.companyId ? user.companyId.name : 'N/A (Global Admin)'}</p>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    async function updateStatus(id, status) {
+      if (!confirm(`Are you sure you want to change this company's status to ${status}?`)) return;
+      try {
+        await argenApi.request(`/admin/companies/${id}/status`, {
+          method: 'PATCH',
+          body: JSON.stringify({ status })
+        });
+        fetchCompanies();
+      } catch (err) {
+        alert('Update failed: ' + err.message);
+      }
+    }
+
+    // Init
+    fetchCompanies();
+  </script>
+</body>
+</html>

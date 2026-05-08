@@ -1,7 +1,7 @@
 const jwt = require('jsonwebtoken');
+const Company = require('../models/Company');
 
-module.exports = function(req, res, next) {
-  // Get token from header
+const protect = async (req, res, next) => {
   let token = req.header('Authorization');
 
   if (token && token.startsWith('Bearer ')) {
@@ -10,12 +10,10 @@ module.exports = function(req, res, next) {
     token = req.header('x-auth-token');
   }
 
-  // Check if no token
   if (!token) {
     return res.status(401).json({ msg: 'No token, authorization denied' });
   }
 
-  // Verify token
   try {
     const decoded = jwt.verify(token, process.env.JWT_SECRET || 'secret');
     req.user = decoded.user;
@@ -24,3 +22,34 @@ module.exports = function(req, res, next) {
     res.status(401).json({ msg: 'Token is not valid' });
   }
 };
+
+// Grant access to specific roles
+const authorize = (...roles) => {
+  return (req, res, next) => {
+    if (!roles.includes(req.user.role)) {
+      return res.status(403).json({
+        msg: `User role ${req.user.role} is not authorized to access this route`
+      });
+    }
+    next();
+  };
+};
+
+// Check if company is active
+const isApproved = async (req, res, next) => {
+  try {
+    if (req.user.role === 'superadmin') return next();
+    
+    const company = await Company.findById(req.user.companyId);
+    if (!company || company.status !== 'active') {
+      return res.status(403).json({
+        msg: 'Access denied. Your company account is not active. Please contact the App Admin.'
+      });
+    }
+    next();
+  } catch (err) {
+    res.status(500).json({ msg: 'Server error in approval check' });
+  }
+};
+
+module.exports = { protect, authorize, isApproved };

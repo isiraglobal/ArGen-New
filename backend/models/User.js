@@ -17,16 +17,22 @@ const UserSchema = new mongoose.Schema({
   },
   role: {
     type: String,
-    enum: ['Admin', 'User', 'Evaluator'],
-    default: 'User'
+    enum: ['superadmin', 'teamadmin', 'member'],
+    default: 'member'
   },
-  company: {
-    type: String
+  companyId: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Company'
   },
+  companyName: String,
+  jobRole: String, // Executive, Manager, IC, Other
+  department: String, // Sales, Marketing, Product, Eng, Ops
   createdAt: {
     type: Date,
     default: Date.now
-  }
+  },
+  resetPasswordToken: String,
+  resetPasswordExpire: Date
 });
 
 // Hash password before saving

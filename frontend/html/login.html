@@ -1,113 +1,420 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Login — ArGen</title>
-  <link rel="icon" type="image/png" href="../images/ArGen Logo.png">
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="../css/style.css">
+  <title>Access Portal - ArGen</title>
+  <link rel="icon" type="image/png" href="/images/ArGen Logo.png">
+  <link
+    href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono&display=swap"
+    rel="stylesheet">
+  <link rel="stylesheet" href="/css/style.css">
+
   <style>
-    .login-container {
-      max-width: 450px;
-      margin: 0 auto;
-      padding: 3rem;
-      background: var(--charcoal);
-      border: 1px solid var(--border-light);
-      border-radius: 8px;
-      box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+    :root {
+      --cb: cubic-bezier(0.4, 0, 0.2, 1);
     }
+
+    .auth-page {
+      min-height: 100dvh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem 1.5rem;
+      background: #000;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .auth-bg-blob {
+      position: absolute;
+      width: 600px;
+      height: 600px;
+      background: radial-gradient(circle, rgba(43, 96, 226, 0.08) 0%, transparent 70%);
+      filter: blur(80px);
+      z-index: 0;
+      pointer-events: none;
+    }
+
+    .auth-card {
+      width: 100%;
+      max-width: 480px;
+      background: rgba(10, 10, 10, 0.6);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 16px;
+      padding: clamp(1.5rem, 5vw, 3rem);
+      position: relative;
+      z-index: 1;
+      box-shadow: 0 24px 48px rgba(0, 0, 0, 0.4);
+    }
+
+    .auth-tabs {
+      display: flex;
+      gap: 0.5rem;
+      margin-bottom: 2.5rem;
+      background: rgba(255, 255, 255, 0.03);
+      padding: 4px;
+      border-radius: 10px;
+      border: 1px solid rgba(255, 255, 255, 0.05);
+    }
+
+    .auth-tab {
+      flex: 1;
+      padding: 10px;
+      text-align: center;
+      font-family: var(--font-mono);
+      font-size: 0.65rem;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: var(--text-sec);
+      cursor: pointer;
+      border-radius: 7px;
+      transition: all 0.3s var(--cb);
+      font-weight: 600;
+    }
+
+    .auth-tab.active {
+      background: var(--argen-blue);
+      color: #fff;
+      box-shadow: 0 4px 12px rgba(43, 96, 226, 0.3);
+    }
+
+    .auth-tab:hover:not(.active) {
+      background: rgba(255, 255, 255, 0.06);
+      color: #fff;
+    }
+
+    .auth-form-step {
+      display: none;
+      animation: fadeIn 0.4s var(--cb) forwards;
+    }
+
+    .auth-form-step.active {
+      display: block;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
     .form-group {
       margin-bottom: 1.5rem;
     }
+
     .form-label {
       display: block;
-      margin-bottom: 0.5rem;
       font-family: var(--font-mono);
-      font-size: 0.8rem;
+      font-size: 0.65rem;
       color: var(--text-sec);
+      margin-bottom: 0.6rem;
+      text-transform: uppercase;
+      letter-spacing: 1px;
     }
+
     .form-input {
       width: 100%;
-      padding: 0.8rem 1rem;
-      background: rgba(255,255,255,0.05);
-      border: 1px solid var(--border-light);
-      border-radius: 4px;
-      color: var(--white);
-      font-family: var(--font-mono);
-      transition: all 0.3s ease;
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 8px;
+      padding: 14px 16px;
+      color: #fff;
+      font-family: var(--font-body);
+      font-size: 0.95rem;
+      transition: all 0.3s var(--cb);
     }
+
     .form-input:focus {
       outline: none;
       border-color: var(--argen-blue);
-      background: rgba(255,255,255,0.08);
+      background: rgba(255, 255, 255, 0.06);
+      box-shadow: 0 0 0 4px rgba(43, 96, 226, 0.1);
     }
-    .error-msg {
-      color: #ef4444;
-      font-size: 0.8rem;
+
+    .form-input::placeholder {
+      color: rgba(255, 255, 255, 0.2);
+    }
+
+    .btn-auth {
+      width: 100%;
+      padding: 16px;
+      border-radius: 8px;
+      font-weight: 700;
+      letter-spacing: 1px;
+      text-transform: uppercase;
       font-family: var(--font-mono);
+      font-size: 0.85rem;
       margin-top: 1rem;
+    }
+
+    .auth-message {
+      margin-top: 1.5rem;
+      padding: 12px;
+      border-radius: 6px;
+      font-family: var(--font-mono);
+      font-size: 0.75rem;
+      text-align: center;
       display: none;
+    }
+
+    .auth-message.error {
+      background: rgba(239, 68, 68, 0.1);
+      color: #ef4444;
+      border: 1px solid rgba(239, 68, 68, 0.2);
+      display: block;
+    }
+
+    .auth-message.success {
+      background: rgba(34, 197, 94, 0.1);
+      color: #22c55e;
+      border: 1px solid rgba(34, 197, 94, 0.2);
+      display: block;
+    }
+
+    .soul-text {
+      font-style: italic;
+      color: var(--argen-blue);
+    }
+
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+    }
+
+    @media (max-width: 480px) {
+      .form-row {
+        grid-template-columns: 1fr;
+      }
     }
   </style>
 </head>
-<body class="bg-black">
-  <!-- Removed Overlays -->
 
-  <section class="section section-black" style="min-height: 100vh; display: flex; align-items: center; justify-content: center;">
-    <div class="container">
-      <div style="text-align: center; margin-bottom: 3rem;">
-        <a href="/">
-          <img src="../images/ArGen Logo.png" alt="ArGen" style="width: 60px; margin-bottom: 1rem;">
-        </a>
-        <h1 class="section-h2" style="font-size: 2rem; margin-bottom: 0.5rem;">Organization <i class="soul-text">Login</i></h1>
-        <p class="section-sub">Enter credentials to access organization dashboard</p>
+<body class="bg-black">
+  <div class="auth-page">
+    <div class="auth-bg-blob" style="top: -100px; right: -100px;"></div>
+    <div class="auth-bg-blob" style="bottom: -100px; left: -100px; background: radial-gradient(circle, rgba(0, 200, 255, 0.05) 0%, transparent 70%);"></div>
+
+    <div style="text-align: center; margin-bottom: 3rem; position: relative; z-index: 1;">
+      <a href="/">
+        <img src="/images/ArGen Logo.png" alt="ArGen" style="width: 50px; margin: 0 auto 1.5rem;">
+      </a>
+      <h1 class="section-h2" style="margin-bottom: 0.5rem; font-size: 2.5rem; letter-spacing: -0.03em;">Access <i class="soul-text">Portal</i></h1>
+      <p class="section-sub" style="font-size: 0.95rem; opacity: 0.7;">Secure, multi-tenant workspace management</p>
+    </div>
+
+    <div class="auth-card">
+      <div class="auth-tabs">
+        <div class="auth-tab active" data-tab="login">Sign In</div>
+        <div class="auth-tab" data-tab="register">Register Co.</div>
+        <div class="auth-tab" data-tab="join">Join Team</div>
       </div>
 
-      <div class="login-container">
-        <form id="loginForm">
+      <!-- Login Form -->
+      <form id="loginForm" class="auth-form-step active">
+        <div class="form-group">
+          <label class="form-label">Email Address</label>
+          <input type="email" class="form-input" placeholder="name@company.com" required>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Password</label>
+          <input type="password" class="form-input" placeholder="••••••••" required>
+        </div>
+        <button type="submit" class="btn btn-primary btn-auth">Authenticate</button>
+      </form>
+
+      <!-- Register Company Form -->
+      <form id="registerForm" class="auth-form-step">
+        <div class="form-group">
+          <label class="form-label">Company Name</label>
+          <input type="text" id="reg-companyName" class="form-input" placeholder="Acme Corp" required>
+        </div>
+        <div class="form-row">
           <div class="form-group">
-            <label class="form-label">Email Address</label>
-            <input type="email" id="email" class="form-input" placeholder="admin@company.com" required>
+            <label class="form-label">Industry</label>
+            <select id="reg-industry" class="form-input" required>
+              <option value="" disabled selected>Select...</option>
+              <option value="Technology">Technology</option>
+              <option value="Finance">Finance</option>
+              <option value="Healthcare">Healthcare</option>
+              <option value="Education">Education</option>
+              <option value="Manufacturing">Manufacturing</option>
+              <option value="Other">Other</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Size</label>
+            <select id="reg-size" class="form-input" required>
+              <option value="" disabled selected>Select...</option>
+              <option value="1-10">1-10</option>
+              <option value="11-50">11-50</option>
+              <option value="51-200">51-200</option>
+              <option value="201-500">201-500</option>
+              <option value="500+">500+</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Country</label>
+          <input type="text" id="reg-country" class="form-input" placeholder="United States" required>
+        </div>
+        <div style="margin: 2rem 0 1.5rem; border-top: 1px solid rgba(255,255,255,0.05); padding-top: 1.5rem;">
+          <p style="color: var(--argen-blue); font-family: var(--font-mono); font-size: 0.6rem; letter-spacing: 1px; margin-bottom: 1rem;">ADMIN_DETAILS</p>
+          <div class="form-group">
+            <label class="form-label">Admin Name</label>
+            <input type="text" id="reg-name" class="form-input" placeholder="John Doe" required>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Admin Email</label>
+            <input type="email" id="reg-email" class="form-input" placeholder="john@company.com" required>
           </div>
           <div class="form-group">
             <label class="form-label">Password</label>
-            <input type="password" id="password" class="form-input" placeholder="••••••••" required>
+            <input type="password" id="reg-password" class="form-input" placeholder="••••••••" required>
           </div>
-          <button type="submit" class="btn btn-primary btn-full" id="submitBtn">Login to Dashboard</button>
-          <div id="errorMsg" class="error-msg"></div>
-        </form>
-        
-        <div style="margin-top: 2rem; text-align: center; font-family: var(--font-mono); font-size: 0.8rem; color: var(--text-sec);">
-          Don't have an account? <a href="#" style="color: var(--argen-blue);">Contact Support</a>
         </div>
-      </div>
+        <button type="submit" class="btn btn-primary btn-auth">Register Workspace</button>
+      </form>
+
+      <!-- Join Team Form -->
+      <form id="joinForm" class="auth-form-step">
+        <div class="form-group">
+          <label class="form-label">Invite Code</label>
+          <input type="text" id="join-inviteCode" class="form-input" style="font-family: var(--font-mono); text-transform: uppercase; letter-spacing: 2px;" placeholder="ABCD-1234" required>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Full Name</label>
+          <input type="text" id="join-name" class="form-input" placeholder="Jane Smith" required>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Email Address</label>
+          <input type="email" id="join-email" class="form-input" placeholder="jane@company.com" required>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label">Job Role</label>
+            <input type="text" id="join-jobRole" class="form-input" placeholder="Product Manager" required>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Department</label>
+            <input type="text" id="join-department" class="form-input" placeholder="Engineering" required>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Password</label>
+          <input type="password" id="join-password" class="form-input" placeholder="••••••••" required>
+        </div>
+        <button type="submit" class="btn btn-primary btn-auth">Join Organization</button>
+      </form>
+
+      <div id="authMessage" class="auth-message"></div>
     </div>
-  </section>
+  </div>
 
-  <script src="../js/api.js"></script>
+  <script src="/js/api.js"></script>
   <script>
-    document.getElementById('loginForm').addEventListener('submit', async (e) => {
-      e.preventDefault();
-      const email = document.getElementById('email').value;
-      const password = document.getElementById('password').value;
-      const errorMsg = document.getElementById('errorMsg');
-      const submitBtn = document.getElementById('submitBtn');
+    document.addEventListener('DOMContentLoaded', () => {
+      const tabs = document.querySelectorAll('.auth-tab');
+      const steps = document.querySelectorAll('.auth-form-step');
+      const messageEl = document.getElementById('authMessage');
 
-      errorMsg.style.display = 'none';
-      submitBtn.disabled = true;
-      submitBtn.textContent = 'Authenticating...';
+      const showMessage = (msg, type = 'error') => {
+        messageEl.textContent = msg;
+        messageEl.className = `auth-message ${type}`;
+        messageEl.style.display = 'block';
+        setTimeout(() => {
+            messageEl.style.display = 'none';
+        }, 8000);
+      };
 
-      try {
-        await window.argenApi.login(email, password);
-        window.location.href = '/teams';
-      } catch (err) {
-        errorMsg.textContent = '> ERROR: ' + err.message;
-        errorMsg.style.display = 'block';
-        submitBtn.disabled = false;
-        submitBtn.textContent = 'Initialize Session';
-      }
+      // Tab Switching
+      tabs.forEach(tab => {
+        tab.addEventListener('click', () => {
+          tabs.forEach(t => t.classList.remove('active'));
+          steps.forEach(s => s.classList.remove('active'));
+          
+          tab.classList.add('active');
+          const stepId = `${tab.dataset.tab}Form`;
+          document.getElementById(stepId).classList.add('active');
+          messageEl.style.display = 'none';
+        });
+      });
+
+      // Login Submission
+      document.getElementById('loginForm').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const email = e.target.querySelector('input[type="email"]').value;
+        const password = e.target.querySelector('input[type="password"]').value;
+
+        try {
+          const data = await argenApi.login(email, password);
+          showMessage('Login successful! Redirecting...', 'success');
+          
+          setTimeout(() => {
+            if (data.user.role === 'superadmin') {
+              window.location.href = '/html/admin-dashboard.html';
+            } else {
+              window.location.href = '/html/dashboard.html';
+            }
+          }, 1000);
+        } catch (error) {
+          showMessage(error.message);
+        }
+      });
+
+      // Register Company Submission
+      document.getElementById('registerForm').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const companyData = {
+          companyName: document.getElementById('reg-companyName').value,
+          industry: document.getElementById('reg-industry').value,
+          size: document.getElementById('reg-size').value,
+          country: document.getElementById('reg-country').value,
+          name: document.getElementById('reg-name').value,
+          email: document.getElementById('reg-email').value,
+          password: document.getElementById('reg-password').value
+        };
+
+        try {
+          const data = await argenApi.registerCompany(companyData);
+          showMessage('Registration successful! Waiting for App Admin approval.', 'success');
+          // Switch to login after a delay
+          setTimeout(() => {
+            tabs[0].click();
+          }, 3000);
+        } catch (error) {
+          showMessage(error.message);
+        }
+      });
+
+      // Join Team Submission
+      document.getElementById('joinForm').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const memberData = {
+          inviteCode: document.getElementById('join-inviteCode').value,
+          name: document.getElementById('join-name').value,
+          email: document.getElementById('join-email').value,
+          jobRole: document.getElementById('join-jobRole').value,
+          department: document.getElementById('join-department').value,
+          password: document.getElementById('join-password').value
+        };
+
+        try {
+          const data = await argenApi.joinTeam(memberData);
+          showMessage('Joined successfully! Redirecting to dashboard...', 'success');
+          setTimeout(() => {
+            window.location.href = '/html/dashboard.html';
+          }, 1500);
+        } catch (error) {
+          showMessage(error.message);
+        }
+      });
     });
   </script>
 </body>
+
 </html>

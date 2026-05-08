@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard - ArGen</title>
+  <link rel="icon" type="image/png" href="/images/ArGen Logo.png">
+  <link
+    href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono&display=swap"
+    rel="stylesheet">
+  <link rel="stylesheet" href="/css/style.css">
+  <style>
+    .dashboard-container {
+      padding-top: 100px;
+      padding-bottom: 5rem;
+    }
+
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1.5rem;
+      margin-bottom: 3rem;
+    }
+
+    .stat-card {
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      padding: 1.5rem;
+      border-radius: 12px;
+    }
+
+    .stat-value {
+      font-size: 2rem;
+      font-weight: 700;
+      color: #fff;
+      margin: 0.5rem 0;
+    }
+
+    .stat-label {
+      font-family: var(--font-mono);
+      font-size: 0.65rem;
+      color: var(--text-sec);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    .batch-card {
+      background: rgba(255, 255, 255, 0.02);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      border-radius: 16px;
+      padding: 2rem;
+      margin-bottom: 1.5rem;
+      transition: all 0.3s var(--cb);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .batch-card:hover {
+      background: rgba(255, 255, 255, 0.04);
+      border-color: var(--argen-blue);
+      transform: translateY(-2px);
+    }
+
+    .batch-info h3 {
+      font-size: 1.25rem;
+      margin-bottom: 0.5rem;
+      color: #fff;
+    }
+
+    .batch-meta {
+      font-family: var(--font-mono);
+      font-size: 0.75rem;
+      color: var(--text-sec);
+    }
+
+    .invite-box {
+      background: rgba(43, 96, 226, 0.05);
+      border: 1px dashed var(--argen-blue);
+      padding: 1.5rem;
+      border-radius: 12px;
+      margin-bottom: 3rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .modal {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.8);
+      backdrop-filter: blur(10px);
+      display: none;
+      z-index: 1000;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .modal-content {
+      background: #0a0a0a;
+      border: 1px solid var(--border-light);
+      padding: 2.5rem;
+      border-radius: 16px;
+      width: 90%;
+      max-width: 500px;
+    }
+  </style>
+</head>
+
+<body class="bg-black">
+  <script src="/js/auth-guard.js"></script>
+  
+  <header class="nav">
+    <div class="nav-inner">
+      <a href="/" class="nav-logo">
+        <img src="/images/ArGen Logo.png" alt="ArGen" class="logo-img">
+      </a>
+      <div style="display: flex; align-items: center; gap: 1.5rem;">
+        <div id="userProfile" style="text-align: right; font-family: var(--font-mono);">
+          <div id="profileName" style="color: #fff; font-size: 0.75rem; font-weight: 700;">[LOADING...]</div>
+          <div id="profileRole" style="color: var(--text-sec); font-size: 0.6rem; text-transform: uppercase;">role_pending</div>
+        </div>
+        <button onclick="argenApi.logout()" class="btn btn-dark" style="padding: 8px 16px; font-size: 0.7rem;">LOGOUT</button>
+      </div>
+    </div>
+  </header>
+
+  <main class="dashboard-container container">
+    <!-- Header Area -->
+    <div style="margin-bottom: 3rem;">
+      <h1 class="section-h2" id="welcomeText">Welcome <i class="soul-text">Back</i></h1>
+      <p class="section-sub" id="orgName">Retrieving organizational context...</p>
+    </div>
+
+    <!-- TeamAdmin Section -->
+    <div id="adminSection" style="display: none;">
+      <div class="invite-box">
+        <div>
+          <p class="stat-label" style="margin-bottom: 0.5rem;">Invite your team</p>
+          <p style="font-size: 0.9rem; color: #fff;">Share this code with your members to join this organization.</p>
+        </div>
+        <div style="text-align: right;">
+          <div id="inviteCodeDisplay" style="font-family: var(--font-mono); font-size: 1.5rem; color: var(--argen-blue); font-weight: 800; letter-spacing: 2px;">XXXX-XXXX</div>
+          <button onclick="copyInviteCode()" style="background: none; border: none; color: var(--text-sec); font-size: 0.65rem; cursor: pointer; text-decoration: underline;">COPY_CODE</button>
+        </div>
+      </div>
+
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
+        <h2 class="card-h3" style="font-size: 1.5rem;">Evaluation <i class="soul-text">Batches</i></h2>
+        <button class="btn btn-primary" onclick="openModal('createBatchModal')">+ Create Batch</button>
+      </div>
+
+      <div id="batchesList">
+        <!-- Batches injected here -->
+      </div>
+    </div>
+
+    <!-- Member Section -->
+    <div id="memberSection" style="display: none;">
+      <h2 class="card-h3" style="font-size: 1.5rem; margin-bottom: 2rem;">Active <i class="soul-text">Evaluations</i></h2>
+      <div id="activeEvaluationsList">
+        <!-- Active evals injected here -->
+      </div>
+
+      <h2 class="card-h3" style="font-size: 1.5rem; margin: 4rem 0 2rem;">Submission <i class="soul-text">History</i></h2>
+      <div id="historyList">
+        <!-- History injected here -->
+      </div>
+    </div>
+  </main>
+
+  <!-- Create Batch Modal -->
+  <div id="createBatchModal" class="modal">
+    <div class="modal-content">
+      <h3 class="card-h3" style="margin-bottom: 1.5rem;">New Evaluation Batch</h3>
+      <form id="createBatchForm">
+        <div class="form-group">
+          <label class="form-label">Batch Title</label>
+          <input type="text" id="batchTitle" class="form-input" placeholder="Q2 Engineering Assessment" required>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Deadline</label>
+          <input type="date" id="batchDeadline" class="form-input" required>
+        </div>
+        <div style="display: flex; gap: 1rem; margin-top: 2rem;">
+          <button type="button" class="btn btn-dark" style="flex: 1;" onclick="closeModal('createBatchModal')">Cancel</button>
+          <button type="submit" class="btn btn-primary" style="flex: 1;">Create</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script src="/js/api.js"></script>
+  <script>
+    const user = JSON.parse(localStorage.getItem('user'));
+    let currentInviteCode = '';
+
+    document.addEventListener('DOMContentLoaded', () => {
+      if (!user) return;
+
+      document.getElementById('profileName').textContent = user.name.toUpperCase();
+      document.getElementById('profileRole').textContent = `ID_${user.role}`;
+      document.getElementById('welcomeText').innerHTML = `Welcome back, <i class="soul-text">${user.name.split(' ')[0]}</i>`;
+      
+      if (user.role === 'teamadmin') {
+        document.getElementById('adminSection').style.display = 'block';
+        initAdminDashboard();
+      } else {
+        document.getElementById('memberSection').style.display = 'block';
+        initMemberDashboard();
+      }
+    });
+
+    async function initAdminDashboard() {
+      try {
+        // Fetch Company Info for Invite Code
+        const companies = await argenApi.request('/admin/companies'); // This might need a non-superadmin endpoint
+        // For TeamAdmin, we should have a /api/evaluations/my-company endpoint
+        
+        // Fetch Batches
+        const batches = await argenApi.request('/evaluations');
+        renderBatches(batches);
+      } catch (err) {
+        console.error('Dashboard init error:', err);
+      }
+    }
+
+    async function initMemberDashboard() {
+      try {
+        const batches = await argenApi.request('/evaluations');
+        renderActiveEvaluations(batches);
+        
+        const history = await argenApi.request('/responses/my');
+        renderHistory(history);
+      } catch (err) {
+        console.error('Member dashboard error:', err);
+      }
+    }
+
+    function renderBatches(batches) {
+      const container = document.getElementById('batchesList');
+      if (!batches.length) {
+        container.innerHTML = '<p style="color: var(--text-sec); text-align: center; padding: 3rem; background: rgba(255,255,255,0.01); border-radius: 12px; border: 1px dashed var(--border-light);">No evaluation batches created yet.</p>';
+        return;
+      }
+      container.innerHTML = batches.map(b => `
+        <div class="batch-card">
+          <div class="batch-info">
+            <h3>${b.title}</h3>
+            <p class="batch-meta">STATUS: ${b.status.toUpperCase()} | DEADLINE: ${new Date(b.deadline).toLocaleDateString()}</p>
+          </div>
+          <a href="/html/batch-detail.html?id=${b._id}" class="btn btn-dark">View Audit</a>
+        </div>
+      `).join('');
+    }
+
+    function renderActiveEvaluations(batches) {
+      const container = document.getElementById('activeEvaluationsList');
+      if (!batches.length) {
+        container.innerHTML = '<p style="color: var(--text-sec); text-align: center; padding: 2rem; background: rgba(255,255,255,0.02); border-radius: 12px;">No active evaluations assigned to your team yet.</p>';
+        return;
+      }
+
+      let html = '';
+      batches.forEach(batch => {
+        batch.challenges.forEach(challenge => {
+          html += `
+            <div class="batch-card">
+              <div class="batch-info">
+                <span class="batch-meta" style="color: var(--argen-blue);">${batch.title}</span>
+                <h3>${challenge.title}</h3>
+                <p class="batch-meta">TYPE: ${challenge.type?.toUpperCase() || 'GENERAL'} | DUE: ${new Date(batch.deadline).toLocaleDateString()}</p>
+              </div>
+              <a href="/html/take-evaluation.html?challengeId=${challenge._id}&evaluationId=${batch._id}" class="btn btn-primary">Start Evaluation</a>
+            </div>
+          `;
+        });
+      });
+      container.innerHTML = html || '<p style="color: var(--text-sec);">Your batches are empty.</p>';
+    }
+
+    function renderHistory(history) {
+      const container = document.getElementById('historyList');
+      if (!history.length) {
+        container.innerHTML = '<p style="color: var(--text-sec);">No past submissions found.</p>';
+        return;
+      }
+      container.innerHTML = history.map(h => `
+        <div class="batch-card">
+          <div class="batch-info">
+            <h3>${h.challengeId?.title || 'Unknown Challenge'}</h3>
+            <p class="batch-meta">Score: ${h.overallScore.toFixed(1)}/10 | Submitted: ${new Date(h.createdAt).toLocaleDateString()}</p>
+          </div>
+          <div style="font-family: var(--font-mono); font-size: 0.8rem; color: var(--argen-blue); font-weight: 700;">
+            ${h.overallScore >= 8 ? 'ELITE' : h.overallScore >= 6 ? 'PROFICIENT' : 'EMERGING'}
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function openModal(id) { document.getElementById(id).style.display = 'flex'; }
+    function closeModal(id) { document.getElementById(id).style.display = 'none'; }
+
+    document.getElementById('createBatchForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const title = document.getElementById('batchTitle').value;
+      const deadline = document.getElementById('batchDeadline').value;
+
+      try {
+        await argenApi.request('/evaluations', {
+          method: 'POST',
+          body: JSON.stringify({ title, deadline, challengeIds: [] }) // Challenges can be added later
+        });
+        closeModal('createBatchModal');
+        initAdminDashboard();
+      } catch (err) {
+        alert(err.message);
+      }
+    });
+
+    function copyInviteCode() {
+      const code = document.getElementById('inviteCodeDisplay').textContent;
+      navigator.clipboard.writeText(code);
+      alert('Invite code copied to clipboard!');
+    }
+  </script>
+</body>
+
+</html>

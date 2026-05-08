@@ -1,30 +1,43 @@
 const mongoose = require('mongoose');
 
 const ChallengeSchema = new mongoose.Schema({
-  title: {
+  challengeId: {
     type: String,
-    required: true
+    required: true,
+    unique: true
   },
-  description: {
+  name: {
     type: String,
     required: true
   },
   type: {
     type: String,
-    enum: ['Technical', 'Creative', 'Strategic', 'Verification'],
+    enum: ['Strategy', 'Data', 'Communication', 'Research', 'Iteration'],
     required: true
   },
   difficulty: {
     type: String,
-    enum: ['Easy', 'Medium', 'Hard'],
-    default: 'Medium'
+    enum: ['Beginner', 'Intermediate', 'Advanced'],
+    default: 'Intermediate'
   },
-  constraints: [{
-    type: String
-  }],
-  benchmarkScore: {
+  industryFocus: String,
+  text: {
+    type: String,
+    required: true
+  },
+  wordLimit: Number,
+  timeEstimate: Number,
+  dimensions: {
+    primary: String,
+    secondary: String
+  },
+  active: {
+    type: Boolean,
+    default: true
+  },
+  usageCount: {
     type: Number,
-    default: 70
+    default: 0
   },
   createdAt: {
     type: Date,

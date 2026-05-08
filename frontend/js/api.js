@@ -6,10 +6,11 @@
 // Check if we have a production API URL set, otherwise fallback to localhost
 const API_BASE_URL = window.ARGEN_API_URL || 
     (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1' 
-        ? 'http://localhost:5000/api' 
-        : 'https://argen-backend.vercel.app/api'); // Placeholder for production URL
+        ? 'http://localhost:5001/api' 
+        : '/api'); 
 
 const api = {
+    baseUrl: API_BASE_URL,
     // Helper for fetch with auth
     async request(endpoint, options = {}) {
         console.log(`[API] Requesting ${endpoint}...`);
@@ -37,8 +38,8 @@ const api = {
         if (response.status === 401) {
             // Token expired or invalid
             localStorage.removeItem('argen_token');
-            if (!window.location.pathname.includes('login.html')) {
-                window.location.href = 'login.html';
+            if (!window.location.pathname.startsWith('/login')) {
+                window.location.href = '/login';
             }
         }
 
@@ -60,10 +61,19 @@ const api = {
         return data;
     },
 
-    async signup(userData) {
-        const data = await this.request('/auth/signup', {
+    async registerCompany(companyData) {
+        // { companyName, industry, size, country, name, email, password }
+        return this.request('/auth/register-company', {
             method: 'POST',
-            body: JSON.stringify(userData),
+            body: JSON.stringify(companyData),
+        });
+    },
+
+    async joinTeam(memberData) {
+        // { name, email, password, inviteCode, jobRole, department }
+        const data = await this.request('/auth/join-team', {
+            method: 'POST',
+            body: JSON.stringify(memberData),
         });
         localStorage.setItem('argen_token', data.token);
         localStorage.setItem('user', JSON.stringify(data.user));
@@ -73,22 +83,22 @@ const api = {
     logout() {
         localStorage.removeItem('argen_token');
         localStorage.removeItem('user');
-        window.location.href = 'index.html';
+        window.location.href = '/';
     },
 
-    // Teams
-    async getTeams() {
-        return this.request('/teams');
+    // Evaluations & Batches
+    async getEvaluations() {
+        return this.request('/evaluations');
     },
 
-    async getTeam(id) {
-        return this.request(`/teams/${id}`);
+    async getEvaluation(id) {
+        return this.request(`/evaluations/${id}`);
     },
 
-    async createTeam(teamData) {
-        return this.request('/teams', {
+    async createEvaluationBatch(batchData) {
+        return this.request('/evaluations', {
             method: 'POST',
-            body: JSON.stringify(teamData),
+            body: JSON.stringify(batchData),
         });
     },
 
@@ -97,18 +107,24 @@ const api = {
         return this.request('/challenges');
     },
 
-    async submitResponse(challengeId, responseText) {
-        return this.request(`/challenges/${challengeId}/submit`, {
+    // Responses & Submissions
+    async submitEvaluationResponse(submissionData) {
+        // { challengeId, evaluationId, promptText, modelOutput }
+        return this.request('/responses/submit', {
             method: 'POST',
-            body: JSON.stringify({ responseText }),
+            body: JSON.stringify(submissionData),
         });
     },
 
-    // Scores & Analytics
-    async getTeamScores(teamId) {
-        return this.request(`/scores/${teamId}`);
+    async getMyResponses() {
+        return this.request('/responses/my');
     },
 
+    async getBatchResponses(batchId) {
+        return this.request(`/responses/batch/${batchId}`);
+    },
+
+    // Benchmarks
     async getBenchmarks() {
         return this.request('/benchmark');
     }

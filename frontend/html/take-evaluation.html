@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Take Evaluation - ArGen</title>
+  <link rel="icon" type="image/png" href="/images/ArGen Logo.png">
+  <link
+    href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono&display=swap"
+    rel="stylesheet">
+  <link rel="stylesheet" href="/css/style.css">
+  <style>
+    .eval-container {
+      padding-top: 100px;
+      padding-bottom: 5rem;
+      max-width: 1000px;
+    }
+
+    .eval-layout {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 3rem;
+      align-items: start;
+    }
+
+    .challenge-display {
+      position: sticky;
+      top: 120px;
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid var(--border-light);
+      padding: 2.5rem;
+      border-radius: 16px;
+    }
+
+    .challenge-type {
+      font-family: var(--font-mono);
+      font-size: 0.7rem;
+      color: var(--argen-blue);
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      margin-bottom: 1rem;
+      display: block;
+    }
+
+    .challenge-title {
+      font-size: 2rem;
+      font-weight: 800;
+      color: #fff;
+      margin-bottom: 1.5rem;
+      line-height: 1.2;
+    }
+
+    .challenge-description {
+      font-size: 1rem;
+      color: var(--text-sec);
+      line-height: 1.7;
+      margin-bottom: 2rem;
+    }
+
+    .dimension-tags {
+      display: flex;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+    }
+
+    .dim-tag {
+      font-family: var(--font-mono);
+      font-size: 0.65rem;
+      padding: 4px 10px;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 4px;
+      color: var(--text-sec);
+    }
+
+    .submission-form {
+      display: flex;
+      flex-direction: column;
+      gap: 2rem;
+    }
+
+    .input-section h4 {
+      font-family: var(--font-mono);
+      font-size: 0.75rem;
+      color: #fff;
+      margin-bottom: 1rem;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    .eval-textarea {
+      width: 100%;
+      min-height: 200px;
+      background: rgba(0, 0, 0, 0.3);
+      border: 1px solid var(--border-light);
+      border-radius: 12px;
+      padding: 1.5rem;
+      color: #fff;
+      font-family: 'Inter', sans-serif;
+      font-size: 0.9rem;
+      line-height: 1.6;
+      resize: vertical;
+      transition: all 0.3s var(--cb);
+    }
+
+    .eval-textarea:focus {
+      border-color: var(--argen-blue);
+      outline: none;
+      background: rgba(43, 96, 226, 0.05);
+    }
+
+    .eval-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 3rem;
+      padding-top: 2rem;
+      border-top: 1px solid var(--border-light);
+    }
+
+    @media (max-width: 768px) {
+      .eval-layout { grid-template-columns: 1fr; }
+      .challenge-display { position: static; margin-bottom: 2rem; }
+    }
+  </style>
+</head>
+
+<body class="bg-black">
+  <script src="/js/auth-guard.js"></script>
+  
+  <header class="nav">
+    <div class="nav-inner">
+      <a href="/dashboard" class="nav-logo">
+        <img src="/images/ArGen Logo.png" alt="ArGen" class="logo-img">
+      </a>
+      <div id="evalStatus" style="font-family: var(--font-mono); font-size: 0.7rem; color: var(--text-sec);">
+        SESSION_ACTIVE // <span id="timer" style="color: var(--argen-blue);">00:00:00</span>
+      </div>
+    </div>
+  </header>
+
+  <main class="eval-container container">
+    <div id="loading" style="text-align: center; padding: 5rem;">
+      <p class="soul-text">Initializing Challenge...</p>
+    </div>
+
+    <div id="evalContent" style="display: none;" class="eval-layout">
+      <!-- Left: Challenge Details -->
+      <aside class="challenge-display">
+        <span class="challenge-type" id="challengeType">STRATEGY_EXECUTION</span>
+        <h2 class="challenge-title" id="challengeTitle">Challenge Loading...</h2>
+        <div class="challenge-description" id="challengeDesc">
+          Full challenge description will appear here.
+        </div>
+        <div class="dimension-tags" id="challengeDims">
+          <span class="dim-tag">Clarity</span>
+          <span class="dim-tag">Constraint</span>
+          <span class="dim-tag">Logic</span>
+        </div>
+      </aside>
+
+      <!-- Right: Submission Form -->
+      <section class="submission-form">
+        <div class="input-section">
+          <h4><span style="color: var(--argen-blue);">01</span> // Prompt Used</h4>
+          <p style="font-size: 0.8rem; color: var(--text-sec); margin-bottom: 1rem;">Paste the exact prompt(s) you used to generate the output.</p>
+          <textarea id="promptText" class="eval-textarea" placeholder="Enter your prompt here..."></textarea>
+        </div>
+
+        <div class="input-section">
+          <h4><span style="color: var(--argen-blue);">02</span> // Model Output</h4>
+          <p style="font-size: 0.8rem; color: var(--text-sec); margin-bottom: 1rem;">Paste the raw output received from the AI model.</p>
+          <textarea id="modelOutput" class="eval-textarea" placeholder="Enter model response here..."></textarea>
+        </div>
+
+        <div class="eval-footer">
+          <button onclick="window.history.back()" class="btn btn-dark">Exit Session</button>
+          <button id="submitBtn" onclick="submitResponse()" class="btn btn-primary">Submit for Scoring →</button>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <script src="/js/api.js"></script>
+  <script>
+    const urlParams = new URLSearchParams(window.location.search);
+    const challengeId = urlParams.get('challengeId');
+    const evaluationId = urlParams.get('evaluationId');
+
+    let currentChallenge = null;
+
+    document.addEventListener('DOMContentLoaded', async () => {
+      if (!challengeId) {
+        window.location.href = '/dashboard';
+        return;
+      }
+      loadChallenge();
+      startTimer();
+    });
+
+    async function loadChallenge() {
+      try {
+        const challenges = await argenApi.request('/challenges');
+        currentChallenge = challenges.find(c => c._id === challengeId);
+        
+        if (!currentChallenge) throw new Error('Challenge not found');
+
+        document.getElementById('challengeTitle').textContent = currentChallenge.title;
+        document.getElementById('challengeDesc').textContent = currentChallenge.description;
+        document.getElementById('challengeType').textContent = (currentChallenge.type || 'General').toUpperCase();
+        
+        document.getElementById('loading').style.display = 'none';
+        document.getElementById('evalContent').style.display = 'grid';
+      } catch (err) {
+        console.error('Error loading challenge:', err);
+        document.getElementById('loading').innerHTML = `<p style="color: var(--red);">Error: ${err.message}</p>`;
+      }
+    }
+
+    async function submitResponse() {
+      const promptText = document.getElementById('promptText').value.trim();
+      const modelOutput = document.getElementById('modelOutput').value.trim();
+
+      if (!promptText || !modelOutput) {
+        alert('Please fill in both fields before submitting.');
+        return;
+      }
+
+      const btn = document.getElementById('submitBtn');
+      btn.disabled = true;
+      btn.textContent = 'SCORING...';
+
+      try {
+        await argenApi.request('/responses/submit', {
+          method: 'POST',
+          body: JSON.stringify({
+            challengeId,
+            evaluationId,
+            promptText,
+            modelOutput
+          })
+        });
+
+        alert('Submission successful! Redirecting to dashboard...');
+        window.location.href = '/dashboard';
+      } catch (err) {
+        alert(err.message);
+        btn.disabled = false;
+        btn.textContent = 'Submit for Scoring →';
+      }
+    }
+
+    function startTimer() {
+      let seconds = 0;
+      const timerEl = document.getElementById('timer');
+      setInterval(() => {
+        seconds++;
+        const h = Math.floor(seconds / 3600).toString().padStart(2, '0');
+        const m = Math.floor((seconds % 3600) / 60).toString().padStart(2, '0');
+        const s = (seconds % 60).toString().padStart(2, '0');
+        timerEl.textContent = `${h}:${m}:${s}`;
+      }, 1000);
+    }
+  </script>
+</body>
+
+</html>
