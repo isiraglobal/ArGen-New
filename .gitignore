@@ -4,6 +4,17 @@ node_modules/
 !.env.example
 !**/.env.example
 .DS_Store
+ArGen - Claude Documentations/
+scratch/
+docs/
+# Agent & Project Management Docs
+AGENT_QUICK_START.md
+CHECKPOINT_GUIDE.md
+CHECKPOINT_TEMPLATE.md
+IMPLEMENTATION_MASTER.md
+PROJECT_STATE.json
+SYSTEM_SUMMARY.md
+TASK_TRACKER.md
 dist/
 build/
 .vercel
