@@ -3,12 +3,12 @@ const router = express.Router();
 const Challenge = require('../models/Challenge');
 const Evaluation = require('../models/Evaluation');
 const Response = require('../models/Response');
-const auth = require('../middleware/auth');
+const { protect } = require('../middleware/auth');
 
 // @route   GET api/challenges
 // @desc    Get all challenges
 // @access  Private
-router.get('/', auth, async (req, res) => {
+router.get('/', protect, async (req, res) => {
   try {
     const challenges = await Challenge.find().sort({ createdAt: -1 });
     res.json(challenges);
@@ -21,7 +21,7 @@ router.get('/', auth, async (req, res) => {
 // @route   POST api/challenges/:id/submit
 // @desc    Submit a response to a challenge
 // @access  Private
-router.post('/:id/submit', auth, async (req, res) => {
+router.post('/:id/submit', protect, async (req, res) => {
   const { promptText, modelOutput, evaluationId } = req.body;
 
   try {

@@ -209,9 +209,8 @@
 
     <div class="auth-card">
       <div class="auth-tabs">
-        <div class="auth-tab active" data-tab="login">Sign In</div>
-        <div class="auth-tab" data-tab="register">Register Co.</div>
-        <div class="auth-tab" data-tab="join">Join Team</div>
+        <div class="auth-tab active" id="loginTab">Login</div>
+        <div class="auth-tab" onclick="window.location.href='/waitlist'">Join Waiting List</div>
       </div>
 
       <!-- Login Form -->
@@ -223,103 +222,38 @@
         <div class="form-group">
           <label class="form-label">Password</label>
           <input type="password" class="form-input" placeholder="••••••••" required>
+          <div style="text-align: right; margin-top: 0.5rem;">
+            <a href="javascript:void(0)" onclick="openForgotPassword()" style="color: var(--text-sec); font-size: 0.7rem; text-decoration: none; font-family: var(--font-mono); letter-spacing: 0.5px;">FORGOT_PASSWORD?</a>
+          </div>
         </div>
         <button type="submit" class="btn btn-primary btn-auth">Authenticate</button>
-      </form>
-
-      <!-- Register Company Form -->
-      <form id="registerForm" class="auth-form-step">
-        <div class="form-group">
-          <label class="form-label">Company Name</label>
-          <input type="text" id="reg-companyName" class="form-input" placeholder="Acme Corp" required>
-        </div>
-        <div class="form-row">
-          <div class="form-group">
-            <label class="form-label">Industry</label>
-            <select id="reg-industry" class="form-input" required>
-              <option value="" disabled selected>Select...</option>
-              <option value="Technology">Technology</option>
-              <option value="Finance">Finance</option>
-              <option value="Healthcare">Healthcare</option>
-              <option value="Education">Education</option>
-              <option value="Manufacturing">Manufacturing</option>
-              <option value="Other">Other</option>
-            </select>
-          </div>
-          <div class="form-group">
-            <label class="form-label">Size</label>
-            <select id="reg-size" class="form-input" required>
-              <option value="" disabled selected>Select...</option>
-              <option value="1-10">1-10</option>
-              <option value="11-50">11-50</option>
-              <option value="51-200">51-200</option>
-              <option value="201-500">201-500</option>
-              <option value="500+">500+</option>
-            </select>
-          </div>
-        </div>
-        <div class="form-group">
-          <label class="form-label">Country</label>
-          <input type="text" id="reg-country" class="form-input" placeholder="United States" required>
-        </div>
-        <div style="margin: 2rem 0 1.5rem; border-top: 1px solid rgba(255,255,255,0.05); padding-top: 1.5rem;">
-          <p style="color: var(--argen-blue); font-family: var(--font-mono); font-size: 0.6rem; letter-spacing: 1px; margin-bottom: 1rem;">ADMIN_DETAILS</p>
-          <div class="form-group">
-            <label class="form-label">Admin Name</label>
-            <input type="text" id="reg-name" class="form-input" placeholder="John Doe" required>
-          </div>
-          <div class="form-group">
-            <label class="form-label">Admin Email</label>
-            <input type="email" id="reg-email" class="form-input" placeholder="john@company.com" required>
-          </div>
-          <div class="form-group">
-            <label class="form-label">Password</label>
-            <input type="password" id="reg-password" class="form-input" placeholder="••••••••" required>
-          </div>
-        </div>
-        <button type="submit" class="btn btn-primary btn-auth">Register Workspace</button>
-      </form>
-
-      <!-- Join Team Form -->
-      <form id="joinForm" class="auth-form-step">
-        <div class="form-group">
-          <label class="form-label">Invite Code</label>
-          <input type="text" id="join-inviteCode" class="form-input" style="font-family: var(--font-mono); text-transform: uppercase; letter-spacing: 2px;" placeholder="ABCD-1234" required>
-        </div>
-        <div class="form-group">
-          <label class="form-label">Full Name</label>
-          <input type="text" id="join-name" class="form-input" placeholder="Jane Smith" required>
-        </div>
-        <div class="form-group">
-          <label class="form-label">Email Address</label>
-          <input type="email" id="join-email" class="form-input" placeholder="jane@company.com" required>
-        </div>
-        <div class="form-row">
-          <div class="form-group">
-            <label class="form-label">Job Role</label>
-            <input type="text" id="join-jobRole" class="form-input" placeholder="Product Manager" required>
-          </div>
-          <div class="form-group">
-            <label class="form-label">Department</label>
-            <input type="text" id="join-department" class="form-input" placeholder="Engineering" required>
-          </div>
-        </div>
-        <div class="form-group">
-          <label class="form-label">Password</label>
-          <input type="password" id="join-password" class="form-input" placeholder="••••••••" required>
-        </div>
-        <button type="submit" class="btn btn-primary btn-auth">Join Organization</button>
       </form>
 
       <div id="authMessage" class="auth-message"></div>
     </div>
   </div>
 
+  <!-- Forgot Password Modal -->
+  <div id="forgotPasswordModal" class="modal" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); backdrop-filter: blur(10px); display: none; z-index: 2000; align-items: center; justify-content: center;">
+    <div style="background: #0a0a0a; border: 1px solid rgba(255,255,255,0.1); padding: 2.5rem; border-radius: 16px; width: 90%; max-width: 400px;">
+      <h3 class="card-h3" style="margin-bottom: 1rem; font-size: 1.5rem;">Reset <i class="soul-text">Access</i></h3>
+      <p style="color: var(--text-sec); font-size: 0.85rem; margin-bottom: 2rem; line-height: 1.6;">Enter your email address and we'll send you a secure link to reset your password.</p>
+      <form id="forgotPasswordForm">
+        <div class="form-group">
+          <label class="form-label">Email Address</label>
+          <input type="email" id="forgot-email" class="form-input" placeholder="name@company.com" required>
+        </div>
+        <div style="display: flex; gap: 1rem; margin-top: 2.5rem;">
+          <button type="button" class="btn btn-dark" style="flex: 1;" onclick="closeForgotPassword()">Cancel</button>
+          <button type="submit" class="btn btn-primary" style="flex: 1;">Send Link</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
   <script src="/js/api.js"></script>
   <script>
     document.addEventListener('DOMContentLoaded', () => {
-      const tabs = document.querySelectorAll('.auth-tab');
-      const steps = document.querySelectorAll('.auth-form-step');
       const messageEl = document.getElementById('authMessage');
 
       const showMessage = (msg, type = 'error') => {
@@ -330,19 +264,6 @@
             messageEl.style.display = 'none';
         }, 8000);
       };
-
-      // Tab Switching
-      tabs.forEach(tab => {
-        tab.addEventListener('click', () => {
-          tabs.forEach(t => t.classList.remove('active'));
-          steps.forEach(s => s.classList.remove('active'));
-          
-          tab.classList.add('active');
-          const stepId = `${tab.dataset.tab}Form`;
-          document.getElementById(stepId).classList.add('active');
-          messageEl.style.display = 'none';
-        });
-      });
 
       // Login Submission
       document.getElementById('loginForm').addEventListener('submit', async (e) => {
@@ -356,7 +277,7 @@
           
           setTimeout(() => {
             if (data.user.role === 'superadmin') {
-              window.location.href = '/html/admin-dashboard.html';
+              window.location.href = '/html/admin-portal.html';
             } else {
               window.location.href = '/html/dashboard.html';
             }
@@ -365,54 +286,38 @@
           showMessage(error.message);
         }
       });
+    });
 
-      // Register Company Submission
-      document.getElementById('registerForm').addEventListener('submit', async (e) => {
-        e.preventDefault();
-        const companyData = {
-          companyName: document.getElementById('reg-companyName').value,
-          industry: document.getElementById('reg-industry').value,
-          size: document.getElementById('reg-size').value,
-          country: document.getElementById('reg-country').value,
-          name: document.getElementById('reg-name').value,
-          email: document.getElementById('reg-email').value,
-          password: document.getElementById('reg-password').value
-        };
+    // Forgot Password Logic
+    function openForgotPassword() {
+      document.getElementById('forgotPasswordModal').style.display = 'flex';
+    }
 
-        try {
-          const data = await argenApi.registerCompany(companyData);
-          showMessage('Registration successful! Waiting for App Admin approval.', 'success');
-          // Switch to login after a delay
-          setTimeout(() => {
-            tabs[0].click();
-          }, 3000);
-        } catch (error) {
-          showMessage(error.message);
-        }
-      });
+    function closeForgotPassword() {
+      document.getElementById('forgotPasswordModal').style.display = 'none';
+    }
 
-      // Join Team Submission
-      document.getElementById('joinForm').addEventListener('submit', async (e) => {
-        e.preventDefault();
-        const memberData = {
-          inviteCode: document.getElementById('join-inviteCode').value,
-          name: document.getElementById('join-name').value,
-          email: document.getElementById('join-email').value,
-          jobRole: document.getElementById('join-jobRole').value,
-          department: document.getElementById('join-department').value,
-          password: document.getElementById('join-password').value
-        };
+    document.getElementById('forgotPasswordForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const email = document.getElementById('forgot-email').value;
+      const btn = e.target.querySelector('button[type="submit"]');
+      
+      btn.disabled = true;
+      btn.textContent = 'Sending...';
 
-        try {
-          const data = await argenApi.joinTeam(memberData);
-          showMessage('Joined successfully! Redirecting to dashboard...', 'success');
-          setTimeout(() => {
-            window.location.href = '/html/dashboard.html';
-          }, 1500);
-        } catch (error) {
-          showMessage(error.message);
-        }
-      });
+      try {
+        await argenApi.request('/auth/forgot-password', {
+          method: 'POST',
+          body: JSON.stringify({ email })
+        });
+        alert('If an account exists with this email, a reset link has been sent.');
+        closeForgotPassword();
+      } catch (err) {
+        alert(err.message);
+      } finally {
+        btn.disabled = false;
+        btn.textContent = 'Send Link';
+      }
     });
   </script>
 </body>

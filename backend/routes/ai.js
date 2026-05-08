@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const fetch = require('node-fetch');
+// Using native fetch available in Node 18+
 
 router.post('/ask', async (req, res) => {
     try {

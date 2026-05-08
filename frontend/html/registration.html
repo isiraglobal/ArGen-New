@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Workspace Registration - ArGen</title>
+  <link rel="icon" type="image/png" href="/images/ArGen Logo.png">
+  <link
+    href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono&display=swap"
+    rel="stylesheet">
+  <link rel="stylesheet" href="/css/style.css">
+  <style>
+    .auth-page {
+      min-height: 100dvh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem 1.5rem;
+      background: #000;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .auth-card {
+      width: 100%;
+      max-width: 520px;
+      background: rgba(10, 10, 10, 0.6);
+      backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 16px;
+      padding: 3rem;
+      position: relative;
+      z-index: 1;
+    }
+
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+    }
+
+    @media (max-width: 480px) {
+      .form-row {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+
+<body class="bg-black">
+  <div class="auth-page">
+    <div style="text-align: center; margin-bottom: 2.5rem; position: relative; z-index: 1;">
+      <img src="/images/ArGen Logo.png" alt="ArGen" style="width: 40px; margin-bottom: 1rem;">
+      <h1 class="section-h2" style="font-size: 2rem;">Setup <i class="soul-text">Workspace</i></h1>
+      <p id="invitationStatus" style="color: var(--text-sec); font-size: 0.85rem; margin-top: 0.5rem;">Verifying your invitation...</p>
+    </div>
+
+    <div class="auth-card" id="registrationCard" style="display: none;">
+      <form id="registerForm">
+        <div class="form-group">
+          <label class="form-label">Company Name</label>
+          <input type="text" id="reg-companyName" class="form-input" placeholder="Acme Corp" required>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label">Industry</label>
+            <select id="reg-industry" class="form-input" required>
+              <option value="" disabled selected>Select...</option>
+              <option value="Technology">Technology</option>
+              <option value="Finance">Finance</option>
+              <option value="Healthcare">Healthcare</option>
+              <option value="Education">Education</option>
+              <option value="Manufacturing">Manufacturing</option>
+              <option value="Other">Other</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Size</label>
+            <select id="reg-size" class="form-input" required>
+              <option value="" disabled selected>Select...</option>
+              <option value="1-10">1-10</option>
+              <option value="11-50">11-50</option>
+              <option value="51-200">51-200</option>
+              <option value="201-500">201-500</option>
+              <option value="500+">500+</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Country</label>
+          <input type="text" id="reg-country" class="form-input" placeholder="United States" required>
+        </div>
+        
+        <div style="margin: 2rem 0 1.5rem; border-top: 1px solid rgba(255,255,255,0.05); padding-top: 1.5rem;">
+          <p style="color: var(--argen-blue); font-family: var(--font-mono); font-size: 0.6rem; letter-spacing: 1px; margin-bottom: 1rem;">ADMIN_ACCOUNT</p>
+          <div class="form-group">
+            <label class="form-label">Admin Name</label>
+            <input type="text" id="reg-name" class="form-input" placeholder="John Doe" required>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Admin Email</label>
+            <input type="email" id="reg-email" class="form-input" placeholder="john@company.com" required readonly>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Password</label>
+            <input type="password" id="reg-password" class="form-input" placeholder="••••••••" required minlength="8">
+          </div>
+        </div>
+        
+        <button type="submit" class="btn btn-primary" style="width: 100%; padding: 16px;">Complete Registration</button>
+      </form>
+      <div id="authMessage" class="auth-message" style="margin-top: 1.5rem; display: none;"></div>
+    </div>
+
+    <div id="errorState" style="display: none; text-align: center;">
+      <p style="color: #ef4444; margin-bottom: 2rem;">This invitation link is invalid or has already been used.</p>
+      <a href="/html/login.html" class="btn btn-dark">Back to Login</a>
+    </div>
+  </div>
+
+  <script src="/js/api.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', async () => {
+      const urlParams = new URLSearchParams(window.location.search);
+      const teamId = urlParams.get('team_id');
+      const approval = urlParams.get('approval');
+
+      if (!teamId || approval !== 'true') {
+        document.getElementById('invitationStatus').style.display = 'none';
+        document.getElementById('errorState').style.display = 'block';
+        return;
+      }
+
+      try {
+        // Verify token via API
+        const response = await fetch(`${window.argenApi.baseUrl}/auth/invitation/${teamId}`);
+        if (!response.ok) throw new Error('Invalid token');
+        const invitation = await response.json();
+
+        // Show form and pre-fill
+        document.getElementById('invitationStatus').textContent = `Invited Workspace: ${invitation.companyName}`;
+        document.getElementById('reg-companyName').value = invitation.companyName;
+        document.getElementById('reg-email').value = invitation.email;
+        document.getElementById('registrationCard').style.display = 'block';
+
+        // Handle submission
+        document.getElementById('registerForm').addEventListener('submit', async (e) => {
+          e.preventDefault();
+          const btn = e.target.querySelector('button');
+          const msg = document.getElementById('authMessage');
+          
+          btn.disabled = true;
+          btn.textContent = 'Processing...';
+
+          const companyData = {
+            companyName: document.getElementById('reg-companyName').value,
+            industry: document.getElementById('reg-industry').value,
+            size: document.getElementById('reg-size').value,
+            country: document.getElementById('reg-country').value,
+            name: document.getElementById('reg-name').value,
+            email: document.getElementById('reg-email').value,
+            password: document.getElementById('reg-password').value,
+            token: teamId
+          };
+
+          try {
+            await argenApi.request('/auth/register-company', {
+              method: 'POST',
+              body: JSON.stringify(companyData)
+            });
+            msg.textContent = 'Workspace activated! Redirecting to login...';
+            msg.className = 'auth-message success';
+            msg.style.display = 'block';
+            setTimeout(() => window.location.href = '/html/login.html', 2000);
+          } catch (err) {
+            msg.textContent = err.message;
+            msg.className = 'auth-message error';
+            msg.style.display = 'block';
+            btn.disabled = false;
+            btn.textContent = 'Complete Registration';
+          }
+        });
+
+      } catch (err) {
+        document.getElementById('invitationStatus').style.display = 'none';
+        document.getElementById('errorState').style.display = 'block';
+      }
+    });
+  </script>
+</body>
+
+</html>

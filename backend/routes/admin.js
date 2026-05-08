@@ -3,6 +3,8 @@ const router = express.Router();
 const { protect, authorize } = require('../middleware/auth');
 const Company = require('../models/Company');
 const User = require('../models/User');
+const Invitation = require('../models/Invitation');
+const crypto = require('crypto');
 
 // @route   GET api/admin/companies
 // @desc    Get all companies (Superadmin only)
@@ -16,36 +18,45 @@ router.get('/companies', protect, authorize('superadmin'), async (req, res) => {
   }
 });
 
-// @route   PUT api/admin/companies/:id/approve
-// @desc    Approve a company
-router.put('/companies/:id/approve', protect, authorize('superadmin'), async (req, res) => {
+// @route   POST api/admin/invitations
+// @desc    Create a registration invitation
+router.post('/invitations', protect, authorize('superadmin'), async (req, res) => {
+  const { email, companyName } = req.body;
   try {
-    let company = await Company.findById(req.id); // Wait, req.params.id
-    if (!company) return res.status(404).json({ msg: 'Company not found' });
-
-    company.status = 'active';
-    company.approvedBy = req.user.id;
-    company.approvedAt = Date.now();
-    await company.save();
-
-    res.json({ msg: 'Company approved successfully', company });
+    const token = crypto.randomBytes(16).toString('hex');
+    const invitation = new Invitation({
+      email,
+      companyName,
+      token
+    });
+    await invitation.save();
+    
+    // The link format requested by user
+    const link = `https://argen.isira.club/registration.html?approval=true&team_id=${token}`;
+    
+    res.json({ link, invitation });
   } catch (err) {
     console.error(err.message);
     res.status(500).send('Server error');
   }
 });
 
-// @route   PUT api/admin/companies/:id/suspend
-// @desc    Suspend a company
-router.put('/companies/:id/suspend', protect, authorize('superadmin'), async (req, res) => {
+// @route   PATCH api/admin/companies/:id/status
+// @desc    Update company status
+router.patch('/companies/:id/status', protect, authorize('superadmin'), async (req, res) => {
+  const { status } = req.body;
   try {
     let company = await Company.findById(req.params.id);
     if (!company) return res.status(404).json({ msg: 'Company not found' });
 
-    company.status = 'suspended';
+    company.status = status;
+    if (status === 'active' && !company.approvedAt) {
+      company.approvedBy = req.user.id;
+      company.approvedAt = Date.now();
+    }
     await company.save();
 
-    res.json({ msg: 'Company suspended', company });
+    res.json({ msg: `Company status updated to ${status}`, company });
   } catch (err) {
     console.error(err.message);
     res.status(500).send('Server error');

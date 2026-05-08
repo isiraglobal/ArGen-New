@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Join Waiting List - ArGen</title>
+  <meta name="description" content="Apply for early access to the ArGen platform and join our elite network of AI-enabled organizations.">
+  <link rel="icon" type="image/png" href="/images/ArGen Logo.png">
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/css/style.css">
+  
+  <style>
+    .tally-container {
+      width: 100%;
+      height: 700px;
+      border: none;
+      background: #fff;
+    }
+    
+    .waitlist-hero {
+      padding-top: calc(var(--nav-h) + 60px);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      background: #000;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .bg-gradient-waitlist {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 150%;
+      height: 150%;
+      background: radial-gradient(circle at center, rgba(43, 96, 226, 0.05) 0%, transparent 70%);
+      pointer-events: none;
+      z-index: 0;
+    }
+  </style>
+</head>
+<body>
+  <header id="nav" class="nav nav-center">
+    <div class="nav-inner">
+      <a href="/" class="nav-logo">
+        <img src="/images/ArGen Logo.png" alt="ArGen" class="logo-img">
+      </a>
+      <nav class="nav-links">
+        <a href="/#how" class="nav-link">How It Works</a>
+        <a href="/pricing" class="nav-link">Pricing</a>
+        <a href="/about" class="nav-link">About</a>
+      </nav>
+      <a href="/login" class="nav-cta">Login →</a>
+      <button class="nav-burger" id="burger" aria-label="Menu">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </header>
+
+  <div class="mobile-menu" id="mobileMenu">
+    <div class="mm-inner">
+      <div class="mm-links">
+        <a href="/" class="mm-link">01 Home</a>
+        <a href="/#how" class="mm-link">02 How It Works</a>
+        <a href="/pricing" class="mm-link">03 Pricing</a>
+        <a href="/about" class="mm-link">05 About</a>
+        <a href="/contact" class="mm-link">06 Contact</a>
+      </div>
+      <div class="mm-footer">
+        <a href="/evaluate" class="btn btn-primary btn-full">Run Evaluation Pilot</a>
+      </div>
+    </div>
+  </div>
+
+  <main class="waitlist-hero">
+    <div class="bg-gradient-waitlist"></div>
+    
+    <div class="container container-narrow reveal" style="position: relative; z-index: 10;">
+      <div style="text-align: center; margin-bottom: 3rem;">
+        <span class="section-tag">[ACCESS_REQUEST]</span>
+        <h1 class="hero-h1" style="font-size: clamp(2.5rem, 5vw, 4rem); margin-bottom: 1rem;">Join the <i class="soul-text">Waitlist</i></h1>
+        <p class="section-sub" style="max-width: 600px; margin: 0 auto;">We're currently in a limited rollout phase. Please complete the application below to be considered for our next cohort of enterprise partners.</p>
+      </div>
+
+      <!-- Web Window Look -->
+      <div class="web-window">
+        <div class="web-window-header">
+          <div class="window-controls">
+            <div class="window-dot dot-red"></div>
+            <div class="window-dot dot-yellow"></div>
+            <div class="window-dot dot-green"></div>
+          </div>
+          <div style="margin-left: auto; font-family: var(--font-mono); font-size: 0.7rem; color: rgba(255,255,255,0.4); text-transform: uppercase; letter-spacing: 1px;">
+            argen-intake-v2.0
+          </div>
+        </div>
+        
+        <div class="web-window-content" style="padding: 0; min-height: 700px; background: #fff;">
+          <iframe 
+            src="https://tally.so/r/VL9D0M" 
+            width="100%" 
+            height="700" 
+            frameborder="0" 
+            marginheight="0" 
+            marginwidth="0" 
+            title="ArGen Waitlist Application"
+            style="border: none; display: block;">
+          </iframe>
+        </div>
+      </div>
+
+      <div style="text-align: center; margin-top: 3rem;">
+        <p style="font-family: var(--font-mono); font-size: 0.75rem; color: var(--text-sec);">
+          Already have an invite? <a href="/registration" style="color: var(--argen-blue); text-decoration: none;">Register here</a>
+        </p>
+      </div>
+    </div>
+  </main>
+
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <a href="/" class="footer-logo">ArGen</a>
+          <p class="footer-desc">The enterprise-grade standard for AI engineering evaluation and talent intelligence.</p>
+        </div>
+        <div class="footer-links">
+          <span class="footer-label">Product</span>
+          <a href="/evaluate" class="footer-link">Evaluate</a>
+          <a href="/pricing" class="footer-link">Pricing</a>
+          <a href="/challenges" class="footer-link">Challenges</a>
+        </div>
+        <div class="footer-links">
+          <span class="footer-label">Connect</span>
+          <a href="/about" class="footer-link">About</a>
+          <a href="/contact" class="footer-link">Contact</a>
+        </div>
+        <div class="footer-links">
+          <span class="footer-label">Legal</span>
+          <a href="/privacy" class="footer-link">Privacy</a>
+          <a href="/terms" class="footer-link">Terms</a>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <span>© 2026 ArGen. All rights reserved.</span>
+        <span class="footer-made">Built with obsession<span class="blink">_</span></span>
+      </div>
+    </div>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/lenis@1.1.18/dist/lenis.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.7/dist/gsap.min.js"></script>
+  <script src="/js/script.js"></script>
+</body>
+</html>

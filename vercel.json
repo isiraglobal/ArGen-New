@@ -18,6 +18,7 @@
     { "source": "/team/:id", "destination": "/frontend/html/team-detail.html" },
     { "source": "/privacy", "destination": "/frontend/html/privacy.html" },
     { "source": "/terms", "destination": "/frontend/html/terms.html" },
+    { "source": "/waitlist", "destination": "/frontend/html/waitlist.html" },
     { "source": "/(css|js|images)/(.*)", "destination": "/frontend/$1/$2" }
   ],
   "headers": [

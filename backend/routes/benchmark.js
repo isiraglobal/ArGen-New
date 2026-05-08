@@ -1,12 +1,12 @@
 const express = require('express');
 const router = express.Router();
 const Evaluation = require('../models/Evaluation');
-const auth = require('../middleware/auth');
+const { protect } = require('../middleware/auth');
 
 // @route   GET api/benchmark
 // @desc    Get aggregate benchmark data (anonymized)
 // @access  Private
-router.get('/', auth, async (req, res) => {
+router.get('/', protect, async (req, res) => {
   try {
     // This is a mockup of the aggregate benchmarking logic
     // In production, this would use MongoDB aggregation on all completed evaluations

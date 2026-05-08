@@ -11,30 +11,34 @@ const initAdmin = async () => {
     await mongoose.connect(MONGO_URI);
     console.log('MongoDB Connected...');
 
-    const email = 'admin@argen.ai';
-    const password = 'AdminPassword123!'; // User should change this
+    const email = 'isiraglobal@gmail.com';
+    const password = 'lakshit2005';
     const name = 'App Admin';
-
-    let admin = await User.findOne({ email });
-    if (admin) {
-      console.log('Admin already exists');
-      process.exit();
-    }
 
     const salt = await bcrypt.genSalt(10);
     const hashedPassword = await bcrypt.hash(password, salt);
 
-    admin = new User({
-      name,
-      email,
-      password: hashedPassword,
-      role: 'superadmin'
-    });
+    let admin = await User.findOne({ role: 'superadmin' });
+    
+    if (admin) {
+      console.log('Updating existing Superadmin...');
+      admin.email = email;
+      admin.password = hashedPassword;
+      admin.name = name;
+    } else {
+      console.log('Creating new Superadmin...');
+      admin = new User({
+        name,
+        email,
+        password: hashedPassword,
+        role: 'superadmin'
+      });
+    }
 
     await admin.save();
-    console.log('Superadmin created successfully');
-    console.log('Email: admin@argen.ai');
-    console.log('Password: AdminPassword123!');
+    console.log('Superadmin synchronized successfully');
+    console.log(`Email: ${email}`);
+    console.log(`Password: ${password}`);
     
     process.exit();
   } catch (err) {

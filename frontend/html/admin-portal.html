@@ -64,9 +64,10 @@
         </div>
       </div>
 
-      <div class="auth-tabs" style="max-width: 400px; margin-bottom: 2rem;">
+      <div class="auth-tabs" style="max-width: 600px; margin-bottom: 2rem;">
         <div class="auth-tab active" onclick="switchView('companies')">Organizations</div>
         <div class="auth-tab" onclick="switchView('users')">User Audit</div>
+        <div class="auth-tab" onclick="switchView('invitations')">Invitations</div>
       </div>
 
       <div id="companiesView">
@@ -80,6 +81,33 @@
           <div style="color: var(--text-sec); text-align: center; padding: 4rem;">Compiling global user audit...</div>
         </div>
       </div>
+
+      <div id="invitationsView" style="display: none;">
+        <div class="request-card" style="margin-bottom: 2rem; display: block;">
+          <h3 style="margin-bottom: 1.5rem;">Generate Access Link</h3>
+          <form id="inviteForm" style="display: grid; grid-template-columns: 1fr 1fr auto; gap: 1rem; align-items: flex-end;">
+            <div class="form-group" style="margin-bottom: 0;">
+              <label class="form-label" style="font-size: 0.65rem;">COMPANY NAME</label>
+              <input type="text" id="inv-company" class="form-input" placeholder="Acme Corp" required style="padding: 10px;">
+            </div>
+            <div class="form-group" style="margin-bottom: 0;">
+              <label class="form-label" style="font-size: 0.65rem;">ADMIN EMAIL</label>
+              <input type="email" id="inv-email" class="form-input" placeholder="admin@acme.com" required style="padding: 10px;">
+            </div>
+            <button type="submit" class="btn btn-primary" style="height: 42px; padding: 0 24px; font-size: 0.75rem;">GENERATE</button>
+          </form>
+          <div id="inviteResult" style="margin-top: 1.5rem; display: none; padding: 1rem; background: rgba(0,0,0,0.3); border-radius: 4px; border: 1px dashed rgba(255,255,255,0.1);">
+            <p style="font-size: 0.7rem; color: var(--text-sec); margin-bottom: 0.5rem; font-family: var(--font-mono);">UNIQUE_REGISTRATION_URL:</p>
+            <div style="display: flex; gap: 0.5rem;">
+              <input type="text" id="inviteLink" readonly class="form-input" style="background: transparent; color: var(--argen-blue); font-family: var(--font-mono); font-size: 0.75rem;">
+              <button onclick="copyInvite()" class="btn btn-dark" style="height: 42px; padding: 0 16px;">COPY</button>
+            </div>
+          </div>
+        </div>
+        <div id="invitationsList" class="admin-grid">
+          <!-- Pending invitations will load here -->
+        </div>
+      </div>
     </div>
   </section>
 
@@ -91,13 +119,50 @@
     function switchView(view) {
       currentView = view;
       document.querySelectorAll('.auth-tab').forEach((tab, i) => {
-        tab.classList.toggle('active', (i === 0 && view === 'companies') || (i === 1 && view === 'users'));
+        tab.classList.toggle('active', (i === 0 && view === 'companies') || (i === 1 && view === 'users') || (i === 2 && view === 'invitations'));
       });
       document.getElementById('companiesView').style.display = view === 'companies' ? 'block' : 'none';
       document.getElementById('usersView').style.display = view === 'users' ? 'block' : 'none';
+      document.getElementById('invitationsView').style.display = view === 'invitations' ? 'block' : 'none';
       
       if (view === 'companies') fetchCompanies();
-      else fetchUsers();
+      else if (view === 'users') fetchUsers();
+      // invitations handled by form mostly, but could fetch history if route exists
+    }
+
+    // Invitation Handling
+    document.getElementById('inviteForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const btn = e.target.querySelector('button');
+      btn.disabled = true;
+      btn.textContent = 'GENERATING...';
+
+      try {
+        const data = await argenApi.request('/admin/invitations', {
+          method: 'POST',
+          body: JSON.stringify({
+            companyName: document.getElementById('inv-company').value,
+            email: document.getElementById('inv-email').value
+          })
+        });
+
+        document.getElementById('inviteLink').value = data.link;
+        document.getElementById('inviteResult').style.display = 'block';
+        btn.textContent = 'GENERATE NEW';
+      } catch (err) {
+        alert('Failed to generate invite: ' + err.message);
+        btn.textContent = 'RETRY';
+      } finally {
+        btn.disabled = false;
+      }
+    });
+
+    function copyInvite() {
+      const copyText = document.getElementById('inviteLink');
+      copyText.select();
+      copyText.setSelectionRange(0, 99999);
+      navigator.clipboard.writeText(copyText.value);
+      alert('Link copied to clipboard!');
     }
 
     async function fetchCompanies() {

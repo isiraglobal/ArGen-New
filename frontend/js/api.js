@@ -4,29 +4,40 @@
  */
 
 // Check if we have a production API URL set, otherwise fallback to localhost
-const API_BASE_URL = window.ARGEN_API_URL || 
-    (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1' 
-        ? 'http://localhost:5001/api' 
-        : '/api'); 
+const getBaseUrl = () => {
+    if (window.ARGEN_API_URL) return window.ARGEN_API_URL;
+    const { hostname, protocol, port } = window.location;
+    if (hostname === 'localhost' || hostname === '127.0.0.1') {
+        return 'http://localhost:3030/api';
+    }
+    // For production, if hosted on the same domain
+    return `${protocol}//${hostname}${port ? ':' + port : ''}/api`;
+};
+
+const API_BASE_URL = getBaseUrl();
 
 const api = {
     baseUrl: API_BASE_URL,
     // Helper for fetch with auth
     async request(endpoint, options = {}) {
-        console.log(`[API] Requesting ${endpoint}...`);
+        const cleanEndpoint = endpoint.startsWith('/') ? endpoint : `/${endpoint}`;
+        const fullUrl = `${API_BASE_URL}${cleanEndpoint}`;
+        
+        console.log(`[API] Requesting: ${fullUrl}`);
+        
         const token = localStorage.getItem('argen_token');
         const headers = {
             'Content-Type': 'application/json',
             ...options.headers,
         };
 
-        if (token) {
+        if (token && token !== 'undefined' && token !== 'null') {
             headers['Authorization'] = `Bearer ${token}`;
         }
 
         let response;
         try {
-            response = await fetch(`${API_BASE_URL}${endpoint}`, {
+            response = await fetch(fullUrl, {
                 ...options,
                 headers,
             });

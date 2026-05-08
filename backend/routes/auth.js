@@ -5,40 +5,63 @@ const bcrypt = require('bcryptjs');
 const crypto = require('crypto');
 const User = require('../models/User');
 const Company = require('../models/Company');
+const Invitation = require('../models/Invitation');
+const sendEmail = require('../utils/sendEmail');
+
+// @route   GET api/auth/invitation/:token
+// @desc    Verify invitation token
+// @access  Public
+router.get('/invitation/:token', async (req, res) => {
+  try {
+    const invitation = await Invitation.findOne({ token: req.params.token, used: false });
+    if (!invitation) {
+      return res.status(404).json({ message: 'Invalid or expired invitation link' });
+    }
+    res.json(invitation);
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send('Server Error');
+  }
+});
 
 // @route   POST api/auth/register-company
 // @desc    Register a new company and its admin
 // @access  Public
 router.post('/register-company', async (req, res) => {
-  const { companyName, industry, size, country, name, email, password } = req.body;
+  const { companyName, industry, size, country, name, email, password, token } = req.body;
 
   try {
-    // 1. Check if company exists
-    let existingCompany = await Company.findOne({ name: companyName });
-    if (existingCompany) {
-      return res.status(400).json({ msg: 'Company name already registered' });
+    // If token provided, verify invitation
+    let invitation = null;
+    if (token) {
+      invitation = await Invitation.findOne({ token, used: false });
+      if (!invitation) {
+        return res.status(400).json({ message: 'Invalid invitation token' });
+      }
     }
 
-    // 2. Check if user exists
-    let user = await User.findOne({ email });
-    if (user) {
-      return res.status(400).json({ msg: 'User email already exists' });
+    let company = await Company.findOne({ name: companyName });
+    if (company) {
+      return res.status(400).json({ message: 'Company already exists' });
     }
 
-    // 3. Create Company (Status: Pending)
-    const inviteCode = crypto.randomBytes(4).toString('hex').toUpperCase();
-    const company = new Company({
+    company = new Company({
       name: companyName,
       industry,
       size,
       country,
       primaryContact: { name, email },
-      inviteCode,
-      status: 'pending'
+      status: invitation ? 'active' : 'pending' // Auto-approve if invited
     });
+
     await company.save();
 
-    // 4. Create User (Role: TeamAdmin)
+    // Create Admin User
+    let user = await User.findOne({ email });
+    if (user) {
+      return res.status(400).json({ message: 'User already exists' });
+    }
+
     const salt = await bcrypt.genSalt(10);
     const hashedPassword = await bcrypt.hash(password, salt);
 
@@ -182,6 +205,84 @@ router.post('/join-team', async (req, res) => {
   } catch (err) {
     console.error(err.message);
     res.status(500).send('Server error');
+  }
+});
+
+// @route   POST api/auth/forgot-password
+// @desc    Generate reset token and send email
+// @access  Public
+router.post('/forgot-password', async (req, res) => {
+  const { email } = req.body;
+
+  try {
+    const user = await User.findOne({ email });
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+
+    // Create reset token
+    const resetToken = crypto.randomBytes(20).toString('hex');
+
+    // Hash token and set to field
+    user.resetPasswordToken = crypto.createHash('sha256').update(resetToken).digest('hex');
+    user.resetPasswordExpire = Date.now() + 10 * 60 * 1000; // 10 mins
+
+    await user.save();
+
+    // Create reset URL
+    const resetUrl = `${req.protocol}://${req.get('host')}/html/reset-password.html?token=${resetToken}`;
+
+    const message = `You are receiving this email because you (or someone else) has requested the reset of a password. Please click the link below to reset your password:\n\n${resetUrl}`;
+
+    try {
+      await sendEmail({
+        email: user.email,
+        subject: 'Password Reset - ArGen',
+        message
+      });
+
+      res.status(200).json({ message: 'Email sent' });
+    } catch (err) {
+      console.error(err);
+      user.resetPasswordToken = undefined;
+      user.resetPasswordExpire = undefined;
+      await user.save();
+      return res.status(500).json({ message: 'Email could not be sent' });
+    }
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send('Server Error');
+  }
+});
+
+// @route   POST api/auth/reset-password/:token
+// @desc    Reset password using token
+// @access  Public
+router.post('/reset-password/:token', async (req, res) => {
+  try {
+    // Get hashed token
+    const resetPasswordToken = crypto.createHash('sha256').update(req.params.token).digest('hex');
+
+    const user = await User.findOne({
+      resetPasswordToken,
+      resetPasswordExpire: { $gt: Date.now() }
+    });
+
+    if (!user) {
+      return res.status(400).json({ message: 'Invalid or expired token' });
+    }
+
+    // Set new password
+    user.password = req.body.password;
+    user.resetPasswordToken = undefined;
+    user.resetPasswordExpire = undefined;
+
+    await user.save();
+
+    res.status(200).json({ message: 'Password reset successful' });
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send('Server Error');
   }
 });
 
