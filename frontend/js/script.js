@@ -398,12 +398,21 @@
       .to('.reveal-line', { y: '0%', duration: 0.9, stagger: 0.12, ease: 'power4.out' }, '<0.1')
       .to('.ai-bar-container', { y: 0, opacity: 1, duration: 0.8, ease: 'power4.out' }, '<0.2');
 
-    if (document.getElementById('particleCanvas')) {
-      document.addEventListener('particlesFaded', () => {
+    const heroReveal = document.querySelectorAll('.hero .reveal');
+    const heroLines = document.querySelectorAll('.reveal-line');
+    
+    if (heroReveal.length > 0 || heroLines.length > 0) {
+      if (document.getElementById('particleCanvas')) {
+        document.addEventListener('particlesFaded', () => {
+          heroTL.play();
+        });
+      } else {
         heroTL.play();
-      });
+      }
     } else {
-      heroTL.play();
+      // If no hero, ensure nav and other basic elements show up
+      gsap.to('.nav', { y: 0, opacity: 1, duration: 0.8, ease: 'power4.out' });
+      gsap.to('.ai-bar-container', { y: 0, opacity: 1, duration: 0.8, ease: 'power4.out' });
     }
 
     // ── Generic scroll reveals ──
@@ -417,11 +426,14 @@
 
     // ── Card staggers ──
     document.querySelectorAll('.card-grid').forEach(grid => {
-      gsap.to(grid.querySelectorAll('.reveal-card'), {
-        scrollTrigger: { trigger: grid, start: 'top 82%' },
-        y: 0, opacity: 1, scale: 1, duration: 0.8,
-        stagger: 0.12, ease: 'power4.out'
-      });
+      const cards = grid.querySelectorAll('.reveal-card');
+      if (cards.length > 0) {
+        gsap.to(cards, {
+          scrollTrigger: { trigger: grid, start: 'top 82%' },
+          y: 0, opacity: 1, scale: 1, duration: 0.8,
+          stagger: 0.12, ease: 'power4.out'
+        });
+      }
     });
 
     // ── HORIZONTAL SCROLL PIN (How It Works) ──

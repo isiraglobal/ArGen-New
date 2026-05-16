@@ -2,6 +2,8 @@ User-agent: *
 Allow: /
 Disallow: /api/
 Disallow: /login
+Disallow: /dashboard
+Disallow: /admin-portal
 Disallow: /teams
 Disallow: /team/
 

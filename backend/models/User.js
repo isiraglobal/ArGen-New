@@ -32,7 +32,15 @@ const UserSchema = new mongoose.Schema({
     default: Date.now
   },
   resetPasswordToken: String,
-  resetPasswordExpire: Date
+  resetPasswordExpire: Date,
+  currentStreak: { type: Number, default: 0 },
+  longestStreak: { type: Number, default: 0 },
+  avgScore7d: { type: Number, default: 0 },
+  difficultyLevel: { 
+    type: String, 
+    enum: ['Beginner', 'Intermediate', 'Advanced', 'Expert', 'Elite'],
+    default: 'Intermediate'
+  }
 });
 
 // Hash password before saving

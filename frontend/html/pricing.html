@@ -1,33 +1,99 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Pricing - ArGen</title>
-  <meta name="description" content="Transparent pricing for AI performance auditing. From pilot projects to enterprise-wide AI capability measurement.">
-  <link rel="icon" type="image/png" href="/images/ArGen Logo.png">
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="/css/style.css">
-  
-  <meta property="og:title" content="ArGen Pricing - Transparent AI Auditing">
-  <meta property="og:description" content="Choose the right plan to measure and optimize your team's AI productivity.">
-  <meta property="og:url" content="https://argen.isira.club/pricing">
-  <link rel="canonical" href="https://argen.isira.club/pricing">
-</head>
-<body>
-  <!-- Removed Overlays -->
+  <style>
+    .builder-container {
+      max-width: 600px;
+      margin: 3rem auto;
+      background: var(--black);
+      border: 1px solid var(--gray);
+      padding: 2.5rem;
+      border-radius: 12px;
+      color: var(--cream);
+    }
+    
+    .builder-title {
+      text-align: center;
+      margin-bottom: 2rem;
+      font-size: 2rem;
+    }
 
-  <header id="nav" class="nav nav-center">
+    .form-group {
+      margin-bottom: 1.5rem;
+    }
+
+    .form-group label {
+      display: block;
+      margin-bottom: 0.5rem;
+      font-weight: bold;
+      color: var(--cream);
+    }
+
+    .form-group input, 
+    .form-group select {
+      width: 100%;
+      padding: 1rem;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid var(--gray);
+      border-radius: 6px;
+      color: var(--cream);
+      font-size: 1rem;
+    }
+
+    .form-group input:focus, 
+    .form-group select:focus {
+      outline: none;
+      border-color: var(--green);
+      background: rgba(255, 255, 255, 0.1);
+    }
+
+    .summary-card {
+      background: rgba(206, 255, 0, 0.1);
+      border: 1px solid var(--green);
+      padding: 1.5rem;
+      border-radius: 8px;
+      margin-top: 2rem;
+      text-align: center;
+    }
+
+    .total-price {
+      font-size: 3rem;
+      font-weight: bold;
+      color: var(--green);
+      margin: 1rem 0;
+    }
+
+    .btn-checkout {
+      width: 100%;
+      margin-top: 1.5rem;
+      padding: 1rem;
+      font-size: 1.1rem;
+    }
+    
+    .price-details {
+      color: var(--gray);
+      font-size: 0.9rem;
+    }
+  </style>
+</head>
+
+<body class="dark-mode">
+  <header id="nav" class="nav">
     <div class="nav-inner">
       <a href="/" class="nav-logo">
-        <img src="/images/ArGen Logo.png" alt="ArGen" class="logo-img">
+        <img src="/images/ArGen Logo.png" alt="ArGen" class="logo-img" style="height: 32px;">
       </a>
       <nav class="nav-links">
         <a href="/#how" class="nav-link">How It Works</a>
         <a href="/pricing" class="nav-link">Pricing</a>
         <a href="/about" class="nav-link">About</a>
       </nav>
-      <a href="/evaluate" class="nav-cta">Run Pilot →</a>
+      <a href="/evaluate" class="nav-cta">Get Started →</a>
       <button class="nav-burger" id="burger" aria-label="Menu">
         <span></span><span></span><span></span>
       </button>
@@ -40,114 +106,97 @@
         <a href="/" class="mm-link">01 Home</a>
         <a href="/#how" class="mm-link">02 How It Works</a>
         <a href="/pricing" class="mm-link">03 Pricing</a>
-        <a href="/about" class="mm-link">05 About</a>
-        <a href="/contact" class="mm-link">06 Contact</a>
+        <a href="/about" class="mm-link">04 About</a>
+        <a href="/contact" class="mm-link">05 Contact</a>
       </div>
       <div class="mm-footer">
-        <a href="/evaluate" class="btn btn-primary btn-full">Run Evaluation Pilot</a>
+        <a href="/evaluate" class="btn btn-primary btn-full">Get Started</a>
       </div>
     </div>
   </div>
-
-  <section class="section section-black" style="padding-top: calc(var(--nav-h) + 80px); min-height: 100vh;">
-    <div class="container">
-      <span class="section-tag reveal">[PRICING]</span>
-      <h1 class="section-h2 reveal" style="font-size: 3rem;">Clear pricing for <i class="soul-text">clear</i> insights.</h1>
-      <p class="section-sub" style="margin-bottom: 4rem;">No per-seat dark patterns. Pay for the evaluation.</p>
-
-      <div class="pricing-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 2rem;">
-        
-        <div class="card" style="padding: 2rem;">
-          <h3 style="color: var(--text-sec); font-family: var(--font-mono); margin-bottom: 1rem;">Free Pilot</h3>
-          <div style="font-size: 3rem; font-family: var(--font-display); color: var(--white); margin-bottom: 0.5rem;">$0</div>
-          <p style="color: var(--text-sec); margin-bottom: 2rem;">One-time</p>
-          <ul style="list-style: none; padding: 0; margin-bottom: 2rem; color: var(--white);">
-            <li style="margin-bottom: 1rem; border-bottom: 1px solid var(--border-light); padding-bottom: 0.5rem;">✓ 5 Team Members</li>
-            <li style="margin-bottom: 1rem; border-bottom: 1px solid var(--border-light); padding-bottom: 0.5rem;">✓ Full 48-Hour Report</li>
-            <li style="margin-bottom: 1rem; border-bottom: 1px solid var(--border-light); padding-bottom: 0.5rem;">✓ No Commitment</li>
-          </ul>
-          <a href="/evaluate" class="btn btn-ghost" style="width: 100%; text-align: center;">Start Free Pilot</a>
-        </div>
-
-        <div class="card" style="padding: 2rem; border-color: var(--argen-blue); position: relative;">
-          <div style="position: absolute; top: -12px; left: 50%; transform: translateX(-50%); background: var(--argen-blue); color: var(--white); padding: 4px 12px; font-size: 0.8rem; font-weight: bold; border-radius: 20px;">MOST POPULAR</div>
-          <h3 style="color: var(--text-sec); font-family: var(--font-mono); margin-bottom: 1rem;">Team Snapshot</h3>
-          <div style="font-size: 3rem; font-family: var(--font-display); color: var(--white); margin-bottom: 0.5rem;">$1,500</div>
-          <p style="color: var(--text-sec); margin-bottom: 2rem;">One-time</p>
-          <ul style="list-style: none; padding: 0; margin-bottom: 2rem; color: var(--white);">
-            <li style="margin-bottom: 1rem; border-bottom: 1px solid var(--border-light); padding-bottom: 0.5rem;">✓ Up to 25 Members</li>
-            <li style="margin-bottom: 1rem; border-bottom: 1px solid var(--border-light); padding-bottom: 0.5rem;">✓ Department Breakdowns</li>
-            <li style="margin-bottom: 1rem; border-bottom: 1px solid var(--border-light); padding-bottom: 0.5rem;">✓ Executive Summary</li>
-          </ul>
-          <a href="/evaluate" class="btn btn-primary" style="width: 100%; text-align: center;">Book Snapshot</a>
-        </div>
-
-        <div class="card" style="padding: 2rem;">
-          <h3 style="color: var(--text-sec); font-family: var(--font-mono); margin-bottom: 1rem;">Team Intelligence</h3>
-          <div style="font-size: 3rem; font-family: var(--font-display); color: var(--white); margin-bottom: 0.5rem;">$199<span style="font-size:1rem">/mo</span></div>
-          <p style="color: var(--text-sec); margin-bottom: 2rem;">Billed Quarterly</p>
-          <ul style="list-style: none; padding: 0; margin-bottom: 2rem; color: var(--white);">
-            <li style="margin-bottom: 1rem; border-bottom: 1px solid var(--border-light); padding-bottom: 0.5rem;">✓ Quarterly Tracking</li>
-            <li style="margin-bottom: 1rem; border-bottom: 1px solid var(--border-light); padding-bottom: 0.5rem;">✓ Custom Challenges</li>
-            <li style="margin-bottom: 1rem; border-bottom: 1px solid var(--border-light); padding-bottom: 0.5rem;">✓ Trend Analysis</li>
-          </ul>
-          <a href="/contact" class="btn btn-ghost" style="width: 100%; text-align: center;">Join Waitlist (Q3 2025)</a>
-        </div>
-
-        <div class="card" style="padding: 2rem;">
-          <h3 style="color: var(--text-sec); font-family: var(--font-mono); margin-bottom: 1rem;">Enterprise</h3>
-          <div style="font-size: 3rem; font-family: var(--font-display); color: var(--white); margin-bottom: 0.5rem;">Custom</div>
-          <p style="color: var(--text-sec); margin-bottom: 2rem;">Tailored Scope</p>
-          <ul style="list-style: none; padding: 0; margin-bottom: 2rem; color: var(--white);">
-            <li style="margin-bottom: 1rem; border-bottom: 1px solid var(--border-light); padding-bottom: 0.5rem;">✓ Unlimited Members</li>
-            <li style="margin-bottom: 1rem; border-bottom: 1px solid var(--border-light); padding-bottom: 0.5rem;">✓ API Access</li>
-            <li style="margin-bottom: 1rem; border-bottom: 1px solid var(--border-light); padding-bottom: 0.5rem;">✓ Custom Integration</li>
-          </ul>
-          <a href="/contact" class="btn btn-ghost" style="width: 100%; text-align: center;">Contact Sales</a>
-        </div>
-
+  <main class="container web-window" style="margin-top: 7rem; padding: 2rem;">
+    <!-- Fixed Pricing Plans -->
+    <div style="text-align: center; margin-bottom: 3rem;">
+      <h2 class="section-h2">Pricing built for ROI<span class="green">.</span></h2>
+      <p class="section-sub" style="color: var(--text-sec); margin-top: 1rem;">No per-seat dark patterns. Subscribe to continuous AI intelligence.</p>
+    </div>
+    
+    <div class="pricing-grid" style="margin-bottom: 5rem;">
+      <div class="price-card">
+        <span class="price-tier">Starter</span>
+        <div class="price-amount">$199<span class="price-freq">/month</span></div>
+        <p class="price-desc">Up to 15 Employees</p>
+        <ul class="price-list">
+          <li>Daily Challenges</li>
+          <li>Standard Rubric Scoring</li>
+          <li>Weekly Team Report</li>
+          <li>Live Leaderboard</li>
+        </ul>
+        <button type="button" class="btn btn-primary btn-full" onclick="selectPlan('Starter', 199, 15)">Select Starter</button>
       </div>
-
-      <div style="margin-top: 6rem; max-width: 800px; margin-left: auto; margin-right: auto;">
-        <h2 class="section-h2" style="font-size: 2rem; text-align: center; margin-bottom: 2rem;">Frequently Asked Questions</h2>
-        <div style="border-top: 1px solid var(--border-light); padding: 1.5rem 0;">
-          <h3 style="font-family: var(--font-mono); color: var(--white); margin-bottom: 0.5rem;">01. Is the free pilot really free?</h3>
-          <p style="color: var(--cyan-accent);">Yes. We evaluate 5 members of your team completely free, no credit card required.</p>
-        </div>
-        <div style="border-top: 1px solid var(--border-light); padding: 1.5rem 0;">
-          <h3 style="font-family: var(--font-mono); color: var(--white); margin-bottom: 0.5rem;">02. How do you justify your pricing?</h3>
-          <p style="color: var(--cyan-accent);">We replace weeks of guesswork and subjective reviews with a 48-hour standardized metric. The ROI is immediate clarity on where your AI budget is actually going.</p>
-        </div>
-        <div style="border-top: 1px solid var(--border-light); padding: 1.5rem 0;">
-          <h3 style="font-family: var(--font-mono); color: var(--white); margin-bottom: 0.5rem;">03. What happens after the snapshot?</h3>
-          <p style="color: var(--cyan-accent);">You receive a complete PDF report and data export detailing performance by dimension and department. No strings attached.</p>
-        </div>
+      
+      <div class="price-card price-card-pop">
+        <span class="price-badge">✓ SCALING TEAM</span>
+        <span class="price-tier">Growth</span>
+        <div class="price-amount">$499<span class="price-freq">/month</span></div>
+        <p class="price-desc">Up to 50 Seats</p>
+        <ul class="price-list">
+          <li>Everything in Starter</li>
+          <li>Individual Coaching Nudges</li>
+          <li>Department Analysis</li>
+          <li>Benchmark Comparison</li>
+          <li>Priority Support</li>
+        </ul>
+        <button type="button" class="btn btn-green btn-full" onclick="selectPlan('Growth', 499, 50)">Select Growth</button>
+      </div>
+      
+      <div class="price-card">
+        <span class="price-tier">Enterprise</span>
+        <div class="price-amount">$1,200<span class="price-freq">/month</span></div>
+        <p class="price-desc">Up to 200 Employees</p>
+        <ul class="price-list">
+          <li>Everything in Growth</li>
+          <li>Custom Challenge Themes</li>
+          <li>Dedicated Benchmark</li>
+          <li>API & Whitelist Access</li>
+          <li>Custom Integration</li>
+        </ul>
+        <button type="button" class="btn btn-ghost btn-full" onclick="selectPlan('Enterprise', 1200, 200)">Select Enterprise</button>
       </div>
     </div>
-  </section>
 
-  <div class="ai-bar-container">
-    <div id="aiBarResponse" class="ai-bar-response">
-      <div class="ai-response-content" id="aiResponseContent"></div>
-      <button class="ai-response-close" id="aiBarClose">✕</button>
-    </div>
-    <div class="ai-bar-glass">
-      <div class="ai-bar-input-wrap">
-        <svg class="ai-mic-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z"></path>
-          <path d="M19 10v2a7 7 0 0 1-14 0v-2"></path>
-          <line x1="12" x2="12" y1="19" y2="22"></line>
-        </svg>
-        <input type="text" id="aiBarInput" class="ai-bar-input" placeholder="TAP AND ASK AI" autocomplete="off">
-      </div>
-      <button id="aiBarSubmit" class="ai-bar-submit" aria-label="Ask AI">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
-        </svg>
-      </button>
-    </div>
-  </div>
+    <div class="builder-container" id="custom-builder" style="background: rgba(10, 10, 10, 0.6); border: 1px solid rgba(255, 255, 255, 0.08); box-shadow: 0 24px 48px rgba(0, 0, 0, 0.4);">
+      <h1 class="builder-title" style="font-family: var(--font-display); font-weight: 500;">Custom <i class="soul-text" style="color: var(--green);">Checkout</i></h1>
+      
+      <form id="custom-plan-form">
+        <div class="form-group">
+          <label for="companyName">Company Name</label>
+          <input type="text" id="companyName" placeholder="Enter your company name" required>
+        </div>
 
+        <div class="form-group">
+          <label for="seats">Number of Employee Seats</label>
+          <input type="number" id="seats" min="5" max="1000" value="15" required>
+        </div>
+
+        <div class="form-group">
+          <label for="planType">Billing Cycle</label>
+          <select id="planType" required>
+            <option value="renewal">Recurring (Monthly)</option>
+            <option value="one_time">One-Time (Annual, saves 20%)</option>
+          </select>
+        </div>
+
+        <div class="summary-card" style="background: rgba(206, 255, 0, 0.05); border: 1px solid rgba(206, 255, 0, 0.2);">
+          <h3>Your Custom Total</h3>
+          <div class="total-price" id="display-price" style="font-family: var(--font-mono);">$0</div>
+          <div class="price-details" id="display-details" style="font-family: var(--font-mono); font-size: 0.8rem;">Calculating...</div>
+        </div>
+
+        <button type="submit" class="btn btn-green btn-checkout" id="checkout-btn" style="font-family: var(--font-mono); text-transform: uppercase; font-weight: bold;">Proceed to Secure Checkout</button>
+      </form>
+    </div>
+  </main>
   <footer class="footer">
     <div class="container">
       <div class="footer-grid">
@@ -178,10 +227,100 @@
       </div>
     </div>
   </footer>
-
-  <script src="https://cdn.jsdelivr.net/npm/lenis@1.1.18/dist/lenis.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.7/dist/gsap.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.7/dist/ScrollTrigger.min.js"></script>
+  <script src="/js/api.js"></script>
   <script src="/js/script.js"></script>
+  <script>
+    const seatsInput = document.getElementById('seats');
+    const planTypeInput = document.getElementById('planType');
+    const displayPrice = document.getElementById('display-price');
+    const displayDetails = document.getElementById('display-details');
+    const checkoutBtn = document.getElementById('checkout-btn');
+    const form = document.getElementById('custom-plan-form');
+    
+    let customAmount = 0;
+
+    function calculatePrice() {
+      const seats = parseInt(seatsInput.value) || 0;
+      const type = planTypeInput.value;
+      
+      let amount = 0;
+      let detailsText = '';
+
+      if (type === 'renewal') {
+        let rate = 15;
+        if (seats >= 50) rate = 10;
+        if (seats >= 200) rate = 6;
+        amount = seats * rate;
+        detailsText = `Billed monthly for ${seats} active seats.`;
+      } else if (type === 'one_time') {
+        let rate = 15;
+        if (seats >= 50) rate = 10;
+        if (seats >= 200) rate = 6;
+        const annualRate = (rate * 12) * 0.8;
+        amount = seats * annualRate;
+        detailsText = `Billed once for a full year of access. Includes 20% discount.`;
+      }
+
+      customAmount = amount;
+      displayPrice.textContent = `$` + amount.toLocaleString();
+      displayDetails.textContent = detailsText;
+    }
+
+    seatsInput.addEventListener('input', calculatePrice);
+    planTypeInput.addEventListener('change', calculatePrice);
+    calculatePrice();
+    
+    function selectPlan(planName, monthlyAmount, defaultSeats) {
+        seatsInput.value = defaultSeats;
+        planTypeInput.value = 'renewal';
+        calculatePrice();
+        document.getElementById('custom-builder').scrollIntoView({ behavior: 'smooth', block: 'center' });
+        
+        const formEl = document.getElementById('custom-builder');
+        formEl.style.transition = 'box-shadow 0.3s ease';
+        formEl.style.boxShadow = '0 0 0 4px rgba(206, 255, 0, 0.4)';
+        setTimeout(() => {
+           formEl.style.boxShadow = '0 24px 48px rgba(0, 0, 0, 0.4)';
+        }, 800);
+    }
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      
+      const seats = parseInt(seatsInput.value);
+      const planType = planTypeInput.value;
+      const companyName = document.getElementById('companyName').value;
+      
+      checkoutBtn.textContent = 'Generating Link...';
+      checkoutBtn.disabled = true;
+
+      try {
+        const data = await window.argenApi.request('/whop/checkout-url', {
+          method: 'POST',
+          body: JSON.stringify({
+            amount: customAmount,
+            planType,
+            seats,
+            companyName
+          })
+        });
+        
+        if (data.checkoutUrl) {
+          window.location.href = data.checkoutUrl;
+        } else {
+          alert('Error generating checkout session: ' + (data.error || 'Unknown error'));
+          checkoutBtn.textContent = 'Proceed to Secure Checkout';
+          checkoutBtn.disabled = false;
+        }
+      } catch (err) {
+        console.error(err);
+        alert('Network error initializing checkout. Ensure the API is running and accessible.');
+        checkoutBtn.textContent = 'Proceed to Secure Checkout';
+        checkoutBtn.disabled = false;
+      }
+    });
+  </script>
+
 </body>
+
 </html>

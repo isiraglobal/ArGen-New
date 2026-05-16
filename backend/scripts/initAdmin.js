@@ -11,9 +11,9 @@ const initAdmin = async () => {
     await mongoose.connect(MONGO_URI);
     console.log('MongoDB Connected...');
 
-    const email = 'isiraglobal@gmail.com';
-    const password = 'lakshit2005';
-    const name = 'App Admin';
+    const email = process.env.ADMIN_EMAIL || 'admin@argen.ai';
+    const password = process.env.ADMIN_PASSWORD || 'ArGenAdmin2026';
+    const name = 'System Architect';
 
     const salt = await bcrypt.genSalt(10);
     const hashedPassword = await bcrypt.hash(password, salt);

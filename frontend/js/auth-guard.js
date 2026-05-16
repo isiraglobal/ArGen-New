@@ -15,7 +15,9 @@
     
     if (isProtected && !token) {
         console.warn('[AuthGuard] Unauthorized access. Redirecting to login.');
-        window.location.href = '/html/login.html?redirect=' + encodeURIComponent(currentPath);
+        const isSuperadminPath = superadminPaths.some(path => currentPath.includes(path));
+        const loginPage = isSuperadminPath ? '/html/admin-access.html' : '/login';
+        window.location.href = loginPage + '?redirect=' + encodeURIComponent(currentPath);
         return;
     }
 
@@ -25,16 +27,16 @@
         
         if (isSuperadminPath && user.role !== 'superadmin') {
             console.error('[AuthGuard] Superadmin access denied.');
-            window.location.href = '/html/dashboard.html';
+            window.location.href = '/dashboard';
             return;
         }
 
         // If trying to access login while already logged in
-        if (currentPath.includes('login.html')) {
+        if (currentPath.includes('login')) {
             if (user.role === 'superadmin') {
-                window.location.href = '/html/admin-portal.html';
+                window.location.href = '/admin-portal';
             } else {
-                window.location.href = '/html/dashboard.html';
+                window.location.href = '/dashboard';
             }
         }
     }

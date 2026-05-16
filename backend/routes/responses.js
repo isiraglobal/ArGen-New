@@ -2,46 +2,85 @@ const express = require('express');
 const router = express.Router();
 const Response = require('../models/Response');
 const Evaluation = require('../models/Evaluation');
+const Challenge = require('../models/Challenge');
+const { scoreResponse } = require('../utils/ai-agents');
 const { protect, isApproved, authorize } = require('../middleware/auth');
 
 // @route   POST api/responses/submit
 // @desc    Submit a response for a challenge in a batch
 // @access  Private (Member)
 router.post('/submit', protect, isApproved, authorize('member', 'teamadmin'), async (req, res) => {
-  const { evaluationId, challengeId, promptText } = req.body;
+  const { evaluationId, challengeId, promptText, modelOutput, workflowApproach, timeTaken, baselineTime, responseText: reqResponseText } = req.body;
+  const responseText = reqResponseText || `Prompt: ${promptText}\n\nOutput: ${modelOutput}`;
 
   try {
-    // 1. Verify evaluation belongs to company
+    // 1. Verify evaluation and challenge
     const evaluation = await Evaluation.findOne({ _id: evaluationId, companyId: req.user.companyId });
     if (!evaluation) {
       return res.status(404).json({ msg: 'Evaluation batch not found' });
     }
 
-    // 2. Create Response (Mock AI scoring for now)
-    const mockScores = {
-      clarity: Math.floor(Math.random() * 10) + 1,
-      constraint: Math.floor(Math.random() * 10) + 1,
-      specificity: Math.floor(Math.random() * 10) + 1,
-      iteration: Math.floor(Math.random() * 10) + 1
-    };
-    
-    const overallScore = Object.values(mockScores).reduce((a, b) => a + b, 0) / 4;
+    const challenge = await Challenge.findById(challengeId);
+    if (!challenge) {
+      return res.status(404).json({ msg: 'Challenge not found' });
+    }
 
+    // 2. Check for duplicate submission today
+    const startOfDay = new Date();
+    startOfDay.setHours(0, 0, 0, 0);
+    const existing = await Response.findOne({
+      user: req.user.id,
+      challenge: challengeId,
+      createdAt: { $gte: startOfDay }
+    });
+    if (existing) {
+      return res.status(400).json({ msg: 'You have already submitted a response for this challenge today.' });
+    }
+
+    // 3. Call AI Scoring Agent
+    const aiResult = await scoreResponse(challenge, responseText);
+    
     const response = new Response({
-      userId: req.user.id,
+      user: req.user.id,
       companyId: req.user.companyId,
       evaluationId,
-      challengeId,
-      promptText,
-      scores: mockScores,
-      overallScore,
-      aiFeedback: "This is a placeholder for AI-generated feedback based on the 4-dimension scoring rubric."
+      challenge: challengeId,
+      responseText,
+      workflowApproach,
+      timeTaken,
+      baselineTime,
+      scores: {
+        clarity: aiResult.clarity,
+        constraint_application: aiResult.constraint_application,
+        output_specificity: aiResult.output_specificity,
+        iteration_quality: aiResult.iteration_quality,
+        total: aiResult.total_score
+      },
+      justification: aiResult.justification,
+      improvement: aiResult.improvement,
+      flags: aiResult.flags || [],
+      scoringStatus: aiResult.flags?.length > 0 ? 'Manual Review' : 'Scored',
+      modelUsed: 'gpt-4o'
     });
 
     await response.save();
 
-    // 3. Update evaluation average if needed (optional)
-    
+    // 4. Update User Streak
+    const user = await require('../models/User').findById(req.user.id);
+    if (user) {
+      user.currentStreak += 1;
+      if (user.currentStreak > user.longestStreak) {
+        user.longestStreak = user.currentStreak;
+      }
+      // Update weakest dimension based on this score
+      const dims = ['clarity', 'constraint_application', 'output_specificity', 'iteration_quality'];
+      const scores = [aiResult.clarity, aiResult.constraint_application, aiResult.output_specificity, aiResult.iteration_quality];
+      const minIndex = scores.indexOf(Math.min(...scores));
+      user.weakestDimension = dims[minIndex];
+      
+      await user.save();
+    }
+
     res.status(201).json(response);
   } catch (err) {
     console.error(err.message);
@@ -54,8 +93,8 @@ router.post('/submit', protect, isApproved, authorize('member', 'teamadmin'), as
 // @access  Private
 router.get('/my', protect, isApproved, async (req, res) => {
   try {
-    const responses = await Response.find({ userId: req.user.id })
-      .populate('challengeId', 'title')
+    const responses = await Response.find({ user: req.user.id })
+      .populate('challenge', 'title')
       .populate('evaluationId', 'title')
       .sort({ createdAt: -1 });
     res.json(responses);
@@ -73,7 +112,7 @@ router.get('/batch/:batchId', protect, isApproved, authorize('teamadmin'), async
     const responses = await Response.find({ 
       evaluationId: req.params.batchId,
       companyId: req.user.companyId 
-    }).populate('userId', 'name email');
+    }).populate('user', 'name email');
     
     res.json(responses);
   } catch (err) {

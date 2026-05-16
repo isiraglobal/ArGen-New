@@ -1,174 +1,111 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Teams Dashboard - ArGen</title>
+  <title>Team Access - ArGen</title>
   <link rel="icon" type="image/png" href="/images/ArGen Logo.png">
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+  <link
+    href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono&display=swap"
+    rel="stylesheet">
   <link rel="stylesheet" href="/css/style.css">
-  <script src="/js/auth-guard.js"></script>
-  <script src="/js/api.js"></script>
-  <link rel="canonical" href="https://argen.isira.club/teams">
-</head>
-<body>
-  <header id="nav" class="nav">
-    <div class="nav-inner">
-      <a href="/" class="nav-logo">
-        <img src="/images/ArGen Logo.png" alt="ArGen" class="logo-img">
-      </a>
-      <nav class="nav-links">
-        <a href="/#how" class="nav-link">How It Works</a>
-        <a href="/pricing" class="nav-link">Pricing</a>
-        <a href="/about" class="nav-link">About</a>
-      </nav>
-      <div class="user-profile" style="display: flex; align-items: center; gap: 1rem;">
-        <span class="nav-link" style="font-weight: 600; font-size: 0.8rem; pointer-events: none;">ADMIN PANEL</span>
-        <img src="/images/ArGen Logo.png" alt="ArGen" style="width: 32px; height: 32px; border-radius: 4px;">
-      </div>
-      <button class="nav-burger" id="burger" aria-label="Menu">
-        <span></span><span></span><span></span>
-      </button>
-    </div>
-  </header>
+  <style>
+    .passcode-page {
+      min-height: 100dvh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem;
+      background: #000;
+    }
 
-  <div class="mobile-menu" id="mobileMenu">
-    <div class="mm-inner">
-      <div class="mm-links">
-        <a href="/" class="mm-link">01 Home</a>
-        <a href="/#how" class="mm-link">02 How It Works</a>
-        <a href="/pricing" class="mm-link">03 Pricing</a>
-        <a href="/about" class="mm-link">05 About</a>
-        <a href="/contact" class="mm-link">06 Contact</a>
-      </div>
-      <div class="mm-footer">
-        <a href="/evaluate" class="btn btn-primary btn-full">Run Evaluation Pilot</a>
+    .passcode-card {
+      width: 100%;
+      max-width: 400px;
+      background: rgba(10, 10, 10, 0.6);
+      backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 16px;
+      padding: 3rem;
+      text-align: center;
+    }
+
+    .passcode-input {
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 8px;
+      padding: 1rem;
+      color: #fff;
+      font-family: var(--font-mono);
+      font-size: 1.5rem;
+      text-align: center;
+      letter-spacing: 4px;
+      width: 100%;
+      margin: 2rem 0;
+      text-transform: uppercase;
+    }
+
+    .passcode-input:focus {
+      outline: none;
+      border-color: var(--argen-blue);
+      background: rgba(255, 255, 255, 0.06);
+    }
+  </style>
+</head>
+
+<body class="bg-black">
+  <script src="/js/auth-guard.js"></script>
+  
+  <div class="passcode-page">
+    <div class="passcode-card">
+      <img src="/images/ArGen Logo.png" alt="ArGen" style="width: 40px; margin-bottom: 2rem;">
+      <h1 class="card-h3" style="font-size: 1.5rem;">Team <i class="soul-text">Verification</i></h1>
+      <p style="color: var(--text-sec); font-size: 0.85rem; margin-top: 0.5rem;">Enter your team's secure access passcode to proceed to the workspace.</p>
+      
+      <form id="passcodeForm">
+        <input type="text" id="passcode" class="passcode-input" placeholder="••••••••" maxlength="8" required autofocus>
+        <button type="submit" class="btn btn-primary w-full" style="width: 100%; padding: 1rem;">Verify Access</button>
+      </form>
+      
+      <div id="errorMsg" style="color: #ef4444; font-family: var(--font-mono); font-size: 0.7rem; margin-top: 1.5rem; display: none;">
+        INVALID_PASSCODE: Access Denied
       </div>
     </div>
   </div>
 
-  <section class="section section-black" style="padding-top: calc(var(--nav-h) + 60px); min-height: 100vh;">
-    <div class="container">
-      <div class="dashboard-header" style="display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 4rem;">
-        <div>
-          <span class="section-tag">[DASHBOARD]</span>
-          <h1 class="section-h2" style="font-size: 3.5rem;">Organization <i class="soul-text">Teams</i></h1>
-          <p class="section-sub" id="dashboardSummary" style="margin-bottom: 0;">Loading organization data...</p>
-        </div>
-        <button class="btn btn-primary" onclick="alert('Team creation flow coming soon')">+ New Evaluation</button>
-      </div>
-
-      <div class="dashboard-grid" id="teamsGrid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); gap: 2rem;">
-        <!-- Dynamic teams will be injected here -->
-        <div class="loading-state" style="grid-column: 1/-1; text-align: center; padding: 4rem; color: var(--text-sec);">
-          Fetching evaluation data...
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <footer class="footer">
-    <div class="container">
-      <div class="footer-grid">
-        <div class="footer-brand">
-          <a href="/" class="footer-logo">ArGen</a>
-          <p class="footer-desc">The enterprise-grade standard for AI engineering evaluation and talent intelligence.</p>
-        </div>
-        <div class="footer-links">
-          <span class="footer-label">Product</span>
-          <a href="/evaluate" class="footer-link">Evaluate</a>
-          <a href="/pricing" class="footer-link">Pricing</a>
-          <a href="/challenges" class="footer-link">Challenges</a>
-        </div>
-        <div class="footer-links">
-          <span class="footer-label">Connect</span>
-          <a href="/about" class="footer-link">About</a>
-          <a href="/contact" class="footer-link">Contact</a>
-        </div>
-        <div class="footer-links">
-          <span class="footer-label">Legal</span>
-          <a href="/privacy" class="footer-link">Privacy</a>
-          <a href="/terms" class="footer-link">Terms</a>
-        </div>
-      </div>
-      <div class="footer-bottom">
-        <div id="userSession">Logged in as <strong id="userEmail">...</strong> | <a href="#" onclick="window.argenApi.logout()" style="color: var(--text-sec); text-decoration: underline;">Logout</a></div>
-        <span class="footer-made">Built with obsession<span class="blink">_</span></span>
-      </div>
-    </div>
-  </footer>
-
-  <script src="https://cdn.jsdelivr.net/npm/lenis@1.1.18/dist/lenis.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.7/dist/gsap.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.7/dist/ScrollTrigger.min.js"></script>
   <script src="/js/api.js"></script>
-  <script src="/js/script.js"></script>
   <script>
-    document.addEventListener('DOMContentLoaded', async () => {
-      const teamsGrid = document.getElementById('teamsGrid');
-      const dashboardSummary = document.getElementById('dashboardSummary');
-      const userEmail = document.getElementById('userEmail');
+    const user = JSON.parse(localStorage.getItem('user'));
+    
+    // If team admin or superadmin, they might have already bypassed this or have different flow
+    // but the user said "everybody" or "after login". Let's apply it to all for now or gate it.
+
+    document.getElementById('passcodeForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const code = document.getElementById('passcode').value.toUpperCase();
+      const errorEl = document.getElementById('errorMsg');
       
-      const user = JSON.parse(localStorage.getItem('user'));
-      if (user) {
-        userEmail.textContent = user.email;
-      }
-
       try {
-        const teams = await window.argenApi.getTeams();
+        const response = await argenApi.request('/auth/verify-passcode', {
+          method: 'POST',
+          body: JSON.stringify({ inviteCode: code })
+        });
         
-        if (!teams || teams.length === 0) {
-          teamsGrid.innerHTML = `
-            <div style="grid-column: 1/-1; text-align: center; padding: 4rem; background: var(--charcoal); border: 1px dashed var(--border-light); border-radius: 8px;">
-              <p style="font-family: var(--font-mono); color: var(--text-sec);">No active evaluations found. Start by creating a new team.</p>
-              <button class="btn btn-primary" style="margin-top: 1.5rem;">+ Create First Team</button>
-            </div>
-          `;
-          dashboardSummary.textContent = 'No active teams found';
-          return;
+        if (response.valid) {
+          // Store verification in session storage so it doesn't ask again this session
+          sessionStorage.setItem('team_verified', 'true');
+          window.location.href = '/html/dashboard.html';
+        } else {
+          errorEl.style.display = 'block';
         }
-
-        dashboardSummary.textContent = \`Managing \${teams.length} active teams | Data synced: Just now\`;
-        
-        teamsGrid.innerHTML = teams.map(team => \`
-          <div class="card reveal-card" style="padding: 2.5rem; background: var(--charcoal); opacity: 1; transform: translateY(0);">
-            <div style="display: flex; justify-content: space-between; margin-bottom: 1.5rem;">
-              <h3 class="card-h3" style="color: var(--white);">\${team.name}</h3>
-              <span class="step-tag" style="background: rgba(34, 197, 94, 0.1); color: var(--emerald-cta); border: 1px solid var(--emerald-cta);">\${team.industry || 'ACTIVE'}</span>
-            </div>
-            <div class="score-display" style="margin-bottom: 2rem;">
-              <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
-                <span style="font-family: var(--font-body); font-weight: 600; font-size: 0.8rem; color: var(--text-sec);">AI PERFORMANCE INDEX</span>
-                <span style="font-family: var(--font-display); font-size: 1.5rem; color: var(--white);">\${team.score || '??'}/100</span>
-              </div>
-              <div style="height: 4px; background: rgba(255,255,255,0.1); border-radius: 2px;">
-                <div style="width: \${team.score || 0}%; height: 100%; background: var(--emerald-cta); border-radius: 2px;"></div>
-              </div>
-            </div>
-            <div class="team-meta" style="display: flex; gap: 2rem; margin-bottom: 2rem;">
-              <div>
-                <span class="stat-label">MEMBERS</span>
-                <span style="display: block; color: var(--white); font-family: var(--font-mono);">\${team.members ? team.members.length : 0}</span>
-              </div>
-              <div>
-                <span class="stat-label">INDUSTRY</span>
-                <span style="display: block; color: var(--white); font-family: var(--font-mono);">\${team.industry || 'N/A'}</span>
-              </div>
-            </div>
-            <a href="/team/\${team._id}" class="btn btn-dark btn-full">View Detailed Analytics</a>
-          </div>
-        \`).join('');
-
       } catch (err) {
-        console.error(err);
-        teamsGrid.innerHTML = \`
-          <div style="grid-column: 1/-1; text-align: center; padding: 4rem; color: #ef4444; font-family: var(--font-mono);">
-            > FATAL_ERROR: FAILED_TO_LOAD_RESOURCES
-            <br><small>\${err.message}</small>
-          </div>
-        \`;
+        errorEl.textContent = 'ERROR: ' + err.message;
+        errorEl.style.display = 'block';
       }
     });
   </script>
 </body>
+
 </html>

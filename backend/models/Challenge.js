@@ -6,21 +6,30 @@ const ChallengeSchema = new mongoose.Schema({
     required: true,
     unique: true
   },
-  name: {
+  companyId: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Company'
+  },
+  title: {
     type: String,
     required: true
   },
   type: {
     type: String,
-    enum: ['Strategy', 'Data', 'Communication', 'Research', 'Iteration'],
+    enum: ['Strategy', 'Data', 'Communication', 'Research', 'Iteration', 'Ethics', 'Tone'],
     required: true
   },
   difficulty: {
     type: String,
-    enum: ['Beginner', 'Intermediate', 'Advanced'],
+    enum: ['Beginner', 'Intermediate', 'Advanced', 'Expert', 'Elite'],
     default: 'Intermediate'
   },
-  industryFocus: String,
+  targetedRole: String, // Executive, Manager, IC
+  targetedDept: String, // Sales, Marketing, Eng, etc.
+  scenario: {
+    type: String,
+    required: true
+  },
   text: {
     type: String,
     required: true

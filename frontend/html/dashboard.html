@@ -108,6 +108,55 @@
       width: 90%;
       max-width: 500px;
     }
+    .grid-4 {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1.5rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .grid-2-1 {
+      display: grid;
+      grid-template-columns: 2fr 1fr;
+      gap: 1.5rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .grid-1-1 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.5rem;
+      margin-bottom: 1.5rem;
+    }
+
+    /* Mobile Optimization */
+    @media (max-width: 1024px) {
+      .grid-4 {
+        grid-template-columns: repeat(2, 1fr);
+      }
+      .grid-2-1 {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .grid-4 {
+        grid-template-columns: 1fr;
+      }
+      .grid-1-1 {
+        grid-template-columns: 1fr;
+      }
+      
+      .dashboard-header-area {
+        flex-direction: column;
+        align-items: flex-start !important;
+        gap: 1.5rem;
+      }
+      
+      .member-main-grid {
+        grid-template-columns: 1fr !important;
+      }
+    }
   </style>
 </head>
 
@@ -131,44 +180,134 @@
 
   <main class="dashboard-container container">
     <!-- Header Area -->
-    <div style="margin-bottom: 3rem;">
-      <h1 class="section-h2" id="welcomeText">Welcome <i class="soul-text">Back</i></h1>
-      <p class="section-sub" id="orgName">Retrieving organizational context...</p>
+    <div class="dashboard-header-area" style="display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 4rem;">
+      <div>
+        <h1 class="section-h2" id="welcomeText" style="margin-bottom: 0.5rem;">Welcome <i class="soul-text">Back</i></h1>
+        <p class="section-sub" id="orgName" style="margin: 0;">Retrieving organizational context...</p>
+      </div>
+      <div id="streakBadge" class="stat-card" style="padding: 0.75rem 1.5rem; display: none; align-items: center; gap: 0.75rem; border-color: var(--argen-blue);">
+        <span class="stat-label" style="margin: 0;">Current Streak</span>
+        <span id="currentStreakVal" style="font-size: 1.5rem; font-weight: 800; color: var(--argen-blue);">0</span>
+      </div>
     </div>
 
-    <!-- TeamAdmin Section -->
+    <!-- TeamAdmin Section (12 Panels) -->
     <div id="adminSection" style="display: none;">
-      <div class="invite-box">
-        <div>
-          <p class="stat-label" style="margin-bottom: 0.5rem;">Invite your team</p>
-          <p style="font-size: 0.9rem; color: #fff;">Share this code with your members to join this organization.</p>
+      <div class="grid-4">
+        <!-- Panel 1: Team Overview -->
+        <div class="stat-card">
+          <span class="stat-label">Team Avg Score</span>
+          <div class="stat-value" id="teamAvgScore">0.0</div>
+          <span class="batch-meta" id="scoreTrend">-- % vs last week</span>
         </div>
-        <div style="text-align: right;">
-          <div id="inviteCodeDisplay" style="font-family: var(--font-mono); font-size: 1.5rem; color: var(--argen-blue); font-weight: 800; letter-spacing: 2px;">XXXX-XXXX</div>
-          <button onclick="copyInviteCode()" style="background: none; border: none; color: var(--text-sec); font-size: 0.65rem; cursor: pointer; text-decoration: underline;">COPY_CODE</button>
+        <div class="stat-card">
+          <span class="stat-label">Active Employees</span>
+          <div class="stat-value" id="activeEmployees">0</div>
+        </div>
+        <div class="stat-card">
+          <span class="stat-label">Completion Rate</span>
+          <div class="stat-value" id="completionRate">0%</div>
+        </div>
+        <div class="stat-card" style="border-style: dashed; border-color: var(--argen-blue); cursor: pointer;" onclick="copyInviteCode()">
+          <span class="stat-label">Team Passcode</span>
+          <div class="stat-value" id="inviteCodeDisplay" style="font-size: 1.5rem; letter-spacing: 2px;">XXXX</div>
+          <span class="batch-meta">CLICK TO COPY</span>
         </div>
       </div>
 
-      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
-        <h2 class="card-h3" style="font-size: 1.5rem;">Evaluation <i class="soul-text">Batches</i></h2>
-        <button class="btn btn-primary" onclick="openModal('createBatchModal')">+ Create Batch</button>
+      <div class="grid-2-1">
+        <!-- Panel 2: Dimension Heatmap -->
+        <div class="stat-card">
+          <h3 class="stat-label" style="margin-bottom: 1.5rem;">Dimension Heatmap</h3>
+          <div id="heatmapGrid" style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem;">
+             <!-- Heatmap cells -->
+          </div>
+        </div>
+        <!-- Panel 5: Industry Benchmark -->
+        <div class="stat-card">
+          <h3 class="stat-label" style="margin-bottom: 1rem;">Industry Benchmark</h3>
+          <canvas id="benchmarkChart" style="max-height: 200px;"></canvas>
+        </div>
       </div>
 
-      <div id="batchesList">
-        <!-- Batches injected here -->
+      <div class="grid-1-1">
+        <!-- Panel 7: Score Trend -->
+        <div class="stat-card">
+          <h3 class="stat-label" style="margin-bottom: 1rem;">Score Trend (8 Weeks)</h3>
+          <canvas id="trendChart" style="max-height: 250px;"></canvas>
+        </div>
+        <!-- Panel 3: Live Leaderboard -->
+        <div class="stat-card">
+          <h3 class="stat-label" style="margin-bottom: 1rem;">Live Leaderboard</h3>
+          <div id="adminLeaderboard" style="font-size: 0.8rem;">
+            <!-- Leaderboard rows -->
+          </div>
+        </div>
+      </div>
+
+      <!-- Panel 9: Flagged Submissions -->
+      <div id="flaggedPanel" class="stat-card" style="border-color: #ff4444; display: none; margin-bottom: 1.5rem;">
+        <h3 class="stat-label" style="color: #ff4444; margin-bottom: 1rem;">Flagged Submissions (Adversarial Detection)</h3>
+        <div id="flaggedList"></div>
+      </div>
+
+      <div style="display: flex; gap: 1rem; align-items: center; background: rgba(255,255,255,0.02); padding: 1.5rem; border-radius: 12px; border: 1px solid var(--border-light);">
+        <div style="flex: 1;">
+          <h3 class="card-h3" style="font-size: 1rem; margin-bottom: 0.25rem;">Autonomous Intelligence Cycle</h3>
+          <p style="font-size: 0.75rem; color: var(--text-sec);">AI agents are researching and generating challenges daily.</p>
+        </div>
+        <button class="btn btn-dark" onclick="generatePDFReport()" id="pdfBtn">Download PDF Report</button>
+        <button class="btn btn-primary" onclick="triggerAICycle()" id="aiTriggerBtn">Trigger Manual Cycle</button>
       </div>
     </div>
 
-    <!-- Member Section -->
+    <!-- Member Section (4 Panels) -->
     <div id="memberSection" style="display: none;">
-      <h2 class="card-h3" style="font-size: 1.5rem; margin-bottom: 2rem;">Active <i class="soul-text">Evaluations</i></h2>
-      <div id="activeEvaluationsList">
-        <!-- Active evals injected here -->
+      <div class="member-main-grid grid-2-1">
+
+        <!-- Panel 1: Today's Challenge -->
+        <div id="todayChallengePanel">
+           <div class="stat-card" style="border-color: var(--argen-blue); background: rgba(43, 96, 226, 0.03); min-height: 400px; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center;">
+              <p class="stat-label">Today's Focus</p>
+              <h2 class="card-h3" style="font-size: 2rem; margin: 1rem 0;" id="challengeTitle">Loading Challenge...</h2>
+              <p id="challengeScenario" style="max-width: 500px; margin-bottom: 2rem; color: var(--text-sec);"></p>
+              <button class="btn btn-primary btn-lg" id="startChallengeBtn">Start Challenge</button>
+              <p class="batch-meta" style="margin-top: 1.5rem;" id="challengeDeadline">EXPIRES AT MIDNIGHT</p>
+           </div>
+        </div>
+
+        <div>
+          <!-- Panel 3: My Streak -->
+          <div class="stat-card" style="margin-bottom: 1.5rem;">
+            <h3 class="stat-label" style="margin-bottom: 1rem;">Performance Streak</h3>
+            <div style="display: flex; justify-content: space-between; align-items: flex-end;">
+              <div>
+                 <span id="memberStreakLarge" style="font-size: 3rem; font-weight: 800; color: #fff;">0</span>
+                 <span class="stat-label" style="display: block;">Days</span>
+              </div>
+              <div style="text-align: right;">
+                 <p class="batch-meta">LONGEST: <span id="longestStreakVal">0</span> DAYS</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Panel 4: Weekly Leaderboard -->
+          <div class="stat-card">
+            <h3 class="stat-label" style="margin-bottom: 1rem;">Team Leaderboard</h3>
+            <div id="memberLeaderboard" style="font-size: 0.8rem;">
+              <!-- Leaderboard rows -->
+            </div>
+            <a href="#" style="display: block; text-align: center; margin-top: 1rem; font-size: 0.7rem; color: var(--argen-blue); text-decoration: none;">VIEW FULL STANDINGS</a>
+          </div>
+        </div>
       </div>
 
-      <h2 class="card-h3" style="font-size: 1.5rem; margin: 4rem 0 2rem;">Submission <i class="soul-text">History</i></h2>
-      <div id="historyList">
-        <!-- History injected here -->
+      <!-- Panel 2: My Score Today / History -->
+      <div style="margin-top: 3rem;">
+        <h2 class="card-h3" style="font-size: 1.5rem; margin-bottom: 2rem;">Submission <i class="soul-text">Insights</i></h2>
+        <div id="historyList">
+          <!-- History injected here -->
+        </div>
       </div>
     </div>
   </main>
@@ -194,140 +333,10 @@
     </div>
   </div>
 
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <script src="/js/api.js"></script>
-  <script>
-    const user = JSON.parse(localStorage.getItem('user'));
-    let currentInviteCode = '';
-
-    document.addEventListener('DOMContentLoaded', () => {
-      if (!user) return;
-
-      document.getElementById('profileName').textContent = user.name.toUpperCase();
-      document.getElementById('profileRole').textContent = `ID_${user.role}`;
-      document.getElementById('welcomeText').innerHTML = `Welcome back, <i class="soul-text">${user.name.split(' ')[0]}</i>`;
-      
-      if (user.role === 'teamadmin') {
-        document.getElementById('adminSection').style.display = 'block';
-        initAdminDashboard();
-      } else {
-        document.getElementById('memberSection').style.display = 'block';
-        initMemberDashboard();
-      }
-    });
-
-    async function initAdminDashboard() {
-      try {
-        // Fetch Company Info for Invite Code
-        const companies = await argenApi.request('/admin/companies'); // This might need a non-superadmin endpoint
-        // For TeamAdmin, we should have a /api/evaluations/my-company endpoint
-        
-        // Fetch Batches
-        const batches = await argenApi.request('/evaluations');
-        renderBatches(batches);
-      } catch (err) {
-        console.error('Dashboard init error:', err);
-      }
-    }
-
-    async function initMemberDashboard() {
-      try {
-        const batches = await argenApi.request('/evaluations');
-        renderActiveEvaluations(batches);
-        
-        const history = await argenApi.request('/responses/my');
-        renderHistory(history);
-      } catch (err) {
-        console.error('Member dashboard error:', err);
-      }
-    }
-
-    function renderBatches(batches) {
-      const container = document.getElementById('batchesList');
-      if (!batches.length) {
-        container.innerHTML = '<p style="color: var(--text-sec); text-align: center; padding: 3rem; background: rgba(255,255,255,0.01); border-radius: 12px; border: 1px dashed var(--border-light);">No evaluation batches created yet.</p>';
-        return;
-      }
-      container.innerHTML = batches.map(b => `
-        <div class="batch-card">
-          <div class="batch-info">
-            <h3>${b.title}</h3>
-            <p class="batch-meta">STATUS: ${b.status.toUpperCase()} | DEADLINE: ${new Date(b.deadline).toLocaleDateString()}</p>
-          </div>
-          <a href="/html/batch-detail.html?id=${b._id}" class="btn btn-dark">View Audit</a>
-        </div>
-      `).join('');
-    }
-
-    function renderActiveEvaluations(batches) {
-      const container = document.getElementById('activeEvaluationsList');
-      if (!batches.length) {
-        container.innerHTML = '<p style="color: var(--text-sec); text-align: center; padding: 2rem; background: rgba(255,255,255,0.02); border-radius: 12px;">No active evaluations assigned to your team yet.</p>';
-        return;
-      }
-
-      let html = '';
-      batches.forEach(batch => {
-        batch.challenges.forEach(challenge => {
-          html += `
-            <div class="batch-card">
-              <div class="batch-info">
-                <span class="batch-meta" style="color: var(--argen-blue);">${batch.title}</span>
-                <h3>${challenge.title}</h3>
-                <p class="batch-meta">TYPE: ${challenge.type?.toUpperCase() || 'GENERAL'} | DUE: ${new Date(batch.deadline).toLocaleDateString()}</p>
-              </div>
-              <a href="/html/take-evaluation.html?challengeId=${challenge._id}&evaluationId=${batch._id}" class="btn btn-primary">Start Evaluation</a>
-            </div>
-          `;
-        });
-      });
-      container.innerHTML = html || '<p style="color: var(--text-sec);">Your batches are empty.</p>';
-    }
-
-    function renderHistory(history) {
-      const container = document.getElementById('historyList');
-      if (!history.length) {
-        container.innerHTML = '<p style="color: var(--text-sec);">No past submissions found.</p>';
-        return;
-      }
-      container.innerHTML = history.map(h => `
-        <div class="batch-card">
-          <div class="batch-info">
-            <h3>${h.challengeId?.title || 'Unknown Challenge'}</h3>
-            <p class="batch-meta">Score: ${h.overallScore.toFixed(1)}/10 | Submitted: ${new Date(h.createdAt).toLocaleDateString()}</p>
-          </div>
-          <div style="font-family: var(--font-mono); font-size: 0.8rem; color: var(--argen-blue); font-weight: 700;">
-            ${h.overallScore >= 8 ? 'ELITE' : h.overallScore >= 6 ? 'PROFICIENT' : 'EMERGING'}
-          </div>
-        </div>
-      `).join('');
-    }
-
-    function openModal(id) { document.getElementById(id).style.display = 'flex'; }
-    function closeModal(id) { document.getElementById(id).style.display = 'none'; }
-
-    document.getElementById('createBatchForm').addEventListener('submit', async (e) => {
-      e.preventDefault();
-      const title = document.getElementById('batchTitle').value;
-      const deadline = document.getElementById('batchDeadline').value;
-
-      try {
-        await argenApi.request('/evaluations', {
-          method: 'POST',
-          body: JSON.stringify({ title, deadline, challengeIds: [] }) // Challenges can be added later
-        });
-        closeModal('createBatchModal');
-        initAdminDashboard();
-      } catch (err) {
-        alert(err.message);
-      }
-    });
-
-    function copyInviteCode() {
-      const code = document.getElementById('inviteCodeDisplay').textContent;
-      navigator.clipboard.writeText(code);
-      alert('Invite code copied to clipboard!');
-    }
-  </script>
+  <script src="/js/dashboard.js"></script>
 </body>
 
 </html>

@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Payment Successful - ArGen</title>
+  <link rel="icon" type="image/png" href="/images/ArGen Logo.png">
+  <link
+    href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono&display=swap"
+    rel="stylesheet">
+  <link rel="stylesheet" href="/css/style.css">
+
+  <style>
+    :root {
+      --cb: cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .auth-page {
+      min-height: 100dvh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem 1.5rem;
+      background: #000;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .auth-bg-blob {
+      position: absolute;
+      width: 600px;
+      height: 600px;
+      background: radial-gradient(circle, rgba(140, 255, 0, 0.08) 0%, transparent 70%);
+      filter: blur(80px);
+      z-index: 0;
+      pointer-events: none;
+    }
+
+    .auth-card {
+      width: 100%;
+      max-width: 500px;
+      background: rgba(10, 10, 10, 0.6);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: 1px solid rgba(140, 255, 0, 0.15);
+      border-radius: 16px;
+      padding: clamp(2rem, 5vw, 3rem);
+      position: relative;
+      z-index: 1;
+      box-shadow: 0 24px 48px rgba(0, 0, 0, 0.4);
+      text-align: center;
+      animation: slideUp 0.6s var(--cb) forwards;
+    }
+
+    @keyframes slideUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .soul-text {
+      font-style: italic;
+      color: #ceff00;
+    }
+
+    .success-icon {
+      width: 64px;
+      height: 64px;
+      background: rgba(206, 255, 0, 0.1);
+      border: 1px solid rgba(206, 255, 0, 0.3);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 1.5rem;
+      color: #ceff00;
+    }
+
+    .success-icon svg {
+      width: 32px;
+      height: 32px;
+      stroke-width: 2.5;
+    }
+
+    .info-box {
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      border-radius: 8px;
+      padding: 1.5rem;
+      margin: 2rem 0;
+      text-align: left;
+    }
+
+    .info-box p {
+      font-size: 0.85rem;
+      color: var(--text-sec);
+      margin-bottom: 0.5rem;
+      line-height: 1.6;
+    }
+    
+    .info-box p:last-child {
+      margin-bottom: 0;
+    }
+
+    .btn-action {
+      width: 100%;
+      padding: 16px;
+      border-radius: 8px;
+      font-weight: 700;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      font-family: var(--font-mono);
+      font-size: 0.85rem;
+      text-decoration: none;
+      display: inline-block;
+      transition: all 0.3s ease;
+      background: #ceff00;
+      color: #000;
+      border: none;
+    }
+
+    .btn-action:hover {
+      background: #b0e600;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(206, 255, 0, 0.2);
+    }
+  </style>
+</head>
+
+<body class="bg-black">
+  <header id="nav" class="nav">
+    <div class="nav-inner">
+      <a href="/" class="nav-logo">
+        <img src="/images/ArGen Logo.png" alt="ArGen" class="logo-img" style="height: 32px;">
+      </a>
+      <nav class="nav-links">
+        <a href="/#how" class="nav-link">How It Works</a>
+        <a href="/pricing" class="nav-link">Pricing</a>
+        <a href="/about" class="nav-link">About</a>
+      </nav>
+      <a href="/evaluate" class="nav-cta">Get Started →</a>
+      <button class="nav-burger" id="burger" aria-label="Menu">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </header>
+
+  <div class="mobile-menu" id="mobileMenu">
+    <div class="mm-inner">
+      <div class="mm-links">
+        <a href="/" class="mm-link">01 Home</a>
+        <a href="/#how" class="mm-link">02 How It Works</a>
+        <a href="/pricing" class="mm-link">03 Pricing</a>
+        <a href="/about" class="mm-link">04 About</a>
+        <a href="/contact" class="mm-link">05 Contact</a>
+      </div>
+      <div class="mm-footer">
+        <a href="/evaluate" class="btn btn-primary btn-full">Get Started</a>
+      </div>
+    </div>
+  </div>
+  <main style="min-height: 100dvh; display: flex; flex-direction: column; padding-top: 80px;">
+    <div class="auth-page" style="flex: 1; min-height: auto;">
+      <div class="auth-bg-blob" style="top: -100px; right: -100px;"></div>
+      <div class="auth-bg-blob" style="bottom: -100px; left: -100px; background: radial-gradient(circle, rgba(0, 200, 255, 0.03) 0%, transparent 70%);"></div>
+
+      <div class="auth-card">
+        <div class="success-icon">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5" />
+          </svg>
+        </div>
+        
+        <h1 class="card-h3" style="font-size: 2rem; margin-bottom: 0.5rem; font-family: var(--font-display);">Payment <i class="soul-text">Verified</i></h1>
+        <p style="color: var(--text-sec); font-size: 0.95rem;">Welcome to the ArGen Platform.</p>
+
+        <div class="info-box">
+          <p><strong style="color: #fff; font-family: var(--font-mono); text-transform: uppercase; letter-spacing: 1px; font-size: 0.7rem;">Next Steps:</strong></p>
+          <p>1. Our infrastructure is currently provisioning your dedicated workspace.</p>
+          <p>2. Within the next 60 seconds, you will receive an encrypted <strong>Admin Setup Link</strong> in your email inbox.</p>
+          <p>3. Click that link to establish your organization and invite your team.</p>
+        </div>
+
+        <a href="/login" class="btn-action">Return to Login</a>
+      </div>
+    </div>
+  </main>
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <a href="/" class="footer-logo">ArGen</a>
+          <p class="footer-desc">The enterprise-grade standard for AI engineering evaluation and talent intelligence.</p>
+        </div>
+        <div class="footer-links">
+          <span class="footer-label">Product</span>
+          <a href="/evaluate" class="footer-link">Evaluate</a>
+          <a href="/pricing" class="footer-link">Pricing</a>
+          <a href="/challenges" class="footer-link">Challenges</a>
+        </div>
+        <div class="footer-links">
+          <span class="footer-label">Connect</span>
+          <a href="/about" class="footer-link">About</a>
+          <a href="/contact" class="footer-link">Contact</a>
+        </div>
+        <div class="footer-links">
+          <span class="footer-label">Legal</span>
+          <a href="/privacy" class="footer-link">Privacy</a>
+          <a href="/terms" class="footer-link">Terms</a>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <span>© 2026 ArGen. All rights reserved.</span>
+        <span class="footer-made">Built with obsession<span class="blink">_</span></span>
+      </div>
+    </div>
+  </footer>
+  <script src="/js/script.js"></script>
+
+</body>
+
+</html>

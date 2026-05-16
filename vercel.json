@@ -3,7 +3,7 @@
   "public": true,
   "name": "argen-frontend",
   "rewrites": [
-    { "source": "/api/(.*)", "destination": "/backend/server.js" },
+    { "source": "/api/(.*)", "destination": "/api/index.js" },
     { "source": "/", "destination": "/frontend/html/index.html" },
     { "source": "/about", "destination": "/frontend/html/about.html" },
     { "source": "/pricing", "destination": "/frontend/html/pricing.html" },
@@ -19,6 +19,7 @@
     { "source": "/privacy", "destination": "/frontend/html/privacy.html" },
     { "source": "/terms", "destination": "/frontend/html/terms.html" },
     { "source": "/waitlist", "destination": "/frontend/html/waitlist.html" },
+    { "source": "/registration", "destination": "/frontend/html/registration.html" },
     { "source": "/(css|js|images)/(.*)", "destination": "/frontend/$1/$2" }
   ],
   "headers": [

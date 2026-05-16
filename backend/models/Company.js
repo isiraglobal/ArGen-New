@@ -27,6 +27,16 @@ const CompanySchema = new mongoose.Schema({
     ref: 'User'
   },
   approvedAt: Date,
+  // AI Researched Profile
+  primary_ai_tools: [String],
+  language_tone: String,
+  competitor_names: [String],
+  challenge_themes: [String],
+  profileGeneratedAt: Date,
+  whopUserId: { type: String },
+  plan: { type: String, enum: ['starter', 'growth', 'enterprise', 'pilot'] },
+  seatLimit: { type: Number, default: 15 },
+  subscriptionStatus: { type: String, enum: ['active', 'past_due', 'cancelled', 'pilot'] },
   createdAt: {
     type: Date,
     default: Date.now

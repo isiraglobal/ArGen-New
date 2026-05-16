@@ -174,6 +174,24 @@
           <textarea id="modelOutput" class="eval-textarea" placeholder="Enter model response here..."></textarea>
         </div>
 
+        <div class="input-section">
+          <h4><span style="color: var(--argen-blue);">03</span> // Workflow Approach (Mandatory)</h4>
+          <p style="font-size: 0.8rem; color: var(--text-sec); margin-bottom: 1rem;">How did you approach this task? Which AI tools did you use and in what sequence?</p>
+          <textarea id="workflowApproach" class="eval-textarea" style="min-height: 100px;" placeholder="Example: I pasted the raw data into Claude, asked it to identify top 3 trends, then validated against our Q1 report..."></textarea>
+        </div>
+
+        <div class="input-section">
+          <h4><span style="color: var(--argen-blue);">04</span> // Time Tracking (Mandatory)</h4>
+          <p style="font-size: 0.8rem; color: var(--text-sec); margin-bottom: 1rem;">Approximately how long did this take you?</p>
+          <input type="text" id="timeTaken" class="eval-textarea" style="min-height: 40px; width: 100%; box-sizing: border-box;" placeholder="e.g., 15 minutes">
+        </div>
+
+        <div class="input-section">
+          <h4><span style="color: var(--argen-blue);">05</span> // Baseline Comparison (Optional)</h4>
+          <p style="font-size: 0.8rem; color: var(--text-sec); margin-bottom: 1rem;">If you've done this task before without AI, how long did it take?</p>
+          <input type="text" id="baselineTime" class="eval-textarea" style="min-height: 40px; width: 100%; box-sizing: border-box;" placeholder="e.g., 2 hours">
+        </div>
+
         <div class="eval-footer">
           <button onclick="window.history.back()" class="btn btn-dark">Exit Session</button>
           <button id="submitBtn" onclick="submitResponse()" class="btn btn-primary">Submit for Scoring →</button>
@@ -207,7 +225,7 @@
         if (!currentChallenge) throw new Error('Challenge not found');
 
         document.getElementById('challengeTitle').textContent = currentChallenge.title;
-        document.getElementById('challengeDesc').textContent = currentChallenge.description;
+        document.getElementById('challengeDesc').textContent = currentChallenge.scenario || currentChallenge.description;
         document.getElementById('challengeType').textContent = (currentChallenge.type || 'General').toUpperCase();
         
         document.getElementById('loading').style.display = 'none';
@@ -221,9 +239,12 @@
     async function submitResponse() {
       const promptText = document.getElementById('promptText').value.trim();
       const modelOutput = document.getElementById('modelOutput').value.trim();
+      const workflowApproach = document.getElementById('workflowApproach').value.trim();
+      const timeTaken = document.getElementById('timeTaken').value.trim();
+      const baselineTime = document.getElementById('baselineTime').value.trim();
 
-      if (!promptText || !modelOutput) {
-        alert('Please fill in both fields before submitting.');
+      if (!promptText || !modelOutput || !workflowApproach || !timeTaken) {
+        alert('Please fill in all mandatory fields before submitting.');
         return;
       }
 
@@ -238,7 +259,10 @@
             challengeId,
             evaluationId,
             promptText,
-            modelOutput
+            modelOutput,
+            workflowApproach,
+            timeTaken,
+            baselineTime
           })
         });
 

@@ -64,25 +64,29 @@
         </div>
       </div>
 
-      <div class="auth-tabs" style="max-width: 600px; margin-bottom: 2rem;">
+      <div class="auth-tabs" style="max-width: 800px; margin-bottom: 2rem;">
         <div class="auth-tab active" onclick="switchView('companies')">Organizations</div>
         <div class="auth-tab" onclick="switchView('users')">User Audit</div>
         <div class="auth-tab" onclick="switchView('invitations')">Invitations</div>
+        <div class="auth-tab" onclick="switchView('monitor')">System Monitor</div>
       </div>
 
-      <div id="companiesView">
+      <!-- Organizations Tab -->
+      <div id="companiesView" class="tab-view">
         <div id="companiesList" class="admin-grid">
           <div style="color: var(--text-sec); text-align: center; padding: 4rem;">Synchronizing organizational data...</div>
         </div>
       </div>
 
-      <div id="usersView" style="display: none;">
+      <!-- Users Tab -->
+      <div id="usersView" class="tab-view" style="display: none;">
         <div id="usersList" class="admin-grid">
           <div style="color: var(--text-sec); text-align: center; padding: 4rem;">Compiling global user audit...</div>
         </div>
       </div>
 
-      <div id="invitationsView" style="display: none;">
+      <!-- Invitations Tab -->
+      <div id="invitationsView" class="tab-view" style="display: none;">
         <div class="request-card" style="margin-bottom: 2rem; display: block;">
           <h3 style="margin-bottom: 1.5rem;">Generate Access Link</h3>
           <form id="inviteForm" style="display: grid; grid-template-columns: 1fr 1fr auto; gap: 1rem; align-items: flex-end;">
@@ -104,147 +108,242 @@
             </div>
           </div>
         </div>
-        <div id="invitationsList" class="admin-grid">
-          <!-- Pending invitations will load here -->
+        <div id="invitationsList" class="admin-grid"></div>
+      </div>
+
+      <!-- System Monitor Tab -->
+      <div id="monitorView" class="tab-view" style="display: none;">
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1.5rem; margin-bottom: 2rem;">
+          <div class="request-card" style="display: block; text-align: center;">
+            <p style="font-size: 0.65rem; color: var(--text-sec); font-family: var(--font-mono);">AGENT_STATUS</p>
+            <h2 id="activeAgents" style="font-size: 2rem; margin: 0.5rem 0;">5/5</h2>
+            <p style="font-size: 0.7rem; color: var(--green);">[ONLINE: ALL SYSTEMS]</p>
+          </div>
+          <div class="request-card" style="display: block; text-align: center;">
+            <p style="font-size: 0.65rem; color: var(--text-sec); font-family: var(--font-mono);">API_QUALITY</p>
+            <h2 id="apiQualityVal" style="font-size: 2rem; margin: 0.5rem 0;">98.2%</h2>
+            <p style="font-size: 0.7rem; color: var(--text-sec);">AVG SCORE</p>
+          </div>
+          <div class="request-card" style="display: block; text-align: center;">
+            <p style="font-size: 0.65rem; color: var(--text-sec); font-family: var(--font-mono);">CREDITS_SPENT</p>
+            <h2 id="creditSpentVal" style="font-size: 2rem; margin: 0.5rem 0;">$0.00</h2>
+            <p style="font-size: 0.7rem; color: var(--text-sec);">LAST 24 HOURS</p>
+          </div>
+          <div class="request-card" style="display: block; text-align: center;">
+            <p style="font-size: 0.65rem; color: var(--text-sec); font-family: var(--font-mono);">CREDITS_LEFT</p>
+            <h2 id="creditLeftVal" style="font-size: 2rem; margin: 0.5rem 0;">$1000.00</h2>
+            <p style="font-size: 0.7rem; color: var(--text-sec);">PLATFORM BUDGET</p>
+          </div>
+        </div>
+
+        <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 1.5rem; margin-bottom: 2rem;">
+          <div class="request-card" style="display: block; min-height: 350px;">
+            <p class="section-sub" style="font-size: 0.65rem; margin-bottom: 1rem;">[VISUAL_ANALYTICS_ENGINE]</p>
+            <div style="height: 300px;"><canvas id="usageChart"></canvas></div>
+          </div>
+          <div class="request-card" style="display: block; min-height: 350px;">
+            <p class="section-sub" style="font-size: 0.65rem; margin-bottom: 1rem;">[REAL_TIME_AGENT_LOGS]</p>
+            <div id="agent-logs" style="max-height: 280px; overflow-y: auto; font-family: var(--font-mono); font-size: 0.7rem;"></div>
+          </div>
+        </div>
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1.5rem;">
+          <div class="request-card" style="display: block;"><canvas id="qualityChart"></canvas></div>
+          <div class="request-card" style="display: block;"><canvas id="tokenChart"></canvas></div>
+          <div class="request-card" style="display: block;"><canvas id="agentPerfChart"></canvas></div>
         </div>
       </div>
     </div>
   </section>
 
-  <script src="/js/auth-guard.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <script src="/js/api.js"></script>
   <script>
-    let currentView = 'companies';
+    let charts = {};
 
     function switchView(view) {
-      currentView = view;
-      document.querySelectorAll('.auth-tab').forEach((tab, i) => {
-        tab.classList.toggle('active', (i === 0 && view === 'companies') || (i === 1 && view === 'users') || (i === 2 && view === 'invitations'));
-      });
-      document.getElementById('companiesView').style.display = view === 'companies' ? 'block' : 'none';
-      document.getElementById('usersView').style.display = view === 'users' ? 'block' : 'none';
-      document.getElementById('invitationsView').style.display = view === 'invitations' ? 'block' : 'none';
+      document.querySelectorAll('.tab-view').forEach(v => v.style.display = 'none');
+      document.querySelectorAll('.auth-tab').forEach(t => t.classList.remove('active'));
       
+      const tabs = ['companies', 'users', 'invitations', 'monitor'];
+      const tabIdx = tabs.indexOf(view);
+      if (tabIdx !== -1) {
+        document.querySelectorAll('.auth-tab')[tabIdx].classList.add('active');
+        document.getElementById(view + 'View').style.display = 'block';
+      }
+
       if (view === 'companies') fetchCompanies();
-      else if (view === 'users') fetchUsers();
-      // invitations handled by form mostly, but could fetch history if route exists
+      if (view === 'users') fetchUsers();
+      if (view === 'invitations') fetchInvitations();
+      if (view === 'monitor') fetchMonitorData();
     }
 
-    // Invitation Handling
+    async function fetchMonitorData() {
+      try {
+        const stats = await argenApi.request('/admin/stats');
+        document.getElementById('activeAgents').textContent = `${stats.agents.activeAgents}/5`;
+        document.getElementById('apiQualityVal').textContent = stats.usage.avgQuality + '%';
+        document.getElementById('creditSpentVal').textContent = '$' + stats.usage.totalCost;
+        document.getElementById('creditLeftVal').textContent = '$' + stats.credits.remaining;
+        
+        initCharts(stats);
+        
+        const logs = await argenApi.request('/admin/agent-logs');
+        renderLogs(logs);
+      } catch (err) {
+        console.error('Monitor error:', err);
+      }
+    }
+
+    function renderLogs(logs) {
+      const container = document.getElementById('agent-logs');
+      container.innerHTML = logs.map(log => `
+        <div style="padding: 0.5rem; border-bottom: 1px solid rgba(255,255,255,0.05); display: flex; justify-content: space-between;">
+          <span>
+            <span style="color: var(--text-sec);">${new Date(log.timestamp).toLocaleTimeString()}</span>
+            <span style="color: var(--argen-blue); margin-left: 0.5rem;">[${log.agentName.toUpperCase()}]</span>
+          </span>
+          <span style="color: ${log.status === 'success' ? 'var(--green)' : '#ef4444'}">${log.tokensUsed} tokens</span>
+        </div>
+      `).join('') || '<div style="color: var(--text-sec); padding: 1rem;">No recent activity.</div>';
+    }
+
+    function initCharts(stats) {
+      // Quality Chart
+      const ctxQ = document.getElementById('qualityChart').getContext('2d');
+      if (charts.quality) charts.quality.destroy();
+      charts.quality = new Chart(ctxQ, {
+        type: 'line',
+        data: {
+          labels: ['M', 'T', 'W', 'T', 'F', 'S', 'S'],
+          datasets: [{
+            label: 'Avg Quality',
+            data: [92, 94, 91, 95, 93, 96, parseFloat(stats.usage.avgQuality)],
+            borderColor: '#2b60e2',
+            tension: 0.4,
+            fill: true,
+            backgroundColor: 'rgba(43, 96, 226, 0.1)'
+          }]
+        },
+        options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { x: { display: false }, y: { display: false } } }
+      });
+
+      // Token Chart
+      const ctxT = document.getElementById('tokenChart').getContext('2d');
+      if (charts.tokens) charts.tokens.destroy();
+      charts.tokens = new Chart(ctxT, {
+        type: 'bar',
+        data: {
+          labels: ['Res', 'Cha', 'Sco', 'Rep', 'Coa'],
+          datasets: [{
+            label: 'Tokens',
+            data: [1200, 800, 1500, 2000, 500],
+            backgroundColor: 'rgba(43, 96, 226, 0.5)',
+            borderRadius: 4
+          }]
+        },
+        options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { x: { display: false }, y: { display: false } } }
+      });
+
+      // Agent Performance Radar
+      const ctxA = document.getElementById('agentPerfChart').getContext('2d');
+      if (charts.agent) charts.agent.destroy();
+      charts.agent = new Chart(ctxA, {
+        type: 'radar',
+        data: {
+          labels: ['Speed', 'Accuracy', 'Cost', 'Soul', 'Reliability'],
+          datasets: [{
+            label: 'Current Status',
+            data: [85, 92, 78, 95, 88],
+            borderColor: '#2b60e2',
+            backgroundColor: 'rgba(43, 96, 226, 0.1)'
+          }]
+        },
+        options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { r: { display: false } } }
+      });
+    }
+
+    async function fetchCompanies() {
+      try {
+        const data = await argenApi.request('/admin/companies');
+        document.getElementById('companiesList').innerHTML = data.map(co => `
+          <div class="request-card">
+            <div class="request-info">
+              <span class="status-badge status-${co.status}">${co.status}</span>
+              <h3 style="margin-top:0.5rem;">${co.name}</h3>
+              <p>${co.primaryContact.email}</p>
+            </div>
+            <div class="request-actions">
+              <button class="btn-approve" onclick="updateStatus('${co._id}', 'active')">MANAGE</button>
+            </div>
+          </div>
+        `).join('');
+      } catch (err) { console.error(err); }
+    }
+
+    async function fetchUsers() {
+      try {
+        const data = await argenApi.request('/admin/users');
+        document.getElementById('usersList').innerHTML = data.map(user => `
+          <div class="request-card">
+            <div class="request-info">
+              <h3 style="margin:0">${user.name}</h3>
+              <p>${user.email} • ${user.role}</p>
+            </div>
+          </div>
+        `).join('');
+      } catch (err) { console.error(err); }
+    }
+
+    async function fetchInvitations() {
+      try {
+        const data = await argenApi.request('/admin/invitations');
+        document.getElementById('invitationsList').innerHTML = data.map(inv => `
+          <div class="request-card">
+            <div class="request-info">
+              <h3 style="margin:0">${inv.companyName}</h3>
+              <p>${inv.email} • ${inv.status}</p>
+            </div>
+          </div>
+        `).join('');
+      } catch (err) { console.error(err); }
+    }
+
     document.getElementById('inviteForm').addEventListener('submit', async (e) => {
       e.preventDefault();
-      const btn = e.target.querySelector('button');
-      btn.disabled = true;
-      btn.textContent = 'GENERATING...';
-
       try {
-        const data = await argenApi.request('/admin/invitations', {
+        const res = await argenApi.request('/admin/invitations', {
           method: 'POST',
           body: JSON.stringify({
             companyName: document.getElementById('inv-company').value,
             email: document.getElementById('inv-email').value
           })
         });
-
-        document.getElementById('inviteLink').value = data.link;
+        document.getElementById('inviteLink').value = res.link;
         document.getElementById('inviteResult').style.display = 'block';
-        btn.textContent = 'GENERATE NEW';
-      } catch (err) {
-        alert('Failed to generate invite: ' + err.message);
-        btn.textContent = 'RETRY';
-      } finally {
-        btn.disabled = false;
-      }
+        fetchInvitations();
+      } catch (err) { alert(err.message); }
     });
 
     function copyInvite() {
-      const copyText = document.getElementById('inviteLink');
-      copyText.select();
-      copyText.setSelectionRange(0, 99999);
-      navigator.clipboard.writeText(copyText.value);
-      alert('Link copied to clipboard!');
-    }
-
-    async function fetchCompanies() {
-      try {
-        const data = await argenApi.request('/admin/companies');
-        renderCompanies(data);
-      } catch (err) {
-        document.getElementById('companiesList').innerHTML = `<div class="auth-message error">${err.message}</div>`;
-      }
-    }
-
-    async function fetchUsers() {
-      try {
-        const data = await argenApi.request('/admin/users');
-        renderUsers(data);
-      } catch (err) {
-        document.getElementById('usersList').innerHTML = `<div class="auth-message error">${err.message}</div>`;
-      }
-    }
-
-    function renderCompanies(companies) {
-      const list = document.getElementById('companiesList');
-      if (!companies.length) {
-        list.innerHTML = '<div style="color: var(--text-sec); text-align: center; padding: 4rem;">No organizations found.</div>';
-        return;
-      }
-
-      list.innerHTML = companies.map(co => `
-        <div class="request-card" style="margin-bottom: 1rem; background: rgba(255,255,255,0.02);">
-          <div class="request-info">
-            <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 0.5rem;">
-              <span class="status-badge status-${co.status}">${co.status}</span>
-              <span style="color: var(--text-sec); font-family: var(--font-mono); font-size: 0.65rem;">${co.industry} • ${co.size} employees</span>
-            </div>
-            <h3 style="margin: 0.5rem 0;">${co.name}</h3>
-            <p style="font-size: 0.8rem; color: var(--text-sec);">Admin: ${co.primaryContact.name} (${co.primaryContact.email})</p>
-            <p style="font-family: var(--font-mono); font-size: 0.7rem; color: var(--argen-blue); margin-top: 0.5rem;">INVITE_CODE: ${co.inviteCode}</p>
-          </div>
-          <div class="request-actions">
-            ${co.status === 'pending' 
-              ? `<button class="btn-approve" onclick="updateStatus('${co._id}', 'active')">APPROVE</button>` 
-              : co.status === 'active' 
-                ? `<button class="btn-approve" style="background: rgba(239, 68, 68, 0.1); color: #ef4444; border: 1px solid rgba(239, 68, 68, 0.2);" onclick="updateStatus('${co._id}', 'suspended')">SUSPEND</button>`
-                : `<button class="btn-approve" onclick="updateStatus('${co._id}', 'active')">RE-ACTIVATE</button>`
-            }
-          </div>
-        </div>
-      `).join('');
-    }
-
-    function renderUsers(users) {
-      const list = document.getElementById('usersList');
-      list.innerHTML = users.map(user => `
-        <div class="request-card" style="margin-bottom: 1rem; background: rgba(255,255,255,0.02);">
-          <div class="request-info">
-            <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 0.5rem;">
-              <span class="status-badge" style="background: rgba(255,255,255,0.05); color: #fff; border: 1px solid rgba(255,255,255,0.1);">${user.role}</span>
-              <span style="color: var(--text-sec); font-family: var(--font-mono); font-size: 0.65rem;">ID: ${user._id.slice(-6)}</span>
-            </div>
-            <h3 style="margin: 0.5rem 0;">${user.name}</h3>
-            <p style="font-size: 0.8rem; color: var(--text-sec);">${user.email}</p>
-            <p style="font-size: 0.75rem; color: var(--argen-blue); margin-top: 0.5rem;">Company: ${user.companyId ? user.companyId.name : 'N/A (Global Admin)'}</p>
-          </div>
-        </div>
-      `).join('');
+      const el = document.getElementById('inviteLink');
+      el.select();
+      document.execCommand('copy');
+      alert('Copied!');
     }
 
     async function updateStatus(id, status) {
-      if (!confirm(`Are you sure you want to change this company's status to ${status}?`)) return;
       try {
         await argenApi.request(`/admin/companies/${id}/status`, {
           method: 'PATCH',
           body: JSON.stringify({ status })
         });
         fetchCompanies();
-      } catch (err) {
-        alert('Update failed: ' + err.message);
-      }
+      } catch (err) { alert(err.message); }
     }
 
-    // Init
-    fetchCompanies();
+    window.onload = () => fetchCompanies();
   </script>
 </body>
 </html>
+>

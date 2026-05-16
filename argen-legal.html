@@ -1,0 +1,1684 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Legal Documents — ArGen</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=DM+Mono:wght@300;400;500&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --deep-blue: #0F1D2E;
+    --fresh-emerald: #1DB88A;
+    --soft-purple: #7B61FF;
+    --cyan-glow: #22D3EE;
+    --soft-white: #F6F5F0;
+    --warm-white: #FAFAF7;
+    --text-primary: #0F1D2E;
+    --text-secondary: #4A5568;
+    --text-muted: #8A9BB0;
+    --border: #E2E8F0;
+    --border-light: #EDF2F7;
+    --accent-line: #1DB88A;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--warm-white);
+    color: var(--text-primary);
+    font-size: 15px;
+    line-height: 1.7;
+  }
+
+  /* ── NAV ── */
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+    background: rgba(246, 245, 240, 0.96);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border);
+    padding: 0 48px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 64px;
+  }
+
+  .nav-brand {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    text-decoration: none;
+  }
+
+  .nav-logo-mark {
+    width: 32px;
+    height: 32px;
+  }
+
+  .nav-wordmark {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 22px;
+    font-weight: 600;
+    color: var(--deep-blue);
+    letter-spacing: 0.04em;
+  }
+
+  .nav-badge {
+    font-family: 'DM Mono', monospace;
+    font-size: 9px;
+    font-weight: 500;
+    color: var(--text-muted);
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    border: 1px solid var(--border);
+    padding: 2px 8px;
+    border-radius: 2px;
+  }
+
+  /* ── SIDEBAR ── */
+  .layout {
+    display: flex;
+    min-height: 100vh;
+    padding-top: 64px;
+  }
+
+  .sidebar {
+    width: 280px;
+    flex-shrink: 0;
+    position: sticky;
+    top: 64px;
+    height: calc(100vh - 64px);
+    overflow-y: auto;
+    border-right: 1px solid var(--border);
+    background: var(--soft-white);
+    padding: 40px 0;
+  }
+
+  .sidebar-section {
+    margin-bottom: 8px;
+  }
+
+  .sidebar-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 9px;
+    font-weight: 500;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    padding: 0 28px 8px;
+    display: block;
+    margin-top: 24px;
+  }
+
+  .sidebar-link {
+    display: block;
+    padding: 8px 28px;
+    text-decoration: none;
+    color: var(--text-secondary);
+    font-size: 13.5px;
+    font-weight: 400;
+    transition: all 0.15s ease;
+    border-left: 2px solid transparent;
+  }
+
+  .sidebar-link:hover,
+  .sidebar-link.active {
+    color: var(--deep-blue);
+    border-left-color: var(--fresh-emerald);
+    background: rgba(29, 184, 138, 0.05);
+  }
+
+  .sidebar-link.doc-link {
+    font-weight: 500;
+    font-size: 14px;
+    color: var(--text-primary);
+    padding: 10px 28px;
+  }
+
+  /* ── MAIN ── */
+  .main {
+    flex: 1;
+    max-width: 900px;
+    padding: 64px 72px 120px;
+  }
+
+  /* ── HERO ── */
+  .hero {
+    margin-bottom: 72px;
+    padding-bottom: 48px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .hero-eyebrow {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--fresh-emerald);
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .hero-eyebrow::before {
+    content: '';
+    display: inline-block;
+    width: 24px;
+    height: 1px;
+    background: var(--fresh-emerald);
+  }
+
+  .hero h1 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 52px;
+    font-weight: 300;
+    line-height: 1.1;
+    color: var(--deep-blue);
+    margin-bottom: 20px;
+    letter-spacing: -0.01em;
+  }
+
+  .hero h1 em {
+    font-style: italic;
+    color: var(--text-muted);
+  }
+
+  .hero-meta {
+    display: flex;
+    gap: 32px;
+    flex-wrap: wrap;
+  }
+
+  .meta-item {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+
+  .meta-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+  }
+
+  .meta-value {
+    font-size: 13.5px;
+    color: var(--text-secondary);
+    font-weight: 400;
+  }
+
+  /* ── DOCUMENT SECTIONS ── */
+  .doc-section {
+    margin-bottom: 96px;
+    scroll-margin-top: 88px;
+  }
+
+  .doc-header {
+    display: flex;
+    align-items: flex-start;
+    gap: 20px;
+    margin-bottom: 40px;
+    padding-bottom: 24px;
+    border-bottom: 1px solid var(--border-light);
+  }
+
+  .doc-number {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    color: var(--text-muted);
+    min-width: 32px;
+    padding-top: 8px;
+  }
+
+  .doc-title-group h2 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 36px;
+    font-weight: 400;
+    color: var(--deep-blue);
+    line-height: 1.2;
+    margin-bottom: 6px;
+  }
+
+  .doc-title-group .doc-subtitle {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--fresh-emerald);
+  }
+
+  /* ── CONTENT TYPOGRAPHY ── */
+  .clause {
+    margin-bottom: 36px;
+  }
+
+  .clause h3 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 20px;
+    font-weight: 600;
+    color: var(--deep-blue);
+    margin-bottom: 12px;
+    padding-left: 16px;
+    border-left: 2px solid var(--border);
+  }
+
+  .clause h4 {
+    font-size: 13px;
+    font-weight: 500;
+    letter-spacing: 0.04em;
+    color: var(--text-secondary);
+    margin: 16px 0 8px;
+    text-transform: uppercase;
+    font-family: 'DM Mono', monospace;
+    font-size: 10.5px;
+  }
+
+  .clause p {
+    color: var(--text-secondary);
+    margin-bottom: 12px;
+    font-size: 14.5px;
+  }
+
+  .clause ul, .clause ol {
+    margin: 8px 0 16px 20px;
+    color: var(--text-secondary);
+    font-size: 14.5px;
+  }
+
+  .clause li {
+    margin-bottom: 6px;
+    padding-left: 4px;
+  }
+
+  /* ── CALLOUT BOXES ── */
+  .callout {
+    padding: 20px 24px;
+    border-radius: 2px;
+    margin: 20px 0;
+    font-size: 14px;
+  }
+
+  .callout-notice {
+    background: rgba(29, 184, 138, 0.06);
+    border: 1px solid rgba(29, 184, 138, 0.2);
+    border-left: 3px solid var(--fresh-emerald);
+  }
+
+  .callout-warning {
+    background: rgba(255, 196, 80, 0.06);
+    border: 1px solid rgba(255, 196, 80, 0.25);
+    border-left: 3px solid #F59E0B;
+  }
+
+  .callout-info {
+    background: rgba(123, 97, 255, 0.05);
+    border: 1px solid rgba(123, 97, 255, 0.15);
+    border-left: 3px solid var(--soft-purple);
+  }
+
+  .callout-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    margin-bottom: 6px;
+    font-weight: 500;
+  }
+
+  .callout-notice .callout-label { color: var(--fresh-emerald); }
+  .callout-warning .callout-label { color: #D97706; }
+  .callout-info .callout-label { color: var(--soft-purple); }
+
+  /* ── DATA TABLE ── */
+  .data-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 16px 0 24px;
+    font-size: 13.5px;
+  }
+
+  .data-table th {
+    font-family: 'DM Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    text-align: left;
+    padding: 10px 14px;
+    border-bottom: 1px solid var(--border);
+    font-weight: 500;
+    background: var(--soft-white);
+  }
+
+  .data-table td {
+    padding: 10px 14px;
+    border-bottom: 1px solid var(--border-light);
+    color: var(--text-secondary);
+    vertical-align: top;
+  }
+
+  .data-table tr:last-child td { border-bottom: none; }
+
+  .data-table td:first-child {
+    font-weight: 500;
+    color: var(--text-primary);
+    white-space: nowrap;
+  }
+
+  /* ── COOKIE TOGGLES ── */
+  .cookie-category {
+    border: 1px solid var(--border);
+    border-radius: 2px;
+    margin-bottom: 12px;
+    overflow: hidden;
+  }
+
+  .cookie-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 16px 20px;
+    background: var(--soft-white);
+  }
+
+  .cookie-name {
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--text-primary);
+  }
+
+  .cookie-desc {
+    font-size: 13px;
+    color: var(--text-muted);
+    margin-top: 2px;
+  }
+
+  .cookie-badge {
+    font-family: 'DM Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    padding: 3px 10px;
+    border-radius: 2px;
+    white-space: nowrap;
+  }
+
+  .badge-required {
+    background: rgba(15, 29, 46, 0.08);
+    color: var(--deep-blue);
+  }
+
+  .badge-optional {
+    background: rgba(29, 184, 138, 0.1);
+    color: var(--fresh-emerald);
+  }
+
+  .cookie-body {
+    padding: 0 20px 16px;
+    border-top: 1px solid var(--border-light);
+  }
+
+  /* ── RIGHTS GRID ── */
+  .rights-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin: 16px 0;
+  }
+
+  .right-card {
+    padding: 20px;
+    border: 1px solid var(--border);
+    border-radius: 2px;
+    background: var(--soft-white);
+  }
+
+  .right-icon {
+    font-size: 20px;
+    margin-bottom: 10px;
+    display: block;
+  }
+
+  .right-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 17px;
+    font-weight: 600;
+    color: var(--deep-blue);
+    margin-bottom: 6px;
+  }
+
+  .right-desc {
+    font-size: 13px;
+    color: var(--text-muted);
+    line-height: 1.5;
+  }
+
+  /* ── DIVIDER ── */
+  .section-divider {
+    height: 1px;
+    background: linear-gradient(to right, var(--fresh-emerald), transparent);
+    margin: 72px 0;
+    opacity: 0.3;
+  }
+
+  /* ── FOOTER ── */
+  .doc-footer {
+    margin-top: 80px;
+    padding: 40px 0;
+    border-top: 1px solid var(--border);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 16px;
+  }
+
+  .footer-brand {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 18px;
+    font-weight: 500;
+    color: var(--deep-blue);
+  }
+
+  .footer-note {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.08em;
+    color: var(--text-muted);
+  }
+
+  /* ── COOKIE BANNER ── */
+  .cookie-banner {
+    position: fixed;
+    bottom: 0; left: 0; right: 0;
+    background: var(--deep-blue);
+    color: white;
+    padding: 20px 48px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 24px;
+    z-index: 999;
+    transform: translateY(0);
+    transition: transform 0.4s ease;
+    flex-wrap: wrap;
+  }
+
+  .cookie-banner.dismissed {
+    transform: translateY(120%);
+  }
+
+  .cookie-banner-text {
+    font-size: 13.5px;
+    color: rgba(255,255,255,0.8);
+    max-width: 600px;
+    line-height: 1.5;
+  }
+
+  .cookie-banner-text a {
+    color: var(--fresh-emerald);
+    text-decoration: none;
+  }
+
+  .cookie-banner-actions {
+    display: flex;
+    gap: 10px;
+    flex-shrink: 0;
+  }
+
+  .btn {
+    padding: 9px 20px;
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    cursor: pointer;
+    border: none;
+    border-radius: 1px;
+    transition: all 0.15s ease;
+  }
+
+  .btn-accept {
+    background: var(--fresh-emerald);
+    color: white;
+  }
+
+  .btn-accept:hover { background: #18a077; }
+
+  .btn-decline {
+    background: transparent;
+    color: rgba(255,255,255,0.6);
+    border: 1px solid rgba(255,255,255,0.2);
+  }
+
+  .btn-decline:hover {
+    color: white;
+    border-color: rgba(255,255,255,0.5);
+  }
+
+  .btn-settings {
+    background: transparent;
+    color: rgba(255,255,255,0.5);
+    padding: 9px 0;
+    text-decoration: underline;
+    text-decoration-color: rgba(255,255,255,0.2);
+  }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 1024px) {
+    .sidebar { display: none; }
+    .main { padding: 48px 32px 80px; max-width: 100%; }
+    nav { padding: 0 24px; }
+    .hero h1 { font-size: 40px; }
+    .rights-grid { grid-template-columns: 1fr; }
+  }
+
+  @media (max-width: 640px) {
+    .cookie-banner { padding: 20px 24px; flex-direction: column; align-items: flex-start; }
+    .main { padding: 32px 20px 64px; }
+    .hero h1 { font-size: 32px; }
+  }
+
+  /* ── INLINE CODE ── */
+  code {
+    font-family: 'DM Mono', monospace;
+    font-size: 12.5px;
+    background: var(--border-light);
+    padding: 2px 6px;
+    border-radius: 2px;
+    color: var(--soft-purple);
+  }
+
+  strong {
+    font-weight: 500;
+    color: var(--text-primary);
+  }
+
+  a {
+    color: var(--fresh-emerald);
+    text-decoration: none;
+  }
+
+  a:hover { text-decoration: underline; }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a href="#" class="nav-brand">
+    <svg class="nav-logo-mark" viewBox="0 0 32 32" fill="none">
+      <polygon points="16,2 30,28 2,28" fill="#0F1D2E" opacity="0.9"/>
+      <polygon points="16,6 27,26 5,26" fill="none" stroke="#1DB88A" stroke-width="1"/>
+      <circle cx="16" cy="24" r="2.5" fill="#7B61FF"/>
+    </svg>
+    <span class="nav-wordmark">ArGen</span>
+  </a>
+  <div style="display:flex;align-items:center;gap:16px;">
+    <span class="nav-badge">Legal Documents</span>
+    <span style="font-family:'DM Mono',monospace;font-size:10px;color:var(--text-muted);">v2.1 — May 2026</span>
+  </div>
+</nav>
+
+<!-- LAYOUT -->
+<div class="layout">
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <span class="sidebar-label">Documents</span>
+    <a href="#terms" class="sidebar-link doc-link">Terms of Service</a>
+    <a href="#privacy" class="sidebar-link doc-link">Privacy Policy</a>
+    <a href="#cookies" class="sidebar-link doc-link">Cookie Policy</a>
+    <a href="#dpa" class="sidebar-link doc-link">Data Processing Agreement</a>
+    <a href="#acceptable-use" class="sidebar-link doc-link">Acceptable Use</a>
+    <a href="#sla" class="sidebar-link doc-link">Service Level Agreement</a>
+    <a href="#gdpr" class="sidebar-link doc-link">GDPR Compliance</a>
+
+    <span class="sidebar-label">Terms — Sections</span>
+    <a href="#t-definitions" class="sidebar-link">1. Definitions</a>
+    <a href="#t-services" class="sidebar-link">2. Services</a>
+    <a href="#t-accounts" class="sidebar-link">3. Accounts</a>
+    <a href="#t-payment" class="sidebar-link">4. Payment</a>
+    <a href="#t-data" class="sidebar-link">5. Data</a>
+    <a href="#t-ip" class="sidebar-link">6. Intellectual Property</a>
+    <a href="#t-liability" class="sidebar-link">7. Liability</a>
+    <a href="#t-termination" class="sidebar-link">8. Termination</a>
+
+    <span class="sidebar-label">Quick Links</span>
+    <a href="mailto:legal@argen.ai" class="sidebar-link">legal@argen.ai</a>
+    <a href="mailto:privacy@argen.ai" class="sidebar-link">privacy@argen.ai</a>
+    <a href="mailto:dpo@argen.ai" class="sidebar-link">dpo@argen.ai</a>
+  </aside>
+
+  <!-- MAIN CONTENT -->
+  <main class="main">
+
+    <!-- HERO -->
+    <div class="hero">
+      <div class="hero-eyebrow">Legal & Compliance</div>
+      <h1>ArGen <em>Legal</em><br>Documentation</h1>
+      <div class="hero-meta">
+        <div class="meta-item">
+          <span class="meta-label">Effective Date</span>
+          <span class="meta-value">1 June 2026</span>
+        </div>
+        <div class="meta-item">
+          <span class="meta-label">Version</span>
+          <span class="meta-value">2.1</span>
+        </div>
+        <div class="meta-item">
+          <span class="meta-label">Last Revised</span>
+          <span class="meta-value">14 May 2026</span>
+        </div>
+        <div class="meta-item">
+          <span class="meta-label">Governing Law</span>
+          <span class="meta-value">India / Delaware (USA)</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- ════════════════════════════════════════
+         TERMS OF SERVICE
+    ════════════════════════════════════════ -->
+    <section class="doc-section" id="terms">
+      <div class="doc-header">
+        <span class="doc-number">01</span>
+        <div class="doc-title-group">
+          <h2>Terms of Service</h2>
+          <span class="doc-subtitle">Binding Agreement — All Users</span>
+        </div>
+      </div>
+
+      <div class="callout callout-warning">
+        <div class="callout-label">Important Notice</div>
+        These Terms constitute a legally binding agreement between you and ArGen ("Company," "we," "us," "our"). By accessing or using ArGen's platform, evaluations, reports, or any related services, you unconditionally accept these Terms. If you do not agree, you must immediately discontinue use.
+      </div>
+
+      <div class="clause" id="t-definitions">
+        <h3>1. Definitions</h3>
+        <p>For the purposes of these Terms:</p>
+        <ul>
+          <li><strong>"Platform"</strong> means ArGen's web-based AI performance evaluation system, including all applications, APIs, interfaces, dashboards, and associated infrastructure.</li>
+          <li><strong>"Evaluation"</strong> means any automated audit or assessment of Content conducted through the Platform to measure quality, compliance, and constraint adherence.</li>
+          <li><strong>"Client"</strong> means the business entity or individual that purchases or accesses Evaluations.</li>
+          <li><strong>"Submitter"</strong> means any individual or automated system that submits Content for Evaluation through the Platform.</li>
+          <li><strong>"Report"</strong> means any output generated by ArGen containing scored metrics, benchmark comparisons, analysis, or recommendations.</li>
+          <li><strong>"AI Scoring Engine"</strong> means ArGen's proprietary deterministic evaluation system powered by large language model APIs.</li>
+          <li><strong>"Benchmark Data"</strong> means aggregated, anonymised performance metrics compiled across multiple Clients and industries.</li>
+          <li><strong>"Subscription"</strong> means a recurring payment agreement granting ongoing access to Platform features.</li>
+          <li><strong>"Content"</strong> means any text, data, documents, files, or information submitted to the Platform for Evaluation.</li>
+          <li><strong>"Personal Data"</strong> has the meaning ascribed under applicable data protection legislation, including the GDPR, DPDPA 2023, and equivalent laws.</li>
+        </ul>
+      </div>
+
+      <div class="clause" id="t-services">
+        <h3>2. Description of Services</h3>
+        <p>ArGen provides an Autonomous AI Audit and Quality Assurance platform that enables organisations to independently evaluate and score documents, proposals, and AI-generated outputs. Core Services include:</p>
+        <ul>
+          <li>Automated ingestion and auditing of Content against Client-defined rubrics and constraints</li>
+          <li>AI-powered scoring of Content across dimensions such as clarity, constraint application, and specificity</li>
+          <li>Generation and delivery of detailed evaluation Reports</li>
+          <li>Industry benchmark comparisons against anonymised aggregate data</li>
+          <li>Operational recommendations based on evaluation outcomes</li>
+        </ul>
+
+        <div class="callout callout-info">
+          <div class="callout-label">Service Scope Clarification</div>
+          ArGen is an independent auditing and intelligence platform. Services do not constitute legal advice, regulatory compliance certification, or guaranteed defect detection. Reports are intended for operational intelligence and quality assurance purposes only.
+        </div>
+
+        <h4>2.1 Service Modifications</h4>
+        <p>ArGen reserves the right to modify, suspend, or discontinue any aspect of the Services at any time with thirty (30) days' written notice, except in cases of emergency, legal obligation, or third-party API unavailability (including underlying AI model providers). Material changes to core functionality will be communicated via email to registered account holders.</p>
+
+        <h4>2.2 Beta Features</h4>
+        <p>Certain features may be designated as "Beta," "Preview," or "Experimental." These are provided as-is, without warranty, and may be discontinued without notice. Beta features are excluded from any SLA commitments.</p>
+
+        <h4>2.3 Third-Party Dependencies</h4>
+        <p>The Platform integrates with third-party services including Anthropic's Claude API, Airtable, Make.com, Tally.so, and Gmail. ArGen does not warrant the availability, accuracy, or continuity of third-party services. Interruptions caused by third-party providers do not constitute a breach of these Terms.</p>
+      </div>
+
+      <div class="clause" id="t-accounts">
+        <h3>3. Account Registration & Eligibility</h3>
+
+        <h4>3.1 Eligibility</h4>
+        <p>You must be at least eighteen (18) years of age to create an account or use the Services. By registering, you represent that you have full authority to enter into these Terms on behalf of yourself or any organisation you represent.</p>
+
+        <h4>3.2 Account Accuracy</h4>
+        <p>You agree to provide accurate, current, and complete information during registration and to promptly update such information if it changes. ArGen may suspend or terminate accounts based on inaccurate information.</p>
+
+        <h4>3.3 Account Security</h4>
+        <p>You are solely responsible for maintaining the confidentiality of your login credentials and for all activity conducted through your account. You must notify ArGen immediately at <a href="mailto:security@argen.ai">security@argen.ai</a> upon discovering any unauthorised access or breach of account security.</p>
+
+        <h4>3.4 Organisational Accounts</h4>
+        <p>Where a Client registers on behalf of an organisation, the individual registering warrants that they have authority to bind the organisation to these Terms. The organisation shall be jointly and severally liable for all obligations under these Terms.</p>
+      </div>
+
+      <div class="clause" id="t-payment">
+        <h3>4. Fees, Payment & Refunds</h3>
+
+        <h4>4.1 Fee Structure</h4>
+        <p>Services are offered on a per-evaluation or Subscription basis. Current pricing is published on argen.ai/pricing and is subject to change. All fees are exclusive of applicable taxes unless stated otherwise.</p>
+
+        <h4>4.2 Payment Terms</h4>
+        <p>All payments are due in advance of service delivery. Subscription fees are billed at the start of each billing cycle. Payment is accepted via Stripe (credit/debit card, bank transfer) or Razorpay for India-based Clients. Invoices are issued digitally.</p>
+
+        <h4>4.3 Late Payments</h4>
+        <p>Invoices not settled within seven (7) days of the due date may attract late payment charges of 1.5% per month on the outstanding balance, or the maximum rate permitted by applicable law, whichever is lower. ArGen reserves the right to suspend Services for accounts with overdue balances.</p>
+
+        <h4>4.4 Refund Policy</h4>
+        <ul>
+          <li><strong>Free Pilots:</strong> No payment, no refund applicable.</li>
+          <li><strong>Paid Evaluations — Pre-Delivery:</strong> Full refund if requested before Evaluation processing begins.</li>
+          <li><strong>Paid Evaluations — Post-Issuance:</strong> 50% refund if fewer than 30% of the purchased Evaluation volume has been utilised. No refund if 30% or more has been utilised.</li>
+          <li><strong>Paid Evaluations — Post-Report Delivery:</strong> No refund. Disputes regarding Report accuracy may be raised within fourteen (14) days of delivery and will result in a free re-evaluation if scoring error is confirmed.</li>
+          <li><strong>Subscriptions:</strong> Cancellation takes effect at the end of the current billing period. No partial refunds for unused time within a billing cycle.</li>
+        </ul>
+
+        <h4>4.5 Taxes</h4>
+        <p>Clients are responsible for all applicable taxes, duties, and levies imposed by government authorities in their jurisdiction, including GST (India) and VAT (EU). ArGen will charge applicable taxes where legally required and issue compliant tax invoices.</p>
+      </div>
+
+      <div class="clause" id="t-data">
+        <h3>5. Data Ownership & Use</h3>
+
+        <h4>5.1 Client Content Ownership</h4>
+        <p>Clients retain full ownership of all Content submitted to the Platform. ArGen claims no ownership over Client-submitted Content.</p>
+
+        <h4>5.2 Licence Granted to ArGen</h4>
+        <p>By submitting Content, Clients grant ArGen a limited, non-exclusive, royalty-free licence to process, analyse, and use such Content solely for the purpose of:</p>
+        <ul>
+          <li>Delivering the Services purchased</li>
+          <li>Generating Reports and scoring outputs</li>
+          <li>Improving the AI Scoring Engine (using anonymised, aggregated data only)</li>
+          <li>Compiling anonymised Benchmark Data</li>
+        </ul>
+        <p>This licence terminates upon account deletion, subject to data retention obligations.</p>
+
+        <h4>5.3 Benchmark Data</h4>
+        <p>ArGen may compile anonymised, aggregated metrics derived from evaluations across all Clients to produce Benchmark Data. Benchmark Data contains no individually identifiable information and no company-identifiable information. ArGen owns all Benchmark Data and may publish, licence, or commercialise it freely.</p>
+
+        <h4>5.4 Prohibited Data</h4>
+        <p>Clients must not submit to the Platform any data classified as: special category personal data under GDPR Article 9 (health, biometric, political, religious, sexual orientation data); data subject to attorney-client privilege; classified government information; or data whose submission would violate any applicable law or third-party agreement.</p>
+      </div>
+
+      <div class="clause" id="t-ip">
+        <h3>6. Intellectual Property</h3>
+
+        <h4>6.1 ArGen Proprietary IP</h4>
+        <p>All components of the Platform are the exclusive intellectual property of ArGen, including but not limited to: the AI Scoring Engine and rubric; evaluation framework; report templates and design; scoring algorithms; Benchmark Data; brand assets, trademarks, and trade dress; and all software, code, and infrastructure.</p>
+
+        <h4>6.2 No Reverse Engineering</h4>
+        <p>Clients and Submitters must not attempt to reverse engineer, decompile, disassemble, extract, or replicate any component of the Platform, including the scoring rubric, system prompts, or evaluation methodology.</p>
+
+        <h4>6.3 Feedback</h4>
+        <p>Any feedback, suggestions, or ideas provided to ArGen regarding the Platform become the property of ArGen and may be used without compensation or attribution.</p>
+
+        <h4>6.4 Trademarks</h4>
+        <p>"ArGen," "ArGen Performance Intelligence," and associated logos are trademarks of ArGen. Use of these marks without prior written consent is prohibited.</p>
+      </div>
+
+      <div class="clause" id="t-liability">
+        <h3>7. Warranties, Disclaimers & Limitation of Liability</h3>
+
+        <h4>7.1 Service Warranty</h4>
+        <p>ArGen warrants that it will provide the Services with reasonable skill and care consistent with industry standards. ArGen does not warrant that the Services will be error-free, uninterrupted, or produce any particular outcome for any Client or Submitter.</p>
+
+        <h4>7.2 AI Scoring Disclaimer</h4>
+        <p>The AI Scoring Engine produces probabilistic assessments. Scores are intended as objective metrics based on defined rubrics and are not infallible determinations of individual capability. Clients acknowledge that AI-generated scores may contain inaccuracies and agree not to rely solely on ArGen Reports for consequential employment or business decisions without independent verification.</p>
+
+        <h4>7.3 Disclaimer of Warranties</h4>
+        <p>To the maximum extent permitted by law, the Services are provided "as is" and "as available." ArGen disclaims all implied warranties, including merchantability, fitness for a particular purpose, and non-infringement.</p>
+
+        <h4>7.4 Limitation of Liability</h4>
+        <p>To the fullest extent permitted by applicable law:</p>
+        <ul>
+          <li>ArGen's total aggregate liability arising from or related to these Terms shall not exceed the greater of: (a) the total fees paid by the Client in the twelve (12) months preceding the claim, or (b) USD $500.</li>
+          <li>ArGen shall not be liable for any indirect, incidental, special, consequential, exemplary, or punitive damages, including loss of profits, revenue, data, goodwill, or business opportunities.</li>
+          <li>These limitations apply regardless of the legal theory on which any claim is based.</li>
+        </ul>
+
+        <h4>7.5 Indemnification</h4>
+        <p>Clients agree to indemnify, defend, and hold harmless ArGen, its officers, employees, and agents from any claims, damages, liabilities, and expenses (including legal fees) arising from: Client's breach of these Terms; misuse of the Platform; violation of third-party rights; or any procurement, vendor selection, or operational decisions made based on ArGen Reports.</p>
+      </div>
+
+      <div class="clause" id="t-termination">
+        <h3>8. Term & Termination</h3>
+
+        <h4>8.1 Duration</h4>
+        <p>These Terms take effect upon account creation or first use of the Services and continue until terminated.</p>
+
+        <h4>8.2 Termination by Client</h4>
+        <p>Clients may terminate their account at any time via written notice to <a href="mailto:support@argen.ai">support@argen.ai</a>. Termination does not entitle Clients to refunds except as provided in Section 4.4.</p>
+
+        <h4>8.3 Termination by ArGen</h4>
+        <p>ArGen may terminate or suspend access immediately and without notice if the Client:</p>
+        <ul>
+          <li>Breaches any material term of these Terms</li>
+          <li>Fails to pay fees within 30 days of the due date</li>
+          <li>Uses the Services for unlawful purposes</li>
+          <li>Engages in conduct that could expose ArGen to liability or reputational harm</li>
+        </ul>
+
+        <h4>8.4 Effects of Termination</h4>
+        <p>Upon termination, access to the Platform is immediately revoked. ArGen will retain Client data for 30 days post-termination to allow data export requests. After 30 days, data will be deleted in accordance with the Privacy Policy, except for data retained pursuant to legal obligations.</p>
+
+        <h4>8.5 Survival</h4>
+        <p>Sections 5, 6, 7, 9, and 10 survive termination of these Terms.</p>
+      </div>
+
+      <div class="clause">
+        <h3>9. Governing Law & Dispute Resolution</h3>
+
+        <h4>9.1 Governing Law</h4>
+        <p>These Terms are governed by the laws of India for Clients domiciled in India, and the laws of the State of Delaware, USA, for all other Clients, without regard to conflict of laws provisions.</p>
+
+        <h4>9.2 Dispute Resolution</h4>
+        <p>Before initiating formal proceedings, parties agree to attempt good-faith negotiation for thirty (30) days. If unresolved, disputes shall be referred to binding arbitration conducted by a mutually agreed sole arbitrator under applicable arbitration rules. Arbitration shall be conducted in English.</p>
+
+        <h4>9.3 Class Action Waiver</h4>
+        <p>You waive any right to participate in class action litigation or class-wide arbitration against ArGen. Each dispute must be brought individually.</p>
+
+        <h4>9.4 Jurisdiction</h4>
+        <p>For matters not subject to arbitration, parties submit to the exclusive jurisdiction of courts in Bengaluru, India (for India-domiciled Clients) or the state and federal courts of Delaware, USA (for all others).</p>
+      </div>
+
+      <div class="clause">
+        <h3>10. General Provisions</h3>
+        <ul>
+          <li><strong>Entire Agreement:</strong> These Terms, together with the Privacy Policy, DPA, and any executed order forms, constitute the entire agreement between the parties.</li>
+          <li><strong>Amendments:</strong> ArGen may update these Terms by posting the revised version to argen.ai/legal. Continued use after thirty (30) days of notice constitutes acceptance.</li>
+          <li><strong>Severability:</strong> If any provision is found unenforceable, it shall be modified to the minimum extent necessary to make it enforceable. All other provisions remain in full force.</li>
+          <li><strong>Waiver:</strong> Failure to enforce any provision does not constitute a waiver of future enforcement rights.</li>
+          <li><strong>Force Majeure:</strong> ArGen shall not be liable for delays or failures caused by events beyond reasonable control, including natural disasters, cyberattacks, third-party API outages, government action, or pandemic.</li>
+          <li><strong>Assignment:</strong> Clients may not assign these Terms without prior written consent. ArGen may assign these Terms in connection with a merger, acquisition, or sale of assets.</li>
+          <li><strong>Contact:</strong> Legal notices must be sent to <a href="mailto:legal@argen.ai">legal@argen.ai</a>.</li>
+        </ul>
+      </div>
+    </section>
+
+    <div class="section-divider"></div>
+
+    <!-- ════════════════════════════════════════
+         PRIVACY POLICY
+    ════════════════════════════════════════ -->
+    <section class="doc-section" id="privacy">
+      <div class="doc-header">
+        <span class="doc-number">02</span>
+        <div class="doc-title-group">
+          <h2>Privacy Policy</h2>
+          <span class="doc-subtitle">GDPR · DPDPA 2023 · CCPA · PIPL Compliant</span>
+        </div>
+      </div>
+
+      <div class="callout callout-notice">
+        <div class="callout-label">Summary</div>
+        ArGen collects minimal personal data necessary to deliver evaluation services. We do not sell personal data. We do not use Submitter data for advertising. All data is processed with a lawful basis and subject to your rights below.
+      </div>
+
+      <div class="clause">
+        <h3>1. Data Controller Identity</h3>
+        <p>The data controller for all personal data processed through the Platform is:</p>
+        <table class="data-table">
+          <tr><td>Entity</td><td>ArGen (Legal entity details on request)</td></tr>
+          <tr><td>Contact</td><td><a href="mailto:privacy@argen.ai">privacy@argen.ai</a></td></tr>
+          <tr><td>DPO</td><td><a href="mailto:dpo@argen.ai">dpo@argen.ai</a></td></tr>
+          <tr><td>EU Representative</td><td>Available upon request for GDPR purposes</td></tr>
+        </table>
+        <p>Where a Client acts as a separate data controller for their Submitters' data (e.g. as an employer), the Client and ArGen are joint controllers or independent controllers depending on context, as detailed in the Data Processing Agreement.</p>
+      </div>
+
+      <div class="clause">
+        <h3>2. Data We Collect</h3>
+
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>Category</th>
+              <th>Data Elements</th>
+              <th>Source</th>
+              <th>Legal Basis</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Account Data</td>
+              <td>Name, email, company name, phone, billing address</td>
+              <td>Client registration</td>
+              <td>Contract performance</td>
+            </tr>
+            <tr>
+              <td>Submitter Identity</td>
+              <td>Full name, email, job role, department, years of experience</td>
+              <td>Evaluation form submission</td>
+              <td>Contract performance / Legitimate interest</td>
+            </tr>
+            <tr>
+              <td>Evaluation Content</td>
+              <td>Content responses (text), process notes, completion time, device/browser metadata</td>
+              <td>Evaluation form submission</td>
+              <td>Contract performance</td>
+            </tr>
+            <tr>
+              <td>Scoring Data</td>
+              <td>AI-generated scores, justifications, dimension breakdowns</td>
+              <td>ArGen AI Scoring Engine</td>
+              <td>Contract performance</td>
+            </tr>
+            <tr>
+              <td>Technical Data</td>
+              <td>IP address, device type, browser, session timestamps, webhook payloads</td>
+              <td>Automatic collection</td>
+              <td>Legitimate interest (security, fraud prevention)</td>
+            </tr>
+            <tr>
+              <td>Payment Data</td>
+              <td>Billing details, payment method (tokenised — not stored raw)</td>
+              <td>Stripe / Razorpay</td>
+              <td>Contract performance / Legal obligation</td>
+            </tr>
+            <tr>
+              <td>Communications</td>
+              <td>Support emails, feedback forms, call recordings (with consent)</td>
+              <td>Client/Submitter communication</td>
+              <td>Legitimate interest / Consent</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <h4>Data We Do Not Collect</h4>
+        <p>ArGen does not collect special category data under GDPR Article 9, including: racial or ethnic origin, political opinions, religious beliefs, trade union membership, genetic data, biometric data for identification, health data, or sexual orientation.</p>
+      </div>
+
+      <div class="clause">
+        <h3>3. How We Use Data</h3>
+        <ul>
+          <li><strong>Service Delivery:</strong> Processing evaluations, generating scores, producing Reports, sending notifications.</li>
+          <li><strong>Account Management:</strong> Registration, billing, customer support, account communications.</li>
+          <li><strong>Product Improvement:</strong> Using anonymised aggregate data to improve scoring accuracy and benchmark quality.</li>
+          <li><strong>Security & Fraud Prevention:</strong> Detecting abuse, protecting Platform integrity, preventing unauthorised access.</li>
+          <li><strong>Legal Compliance:</strong> Meeting obligations under applicable laws, responding to lawful government requests.</li>
+          <li><strong>Benchmarking:</strong> Compiling anonymised industry performance data (no individual data is identifiable in any benchmark output).</li>
+        </ul>
+        <p>ArGen does not use personal data for: advertising, selling to third parties, automated decision-making that produces legal or similarly significant effects without human review, or profiling unrelated to evaluation performance.</p>
+      </div>
+
+      <div class="clause">
+        <h3>4. Data Sharing & Third Parties</h3>
+
+        <table class="data-table">
+          <thead>
+            <tr><th>Recipient</th><th>Purpose</th><th>Data Shared</th><th>Safeguards</th></tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Anthropic (Claude API)</td>
+              <td>AI scoring engine</td>
+              <td>Prompt text + response text only (no PII)</td>
+              <td>DPA, SOC 2, GDPR compliance</td>
+            </tr>
+            <tr>
+              <td>Airtable</td>
+              <td>Database storage</td>
+              <td>All evaluation data</td>
+              <td>DPA, SOC 2 Type II</td>
+            </tr>
+            <tr>
+              <td>Make.com</td>
+              <td>Workflow automation</td>
+              <td>Webhook payloads (evaluation data)</td>
+              <td>DPA, EU-US Data Privacy Framework</td>
+            </tr>
+            <tr>
+              <td>Tally.so</td>
+              <td>Form delivery</td>
+              <td>Submitter responses at submission</td>
+              <td>DPA, GDPR compliant</td>
+            </tr>
+            <tr>
+              <td>Stripe / Razorpay</td>
+              <td>Payment processing</td>
+              <td>Billing data only</td>
+              <td>PCI-DSS Level 1</td>
+            </tr>
+            <tr>
+              <td>Google (Gmail / Drive)</td>
+              <td>Email delivery, file storage</td>
+              <td>Report PDFs, email content</td>
+              <td>DPA, ISO 27001</td>
+            </tr>
+            <tr>
+              <td>Calendly</td>
+              <td>Scheduling</td>
+              <td>Name, email for booked calls</td>
+              <td>DPA, GDPR compliant</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <p>ArGen will disclose personal data to law enforcement or government authorities only when required by law, pursuant to a valid court order, or to protect the rights, safety, or property of ArGen or others.</p>
+      </div>
+
+      <div class="clause">
+        <h3>5. Data Retention</h3>
+        <table class="data-table">
+          <thead>
+            <tr><th>Data Type</th><th>Retention Period</th><th>Basis</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>Raw Content responses (text)</td><td>90 days from submission</td><td>Minimum necessary for delivery</td></tr>
+            <tr><td>Scores and justifications (anonymised)</td><td>Indefinite</td><td>Benchmark data / product IP</td></tr>
+            <tr><td>Submitter PII (name, email)</td><td>2 years from last evaluation, or until deletion requested</td><td>Legitimate interest, legal claims</td></tr>
+            <tr><td>Account / Client data</td><td>Duration of relationship + 7 years</td><td>Legal / tax obligations</td></tr>
+            <tr><td>Payment records</td><td>7 years</td><td>Financial regulation</td></tr>
+            <tr><td>Technical / security logs</td><td>30 days</td><td>Security investigation</td></tr>
+            <tr><td>Support communications</td><td>3 years</td><td>Dispute resolution</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="clause">
+        <h3>6. Your Rights</h3>
+        <div class="rights-grid">
+          <div class="right-card">
+            <span class="right-icon">📋</span>
+            <div class="right-title">Right of Access</div>
+            <div class="right-desc">Request a copy of all personal data ArGen holds about you. Fulfilled within 30 days.</div>
+          </div>
+          <div class="right-card">
+            <span class="right-icon">✏️</span>
+            <div class="right-title">Right to Rectification</div>
+            <div class="right-desc">Request correction of inaccurate or incomplete personal data.</div>
+          </div>
+          <div class="right-card">
+            <span class="right-icon">🗑️</span>
+            <div class="right-title">Right to Erasure</div>
+            <div class="right-desc">Request deletion of your personal data, subject to legal retention obligations.</div>
+          </div>
+          <div class="right-card">
+            <span class="right-icon">⏸️</span>
+            <div class="right-title">Right to Restriction</div>
+            <div class="right-desc">Request that processing of your data be restricted while a dispute is resolved.</div>
+          </div>
+          <div class="right-card">
+            <span class="right-icon">📦</span>
+            <div class="right-title">Right to Portability</div>
+            <div class="right-desc">Receive your personal data in a structured, machine-readable format (CSV or JSON).</div>
+          </div>
+          <div class="right-card">
+            <span class="right-icon">🚫</span>
+            <div class="right-title">Right to Object</div>
+            <div class="right-desc">Object to processing based on legitimate interest, including for direct marketing.</div>
+          </div>
+          <div class="right-card">
+            <span class="right-icon">🤖</span>
+            <div class="right-title">Automated Decision-Making</div>
+            <div class="right-desc">Right not to be subject to solely automated decisions with legal or significant effects.</div>
+          </div>
+          <div class="right-card">
+            <span class="right-icon">↩️</span>
+            <div class="right-title">Right to Withdraw Consent</div>
+            <div class="right-desc">Where processing is based on consent, you may withdraw at any time without affecting prior processing.</div>
+          </div>
+        </div>
+        <p style="margin-top:16px;">Exercise any right by emailing <a href="mailto:privacy@argen.ai">privacy@argen.ai</a>. Include your name, email, and specific request. We will respond within thirty (30) days. If unsatisfied, you have the right to lodge a complaint with your national supervisory authority (e.g. the Information Commissioner's Office in the UK, CNIL in France, or the Data Protection Board of India).</p>
+      </div>
+
+      <div class="clause">
+        <h3>7. International Data Transfers</h3>
+        <p>ArGen may transfer personal data outside your country of residence, including to the United States and other jurisdictions. Such transfers are subject to appropriate safeguards, including:</p>
+        <ul>
+          <li>Standard Contractual Clauses (SCCs) adopted by the European Commission</li>
+          <li>EU-US Data Privacy Framework where applicable</li>
+          <li>Adequacy decisions issued by relevant supervisory authorities</li>
+          <li>Binding Corporate Rules or equivalent mechanisms</li>
+        </ul>
+        <p>Contact <a href="mailto:dpo@argen.ai">dpo@argen.ai</a> to obtain copies of applicable transfer mechanisms.</p>
+      </div>
+
+      <div class="clause">
+        <h3>8. Data Security</h3>
+        <p>ArGen implements technical and organisational measures commensurate with the risk of processing, including:</p>
+        <ul>
+          <li>TLS 1.3 encryption for all data in transit</li>
+          <li>AES-256 encryption for data at rest</li>
+          <li>Role-based access controls with least-privilege principles</li>
+          <li>API key rotation every ninety (90) days</li>
+          <li>Multi-factor authentication on all administrative accounts</li>
+          <li>Daily automated backups with 30-day encrypted archive</li>
+          <li>Third-party processor due diligence (security assessments)</li>
+        </ul>
+        <p>In the event of a personal data breach, ArGen will notify affected Clients and, where required by law, relevant supervisory authorities within seventy-two (72) hours of becoming aware.</p>
+      </div>
+
+      <div class="clause">
+        <h3>9. Children's Privacy</h3>
+        <p>The Platform is not directed at or intended for use by individuals under the age of eighteen (18). ArGen does not knowingly collect personal data from minors. If we become aware that personal data has been collected from a minor, we will promptly delete it and notify the relevant Client.</p>
+      </div>
+    </section>
+
+    <div class="section-divider"></div>
+
+    <!-- ════════════════════════════════════════
+         COOKIE POLICY
+    ════════════════════════════════════════ -->
+    <section class="doc-section" id="cookies">
+      <div class="doc-header">
+        <span class="doc-number">03</span>
+        <div class="doc-title-group">
+          <h2>Cookie Policy</h2>
+          <span class="doc-subtitle">ePrivacy Directive · GDPR Article 6</span>
+        </div>
+      </div>
+
+      <div class="clause">
+        <h3>What Are Cookies</h3>
+        <p>Cookies are small text files placed on your device when you visit a website. They are widely used to make websites function, improve efficiency, and provide reporting information. ArGen uses cookies and similar technologies (local storage, session storage, pixel tags) in accordance with applicable law.</p>
+      </div>
+
+      <div class="clause">
+        <h3>Cookie Categories</h3>
+
+        <div class="cookie-category">
+          <div class="cookie-header">
+            <div>
+              <div class="cookie-name">Strictly Necessary Cookies</div>
+              <div class="cookie-desc">Required for the Platform to function. Cannot be disabled.</div>
+            </div>
+            <span class="cookie-badge badge-required">Always Active</span>
+          </div>
+          <div class="cookie-body">
+            <table class="data-table">
+              <thead>
+                <tr><th>Cookie Name</th><th>Provider</th><th>Purpose</th><th>Duration</th></tr>
+              </thead>
+              <tbody>
+                <tr><td><code>argen_session</code></td><td>ArGen</td><td>Maintains authenticated session state</td><td>Session</td></tr>
+                <tr><td><code>argen_csrf</code></td><td>ArGen</td><td>CSRF attack prevention</td><td>Session</td></tr>
+                <tr><td><code>eval_progress</code></td><td>ArGen</td><td>Saves evaluation form progress (auto-resume)</td><td>7 days</td></tr>
+                <tr><td><code>cookie_consent</code></td><td>ArGen</td><td>Records your cookie preferences</td><td>12 months</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="cookie-category">
+          <div class="cookie-header">
+            <div>
+              <div class="cookie-name">Functional Cookies</div>
+              <div class="cookie-desc">Enhance usability and remember your preferences.</div>
+            </div>
+            <span class="cookie-badge badge-optional">Optional</span>
+          </div>
+          <div class="cookie-body">
+            <table class="data-table">
+              <thead>
+                <tr><th>Cookie Name</th><th>Provider</th><th>Purpose</th><th>Duration</th></tr>
+              </thead>
+              <tbody>
+                <tr><td><code>lang_pref</code></td><td>ArGen</td><td>Stores language/locale preference</td><td>12 months</td></tr>
+                <tr><td><code>timezone</code></td><td>ArGen</td><td>Stores timezone for date display</td><td>12 months</td></tr>
+                <tr><td><code>calendly_uuid</code></td><td>Calendly</td><td>Powers scheduling widget</td><td>Session</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="cookie-category">
+          <div class="cookie-header">
+            <div>
+              <div class="cookie-name">Analytics Cookies</div>
+              <div class="cookie-desc">Help us understand how the Platform is used (anonymised).</div>
+            </div>
+            <span class="cookie-badge badge-optional">Optional</span>
+          </div>
+          <div class="cookie-body">
+            <table class="data-table">
+              <thead>
+                <tr><th>Cookie Name</th><th>Provider</th><th>Purpose</th><th>Duration</th></tr>
+              </thead>
+              <tbody>
+                <tr><td><code>_ga, _ga_*</code></td><td>Google Analytics (if enabled)</td><td>Page view / session analytics (IP anonymised)</td><td>2 years</td></tr>
+                <tr><td><code>argen_perf</code></td><td>ArGen</td><td>Page load timing diagnostics</td><td>Session</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="cookie-category">
+          <div class="cookie-header">
+            <div>
+              <div class="cookie-name">Marketing Cookies</div>
+              <div class="cookie-desc">Currently not used. ArGen does not run retargeting or advertising campaigns.</div>
+            </div>
+            <span class="cookie-badge badge-required">Not Used</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="clause">
+        <h3>Managing Your Cookie Preferences</h3>
+        <p>You may withdraw or modify cookie consent at any time by:</p>
+        <ul>
+          <li>Clicking the cookie settings link in the footer of any ArGen page</li>
+          <li>Adjusting browser settings to block or delete cookies</li>
+          <li>Emailing <a href="mailto:privacy@argen.ai">privacy@argen.ai</a></li>
+        </ul>
+        <p>Note that disabling strictly necessary cookies will impair Platform functionality. Your preferences are stored for twelve (12) months. Clearing browser cookies will reset your preferences.</p>
+
+        <h4>Browser-Level Controls</h4>
+        <p>Most browsers allow you to control cookies via settings. Refer to your browser's help documentation:</p>
+        <ul>
+          <li><strong>Chrome:</strong> Settings → Privacy and Security → Cookies</li>
+          <li><strong>Firefox:</strong> Settings → Privacy & Security → Cookies and Site Data</li>
+          <li><strong>Safari:</strong> Preferences → Privacy → Manage Website Data</li>
+          <li><strong>Edge:</strong> Settings → Cookies and site permissions</li>
+        </ul>
+      </div>
+
+      <div class="clause">
+        <h3>Similar Technologies</h3>
+        <p>In addition to cookies, ArGen uses:</p>
+        <ul>
+          <li><strong>Local Storage:</strong> Used by Tally.so evaluation forms to auto-save Submitter progress within the browser session. Not accessible across domains.</li>
+          <li><strong>Session Storage:</strong> Temporary in-browser storage for form state. Cleared when the browser tab is closed.</li>
+          <li><strong>Webhook Pixels:</strong> Not used. ArGen does not use tracking pixels.</li>
+        </ul>
+      </div>
+    </section>
+
+    <div class="section-divider"></div>
+
+    <!-- ════════════════════════════════════════
+         DATA PROCESSING AGREEMENT
+    ════════════════════════════════════════ -->
+    <section class="doc-section" id="dpa">
+      <div class="doc-header">
+        <span class="doc-number">04</span>
+        <div class="doc-title-group">
+          <h2>Data Processing Agreement</h2>
+          <span class="doc-subtitle">GDPR Article 28 · SCCs · DPDPA 2023</span>
+        </div>
+      </div>
+
+      <div class="callout callout-info">
+        <div class="callout-label">DPA Incorporation</div>
+        This DPA forms part of the main Terms of Service. Where a Client is subject to GDPR, DPDPA 2023, or equivalent data protection law and processes personal data through the Platform as a data controller, this DPA governs the processing relationship between Client (Controller) and ArGen (Processor).
+      </div>
+
+      <div class="clause">
+        <h3>1. Roles & Responsibilities</h3>
+        <p><strong>Client as Controller:</strong> The Client determines the purposes and means of processing Submitter personal data (e.g. deciding to run an evaluation, which personnel or systems submit, and how Reports are used).</p>
+        <p><strong>ArGen as Processor:</strong> ArGen processes personal data only on documented instructions from the Controller (i.e. the Services described in these Terms) and for no other purpose.</p>
+        <p>For Benchmark Data compilation, ArGen acts as an independent Controller over fully anonymised aggregate data.</p>
+      </div>
+
+      <div class="clause">
+        <h3>2. Processing Details</h3>
+        <table class="data-table">
+          <thead>
+            <tr><th>Element</th><th>Detail</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>Subject matter</td><td>Automated AI auditing of Client's documents and proposals</td></tr>
+            <tr><td>Duration</td><td>Duration of the Client's engagement with ArGen</td></tr>
+            <tr><td>Nature of processing</td><td>Collection, storage, AI-powered analysis, scoring, report generation, communication</td></tr>
+            <tr><td>Purpose</td><td>Delivery of evaluation and intelligence services as contracted</td></tr>
+            <tr><td>Types of data</td><td>Names, emails, job roles, departments, Content responses, performance scores</td></tr>
+            <tr><td>Categories of data subjects</td><td>Vendors, contractors, and designated Submitters</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="clause">
+        <h3>3. ArGen's Processor Obligations</h3>
+        <p>As Processor, ArGen shall:</p>
+        <ul>
+          <li>Process personal data only on documented instructions from the Controller</li>
+          <li>Ensure all personnel with access to personal data are bound by confidentiality</li>
+          <li>Implement appropriate technical and organisational security measures</li>
+          <li>Assist the Controller in fulfilling data subject rights requests</li>
+          <li>Delete or return all personal data upon termination (Controller's choice)</li>
+          <li>Provide all information necessary to demonstrate compliance</li>
+          <li>Notify the Controller without undue delay upon becoming aware of a personal data breach</li>
+        </ul>
+      </div>
+
+      <div class="clause">
+        <h3>4. Sub-Processors</h3>
+        <p>ArGen authorises the use of the following sub-processors. Clients provide general written authorisation for these sub-processors upon accepting these Terms:</p>
+        <table class="data-table">
+          <thead>
+            <tr><th>Sub-Processor</th><th>Country</th><th>Processing Activity</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>Anthropic (Claude API)</td><td>USA</td><td>AI-powered Content response analysis (response text only, no PII)</td></tr>
+            <tr><td>Airtable, Inc.</td><td>USA</td><td>Primary database storage</td></tr>
+            <tr><td>Celonis SE (Make.com)</td><td>EU/USA</td><td>Automation and workflow orchestration</td></tr>
+            <tr><td>Tally.so</td><td>EU (Belgium)</td><td>Evaluation form delivery and response collection</td></tr>
+            <tr><td>Google LLC</td><td>USA/EU</td><td>Email (Gmail), file storage (Drive)</td></tr>
+            <tr><td>Stripe, Inc.</td><td>USA</td><td>Payment processing (billing data only)</td></tr>
+            <tr><td>Razorpay</td><td>India</td><td>Payment processing (India — billing data only)</td></tr>
+          </tbody>
+        </table>
+        <p>ArGen will provide thirty (30) days' advance notice of any intended change to sub-processors, giving Controllers the opportunity to object. Sub-processor agreements incorporate equivalent data protection obligations.</p>
+      </div>
+
+      <div class="clause">
+        <h3>5. International Transfers</h3>
+        <p>Where personal data is transferred to sub-processors in countries without an EU adequacy decision, ArGen relies on:</p>
+        <ul>
+          <li><strong>Standard Contractual Clauses (SCCs):</strong> 2021 EU Commission SCCs incorporated into all relevant sub-processor agreements.</li>
+          <li><strong>EU-US Data Privacy Framework:</strong> For US-based sub-processors certified under the Framework.</li>
+          <li><strong>UK International Data Transfer Agreements (IDTAs):</strong> For UK-specific transfers.</li>
+        </ul>
+      </div>
+
+      <div class="clause">
+        <h3>6. Audits</h3>
+        <p>ArGen will provide Clients with all information reasonably necessary to demonstrate compliance with this DPA, and will allow for and contribute to audits by the Client or a mandated auditor, subject to reasonable notice (minimum thirty (30) days), confidentiality obligations, and cost allocation to the Controller.</p>
+      </div>
+    </section>
+
+    <div class="section-divider"></div>
+
+    <!-- ════════════════════════════════════════
+         ACCEPTABLE USE POLICY
+    ════════════════════════════════════════ -->
+    <section class="doc-section" id="acceptable-use">
+      <div class="doc-header">
+        <span class="doc-number">05</span>
+        <div class="doc-title-group">
+          <h2>Acceptable Use Policy</h2>
+          <span class="doc-subtitle">Platform Conduct Standards</span>
+        </div>
+      </div>
+
+      <div class="clause">
+        <h3>Permitted Use</h3>
+        <p>The Platform may be used exclusively for lawful organisational evaluation of proposals and Content, as contemplated by the Terms of Service. Clients are responsible for ensuring Submitters use the Platform appropriately.</p>
+      </div>
+
+      <div class="clause">
+        <h3>Prohibited Conduct</h3>
+        <p>The following are strictly prohibited:</p>
+
+        <h4>Integrity Violations</h4>
+        <ul>
+          <li>Submitting responses composed entirely by third parties without any personal contribution (ghosting evaluations)</li>
+          <li>Sharing Content with other Submitters prior to their completion</li>
+          <li>Submitting identical or substantially copied responses across multiple Submitters</li>
+          <li>Deliberately submitting low-quality responses to manipulate team-level scores</li>
+        </ul>
+
+        <h4>Technical Abuse</h4>
+        <ul>
+          <li>Automated or scripted submission of evaluation responses</li>
+          <li>Attempting to access, extract, or reverse-engineer the AI Scoring Engine, system prompts, or rubric</li>
+          <li>Using bots, crawlers, or scraping tools against the Platform</li>
+          <li>Attempting to circumvent access controls, rate limits, or security measures</li>
+          <li>Uploading malicious code, malware, or content designed to interfere with the Platform</li>
+          <li>Conducting denial-of-service attacks</li>
+        </ul>
+
+        <h4>Content Violations</h4>
+        <ul>
+          <li>Submitting content that is defamatory, harassing, threatening, or discriminatory</li>
+          <li>Submitting confidential third-party information without authorisation</li>
+          <li>Including personal data of third parties not involved in the evaluation</li>
+          <li>Submitting content that violates any applicable law or regulation</li>
+        </ul>
+
+        <h4>Misrepresentation</h4>
+        <ul>
+          <li>Providing false information about company size, evaluation volume, or eligibility</li>
+          <li>Using ArGen Reports in marketing materials without written consent</li>
+          <li>Representing ArGen scores as certified professional qualifications or accreditations</li>
+        </ul>
+
+        <h4>Resale & Derivative Products</h4>
+        <ul>
+          <li>Reselling, sublicensing, or white-labelling ArGen Services without written agreement</li>
+          <li>Building competing products using insights derived from ArGen's methodology</li>
+          <li>Republishing or redistributing Report content without permission</li>
+        </ul>
+      </div>
+
+      <div class="clause">
+        <h3>Enforcement</h3>
+        <p>Violations of this policy may result in immediate suspension of access, termination of the Client agreement, forfeiture of fees paid, and where applicable, legal action. ArGen reserves the right to investigate suspected violations, including review of submission metadata.</p>
+      </div>
+    </section>
+
+    <div class="section-divider"></div>
+
+    <!-- ════════════════════════════════════════
+         SLA
+    ════════════════════════════════════════ -->
+    <section class="doc-section" id="sla">
+      <div class="doc-header">
+        <span class="doc-number">06</span>
+        <div class="doc-title-group">
+          <h2>Service Level Agreement</h2>
+          <span class="doc-subtitle">Uptime Commitments · Support Response</span>
+        </div>
+      </div>
+
+      <div class="callout callout-info">
+        <div class="callout-label">SLA Applicability</div>
+        This SLA applies to paid Clients only. Free pilot evaluations are delivered on a best-effort basis without SLA guarantees.
+      </div>
+
+      <div class="clause">
+        <h3>1. Platform Availability</h3>
+        <p>ArGen commits to the following uptime targets for the evaluation delivery and dashboard systems:</p>
+        <table class="data-table">
+          <thead>
+            <tr><th>Component</th><th>Monthly Uptime Target</th><th>Measurement</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>Evaluation Form Delivery (Tally)</td><td>99.0%</td><td>Third-party status page</td></tr>
+            <tr><td>Scoring Engine (API)</td><td>99.5%</td><td>Anthropic SLA passthrough</td></tr>
+            <tr><td>Data Storage (Airtable)</td><td>99.5%</td><td>Airtable status page</td></tr>
+            <tr><td>Report Delivery (Email)</td><td>99.0%</td><td>Delivery confirmation logs</td></tr>
+          </tbody>
+        </table>
+        <p><strong>Exclusions:</strong> Scheduled maintenance (minimum 48 hours' notice), third-party provider outages, force majeure events, and Client-caused issues are excluded from uptime calculations.</p>
+      </div>
+
+      <div class="clause">
+        <h3>2. Report Delivery SLA</h3>
+        <table class="data-table">
+          <thead>
+            <tr><th>Plan</th><th>Report Delivery Commitment</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>Standard Evaluation</td><td>Within 48 business hours of final Submitter submission</td></tr>
+            <tr><td>Expedited (Premium add-on)</td><td>Within 24 business hours of final Submitter submission</td></tr>
+            <tr><td>Subscription (Quarterly)</td><td>Fixed delivery schedule agreed at onboarding</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="clause">
+        <h3>3. Support Response Times</h3>
+        <table class="data-table">
+          <thead>
+            <tr><th>Priority</th><th>Description</th><th>First Response</th><th>Resolution Target</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>Critical</td><td>Evaluation delivery completely blocked; scoring engine down</td><td>2 hours</td><td>24 hours</td></tr>
+            <tr><td>High</td><td>Significant platform degradation; report delivery failure</td><td>4 business hours</td><td>48 hours</td></tr>
+            <tr><td>Medium</td><td>Partial functionality impaired; scoring query</td><td>1 business day</td><td>5 business days</td></tr>
+            <tr><td>Low</td><td>General questions, billing inquiries, feedback</td><td>2 business days</td><td>10 business days</td></tr>
+          </tbody>
+        </table>
+        <p>Support is available via <a href="mailto:support@argen.ai">support@argen.ai</a>. Business hours are 9:00 AM – 6:00 PM IST, Monday through Friday.</p>
+      </div>
+
+      <div class="clause">
+        <h3>4. SLA Credits</h3>
+        <p>Where ArGen fails to meet Report Delivery SLA commitments due to causes within ArGen's control, Clients may request a service credit equal to 10% of the evaluation fee for each full business day of delay beyond the committed timeframe, up to a maximum of 50% of the evaluation fee. Credits must be requested within fourteen (14) days of the delay and are applied to future invoices only. Credits are the sole remedy for SLA failures.</p>
+      </div>
+    </section>
+
+    <div class="section-divider"></div>
+
+    <!-- ════════════════════════════════════════
+         GDPR / REGULATORY
+    ════════════════════════════════════════ -->
+    <section class="doc-section" id="gdpr">
+      <div class="doc-header">
+        <span class="doc-number">07</span>
+        <div class="doc-title-group">
+          <h2>Regulatory Compliance</h2>
+          <span class="doc-subtitle">GDPR · DPDPA 2023 · CCPA · PIPL · SOC 2</span>
+        </div>
+      </div>
+
+      <div class="clause">
+        <h3>GDPR (EU/EEA)</h3>
+        <p>For EU/EEA Clients and Submitters, ArGen complies with Regulation (EU) 2016/679 (GDPR) as follows:</p>
+        <ul>
+          <li><strong>Legal Basis:</strong> Processing is based on contract performance (Article 6(1)(b)), legitimate interest (Article 6(1)(f)), and consent where applicable.</li>
+          <li><strong>Data Minimisation:</strong> Only data necessary for service delivery is collected (Article 5(1)(c)).</li>
+          <li><strong>Purpose Limitation:</strong> Data collected for evaluation delivery is not repurposed for unrelated activities.</li>
+          <li><strong>Accuracy:</strong> Clients are responsible for ensuring Submitter data provided to ArGen is accurate.</li>
+          <li><strong>Storage Limitation:</strong> Retention periods specified in the Privacy Policy comply with Article 5(1)(e).</li>
+          <li><strong>DPIA:</strong> ArGen has conducted a Data Protection Impact Assessment for the core evaluation processing activity. A summary is available on written request.</li>
+          <li><strong>Article 28 Compliance:</strong> The DPA (Section 04 above) satisfies Article 28 requirements for processor agreements.</li>
+          <li><strong>Representative:</strong> For non-EU-established ArGen entities processing EU data, a designated EU representative is available on request.</li>
+        </ul>
+      </div>
+
+      <div class="clause">
+        <h3>Digital Personal Data Protection Act 2023 (India — DPDPA)</h3>
+        <p>For Indian Clients and Submitters:</p>
+        <ul>
+          <li><strong>Data Fiduciary:</strong> ArGen operates as a Data Fiduciary under Section 2(i) of the DPDPA for data processed on its own behalf, and as a Data Processor for Client-originated processing.</li>
+          <li><strong>Consent:</strong> Where consent is the lawful basis, it is obtained prior to processing, in plain language, and is specific to the processing purpose.</li>
+          <li><strong>Data Principal Rights:</strong> Indian data principals have rights to access, correct, erase, and grieve, enforceable via <a href="mailto:dpo@argen.ai">dpo@argen.ai</a>.</li>
+          <li><strong>Data Localisation:</strong> ArGen stores Indian Client data on systems subject to Indian data localisation requirements where mandated by the DPDPA and applicable sectoral rules.</li>
+          <li><strong>Grievance Officer:</strong> ArGen has designated a Grievance Officer for DPDPA purposes. Contact details are available at <a href="mailto:dpo@argen.ai">dpo@argen.ai</a>.</li>
+          <li><strong>Personal Data Breach:</strong> Breaches are reported to the Data Protection Board of India within the timeframes specified by law.</li>
+        </ul>
+      </div>
+
+      <div class="clause">
+        <h3>California Consumer Privacy Act (CCPA / CPRA)</h3>
+        <p>For California residents:</p>
+        <ul>
+          <li>ArGen does not sell personal information as defined under the CCPA.</li>
+          <li>ArGen does not share personal information for cross-context behavioural advertising.</li>
+          <li>California residents have the right to know, delete, correct, and opt out of the sale/sharing of personal information.</li>
+          <li>ArGen does not discriminate against users who exercise CCPA rights.</li>
+          <li>To exercise CCPA rights, contact <a href="mailto:privacy@argen.ai">privacy@argen.ai</a> or submit a verifiable consumer request.</li>
+          <li>Authorised agents may submit requests on behalf of California residents with written authorisation.</li>
+        </ul>
+      </div>
+
+      <div class="clause">
+        <h3>UK GDPR (Post-Brexit)</h3>
+        <p>ArGen's Privacy Policy and DPA apply equally to UK-based processing under the UK GDPR and the Data Protection Act 2018. The Information Commissioner's Office (ICO) is the relevant supervisory authority for UK data subjects. UK SCCs (IDTAs) are used for transfers from the UK to third countries.</p>
+      </div>
+
+      <div class="clause">
+        <h3>Personal Information Protection Law (PIPL — China)</h3>
+        <p>For Submitters based in the People's Republic of China, ArGen processes personal information in accordance with the PIPL where applicable:</p>
+        <ul>
+          <li>Separate consent is obtained prior to cross-border transfer of personal information.</li>
+          <li>ArGen undertakes security assessments as required for cross-border data transfers.</li>
+          <li>Chinese data subjects may exercise rights under PIPL Articles 44–47 by contacting <a href="mailto:privacy@argen.ai">privacy@argen.ai</a>.</li>
+        </ul>
+      </div>
+
+      <div class="clause">
+        <h3>SOC 2 & Future Certifications</h3>
+        <p>ArGen is in active preparation for SOC 2 Type II certification, targeting audit completion by Q4 2026. The audit will cover the Trust Service Criteria for Security, Availability, and Confidentiality. Enterprise Clients may request access to the resulting report upon availability.</p>
+        <p>Third-party vendor SOC 2 reports for Anthropic, Airtable, Stripe, and Google are available on request for Client due diligence purposes.</p>
+      </div>
+
+      <div class="clause">
+        <h3>AI Act (EU) — Transparency Notice</h3>
+        <p>ArGen's AI Scoring Engine constitutes a limited-risk AI system under the proposed EU AI Act framework. In compliance with transparency obligations:</p>
+        <ul>
+          <li>Submitters are informed that their Content responses are processed by an AI system before submission.</li>
+          <li>All AI-generated scores include human-readable justifications.</li>
+          <li>Clients may request manual human review of any scored evaluation.</li>
+          <li>The AI Scoring Engine does not make autonomous decisions producing legal effects — all consequential decisions (e.g. employment actions) remain with human decision-makers.</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- FOOTER -->
+    <div class="doc-footer">
+      <div>
+        <div class="footer-brand">ArGen — Performance Intelligence</div>
+        <div class="footer-note" style="margin-top:4px;">
+          Questions: <a href="mailto:legal@argen.ai">legal@argen.ai</a>
+        </div>
+      </div>
+      <div style="text-align:right;">
+        <div class="footer-note">Legal Documents v2.1</div>
+        <div class="footer-note" style="margin-top:4px;">Effective 1 June 2026 · All rights reserved</div>
+      </div>
+    </div>
+
+  </main>
+</div>
+
+<!-- COOKIE CONSENT BANNER -->
+<div class="cookie-banner" id="cookieBanner">
+  <div class="cookie-banner-text">
+    ArGen uses strictly necessary cookies to operate the Platform, and optional analytics cookies to improve our services. No advertising or tracking cookies are used. By clicking "Accept," you consent to optional cookies.
+    <a href="#cookies"> Cookie Policy</a>
+  </div>
+  <div class="cookie-banner-actions">
+    <button class="btn btn-decline" onclick="dismissBanner('declined')">Decline Optional</button>
+    <button class="btn btn-accept" onclick="dismissBanner('accepted')">Accept All</button>
+  </div>
+</div>
+
+<script>
+  // Cookie banner logic
+  function dismissBanner(choice) {
+    document.getElementById('cookieBanner').classList.add('dismissed');
+    localStorage.setItem('argen_cookie_consent', choice);
+    localStorage.setItem('argen_cookie_date', new Date().toISOString());
+  }
+
+  // Check if already consented
+  const existingConsent = localStorage.getItem('argen_cookie_consent');
+  if (existingConsent) {
+    document.getElementById('cookieBanner').classList.add('dismissed');
+  }
+
+  // Active sidebar link on scroll
+  const sections = document.querySelectorAll('.doc-section');
+  const sidebarLinks = document.querySelectorAll('.sidebar-link.doc-link');
+
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        sidebarLinks.forEach(link => {
+          link.classList.remove('active');
+          if (link.getAttribute('href') === '#' + entry.target.id) {
+            link.classList.add('active');
+          }
+        });
+      }
+    });
+  }, { threshold: 0.2, rootMargin: '-80px 0px 0px 0px' });
+
+  sections.forEach(s => observer.observe(s));
+</script>
+</body>
+</html>

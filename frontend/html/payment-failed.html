@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Reset Password - ArGen</title>
+  <title>Payment Failed - ArGen</title>
   <link rel="icon" type="image/png" href="/images/ArGen Logo.png">
   <link
     href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono&display=swap"
@@ -12,6 +12,10 @@
   <link rel="stylesheet" href="/css/style.css">
 
   <style>
+    :root {
+      --cb: cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
     .auth-page {
       min-height: 100dvh;
       display: flex;
@@ -20,27 +24,107 @@
       justify-content: center;
       padding: 2rem 1.5rem;
       background: #000;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .auth-bg-blob {
+      position: absolute;
+      width: 600px;
+      height: 600px;
+      background: radial-gradient(circle, rgba(239, 68, 68, 0.08) 0%, transparent 70%);
+      filter: blur(80px);
+      z-index: 0;
+      pointer-events: none;
     }
 
     .auth-card {
       width: 100%;
-      max-width: 480px;
+      max-width: 500px;
       background: rgba(10, 10, 10, 0.6);
       backdrop-filter: blur(20px);
-      border: 1px solid rgba(255, 255, 255, 0.08);
+      -webkit-backdrop-filter: blur(20px);
+      border: 1px solid rgba(239, 68, 68, 0.15);
       border-radius: 16px;
-      padding: 3rem;
+      padding: clamp(2rem, 5vw, 3rem);
+      position: relative;
+      z-index: 1;
+      box-shadow: 0 24px 48px rgba(0, 0, 0, 0.4);
+      text-align: center;
+      animation: slideUp 0.6s var(--cb) forwards;
+    }
+
+    @keyframes slideUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
     }
 
     .soul-text {
       font-style: italic;
-      color: var(--argen-blue);
+      color: #ef4444;
+    }
+
+    .error-icon {
+      width: 64px;
+      height: 64px;
+      background: rgba(239, 68, 68, 0.1);
+      border: 1px solid rgba(239, 68, 68, 0.3);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 1.5rem;
+      color: #ef4444;
+    }
+
+    .error-icon svg {
+      width: 32px;
+      height: 32px;
+      stroke-width: 2.5;
+    }
+
+    .info-box {
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      border-radius: 8px;
+      padding: 1.5rem;
+      margin: 2rem 0;
+      text-align: left;
+    }
+
+    .info-box p {
+      font-size: 0.85rem;
+      color: var(--text-sec);
+      margin-bottom: 0.5rem;
+      line-height: 1.6;
+    }
+
+    .btn-action {
+      width: 100%;
+      padding: 16px;
+      border-radius: 8px;
+      font-weight: 700;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      font-family: var(--font-mono);
+      font-size: 0.85rem;
+      text-decoration: none;
+      display: inline-block;
+      transition: all 0.3s ease;
+      background: transparent;
+      color: #fff;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+
+    .btn-action:hover {
+      background: rgba(255, 255, 255, 0.05);
+      border-color: rgba(255, 255, 255, 0.4);
     }
   </style>
 </head>
 
 <body class="bg-black">
-    <header id="nav" class="nav">
+  <header id="nav" class="nav">
     <div class="nav-inner">
       <a href="/" class="nav-logo">
         <img src="/images/ArGen Logo.png" alt="ArGen" class="logo-img" style="height: 32px;">
@@ -73,31 +157,26 @@
   </div>
   <main style="min-height: 100dvh; display: flex; flex-direction: column; padding-top: 80px;">
     <div class="auth-page" style="flex: 1; min-height: auto;">
-    <div style="text-align: center; margin-bottom: 3rem;">
-      <a href="/">
-        <img src="/images/ArGen Logo.png" alt="ArGen" style="width: 50px; margin: 0 auto 1.5rem;">
-      </a>
-      <h1 class="section-h2" style="font-size: 2.5rem;">Secure <i class="soul-text">Reset</i></h1>
-      <p class="section-sub">Update your authentication credentials</p>
-    </div>
+      <div class="auth-bg-blob" style="top: -100px; right: -100px;"></div>
 
-    <div class="auth-card">
-      <form id="resetPasswordForm">
-        <div class="form-group" style="margin-bottom: 1.5rem;">
-          <label class="form-label" style="display: block; font-family: var(--font-mono); font-size: 0.65rem; color: var(--text-sec); margin-bottom: 0.5rem; text-transform: uppercase;">New Password</label>
-          <input type="password" id="new-password" class="form-input" style="width: 100%; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.1); padding: 14px; border-radius: 8px; color: #fff;" placeholder="••••••••" required minlength="8">
+      <div class="auth-card">
+        <div class="error-icon">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+          </svg>
         </div>
-        <div class="form-group" style="margin-bottom: 2rem;">
-          <label class="form-label" style="display: block; font-family: var(--font-mono); font-size: 0.65rem; color: var(--text-sec); margin-bottom: 0.5rem; text-transform: uppercase;">Confirm Password</label>
-          <input type="password" id="confirm-password" class="form-input" style="width: 100%; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.1); padding: 14px; border-radius: 8px; color: #fff;" placeholder="••••••••" required>
-        </div>
-        <button type="submit" class="btn btn-primary" style="width: 100%; padding: 16px; font-weight: 700; font-family: var(--font-mono);">Update Password</button>
-      </form>
-      <div id="statusMessage" style="margin-top: 1.5rem; text-align: center; font-family: var(--font-mono); font-size: 0.75rem; display: none;"></div>
-    </div>
-  </div>
+        
+        <h1 class="card-h3" style="font-size: 2rem; margin-bottom: 0.5rem; font-family: var(--font-display);">Transaction <i class="soul-text">Declined</i></h1>
+        <p style="color: var(--text-sec); font-size: 0.95rem;">Your payment could not be processed.</p>
 
+        <div class="info-box">
+          <p>No charges have been made to your account.</p>
+          <p>Please return to the checkout to verify your payment details or attempt another payment method.</p>
+        </div>
+
+        <a href="/pricing" class="btn-action">Return to Pricing</a>
       </div>
+    </div>
   </main>
   <footer class="footer">
     <div class="container">
@@ -129,43 +208,8 @@
       </div>
     </div>
   </footer>
-  <script src="/js/api.js"></script>
-  <script>
-    const urlParams = new URLSearchParams(window.location.search);
-    const token = urlParams.get('token');
+  <script src="/js/script.js"></script>
 
-    if (!token) {
-        alert('Invalid reset link. Please request a new one.');
-        window.location.href = '/html/login.html';
-    }
-
-    document.getElementById('resetPasswordForm').addEventListener('submit', async (e) => {
-        e.preventDefault();
-        const password = document.getElementById('new-password').value;
-        const confirm = document.getElementById('confirm-password').value;
-        const status = document.getElementById('statusMessage');
-
-        if (password !== confirm) {
-            status.textContent = 'Passwords do not match';
-            status.style.color = '#ef4444';
-            status.style.display = 'block';
-            return;
-        }
-
-        try {
-            await argenApi.resetPassword(token, password);
-            status.textContent = 'Success! Password updated. Redirecting...';
-            status.style.color = '#22c55e';
-            status.style.display = 'block';
-            setTimeout(() => {
-                window.location.href = '/html/login.html';
-            }, 2000);
-        } catch (err) {
-            status.textContent = err.message;
-            status.style.color = '#ef4444';
-            status.style.display = 'block';
-        }
-    });
-  </script>
 </body>
+
 </html>

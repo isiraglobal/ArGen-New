@@ -8,7 +8,7 @@ const getBaseUrl = () => {
     if (window.ARGEN_API_URL) return window.ARGEN_API_URL;
     const { hostname, protocol, port } = window.location;
     if (hostname === 'localhost' || hostname === '127.0.0.1') {
-        return 'http://localhost:3030/api';
+        return 'http://localhost:5001/api';
     }
     // For production, if hosted on the same domain
     return `${protocol}//${hostname}${port ? ':' + port : ''}/api`;
@@ -89,6 +89,27 @@ const api = {
         localStorage.setItem('argen_token', data.token);
         localStorage.setItem('user', JSON.stringify(data.user));
         return data;
+    },
+
+    async forgotPassword(email) {
+        return this.request('/auth/forgot-password', {
+            method: 'POST',
+            body: JSON.stringify({ email }),
+        });
+    },
+
+    async resetPassword(token, password) {
+        return this.request(`/auth/reset-password/${token}`, {
+            method: 'POST',
+            body: JSON.stringify({ password }),
+        });
+    },
+
+    async verifyPasscode(inviteCode) {
+        return this.request('/auth/verify-passcode', {
+            method: 'POST',
+            body: JSON.stringify({ inviteCode }),
+        });
     },
 
     logout() {

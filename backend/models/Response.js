@@ -25,6 +25,17 @@ const ResponseSchema = new mongoose.Schema({
     type: String,
     required: true
   },
+  workflowApproach: {
+    type: String,
+    required: true
+  },
+  timeTaken: {
+    type: String,
+    required: true
+  },
+  baselineTime: {
+    type: String
+  },
   scoringStatus: {
     type: String,
     enum: ['Pending', 'Scored', 'Manual Review', 'Error'],
@@ -43,6 +54,7 @@ const ResponseSchema = new mongoose.Schema({
     type: Boolean,
     default: false
   },
+  flags: [String],
   modelUsed: String,
   apiCost: {
     type: Number,

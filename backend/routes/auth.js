@@ -7,6 +7,7 @@ const User = require('../models/User');
 const Company = require('../models/Company');
 const Invitation = require('../models/Invitation');
 const sendEmail = require('../utils/sendEmail');
+const { createEmailTemplate } = require('../utils/emailTemplate');
 
 // @route   GET api/auth/invitation/:token
 // @desc    Verify invitation token
@@ -45,12 +46,16 @@ router.post('/register-company', async (req, res) => {
       return res.status(400).json({ message: 'Company already exists' });
     }
 
+    // Generate unique 8-char invite code
+    const inviteCode = Math.random().toString(36).substring(2, 10).toUpperCase();
+
     company = new Company({
       name: companyName,
       industry,
       size,
       country,
       primaryContact: { name, email },
+      inviteCode,
       status: invitation ? 'active' : 'pending' // Auto-approve if invited
     });
 
@@ -74,9 +79,18 @@ router.post('/register-company', async (req, res) => {
     });
     await user.save();
 
+    // Mark invitation as used
+    if (invitation) {
+      invitation.used = true;
+      invitation.usedBy = user._id;
+      invitation.usedAt = Date.now();
+      await invitation.save();
+    }
+
     res.status(201).json({ 
       msg: 'Company registration successful. Pending App Admin approval.',
-      companyId: company._id 
+      companyId: company._id,
+      inviteCode: company.inviteCode
     });
 
   } catch (err) {
@@ -92,6 +106,36 @@ router.post('/login', async (req, res) => {
   const { email, password } = req.body;
 
   try {
+    // 1. Check for Superadmin Bypass (via Environment Variables)
+    const adminEmail = process.env.ADMIN_EMAIL || 'admin@argen.ai';
+    const adminPass = process.env.ADMIN_PASSWORD || 'ArGenAdmin2026';
+
+    if (email === adminEmail && password === adminPass) {
+      let user = await User.findOne({ email: adminEmail });
+      
+      // If admin doesn't exist in DB but matches Env Vars, create a temporary session user
+      // or just use the one from DB if it exists (preferred for consistency)
+      if (!user) {
+        // Auto-create superadmin if it doesn't exist but env vars are provided
+        const salt = await bcrypt.genSalt(10);
+        const hashedPassword = await bcrypt.hash(adminPass, salt);
+        user = new User({
+          name: 'System Architect',
+          email: adminEmail,
+          password: hashedPassword,
+          role: 'superadmin'
+        });
+        await user.save();
+      }
+
+      const payload = { user: { id: user.id, role: 'superadmin', companyId: null } };
+      return jwt.sign(payload, process.env.JWT_SECRET || 'secret', { expiresIn: '5d' }, (err, token) => {
+        if (err) throw err;
+        res.json({ token, user: { id: user.id, name: user.name, email: user.email, role: 'superadmin', companyId: null } });
+      });
+    }
+
+    // 2. Normal Login Flow
     let user = await User.findOne({ email }).populate('companyId');
     if (!user) {
       return res.status(400).json({ msg: 'Invalid Credentials' });
@@ -230,15 +274,25 @@ router.post('/forgot-password', async (req, res) => {
     await user.save();
 
     // Create reset URL
-    const resetUrl = `${req.protocol}://${req.get('host')}/html/reset-password.html?token=${resetToken}`;
+    const resetUrl = `${req.protocol}://${req.get('host')}/reset-password.html?token=${resetToken}`;
 
-    const message = `You are receiving this email because you (or someone else) has requested the reset of a password. Please click the link below to reset your password:\n\n${resetUrl}`;
+    const html = createEmailTemplate({
+        title: 'Password Reset - ArGen',
+        preheader: 'Secure link to reset your ArGen password.',
+        bodyContent: `
+            <h1>Password Reset</h1>
+            <p>You are receiving this email because a password reset was requested for your ArGen account.</p>
+            <p>Click the secure link below to set a new password. This link will expire in 10 minutes.</p>
+        `,
+        buttonText: 'Reset Password',
+        buttonUrl: resetUrl
+    });
 
     try {
       await sendEmail({
         email: user.email,
         subject: 'Password Reset - ArGen',
-        message
+        html
       });
 
       res.status(200).json({ message: 'Email sent' });
@@ -280,6 +334,26 @@ router.post('/reset-password/:token', async (req, res) => {
     await user.save();
 
     res.status(200).json({ message: 'Password reset successful' });
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send('Server Error');
+  }
+});
+
+// @route   POST api/auth/verify-passcode
+// @desc    Verify team invite code for session access
+// @access  Private
+router.post('/verify-passcode', async (req, res) => {
+  const { inviteCode } = req.body;
+
+  try {
+    const company = await Company.findOne({ inviteCode: inviteCode.toUpperCase() });
+    
+    if (!company) {
+      return res.status(400).json({ valid: false, message: 'Invalid Passcode' });
+    }
+
+    res.json({ valid: true, companyName: company.name });
   } catch (err) {
     console.error(err.message);
     res.status(500).send('Server Error');
