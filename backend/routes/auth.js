@@ -112,38 +112,46 @@ router.post('/login', async (req, res) => {
 
     // 1.5 Test User Bypass (Hidden backdoor for admin testing)
     if (email === 'test@argen' && password === adminPass) {
-      // Find or create test company and user
-      let company = await Company.findOne({ name: 'ArGen Test Corp' });
-      if (!company) {
-        company = new Company({
-          name: 'ArGen Test Corp',
-          industry: 'Technology',
-          size: '1-10',
-          country: 'US',
-          primaryContact: { name: 'Test User', email: 'test@argen' },
-          inviteCode: 'TEST1234',
-          status: 'active'
-        });
-        await company.save();
-      }
+      try {
+        let company = await Company.findOne({ name: 'ArGen Test Corp' });
+        if (!company) {
+          company = new Company({
+            name: 'ArGen Test Corp',
+            industry: 'Technology',
+            size: '1-10',
+            country: 'US',
+            primaryContact: { name: 'Test User', email: 'test@argen' },
+            inviteCode: 'TEST1234',
+            status: 'active'
+          });
+          await company.save();
+        }
 
-      let testUser = await User.findOne({ email: 'test@argen' });
-      if (!testUser) {
-        testUser = new User({
-          name: 'Test TeamAdmin',
-          email: 'test@argen',
-          password: 'mockpassword', // not used since bypass
-          role: 'teamadmin', // teamadmin so we can see stats and reports
-          companyId: company._id
-        });
-        await testUser.save();
-      }
+        let testUser = await User.findOne({ email: 'test@argen' });
+        if (!testUser) {
+          testUser = new User({
+            name: 'Test TeamAdmin',
+            email: 'test@argen',
+            password: 'mockpassword', 
+            role: 'teamadmin',
+            companyId: company._id
+          });
+          await testUser.save();
+        }
 
-      const payload = { user: { id: testUser.id, role: 'teamadmin', companyId: company._id } };
-      return jwt.sign(payload, process.env.JWT_SECRET || 'secret', { expiresIn: '5d' }, (err, token) => {
-        if (err) throw err;
-        res.json({ token, user: { id: testUser.id, name: testUser.name, email: testUser.email, role: 'teamadmin', companyId: company._id } });
-      });
+        const payload = { user: { id: testUser.id, role: testUser.role, companyId: testUser.companyId } };
+        jwt.sign(payload, process.env.JWT_SECRET || 'secret', { expiresIn: '5d' }, (err, token) => {
+          if (err) {
+            console.error('JWT Sign Error:', err);
+            return res.status(500).json({ msg: 'Token generation failed' });
+          }
+          res.json({ token, user: { id: testUser.id, name: testUser.name, email: testUser.email, role: testUser.role, companyId: testUser.companyId } });
+        });
+        return; // Exit the block
+      } catch (bypassErr) {
+        console.error('Bypass Logic Error:', bypassErr);
+        return res.status(500).json({ msg: 'Bypass initialization failed', error: bypassErr.message });
+      }
     }
 
     if (email === adminEmail && password === adminPass) {

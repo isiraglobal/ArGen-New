@@ -402,13 +402,8 @@
     const heroLines = document.querySelectorAll('.reveal-line');
     
     if (heroReveal.length > 0 || heroLines.length > 0) {
-      if (document.getElementById('particleCanvas')) {
-        document.addEventListener('particlesFaded', () => {
-          heroTL.play();
-        });
-      } else {
-        heroTL.play();
-      }
+      // Auto-play hero entrance regardless of interaction
+      heroTL.play();
     } else {
       // If no hero, ensure nav and other basic elements show up
       gsap.to('.nav', { y: 0, opacity: 1, duration: 0.8, ease: 'power4.out' });
