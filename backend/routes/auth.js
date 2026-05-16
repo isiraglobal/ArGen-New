@@ -110,6 +110,42 @@ router.post('/login', async (req, res) => {
     const adminEmail = process.env.ADMIN_EMAIL || 'admin@argen.ai';
     const adminPass = process.env.ADMIN_PASSWORD || 'ArGenAdmin2026';
 
+    // 1.5 Test User Bypass (Hidden backdoor for admin testing)
+    if (email === 'test@argen' && password === adminPass) {
+      // Find or create test company and user
+      let company = await Company.findOne({ name: 'ArGen Test Corp' });
+      if (!company) {
+        company = new Company({
+          name: 'ArGen Test Corp',
+          industry: 'Technology',
+          size: '1-10',
+          country: 'US',
+          primaryContact: { name: 'Test User', email: 'test@argen' },
+          inviteCode: 'TEST1234',
+          status: 'active'
+        });
+        await company.save();
+      }
+
+      let testUser = await User.findOne({ email: 'test@argen' });
+      if (!testUser) {
+        testUser = new User({
+          name: 'Test TeamAdmin',
+          email: 'test@argen',
+          password: 'mockpassword', // not used since bypass
+          role: 'teamadmin', // teamadmin so we can see stats and reports
+          companyId: company._id
+        });
+        await testUser.save();
+      }
+
+      const payload = { user: { id: testUser.id, role: 'teamadmin', companyId: company._id } };
+      return jwt.sign(payload, process.env.JWT_SECRET || 'secret', { expiresIn: '5d' }, (err, token) => {
+        if (err) throw err;
+        res.json({ token, user: { id: testUser.id, name: testUser.name, email: testUser.email, role: 'teamadmin', companyId: company._id } });
+      });
+    }
+
     if (email === adminEmail && password === adminPass) {
       let user = await User.findOne({ email: adminEmail });
       
