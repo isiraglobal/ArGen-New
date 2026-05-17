@@ -98,7 +98,7 @@ app.use(async (req, res, next) => {
 // For local development
 if (process.env.NODE_ENV !== 'production') {
     const PORT = parseInt(process.env.PORT) || 3001;
-    app.listen(PORT, () => console.log(`Server running on http://localhost:${PORT}`));
+    app.listen(PORT, '127.0.0.1', () => console.log(`Server running on http://127.0.0.1:${PORT}`));
 }
 
 module.exports = app;
