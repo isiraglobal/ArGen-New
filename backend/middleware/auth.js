@@ -26,7 +26,8 @@ const protect = async (req, res, next) => {
 // Grant access to specific roles
 const authorize = (...roles) => {
   return (req, res, next) => {
-    if (!roles.includes(req.user.role)) {
+    const userRole = req.user.role ? req.user.role.toLowerCase() : '';
+    if (!roles.map(r => r.toLowerCase()).includes(userRole)) {
       return res.status(403).json({
         msg: `User role ${req.user.role} is not authorized to access this route`
       });
@@ -38,7 +39,7 @@ const authorize = (...roles) => {
 // Check if company is active
 const isApproved = async (req, res, next) => {
   try {
-    if (req.user.role === 'superadmin') return next();
+    if (req.user.role && req.user.role.toLowerCase() === 'superadmin') return next();
     
     const company = await Company.findById(req.user.companyId);
     if (!company || company.status !== 'active') {

@@ -54,9 +54,17 @@ const api = {
             }
         }
 
-        const data = await response.json();
+        const text = await response.text();
+        let data;
+        try {
+            data = JSON.parse(text);
+        } catch (err) {
+            // Not JSON
+            throw new Error(text || `Error ${response.status}: ${response.statusText}`);
+        }
+
         if (!response.ok) {
-            throw new Error(data.message || 'API request failed');
+            throw new Error(data.message || data.msg || 'API request failed');
         }
         return data;
     },

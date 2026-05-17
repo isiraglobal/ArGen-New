@@ -9,6 +9,28 @@ const { protect } = require('../middleware/auth');
 // @desc    Get active/personalized challenges for the user
 // @access  Private
 router.get('/active', protect, async (req, res) => {
+  if (global.MOCK_DB) {
+    return res.json([
+      {
+        _id: 'mock-ch-1',
+        name: 'Strategic Reasoning Challenge',
+        type: 'analysis',
+        difficulty: 'Advanced',
+        text: 'Analyze the impact of agentic workflows on enterprise SaaS procurement...',
+        wordLimit: 500,
+        timeEstimate: 15
+      },
+      {
+        _id: 'mock-ch-2',
+        name: 'Technical Constraint Optimization',
+        type: 'technical',
+        difficulty: 'Expert',
+        text: 'Refactor the following Python code to minimize memory usage in a serverless environment...',
+        wordLimit: 1000,
+        timeEstimate: 30
+      }
+    ]);
+  }
   try {
     const user = req.user;
     
@@ -51,6 +73,13 @@ router.get('/', protect, async (req, res) => {
 // @desc    Submit a response to a challenge
 // @access  Private
 router.post('/:id/submit', protect, async (req, res) => {
+  if (global.MOCK_DB) {
+    return res.json({
+      _id: 'mock-response-id',
+      scoringStatus: 'Pending',
+      msg: 'MOCK MODE: Submission received successfully.'
+    });
+  }
   const { promptText, modelOutput, evaluationId } = req.body;
 
   try {

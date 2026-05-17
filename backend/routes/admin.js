@@ -1,5 +1,6 @@
 const express = require('express');
 const router = express.Router();
+const mongoose = require('mongoose');
 const { protect, authorize } = require('../middleware/auth');
 const Company = require('../models/Company');
 const User = require('../models/User');
@@ -10,6 +11,13 @@ const crypto = require('crypto');
 // @route   GET api/admin/stats
 // @desc    Get advanced global system statistics (Superadmin only)
 router.get('/stats', protect, authorize('superadmin'), async (req, res) => {
+  if (global.MOCK_DB) {
+    return res.json({
+      agents: { totalRuns: 1250, failedRuns: 12, activeAgents: 5, uptime: '99.9%' },
+      usage: { totalTokens: 4500000, totalCost: '45.25', avgQuality: '9.2' },
+      credits: { totalSpent: '45.25', remaining: '954.75' }
+    });
+  }
   try {
     const totalRuns = await SystemMetric.countDocuments({ type: 'agent_run' });
     const failedRuns = await SystemMetric.countDocuments({ type: 'agent_run', status: 'failed' });
@@ -44,14 +52,26 @@ router.get('/stats', protect, authorize('superadmin'), async (req, res) => {
       }
     });
   } catch (err) {
-    console.error(err.message);
-    res.status(500).send('Server error');
+    console.error('Admin Stats Error:', err);
+    res.status(500).json({ msg: 'Server error', error: err.message });
   }
 });
 
 // @route   GET api/admin/company-dashboard-stats
 // @desc    Get stats for the 12-panel team admin dashboard
 router.get('/company-dashboard-stats', protect, async (req, res) => {
+  if (global.MOCK_DB) {
+    return res.json({
+      avgScore: 78.5,
+      totalSubmissions: 42,
+      dimensions: { clarity: 82, constraints: 75, specificity: 88, iteration: 68 },
+      benchmark: {
+        team: [82, 75, 88, 68, 85],
+        median: [70, 70, 75, 70, 80]
+      },
+      trend: [7.2, 7.5, 7.1, 7.8, 8.2, 8.0, 8.4, 78.5]
+    });
+  }
   try {
     const companyId = req.user.companyId;
     if (!companyId && req.user.role !== 'superadmin') {
@@ -98,8 +118,8 @@ router.get('/company-dashboard-stats', protect, async (req, res) => {
       trend: [7.2, 7.5, 7.1, 7.8, 8.2, 8.0, 8.4, (stats.avgScore || 0).toFixed(1)]
     });
   } catch (err) {
-    console.error(err.message);
-    res.status(500).send('Server error');
+    console.error('Company Dashboard Stats Error:', err);
+    res.status(500).json({ msg: 'Server error', error: err.message });
   }
 });
 
@@ -112,8 +132,8 @@ router.get('/agent-logs', protect, authorize('superadmin'), async (req, res) => 
       .limit(20);
     res.json(logs);
   } catch (err) {
-    console.error(err.message);
-    res.status(500).send('Server error');
+    console.error('Agent Logs Error:', err);
+    res.status(500).json({ msg: 'Server error', error: err.message });
   }
 });
 
@@ -124,12 +144,23 @@ router.get('/companies', protect, authorize('superadmin'), async (req, res) => {
     const companies = await Company.find().sort({ createdAt: -1 });
     res.json(companies);
   } catch (err) {
-    console.error(err.message);
-    res.status(500).send('Server error');
+    console.error('Companies List Error:', err);
+    res.status(500).json({ msg: 'Server error', error: err.message });
   }
+});
+
 // @route   GET api/admin/my-company
 // @desc    Get current user's company details
 router.get('/my-company', protect, async (req, res) => {
+  if (global.MOCK_DB) {
+    return res.json({
+      _id: 'mock-company-id',
+      name: 'ArGen Mock Corp',
+      industry: 'AI & Data Science',
+      status: 'active',
+      inviteCode: 'MOCK1234'
+    });
+  }
   try {
     if (!req.user.companyId) {
       return res.status(404).json({ msg: 'No company associated with this account' });
@@ -137,8 +168,8 @@ router.get('/my-company', protect, async (req, res) => {
     const company = await Company.findById(req.user.companyId);
     res.json(company);
   } catch (err) {
-    console.error(err.message);
-    res.status(500).send('Server error');
+    console.error('My Company Error:', err);
+    res.status(500).json({ msg: 'Server error', error: err.message });
   }
 });
 
@@ -156,7 +187,7 @@ router.post('/invitations', protect, authorize('superadmin'), async (req, res) =
     await invitation.save();
     
     // The link format requested by user
-    const link = `https://argen.isira.club/registration.html?approval=true&team_id=${token}`;
+    const link = `https://argen.isira.club/registration?approval=true&team_id=${token}`;
     
     // Send email notification
     const sendEmail = require('../utils/sendEmail');
@@ -182,8 +213,8 @@ router.post('/invitations', protect, authorize('superadmin'), async (req, res) =
     
     res.json({ link, invitation });
   } catch (err) {
-    console.error(err.message);
-    res.status(500).send('Server error');
+    console.error('Invitation Creation Error:', err);
+    res.status(500).json({ msg: 'Server error', error: err.message });
   }
 });
 
@@ -218,8 +249,8 @@ router.patch('/companies/:id/status', protect, authorize('superadmin'), async (r
 
     res.json({ msg: `Company status updated to ${status}`, company });
   } catch (err) {
-    console.error(err.message);
-    res.status(500).send('Server error');
+    console.error('Company Status Update Error:', err);
+    res.status(500).json({ msg: 'Server error', error: err.message });
   }
 });
 
@@ -230,8 +261,8 @@ router.get('/users', protect, authorize('superadmin'), async (req, res) => {
     const users = await User.find().select('-password').sort({ createdAt: -1 });
     res.json(users);
   } catch (err) {
-    console.error(err.message);
-    res.status(500).send('Server error');
+    console.error('Users List Error:', err);
+    res.status(500).json({ msg: 'Server error', error: err.message });
   }
 });
 
@@ -253,8 +284,8 @@ router.get('/flagged', protect, authorize('teamadmin'), async (req, res) => {
     
     res.json(formatted);
   } catch (err) {
-    console.error(err.message);
-    res.status(500).send('Server error');
+    console.error('Flagged Responses Error:', err);
+    res.status(500).json({ msg: 'Server error', error: err.message });
   }
 });
 

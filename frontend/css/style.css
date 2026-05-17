@@ -299,6 +299,13 @@ a, button {
   backdrop-filter: blur(16px);
 }
 
+/* Always-visible nav for authenticated/inner pages */
+.nav.nav-always-visible {
+  transform: translateY(0);
+  background: rgba(0, 0, 0, 0.92);
+  backdrop-filter: blur(16px);
+}
+
 .nav.hide-nav {
   transform: translateY(-100%);
 }
@@ -315,8 +322,9 @@ a, button {
   align-items: center;
 }
 .logo-img {
-  height: 80px;
+  height: 36px;
   width: auto;
+  display: block;
 }
 
 /* Centered logo variation for inner pages */
@@ -329,7 +337,7 @@ a, button {
   transform: translateX(-50%);
 }
 .nav.nav-center .logo-img {
-  height: 96px; /* Larger centered logo */
+  height: 40px;
 }
 
 .nav-links {

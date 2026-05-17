@@ -2,7 +2,7 @@ const user = JSON.parse(localStorage.getItem('user'));
 
 document.addEventListener('DOMContentLoaded', () => {
     if (!user) {
-        window.location.href = '/html/login.html';
+        window.location.href = '/login';
         return;
     }
 
@@ -10,7 +10,8 @@ document.addEventListener('DOMContentLoaded', () => {
     document.getElementById('profileRole').textContent = `ID_${user.role.toUpperCase()}`;
     document.getElementById('welcomeText').innerHTML = `Welcome back, <i class="soul-text">${user.name.split(' ')[0]}</i>`;
 
-    if (user.role === 'teamadmin') {
+    const role = user.role.toLowerCase();
+    if (role === 'teamadmin' || role === 'superadmin') {
         document.getElementById('adminSection').style.display = 'block';
         initAdminDashboard();
     } else {
@@ -178,7 +179,7 @@ async function initMemberDashboard() {
             document.getElementById('challengeTitle').textContent = c.title;
             document.getElementById('challengeScenario').textContent = c.scenario.substring(0, 150) + '...';
             document.getElementById('startChallengeBtn').onclick = () => {
-                window.location.href = `/html/take-evaluation.html?challengeId=${c._id}`;
+                window.location.href = `/evaluate?challengeId=${c._id}`;
             };
         } else {
             document.getElementById('challengeTitle').textContent = "ALL CAUGHT UP";

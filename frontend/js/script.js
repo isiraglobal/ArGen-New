@@ -5,6 +5,22 @@
 (function () {
   'use strict';
 
+  /* ─────────────── VARIABLE DECLARATIONS (must be at top to avoid TDZ) ─────────────── */
+  let particles = [];
+  let mouse = { x: -1000, y: -1000 };
+  let particleCanvas, pCtx;
+  let animFrameId;
+  let hasInteracted = false;
+  let rippleTarget = { x: 0, y: 0 };
+  let rippleRadius = 0;
+  let dpr = 1;
+  let bootIdx = 0, progress = 0;
+
+  /* ─────────────── CONSTANTS ─────────────── */
+  const REPULSION_RADIUS = 150;
+  const REPULSION_STRENGTH = 1.5;
+  const COLORS = ['#4A6EE0', '#7C3AED', '#06B6D4', '#22C55E', '#FFFFFF'];
+
   /* ─────────────── BOOT SEQUENCE ─────────────── */
   const bootLines = [
     'Initializing ArGen Core...',
@@ -18,7 +34,6 @@
   const loaderLines = document.getElementById('loaderLines');
   const loaderFill = document.getElementById('loaderFill');
   const loaderPct = document.getElementById('loaderPct');
-  let bootIdx = 0, progress = 0;
 
   function bootTick() {
     if (bootIdx < bootLines.length) {
@@ -51,15 +66,24 @@
 
   /* ─────────────── MAIN INIT ─────────────── */
   function initAll() {
-    initParticles();
-    initLenis();
-    initNav();
-    initAuthUI();
-    initMobileMenu();
-    initAccordions();
-    initGSAP();
-    initCounters();
-    initAiBar();
+    try {
+      initParticles();
+      initLenis();
+      initNav();
+      initAuthUI();
+      initMobileMenu();
+      initAccordions();
+      initGSAP();
+      initCounters();
+      initAiBar();
+    } catch (err) {
+      console.error('ArGen Init Error:', err);
+      // Fallback: Reveal all elements if GSAP fails
+      document.querySelectorAll('.reveal').forEach(el => {
+        el.style.opacity = '1';
+        el.style.transform = 'none';
+      });
+    }
   }
 
   /* ═══════════════════════════════════════════
@@ -68,17 +92,6 @@
      - Mouse repulsion
      - Ripple fade out on interaction
      ═══════════════════════════════════════════ */
-  let particles = [];
-  let mouse = { x: -1000, y: -1000 };
-  let particleCanvas, pCtx;
-  const REPULSION_RADIUS = 150;
-  const REPULSION_STRENGTH = 1.5;
-  const COLORS = ['#4A6EE0', '#7C3AED', '#06B6D4', '#22C55E', '#FFFFFF'];
-  let animFrameId;
-  let hasInteracted = false;
-  let rippleTarget = { x: 0, y: 0 };
-  let rippleRadius = 0;
-  let dpr = 1;
 
   function initParticles() {
     particleCanvas = document.getElementById('particleCanvas');

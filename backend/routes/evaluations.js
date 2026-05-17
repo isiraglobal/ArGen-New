@@ -11,6 +11,14 @@ const { protect, authorize, isApproved } = require('../middleware/auth');
 // @desc    Trigger AI Intelligence Cycle to generate challenges
 // @access  Private (TeamAdmin)
 router.post('/generate-ai', protect, isApproved, authorize('teamadmin'), async (req, res) => {
+  if (global.MOCK_DB) {
+    return res.status(201).json({
+      _id: 'mock-eval-id',
+      title: `Mock AI Cycle - ${new Date().toLocaleDateString()}`,
+      status: 'active',
+      challenges: ['mock-ch-1', 'mock-ch-2']
+    });
+  }
   try {
     const company = await Company.findById(req.user.companyId);
     const users = await User.find({ companyId: req.user.companyId, role: 'member' });
@@ -90,6 +98,12 @@ router.post('/', protect, isApproved, authorize('teamadmin'), async (req, res) =
 // @desc    Get all evaluations for the user's company
 // @access  Private
 router.get('/', protect, isApproved, async (req, res) => {
+  if (global.MOCK_DB) {
+    return res.json([
+      { _id: 'mock-1', title: 'Q1 AI Proficiency', status: 'active', createdAt: new Date() },
+      { _id: 'mock-2', title: 'Onboarding Assessment', status: 'completed', createdAt: new Date(Date.now() - 86400000) }
+    ]);
+  }
   try {
     const evaluations = await Evaluation.find({ companyId: req.user.companyId })
       .populate('challenges', 'title difficulty category')

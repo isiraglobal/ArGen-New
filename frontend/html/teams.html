@@ -5,11 +5,11 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Team Access - ArGen</title>
-  <link rel="icon" type="image/png" href="/images/ArGen Logo.png">
+  <link rel="icon" type="image/png" href="../images/ArGen Logo.png">
   <link
     href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono&display=swap"
     rel="stylesheet">
-  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="../css/style.css">
   <style>
     .passcode-page {
       min-height: 100dvh;
@@ -56,11 +56,11 @@
 </head>
 
 <body class="bg-black">
-  <script src="/js/auth-guard.js"></script>
+  <script src="../js/auth-guard.js"></script>
   
   <div class="passcode-page">
     <div class="passcode-card">
-      <img src="/images/ArGen Logo.png" alt="ArGen" style="width: 40px; margin-bottom: 2rem;">
+      <img src="../images/ArGen Logo.png" alt="ArGen" style="width: 40px; margin-bottom: 2rem;">
       <h1 class="card-h3" style="font-size: 1.5rem;">Team <i class="soul-text">Verification</i></h1>
       <p style="color: var(--text-sec); font-size: 0.85rem; margin-top: 0.5rem;">Enter your team's secure access passcode to proceed to the workspace.</p>
       
@@ -75,7 +75,7 @@
     </div>
   </div>
 
-  <script src="/js/api.js"></script>
+  <script src="../js/api.js"></script>
   <script>
     const user = JSON.parse(localStorage.getItem('user'));
     
@@ -96,7 +96,7 @@
         if (response.valid) {
           // Store verification in session storage so it doesn't ask again this session
           sessionStorage.setItem('team_verified', 'true');
-          window.location.href = '/html/dashboard.html';
+          window.location.href = '/dashboard';
         } else {
           errorEl.style.display = 'block';
         }

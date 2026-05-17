@@ -5,11 +5,11 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Take Evaluation - ArGen</title>
-  <link rel="icon" type="image/png" href="/images/ArGen Logo.png">
+  <link rel="icon" type="image/png" href="../images/ArGen Logo.png">
   <link
     href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono&display=swap"
     rel="stylesheet">
-  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="../css/style.css">
   <style>
     .eval-container {
       padding-top: 100px;
@@ -127,12 +127,12 @@
 </head>
 
 <body class="bg-black">
-  <script src="/js/auth-guard.js"></script>
+  <script src="../js/auth-guard.js"></script>
   
   <header class="nav">
     <div class="nav-inner">
       <a href="/dashboard" class="nav-logo">
-        <img src="/images/ArGen Logo.png" alt="ArGen" class="logo-img">
+        <img src="../images/ArGen Logo.png" alt="ArGen" class="logo-img">
       </a>
       <div id="evalStatus" style="font-family: var(--font-mono); font-size: 0.7rem; color: var(--text-sec);">
         SESSION_ACTIVE // <span id="timer" style="color: var(--argen-blue);">00:00:00</span>
@@ -200,7 +200,7 @@
     </div>
   </main>
 
-  <script src="/js/api.js"></script>
+  <script src="../js/api.js"></script>
   <script>
     const urlParams = new URLSearchParams(window.location.search);
     const challengeId = urlParams.get('challengeId');

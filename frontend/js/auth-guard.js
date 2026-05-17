@@ -25,7 +25,8 @@
     if (token && user) {
         const isSuperadminPath = superadminPaths.some(path => currentPath.includes(path));
         
-        if (isSuperadminPath && user.role !== 'superadmin') {
+        const role = user.role.toLowerCase();
+        if (isSuperadminPath && role !== 'superadmin') {
             console.error('[AuthGuard] Superadmin access denied.');
             window.location.href = '/dashboard';
             return;
@@ -33,7 +34,7 @@
 
         // If trying to access login while already logged in
         if (currentPath.includes('login')) {
-            if (user.role === 'superadmin') {
+            if (role === 'superadmin') {
                 window.location.href = '/admin-portal';
             } else {
                 window.location.href = '/dashboard';
