@@ -43,12 +43,16 @@
   </style>
 </head>
 <body class="bg-black">
+  <script src="../js/auth-guard.js"></script>
   <header class="nav nav-always-visible">
     <div class="nav-inner">
       <a href="/" class="nav-logo">
         <img src="../images/ArGen Logo.png" alt="ArGen" class="logo-img">
       </a>
-      <div style="color: var(--white); font-family: var(--font-mono); font-size: 0.8rem;">[ADMIN_SYSTEM_v1.0]</div>
+      <div style="display: flex; align-items: center; gap: 1.5rem;">
+        <div style="color: var(--white); font-family: var(--font-mono); font-size: 0.7rem;">[ADMIN_SYSTEM_v1.0]</div>
+        <button onclick="argenApi.logout()" class="btn btn-dark" style="padding: 8px 16px; font-size: 0.7rem;">LOGOUT</button>
+      </div>
     </div>
   </header>
 
@@ -64,93 +68,97 @@
         </div>
       </div>
 
-      <div class="auth-tabs" style="max-width: 800px; margin-bottom: 2rem;">
-        <div class="auth-tab active" onclick="switchView('companies')">Organizations</div>
-        <div class="auth-tab" onclick="switchView('users')">User Audit</div>
-        <div class="auth-tab" onclick="switchView('invitations')">Invitations</div>
-        <div class="auth-tab" onclick="switchView('monitor')">System Monitor</div>
-      </div>
-
-      <!-- Organizations Tab -->
-      <div id="companiesView" class="tab-view">
-        <div id="companiesList" class="admin-grid">
-          <div style="color: var(--text-sec); text-align: center; padding: 4rem;">Synchronizing organizational data...</div>
+      <div style="display: grid; grid-template-columns: 250px 1fr; gap: 2rem; align-items: flex-start;">
+        <div class="auth-tabs" style="display: flex; flex-direction: column; gap: 0.5rem; background: rgba(0,0,0,0.2); padding: 1rem; border-radius: 8px; border: 1px solid rgba(255,255,255,0.05);">
+          <div class="auth-tab active" onclick="switchView('companies')">Organizations</div>
+          <div class="auth-tab" onclick="switchView('users')">User Audit</div>
+          <div class="auth-tab" onclick="switchView('invitations')">Invitations</div>
+          <div class="auth-tab" onclick="switchView('monitor')">System Monitor</div>
         </div>
-      </div>
 
-      <!-- Users Tab -->
-      <div id="usersView" class="tab-view" style="display: none;">
-        <div id="usersList" class="admin-grid">
-          <div style="color: var(--text-sec); text-align: center; padding: 4rem;">Compiling global user audit...</div>
-        </div>
-      </div>
-
-      <!-- Invitations Tab -->
-      <div id="invitationsView" class="tab-view" style="display: none;">
-        <div class="request-card" style="margin-bottom: 2rem; display: block;">
-          <h3 style="margin-bottom: 1.5rem;">Generate Access Link</h3>
-          <form id="inviteForm" style="display: grid; grid-template-columns: 1fr 1fr auto; gap: 1rem; align-items: flex-end;">
-            <div class="form-group" style="margin-bottom: 0;">
-              <label class="form-label" style="font-size: 0.65rem;">COMPANY NAME</label>
-              <input type="text" id="inv-company" class="form-input" placeholder="Acme Corp" required style="padding: 10px;">
-            </div>
-            <div class="form-group" style="margin-bottom: 0;">
-              <label class="form-label" style="font-size: 0.65rem;">ADMIN EMAIL</label>
-              <input type="email" id="inv-email" class="form-input" placeholder="admin@acme.com" required style="padding: 10px;">
-            </div>
-            <button type="submit" class="btn btn-primary" style="height: 42px; padding: 0 24px; font-size: 0.75rem;">GENERATE</button>
-          </form>
-          <div id="inviteResult" style="margin-top: 1.5rem; display: none; padding: 1rem; background: rgba(0,0,0,0.3); border-radius: 4px; border: 1px dashed rgba(255,255,255,0.1);">
-            <p style="font-size: 0.7rem; color: var(--text-sec); margin-bottom: 0.5rem; font-family: var(--font-mono);">UNIQUE_REGISTRATION_URL:</p>
-            <div style="display: flex; gap: 0.5rem;">
-              <input type="text" id="inviteLink" readonly class="form-input" style="background: transparent; color: var(--argen-blue); font-family: var(--font-mono); font-size: 0.75rem;">
-              <button onclick="copyInvite()" class="btn btn-dark" style="height: 42px; padding: 0 16px;">COPY</button>
+        <div class="tab-content-area" style="min-width: 0;">
+          <!-- Organizations Tab -->
+          <div id="companiesView" class="tab-view">
+            <div id="companiesList" class="admin-grid">
+              <div style="color: var(--text-sec); text-align: center; padding: 4rem;">Synchronizing organizational data...</div>
             </div>
           </div>
-        </div>
-        <div id="invitationsList" class="admin-grid"></div>
-      </div>
 
-      <!-- System Monitor Tab -->
-      <div id="monitorView" class="tab-view" style="display: none;">
-        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1.5rem; margin-bottom: 2rem;">
-          <div class="request-card" style="display: block; text-align: center;">
-            <p style="font-size: 0.65rem; color: var(--text-sec); font-family: var(--font-mono);">AGENT_STATUS</p>
-            <h2 id="activeAgents" style="font-size: 2rem; margin: 0.5rem 0;">5/5</h2>
-            <p style="font-size: 0.7rem; color: var(--green);">[ONLINE: ALL SYSTEMS]</p>
+          <!-- Users Tab -->
+          <div id="usersView" class="tab-view" style="display: none;">
+            <div id="usersList" class="admin-grid">
+              <div style="color: var(--text-sec); text-align: center; padding: 4rem;">Compiling global user audit...</div>
+            </div>
           </div>
-          <div class="request-card" style="display: block; text-align: center;">
-            <p style="font-size: 0.65rem; color: var(--text-sec); font-family: var(--font-mono);">API_QUALITY</p>
-            <h2 id="apiQualityVal" style="font-size: 2rem; margin: 0.5rem 0;">98.2%</h2>
-            <p style="font-size: 0.7rem; color: var(--text-sec);">AVG SCORE</p>
-          </div>
-          <div class="request-card" style="display: block; text-align: center;">
-            <p style="font-size: 0.65rem; color: var(--text-sec); font-family: var(--font-mono);">CREDITS_SPENT</p>
-            <h2 id="creditSpentVal" style="font-size: 2rem; margin: 0.5rem 0;">$0.00</h2>
-            <p style="font-size: 0.7rem; color: var(--text-sec);">LAST 24 HOURS</p>
-          </div>
-          <div class="request-card" style="display: block; text-align: center;">
-            <p style="font-size: 0.65rem; color: var(--text-sec); font-family: var(--font-mono);">CREDITS_LEFT</p>
-            <h2 id="creditLeftVal" style="font-size: 2rem; margin: 0.5rem 0;">$1000.00</h2>
-            <p style="font-size: 0.7rem; color: var(--text-sec);">PLATFORM BUDGET</p>
-          </div>
-        </div>
 
-        <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 1.5rem; margin-bottom: 2rem;">
-          <div class="request-card" style="display: block; min-height: 350px;">
-            <p class="section-sub" style="font-size: 0.65rem; margin-bottom: 1rem;">[VISUAL_ANALYTICS_ENGINE]</p>
-            <div style="height: 300px;"><canvas id="usageChart"></canvas></div>
+          <!-- Invitations Tab -->
+          <div id="invitationsView" class="tab-view" style="display: none;">
+            <div class="request-card" style="margin-bottom: 2rem; display: block;">
+              <h3 style="margin-bottom: 1.5rem;">Generate Access Link</h3>
+              <form id="inviteForm" style="display: grid; grid-template-columns: 1fr 1fr auto; gap: 1rem; align-items: flex-end;">
+                <div class="form-group" style="margin-bottom: 0;">
+                  <label class="form-label" style="font-size: 0.65rem;">COMPANY NAME</label>
+                  <input type="text" id="inv-company" class="form-input" placeholder="Acme Corp" required style="padding: 10px;">
+                </div>
+                <div class="form-group" style="margin-bottom: 0;">
+                  <label class="form-label" style="font-size: 0.65rem;">ADMIN EMAIL</label>
+                  <input type="email" id="inv-email" class="form-input" placeholder="admin@acme.com" required style="padding: 10px;">
+                </div>
+                <button type="submit" class="btn btn-primary" style="height: 42px; padding: 0 24px; font-size: 0.75rem;">GENERATE</button>
+              </form>
+              <div id="inviteResult" style="margin-top: 1.5rem; display: none; padding: 1rem; background: rgba(0,0,0,0.3); border-radius: 4px; border: 1px dashed rgba(255,255,255,0.1);">
+                <p style="font-size: 0.7rem; color: var(--text-sec); margin-bottom: 0.5rem; font-family: var(--font-mono);">UNIQUE_REGISTRATION_URL:</p>
+                <div style="display: flex; gap: 0.5rem;">
+                  <input type="text" id="inviteLink" readonly class="form-input" style="background: transparent; color: var(--argen-blue); font-family: var(--font-mono); font-size: 0.75rem;">
+                  <button onclick="copyInvite()" class="btn btn-dark" style="height: 42px; padding: 0 16px;">COPY</button>
+                </div>
+              </div>
+            </div>
+            <div id="invitationsList" class="admin-grid"></div>
           </div>
-          <div class="request-card" style="display: block; min-height: 350px;">
-            <p class="section-sub" style="font-size: 0.65rem; margin-bottom: 1rem;">[REAL_TIME_AGENT_LOGS]</p>
-            <div id="agent-logs" style="max-height: 280px; overflow-y: auto; font-family: var(--font-mono); font-size: 0.7rem;"></div>
-          </div>
-        </div>
 
-        <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1.5rem;">
-          <div class="request-card" style="display: block;"><canvas id="qualityChart"></canvas></div>
-          <div class="request-card" style="display: block;"><canvas id="tokenChart"></canvas></div>
-          <div class="request-card" style="display: block;"><canvas id="agentPerfChart"></canvas></div>
+          <!-- System Monitor Tab -->
+          <div id="monitorView" class="tab-view" style="display: none;">
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 1rem; margin-bottom: 2rem;">
+              <div class="request-card" style="display: block; text-align: center; padding: 1.5rem 1rem;">
+                <p style="font-size: 0.65rem; color: var(--text-sec); font-family: var(--font-mono);">AGENT_STATUS</p>
+                <h2 id="activeAgents" style="font-size: 1.75rem; margin: 0.5rem 0;">5/5</h2>
+                <p style="font-size: 0.65rem; color: var(--green);">[ONLINE: ALL SYSTEMS]</p>
+              </div>
+              <div class="request-card" style="display: block; text-align: center; padding: 1.5rem 1rem;">
+                <p style="font-size: 0.65rem; color: var(--text-sec); font-family: var(--font-mono);">API_QUALITY</p>
+                <h2 id="apiQualityVal" style="font-size: 1.75rem; margin: 0.5rem 0;">98.2%</h2>
+                <p style="font-size: 0.65rem; color: var(--text-sec);">AVG SCORE</p>
+              </div>
+              <div class="request-card" style="display: block; text-align: center; padding: 1.5rem 1rem;">
+                <p style="font-size: 0.65rem; color: var(--text-sec); font-family: var(--font-mono);">CREDITS_SPENT</p>
+                <h2 id="creditSpentVal" style="font-size: 1.75rem; margin: 0.5rem 0;">$0.00</h2>
+                <p style="font-size: 0.65rem; color: var(--text-sec);">LAST 24 HOURS</p>
+              </div>
+              <div class="request-card" style="display: block; text-align: center; padding: 1.5rem 1rem;">
+                <p style="font-size: 0.65rem; color: var(--text-sec); font-family: var(--font-mono);">CREDITS_LEFT</p>
+                <h2 id="creditLeftVal" style="font-size: 1.75rem; margin: 0.5rem 0;">$1000.00</h2>
+                <p style="font-size: 0.65rem; color: var(--text-sec);">PLATFORM BUDGET</p>
+              </div>
+            </div>
+
+            <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 1.5rem; margin-bottom: 2rem;">
+              <div class="request-card" style="display: block; min-height: 350px;">
+                <p class="section-sub" style="font-size: 0.65rem; margin-bottom: 1rem;">[VISUAL_ANALYTICS_ENGINE]</p>
+                <div style="height: 300px; width: 100%; position: relative;"><canvas id="usageChart"></canvas></div>
+              </div>
+              <div class="request-card" style="display: block; min-height: 350px;">
+                <p class="section-sub" style="font-size: 0.65rem; margin-bottom: 1rem;">[REAL_TIME_AGENT_LOGS]</p>
+                <div id="agent-logs" style="max-height: 280px; overflow-y: auto; font-family: var(--font-mono); font-size: 0.7rem;"></div>
+              </div>
+            </div>
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1.5rem;">
+              <div class="request-card" style="display: block; position: relative; height: 200px;"><canvas id="qualityChart"></canvas></div>
+              <div class="request-card" style="display: block; position: relative; height: 200px;"><canvas id="tokenChart"></canvas></div>
+              <div class="request-card" style="display: block; position: relative; height: 200px;"><canvas id="agentPerfChart"></canvas></div>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -209,6 +217,25 @@
     }
 
     function initCharts(stats) {
+      // Usage Chart
+      const ctxU = document.getElementById('usageChart').getContext('2d');
+      if (charts.usage) charts.usage.destroy();
+      charts.usage = new Chart(ctxU, {
+        type: 'line',
+        data: {
+          labels: ['12am', '4am', '8am', '12pm', '4pm', '8pm', 'Now'],
+          datasets: [{
+            label: 'API Calls',
+            data: [120, 80, 450, 900, 1100, 850, 400],
+            borderColor: '#2b60e2',
+            tension: 0.4,
+            fill: true,
+            backgroundColor: 'rgba(43, 96, 226, 0.1)'
+          }]
+        },
+        options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { x: { grid: { color: 'rgba(255,255,255,0.05)' } }, y: { grid: { color: 'rgba(255,255,255,0.05)' } } } }
+      });
+
       // Quality Chart
       const ctxQ = document.getElementById('qualityChart').getContext('2d');
       if (charts.quality) charts.quality.destroy();

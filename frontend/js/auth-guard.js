@@ -3,10 +3,10 @@
     const userStr = localStorage.getItem('user');
     const user = userStr ? JSON.parse(userStr) : null;
     
-    // Define path groups
-    const superadminPaths = ['/html/admin-portal.html', '/html/admin-dashboard.html'];
-    const teamadminPaths = ['/html/dashboard.html', '/html/teams.html', '/html/team-detail.html'];
-    const memberPaths = ['/html/dashboard.html', '/html/challenges.html'];
+    // Define path groups (support both .html extension and clean routes)
+    const superadminPaths = ['/html/admin-portal.html', '/admin-portal', '/html/admin-dashboard.html', '/admin-dashboard'];
+    const teamadminPaths = ['/html/dashboard.html', '/dashboard', '/html/teams.html', '/teams', '/html/team-detail.html', '/team-detail'];
+    const memberPaths = ['/html/dashboard.html', '/dashboard', '/html/challenges.html', '/challenges', '/take-evaluation'];
     
     const currentPath = window.location.pathname;
 

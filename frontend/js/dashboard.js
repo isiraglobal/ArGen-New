@@ -22,17 +22,16 @@ document.addEventListener('DOMContentLoaded', () => {
 
 async function initAdminDashboard() {
     try {
-        const company = await argenApi.request('/admin/my-company');
+        const company = await argenApi.getMyCompany();
         if (company) {
             document.getElementById('orgName').textContent = company.name.toUpperCase();
             document.getElementById('inviteCodeDisplay').textContent = company.inviteCode;
         }
 
-        const leaderboard = await argenApi.request('/leaderboard');
+        const leaderboard = await argenApi.getLeaderboard();
         renderAdminLeaderboard(leaderboard);
 
-        // Fetch real stats from our new aggregation endpoints
-        const stats = await argenApi.request('/admin/company-dashboard-stats'); 
+        const stats = await argenApi.getDashboardStats();
         renderAdminStats(leaderboard, stats);
         renderCharts(stats);
         renderHeatmap(stats);
@@ -160,39 +159,40 @@ function renderHeatmap(stats) {
 
 async function initMemberDashboard() {
     try {
-        const company = await argenApi.request('/admin/my-company');
+        const company = await argenApi.getMyCompany();
         if (company) {
             document.getElementById('orgName').textContent = company.name.toUpperCase();
         }
 
         // Streak
-        const me = await argenApi.request('/auth/me'); // To get updated streak
+        const me = await argenApi.getMe();
         document.getElementById('currentStreakVal').textContent = me.currentStreak || 0;
         document.getElementById('memberStreakLarge').textContent = me.currentStreak || 0;
         document.getElementById('longestStreakVal').textContent = me.longestStreak || 0;
         document.getElementById('streakBadge').style.display = 'flex';
 
         // Challenge
-        const challenges = await argenApi.request('/challenges/active');
+        const challenges = await argenApi.getActiveChallenges();
         if (challenges && challenges.length > 0) {
             const c = challenges[0];
-            document.getElementById('challengeTitle').textContent = c.title;
-            document.getElementById('challengeScenario').textContent = c.scenario.substring(0, 150) + '...';
+            document.getElementById('challengeTitle').textContent = c.title || c.name;
+            const scenarioText = c.scenario || c.text || c.description || '';
+            document.getElementById('challengeScenario').textContent = scenarioText.substring(0, 150) + '...';
             document.getElementById('startChallengeBtn').onclick = () => {
-                window.location.href = `/evaluate?challengeId=${c._id}`;
+                window.location.href = `/take-evaluation?challengeId=${c._id}`;
             };
         } else {
-            document.getElementById('challengeTitle').textContent = "ALL CAUGHT UP";
-            document.getElementById('challengeScenario').textContent = "The AI is currently researching new scenarios. Check back tomorrow.";
+            document.getElementById('challengeTitle').textContent = 'ALL CAUGHT UP';
+            document.getElementById('challengeScenario').textContent = 'The AI is currently researching new scenarios. Check back tomorrow.';
             document.getElementById('startChallengeBtn').style.display = 'none';
         }
 
         // Leaderboard
-        const leaderboard = await argenApi.request('/leaderboard');
+        const leaderboard = await argenApi.getLeaderboard();
         renderMemberLeaderboard(leaderboard);
 
         // History
-        const history = await argenApi.request('/responses/my');
+        const history = await argenApi.getMyResponses();
         renderHistory(history);
 
     } catch (err) {
@@ -202,7 +202,7 @@ async function initMemberDashboard() {
 
 function renderAdminLeaderboard(leaderboard) {
     const container = document.getElementById('adminLeaderboard');
-    if (!leaderboard.length) {
+    if (!leaderboard || !leaderboard.length) {
         container.innerHTML = '<p class="batch-meta">Waiting for team activity...</p>';
         return;
     }
@@ -214,8 +214,8 @@ function renderAdminLeaderboard(leaderboard) {
                 <span style="font-weight: 600;">${u.name}</span>
             </div>
             <div style="text-align: right;">
-                <div style="font-weight: 700; color: var(--argen-blue);">${u.totalScore ? u.totalScore.toFixed(1) : '0.0'}</div>
-                <div style="font-size: 0.6rem; color: var(--text-sec);">STREAK: ${u.currentStreak || 0}D</div>
+                <div style="font-weight: 700; color: var(--argen-blue);">${u.totalScore != null ? Number(u.totalScore).toFixed(1) : (u.score != null ? Number(u.score).toFixed(1) : '0.0')}</div>
+                <div style="font-size: 0.6rem; color: var(--text-sec);">STREAK: ${u.currentStreak || u.streak || 0}D</div>
             </div>
         </div>
     `).join('');
@@ -266,7 +266,7 @@ async function checkFlaggedSubmissions() {
         const panel = document.getElementById('flaggedPanel');
         const list = document.getElementById('flaggedList');
         
-        const flagged = await argenApi.request('/admin/flagged');
+        const flagged = await argenApi.getFlaggedSubmissions();
 
         if (flagged && flagged.length > 0) {
             panel.style.display = 'block';
@@ -288,8 +288,7 @@ async function triggerAICycle() {
     btn.textContent = 'EXECUTING AGENTIC LOOP...';
 
     try {
-        // Trigger the scheduler route we created
-        await argenApi.request('/scheduler/daily', { method: 'POST' });
+        await argenApi.triggerDailyCycle();
         alert('AI Agents have successfully performed company research and synchronized daily challenges.');
         location.reload();
     } catch (err) {

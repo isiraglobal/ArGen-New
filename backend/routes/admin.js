@@ -140,6 +140,12 @@ router.get('/agent-logs', protect, authorize('superadmin'), async (req, res) => 
 // @route   GET api/admin/companies
 // @desc    Get all companies (Superadmin only)
 router.get('/companies', protect, authorize('superadmin'), async (req, res) => {
+  if (global.MOCK_DB) {
+    return res.json([
+      { _id: 'mock-co-1', name: 'TechFlow Inc', industry: 'SaaS', status: 'active', inviteCode: 'TF001' },
+      { _id: 'mock-co-2', name: 'DataCore Labs', industry: 'AI Research', status: 'pending', inviteCode: 'DC002' }
+    ]);
+  }
   try {
     const companies = await Company.find().sort({ createdAt: -1 });
     res.json(companies);
@@ -257,6 +263,12 @@ router.patch('/companies/:id/status', protect, authorize('superadmin'), async (r
 // @route   GET api/admin/users
 // @desc    Get all users (for safety/audit)
 router.get('/users', protect, authorize('superadmin'), async (req, res) => {
+  if (global.MOCK_DB) {
+    return res.json([
+      { _id: 'mock-u1', name: 'Alex Chen', email: 'alex@techflow.io', role: 'member', companyId: 'mock-co-1' },
+      { _id: 'mock-u2', name: 'Sarah Kim', email: 'sarah@techflow.io', role: 'teamadmin', companyId: 'mock-co-1' }
+    ]);
+  }
   try {
     const users = await User.find().select('-password').sort({ createdAt: -1 });
     res.json(users);
@@ -268,8 +280,11 @@ router.get('/users', protect, authorize('superadmin'), async (req, res) => {
 
 // @route   GET api/admin/flagged
 // @desc    Get flagged submissions for a company
-// @access  Private (TeamAdmin)
-router.get('/flagged', protect, authorize('teamadmin'), async (req, res) => {
+// @access  Private (TeamAdmin + SuperAdmin)
+router.get('/flagged', protect, authorize('teamadmin', 'superadmin'), async (req, res) => {
+  if (global.MOCK_DB) {
+    return res.json([]);
+  }
   try {
     const Response = require('../models/Response');
     const flaggedResponses = await Response.find({ 

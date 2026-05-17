@@ -60,6 +60,34 @@ router.get('/active', protect, async (req, res) => {
 // @desc    Get all challenges
 // @access  Private
 router.get('/', protect, async (req, res) => {
+  if (global.MOCK_DB) {
+    return res.json([
+      {
+        _id: 'mock-ch-1',
+        title: 'Strategic AI Deployment',
+        scenario: 'Your enterprise client has tasked you with deploying an AI-powered customer service solution across 5 regional offices. Draft a phased rollout plan addressing data privacy, change management, and ROI measurement.',
+        type: 'Strategy',
+        difficulty: 'Advanced',
+        active: true
+      },
+      {
+        _id: 'mock-ch-2',
+        title: 'Constraint-First Prompting',
+        scenario: 'Rewrite the following bloated prompt to be 50% shorter while maintaining full output quality. Identify the 3 redundant clauses and explain your removal decisions.',
+        type: 'Technical',
+        difficulty: 'Expert',
+        active: true
+      },
+      {
+        _id: 'mock-ch-3',
+        title: 'Adversarial Output Audit',
+        scenario: 'Review this AI-generated financial analysis for hallucinations, logical gaps, and unsupported claims. Provide a structured audit report with severity ratings.',
+        type: 'Audit',
+        difficulty: 'Intermediate',
+        active: true
+      }
+    ]);
+  }
   try {
     const challenges = await Challenge.find().sort({ createdAt: -1 });
     res.json(challenges);

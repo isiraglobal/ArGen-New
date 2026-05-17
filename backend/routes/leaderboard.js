@@ -8,6 +8,15 @@ const Response = require('../models/Response');
 // @desc    Get weekly leaderboard for the user's company
 // @access  Private
 router.get('/', protect, isApproved, async (req, res) => {
+  if (global.MOCK_DB) {
+    return res.json([
+      { id: 'mock-1', userId: 'mock-1', name: 'Alex Chen', totalScore: 94.2, currentStreak: 7, daysCompleted: 5, rank: 1 },
+      { id: 'mock-2', userId: 'mock-2', name: 'Sarah Kim', totalScore: 88.5, currentStreak: 5, daysCompleted: 5, rank: 2 },
+      { id: 'mock-3', userId: 'mock-3', name: 'James Okafor', totalScore: 81.0, currentStreak: 3, daysCompleted: 4, rank: 3 },
+      { id: 'mock-4', userId: 'mock-4', name: 'Priya Nair', totalScore: 75.4, currentStreak: 2, daysCompleted: 4, rank: 4 },
+      { id: 'mock-5', userId: 'mock-5', name: 'Marcus T.', totalScore: 68.0, currentStreak: 1, daysCompleted: 3, rank: 5 }
+    ]);
+  }
   try {
     // 1. Get start of current week (Monday 00:00)
     const now = new Date();

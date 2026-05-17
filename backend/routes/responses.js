@@ -9,9 +9,22 @@ const { protect, isApproved, authorize } = require('../middleware/auth');
 // @route   POST api/responses/submit
 // @desc    Submit a response for a challenge in a batch
 // @access  Private (Member)
-router.post('/submit', protect, isApproved, authorize('member', 'teamadmin'), async (req, res) => {
+router.post('/submit', protect, isApproved, authorize('member', 'teamadmin', 'superadmin'), async (req, res) => {
   const { evaluationId, challengeId, promptText, modelOutput, workflowApproach, timeTaken, baselineTime, responseText: reqResponseText } = req.body;
   const responseText = reqResponseText || `Prompt: ${promptText}\n\nOutput: ${modelOutput}`;
+
+  if (global.MOCK_DB) {
+    return res.status(201).json({
+      _id: 'mock-resp-' + Date.now(),
+      challengeId,
+      scores: { clarity: 82, constraint_application: 78, output_specificity: 85, iteration_quality: 71, total: 79 },
+      justification: 'Strong clarity and output specificity. Focus on iteration quality for improvement.',
+      improvement: 'Try breaking your prompt into numbered steps to improve constraint application scores.',
+      flags: [],
+      scoringStatus: 'Scored',
+      createdAt: new Date()
+    });
+  }
 
   try {
     // 1. Verify evaluation and challenge
@@ -34,7 +47,11 @@ router.post('/submit', protect, isApproved, authorize('member', 'teamadmin'), as
       createdAt: { $gte: startOfDay }
     });
     if (existing) {
-      return res.status(400).json({ msg: 'You have already submitted a response for this challenge today.' });
+      if (process.env.NODE_ENV === 'production') {
+        return res.status(400).json({ msg: 'You have already submitted a response for this challenge today.' });
+      } else {
+        console.log("Development Bypass: Allowing duplicate challenge submission for testing.");
+      }
     }
 
     // 3. Call AI Scoring Agent
@@ -92,6 +109,13 @@ router.post('/submit', protect, isApproved, authorize('member', 'teamadmin'), as
 // @desc    Get current user's submissions
 // @access  Private
 router.get('/my', protect, isApproved, async (req, res) => {
+  if (global.MOCK_DB) {
+    return res.json([
+      { _id: 'mock-r1', challengeId: { title: 'Strategic AI Deployment' }, overallScore: 82, createdAt: new Date(Date.now() - 86400000 * 1) },
+      { _id: 'mock-r2', challengeId: { title: 'Constraint-First Prompting' }, overallScore: 75, createdAt: new Date(Date.now() - 86400000 * 2) },
+      { _id: 'mock-r3', challengeId: { title: 'Adversarial Output Audit' }, overallScore: 91, createdAt: new Date(Date.now() - 86400000 * 3) }
+    ]);
+  }
   try {
     const responses = await Response.find({ user: req.user.id })
       .populate('challenge', 'title')

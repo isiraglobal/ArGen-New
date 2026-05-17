@@ -207,32 +207,49 @@
     const evaluationId = urlParams.get('evaluationId');
 
     let currentChallenge = null;
+    let timerSeconds = 0;
 
     document.addEventListener('DOMContentLoaded', async () => {
       if (!challengeId) {
         window.location.href = '/dashboard';
         return;
       }
-      loadChallenge();
+      await loadChallenge();
       startTimer();
     });
 
     async function loadChallenge() {
       try {
-        const challenges = await argenApi.request('/challenges');
+        // Try to load the specific challenge
+        const challenges = await argenApi.getChallenges();
         currentChallenge = challenges.find(c => c._id === challengeId);
-        
-        if (!currentChallenge) throw new Error('Challenge not found');
 
-        document.getElementById('challengeTitle').textContent = currentChallenge.title;
-        document.getElementById('challengeDesc').textContent = currentChallenge.scenario || currentChallenge.description;
+        // If not found (mock IDs), use the first available challenge
+        if (!currentChallenge && challenges.length > 0) {
+          currentChallenge = challenges[0];
+        }
+
+        if (!currentChallenge) throw new Error('No challenges available');
+
+        document.getElementById('challengeTitle').textContent = currentChallenge.title || currentChallenge.name;
+        document.getElementById('challengeDesc').textContent = currentChallenge.scenario || currentChallenge.text || currentChallenge.description || '';
         document.getElementById('challengeType').textContent = (currentChallenge.type || 'General').toUpperCase();
-        
+
+        // Update dimension tags if available
+        if (currentChallenge.dimensions) {
+          document.getElementById('challengeDims').innerHTML = currentChallenge.dimensions
+            .map(d => `<span class="dim-tag">${d}</span>`).join('');
+        }
+
         document.getElementById('loading').style.display = 'none';
         document.getElementById('evalContent').style.display = 'grid';
       } catch (err) {
         console.error('Error loading challenge:', err);
-        document.getElementById('loading').innerHTML = `<p style="color: var(--red);">Error: ${err.message}</p>`;
+        document.getElementById('loading').innerHTML = `
+          <div style="text-align: center; padding: 3rem;">
+            <p style="color: #ef4444; font-family: var(--font-mono); margin-bottom: 1rem;">ERROR: ${err.message}</p>
+            <a href="/dashboard" class="btn btn-dark">← Return to Dashboard</a>
+          </div>`;
       }
     }
 
@@ -244,7 +261,7 @@
       const baselineTime = document.getElementById('baselineTime').value.trim();
 
       if (!promptText || !modelOutput || !workflowApproach || !timeTaken) {
-        alert('Please fill in all mandatory fields before submitting.');
+        showToast('Please fill in all mandatory fields before submitting.', 'error');
         return;
       }
 
@@ -253,36 +270,62 @@
       btn.textContent = 'SCORING...';
 
       try {
-        await argenApi.request('/responses/submit', {
-          method: 'POST',
-          body: JSON.stringify({
-            challengeId,
-            evaluationId,
-            promptText,
-            modelOutput,
-            workflowApproach,
-            timeTaken,
-            baselineTime
-          })
+        const result = await argenApi.submitEvaluationResponse({
+          challengeId: currentChallenge._id,
+          evaluationId: evaluationId || null,
+          promptText,
+          modelOutput,
+          workflowApproach,
+          timeTaken,
+          baselineTime
         });
 
-        alert('Submission successful! Redirecting to dashboard...');
-        window.location.href = '/dashboard';
+        // Show score result
+        const total = result.scores?.total || 0;
+        const grade = total >= 85 ? '🏆 ELITE' : total >= 70 ? '✅ PROFICIENT' : '📈 DEVELOPING';
+        showResultModal(total, grade, result.justification, result.improvement);
       } catch (err) {
-        alert(err.message);
+        showToast(err.message, 'error');
         btn.disabled = false;
         btn.textContent = 'Submit for Scoring →';
       }
     }
 
+    function showResultModal(score, grade, justification, improvement) {
+      const overlay = document.createElement('div');
+      overlay.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,0.85);backdrop-filter:blur(10px);display:flex;align-items:center;justify-content:center;z-index:9999;padding:2rem;';
+      overlay.innerHTML = `
+        <div style="max-width:560px;width:100%;background:rgba(10,10,10,0.95);border:1px solid rgba(255,255,255,0.1);border-radius:16px;padding:2.5rem;">
+          <div style="font-family:var(--font-mono);font-size:0.65rem;color:var(--argen-blue);letter-spacing:2px;margin-bottom:1rem;">EVALUATION COMPLETE</div>
+          <div style="font-size:4rem;font-weight:800;color:#fff;margin-bottom:0.25rem;">${Number(score).toFixed(1)}</div>
+          <div style="font-size:0.9rem;color:var(--text-sec);margin-bottom:1.5rem;">${grade}</div>
+          <div style="background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.06);border-radius:8px;padding:1.25rem;margin-bottom:1rem;">
+            <p style="font-size:0.8rem;color:var(--text-sec);line-height:1.6;">${justification || 'Evaluation scored successfully.'}</p>
+          </div>
+          ${improvement ? `<div style="background:rgba(43,96,226,0.06);border:1px solid rgba(43,96,226,0.2);border-radius:8px;padding:1.25rem;margin-bottom:1.5rem;">
+            <div style="font-family:var(--font-mono);font-size:0.6rem;color:var(--argen-blue);margin-bottom:0.5rem;">IMPROVEMENT VECTOR</div>
+            <p style="font-size:0.8rem;color:var(--text-sec);line-height:1.6;">${improvement}</p>
+          </div>` : ''}
+          <a href="/dashboard" class="btn btn-primary" style="width:100%;display:block;text-align:center;padding:14px;">← Return to Dashboard</a>
+        </div>`;
+      document.body.appendChild(overlay);
+    }
+
+    function showToast(message, type = 'info') {
+      const toast = document.createElement('div');
+      toast.style.cssText = `position:fixed;bottom:2rem;left:50%;transform:translateX(-50%);background:${type === 'error' ? '#ef4444' : '#2b60e2'};color:#fff;padding:12px 24px;border-radius:8px;font-family:var(--font-mono);font-size:0.8rem;z-index:9999;max-width:90vw;text-align:center;`;
+      toast.textContent = message;
+      document.body.appendChild(toast);
+      setTimeout(() => toast.remove(), 5000);
+    }
+
     function startTimer() {
-      let seconds = 0;
       const timerEl = document.getElementById('timer');
       setInterval(() => {
-        seconds++;
-        const h = Math.floor(seconds / 3600).toString().padStart(2, '0');
-        const m = Math.floor((seconds % 3600) / 60).toString().padStart(2, '0');
-        const s = (seconds % 60).toString().padStart(2, '0');
+        timerSeconds++;
+        const h = Math.floor(timerSeconds / 3600).toString().padStart(2, '0');
+        const m = Math.floor((timerSeconds % 3600) / 60).toString().padStart(2, '0');
+        const s = (timerSeconds % 60).toString().padStart(2, '0');
         timerEl.textContent = `${h}:${m}:${s}`;
       }, 1000);
     }

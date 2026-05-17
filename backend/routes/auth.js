@@ -276,6 +276,33 @@ router.post('/login', async (req, res) => {
   }
 });
 
+// @route   GET api/auth/me
+// @desc    Get current authenticated user's profile
+// @access  Private
+const { protect } = require('../middleware/auth');
+router.get('/me', protect, async (req, res) => {
+  if (global.MOCK_DB) {
+    return res.json({
+      id: req.user.id || 'mock-user-id',
+      name: 'Demo User',
+      email: 'demo@argen.io',
+      role: req.user.role || 'member',
+      companyId: req.user.companyId || 'mock-company-id',
+      currentStreak: 3,
+      longestStreak: 7,
+      weakestDimension: 'iteration_quality'
+    });
+  }
+  try {
+    const user = await User.findById(req.user.id).select('-password');
+    if (!user) return res.status(404).json({ msg: 'User not found' });
+    res.json(user);
+  } catch (err) {
+    console.error('Get Me Error:', err);
+    res.status(500).json({ msg: 'Server error' });
+  }
+});
+
 // @route   POST api/auth/join-team
 // @desc    Register a member via invite code
 // @access  Public
@@ -449,6 +476,10 @@ router.post('/reset-password/:token', async (req, res) => {
 // @access  Private
 router.post('/verify-passcode', async (req, res) => {
   const { inviteCode } = req.body;
+
+  if (global.MOCK_DB) {
+    return res.json({ valid: true, companyName: 'Mock Corporation' });
+  }
 
   try {
     const company = await Company.findOne({ inviteCode: inviteCode.toUpperCase() });

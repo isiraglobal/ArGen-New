@@ -39,6 +39,8 @@ const authorize = (...roles) => {
 // Check if company is active
 const isApproved = async (req, res, next) => {
   try {
+    // MOCK_DB bypass: skip DB check entirely in offline/mock mode
+    if (global.MOCK_DB) return next();
     if (req.user.role && req.user.role.toLowerCase() === 'superadmin') return next();
     
     const company = await Company.findById(req.user.companyId);
