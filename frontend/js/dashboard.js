@@ -36,6 +36,7 @@ async function initAdminDashboard() {
         renderCharts(stats);
         renderHeatmap(stats);
         checkFlaggedSubmissions();
+        loadDashboardInvoices();
     } catch (err) {
         console.error('Admin Dashboard Error:', err);
     }
@@ -343,4 +344,75 @@ function generatePDFReport() {
         element.style.backgroundColor = originalBackground;
         element.style.padding = '0';
     });
+}
+
+async function loadDashboardInvoices() {
+    try {
+        const invoices = await argenApi.getInvoices();
+        const container = document.getElementById('dashboardInvoicesList');
+        if (!container) return;
+        
+        if (!invoices || invoices.length === 0) {
+            container.innerHTML = `
+                <tr>
+                    <td colspan="6" style="padding: 2rem; text-align: center; color: var(--text-sec);">
+                        No invoice records found for your company.
+                    </td>
+                </tr>
+            `;
+            return;
+        }
+
+        container.innerHTML = invoices.map(inv => {
+            const dateStr = inv.date ? new Date(inv.date).toLocaleDateString('en-US', {
+                month: 'short', day: 'numeric', year: 'numeric'
+            }) : '---';
+            
+            const totalDue = inv.totalDue !== undefined ? parseFloat(inv.totalDue).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) : '0.00';
+            
+            let statusColor = '#9ca3af';
+            let statusBg = 'rgba(156, 163, 175, 0.1)';
+            if (inv.status === 'Paid') {
+                statusColor = 'var(--accent)';
+                statusBg = 'rgba(0, 255, 136, 0.15)';
+            } else if (inv.status === 'Sent') {
+                statusColor = '#3b82f6';
+                statusBg = 'rgba(59, 130, 246, 0.15)';
+            } else if (inv.status === 'Overdue') {
+                statusColor = '#ef4444';
+                statusBg = 'rgba(239, 68, 68, 0.15)';
+            }
+
+            return `
+                <tr style="border-bottom: 1px solid rgba(255,255,255,0.03);">
+                    <td style="padding: 1rem 0.5rem; font-weight: 700; color: #fff;">${inv.invoiceNumber}</td>
+                    <td style="padding: 1rem 0.5rem; color: var(--text-sec);">${dateStr}</td>
+                    <td style="padding: 1rem 0.5rem; color: #fff; max-width: 250px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">${inv.productName || 'Enterprise Access'}</td>
+                    <td style="padding: 1rem 0.5rem; text-align: right; font-weight: 700; color: #fff;">$${totalDue}</td>
+                    <td style="padding: 1rem 0.5rem; text-align: center;">
+                        <span style="display: inline-block; padding: 2px 8px; border-radius: 4px; font-size: 0.65rem; font-weight: 700; color: ${statusColor}; background: ${statusBg}; border: 1px solid ${statusColor}; text-transform: uppercase;">
+                            ${inv.status}
+                        </span>
+                    </td>
+                    <td style="padding: 1rem 0.5rem; text-align: right;">
+                        <a href="/invoice?id=${inv._id}" target="_blank" class="btn" style="padding: 6px 12px; font-size: 0.65rem; background: var(--accent); color: #000; border: none; font-weight: 700; border-radius: 4px; text-decoration: none; display: inline-flex; align-items: center; justify-content: center;">
+                            VIEW PDF
+                        </a>
+                    </td>
+                </tr>
+            `;
+        }).join('');
+    } catch (err) {
+        console.error('Failed to load corporate invoices:', err);
+        const container = document.getElementById('dashboardInvoicesList');
+        if (container) {
+            container.innerHTML = `
+                <tr>
+                    <td colspan="6" style="padding: 2rem; text-align: center; color: #ff4444;">
+                        Error synchronizing secure ledger records.
+                    </td>
+                </tr>
+            `;
+        }
+    }
 }

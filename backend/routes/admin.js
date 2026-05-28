@@ -7,6 +7,7 @@ const User = require('../models/User');
 const Invitation = require('../models/Invitation');
 const SystemMetric = require('../models/SystemMetric');
 const crypto = require('crypto');
+const Invoice = require('../models/Invoice');
 
 // @route   GET api/admin/stats
 // @desc    Get advanced global system statistics (Superadmin only)
@@ -239,6 +240,31 @@ router.patch('/companies/:id/status', protect, authorize('superadmin'), async (r
       company.approvedBy = req.user.id;
       company.approvedAt = Date.now();
       
+      // Auto-generate invoice automatically for active clients
+      try {
+        const invoiceNumber = 'INV-' + Math.floor(100000 + Math.random() * 900000);
+        const contactName = company.primaryContact && company.primaryContact.name ? company.primaryContact.name : company.name;
+        const contactEmail = company.primaryContact && company.primaryContact.email ? company.primaryContact.email : 'billing@' + company.name.toLowerCase().replace(/\s+/g, '') + '.com';
+        
+        const invoice = new Invoice({
+          invoiceNumber,
+          companyId: company._id,
+          clientName: contactName,
+          clientContact: contactEmail,
+          clientAddress: company.country || 'Corporate Headquarters',
+          items: [
+            { description: 'ArGen Enterprise Annual Platform License (Seat Limit: ' + (company.seatLimit || 15) + ')', amount: 1200.00 }
+          ],
+          subtotal: 1200.00,
+          totalDue: 1200.00,
+          status: 'Draft'
+        });
+        await invoice.save();
+        console.log(`Auto-generated invoice ${invoiceNumber} for active company: ${company.name}`);
+      } catch (invoiceErr) {
+        console.error('Failed to auto-generate invoice:', invoiceErr);
+      }
+      
       // Trigger Agent 1 — Research Agent (Async)
       researchCompany(company.name, company.domain || company.name + '.com').then(async profile => {
          company.industry = profile.industry;
@@ -300,6 +326,248 @@ router.get('/flagged', protect, authorize('teamadmin', 'superadmin'), async (req
     res.json(formatted);
   } catch (err) {
     console.error('Flagged Responses Error:', err);
+    res.status(500).json({ msg: 'Server error', error: err.message });
+  }
+});
+
+// =========================================================================
+// INVOICE MANAGEMENT ENDPOINTS (Admin Portal Only)
+// =========================================================================
+
+// @route   GET api/admin/invoices/public/:id
+// @desc    Retrieve invoice details publicly (no auth required for client PDF sharing)
+router.get('/invoices/public/:id', async (req, res) => {
+  if (global.MOCK_DB) {
+    return res.json({
+      _id: req.params.id,
+      invoiceNumber: 'INV-783941',
+      poNumber: '12-34-56-7890',
+      date: new Date(),
+      clientName: 'Acme Corp',
+      clientAddress: '123 Enterprise Dr, Tech Suite A, Austin, TX',
+      clientContact: 'billing@acme.com',
+      productName: 'ArGen Enterprise SaaS Platform License',
+      productDescription: 'Autonomous AI productivity auditing platform and workflow playbooks',
+      usageTerms: 'Unlimited usage for verified domain members',
+      periodOfUse: 'Unlimited / Annual Subscription',
+      items: [{ description: 'ArGen Enterprise Annual Platform License (Seat Limit: 15)', amount: 1200.00 }],
+      subtotal: 1200.00,
+      totalDue: 1200.00,
+      status: 'Sent',
+      paymentMethods: {
+        bankTransfer: {
+          bankName: 'Silicon Valley Bank',
+          accountNumber: '•••• •••• 9821',
+          routingNumber: '021000021',
+          ein: '12-3456789'
+        },
+        zelle: {
+          phoneNumber: '+1 (555) 019-2834'
+        }
+      },
+      paymentTerms: 'Payment is due upon receipt of this invoice unless otherwise agreed in writing.'
+    });
+  }
+  try {
+    const invoice = await Invoice.findById(req.params.id).populate('companyId', 'name');
+    if (!invoice) return res.status(404).json({ msg: 'Invoice not found' });
+    res.json(invoice);
+  } catch (err) {
+    console.error('Fetch Public Invoice Error:', err);
+    res.status(500).json({ msg: 'Server error', error: err.message });
+  }
+});
+
+// @route   GET api/admin/invoices
+// @desc    Get all invoices (Superadmin sees all, Teamadmin sees their company's)
+router.get('/invoices', protect, authorize('teamadmin', 'superadmin'), async (req, res) => {
+  if (global.MOCK_DB) {
+    return res.json([
+      {
+        _id: 'mock-inv-1',
+        invoiceNumber: 'INV-783941',
+        poNumber: '12-34-56-7890',
+        date: new Date(),
+        clientName: 'Acme Corp',
+        clientAddress: '123 Enterprise Dr, Tech Suite A, Austin, TX',
+        clientContact: 'billing@acme.com',
+        productName: 'ArGen Enterprise SaaS Platform License',
+        productDescription: 'Autonomous AI productivity auditing platform and workflow playbooks',
+        usageTerms: 'Unlimited usage for verified domain members',
+        periodOfUse: 'Unlimited / Annual Subscription',
+        items: [{ description: 'ArGen Enterprise Annual Platform License (Seat Limit: 15)', amount: 1200.00 }],
+        subtotal: 1200.00,
+        totalDue: 1200.00,
+        status: 'Sent'
+      }
+    ]);
+  }
+  try {
+    let query = {};
+    if (req.user.role === 'teamadmin') {
+      if (!req.user.companyId) return res.json([]);
+      query.companyId = req.user.companyId;
+    }
+    const invoices = await Invoice.find(query).populate('companyId', 'name').sort({ date: -1 });
+    res.json(invoices);
+  } catch (err) {
+    console.error('Fetch Invoices Error:', err);
+    res.status(500).json({ msg: 'Server error', error: err.message });
+  }
+});
+
+// @route   POST api/admin/invoices
+// @desc    Create a custom invoice manually
+router.post('/invoices', protect, authorize('teamadmin', 'superadmin'), async (req, res) => {
+  const {
+    companyId,
+    clientName,
+    clientAddress,
+    clientContact,
+    productName,
+    productDescription,
+    usageTerms,
+    periodOfUse,
+    items,
+    poNumber,
+    status
+  } = req.body;
+
+  if (global.MOCK_DB) {
+    const mockInvoice = {
+      _id: 'mock-inv-' + Math.floor(Math.random() * 1000),
+      invoiceNumber: 'INV-' + Math.floor(100000 + Math.random() * 900000),
+      poNumber: poNumber || '12-34-56-7890',
+      date: new Date(),
+      clientName,
+      clientAddress,
+      clientContact,
+      productName: productName || 'ArGen Enterprise SaaS Platform License',
+      productDescription: productDescription || 'Autonomous AI productivity auditing platform and workflow playbooks',
+      usageTerms: usageTerms || 'Unlimited usage for verified domain members',
+      periodOfUse: periodOfUse || 'Unlimited / Annual Subscription',
+      items: items || [],
+      subtotal: (items || []).reduce((acc, item) => acc + (parseFloat(item.amount) || 0), 0),
+      totalDue: (items || []).reduce((acc, item) => acc + (parseFloat(item.amount) || 0), 0),
+      status: status || 'Draft'
+    };
+    return res.status(201).json(mockInvoice);
+  }
+
+  try {
+    const invoiceNumber = 'INV-' + Math.floor(100000 + Math.random() * 900000);
+    const calculatedSubtotal = (items || []).reduce((acc, item) => acc + (parseFloat(item.amount) || 0), 0);
+    
+    const invoice = new Invoice({
+      invoiceNumber,
+      poNumber: poNumber || '12-34-56-7890',
+      companyId: companyId || req.user.companyId,
+      clientName,
+      clientAddress,
+      clientContact,
+      productName: productName || 'ArGen Enterprise SaaS Platform License',
+      productDescription: productDescription || 'Autonomous AI productivity auditing platform and workflow playbooks',
+      usageTerms: usageTerms || 'Unlimited usage for verified domain members',
+      periodOfUse: periodOfUse || 'Unlimited / Annual Subscription',
+      items: items || [],
+      subtotal: calculatedSubtotal,
+      totalDue: calculatedSubtotal,
+      status: status || 'Draft'
+    });
+
+    await invoice.save();
+    res.status(201).json(invoice);
+  } catch (err) {
+    console.error('Create Invoice Error:', err);
+    res.status(500).json({ msg: 'Server error', error: err.message });
+  }
+});
+
+// @route   PUT api/admin/invoices/:id
+// @desc    Update invoice details
+router.put('/invoices/:id', protect, authorize('teamadmin', 'superadmin'), async (req, res) => {
+  const {
+    poNumber,
+    clientName,
+    clientAddress,
+    clientContact,
+    productName,
+    productDescription,
+    usageTerms,
+    periodOfUse,
+    items,
+    status
+  } = req.body;
+
+  if (global.MOCK_DB) {
+    return res.json({
+      _id: req.params.id,
+      invoiceNumber: 'INV-783941',
+      poNumber: poNumber || '12-34-56-7890',
+      date: new Date(),
+      clientName,
+      clientAddress,
+      clientContact,
+      productName: productName || 'ArGen Enterprise SaaS Platform License',
+      productDescription: productDescription || 'Autonomous AI productivity auditing platform and workflow playbooks',
+      usageTerms: usageTerms || 'Unlimited usage for verified domain members',
+      periodOfUse: periodOfUse || 'Unlimited / Annual Subscription',
+      items: items || [{ description: 'ArGen Enterprise Annual Platform License (Seat Limit: 15)', amount: 1200.00 }],
+      subtotal: items ? items.reduce((acc, item) => acc + (parseFloat(item.amount) || 0), 0) : 1200.00,
+      totalDue: items ? items.reduce((acc, item) => acc + (parseFloat(item.amount) || 0), 0) : 1200.00,
+      status: status || 'Sent'
+    });
+  }
+
+  try {
+    let invoice = await Invoice.findById(req.params.id);
+    if (!invoice) return res.status(404).json({ msg: 'Invoice not found' });
+
+    if (req.user.role === 'teamadmin' && invoice.companyId.toString() !== req.user.companyId.toString()) {
+      return res.status(403).json({ msg: 'Access denied' });
+    }
+
+    if (poNumber) invoice.poNumber = poNumber;
+    if (clientName) invoice.clientName = clientName;
+    if (clientAddress) invoice.clientAddress = clientAddress;
+    if (clientContact) invoice.clientContact = clientContact;
+    if (productName) invoice.productName = productName;
+    if (productDescription) invoice.productDescription = productDescription;
+    if (usageTerms) invoice.usageTerms = usageTerms;
+    if (periodOfUse) invoice.periodOfUse = periodOfUse;
+    if (items) {
+      invoice.items = items;
+      invoice.subtotal = items.reduce((acc, item) => acc + (parseFloat(item.amount) || 0), 0);
+      invoice.totalDue = invoice.subtotal;
+    }
+    if (status) invoice.status = status;
+
+    await invoice.save();
+    res.json(invoice);
+  } catch (err) {
+    console.error('Update Invoice Error:', err);
+    res.status(500).json({ msg: 'Server error', error: err.message });
+  }
+});
+
+// @route   DELETE api/admin/invoices/:id
+// @desc    Delete an invoice
+router.delete('/invoices/:id', protect, authorize('teamadmin', 'superadmin'), async (req, res) => {
+  if (global.MOCK_DB) {
+    return res.json({ msg: 'Invoice deleted successfully' });
+  }
+  try {
+    const invoice = await Invoice.findById(req.params.id);
+    if (!invoice) return res.status(404).json({ msg: 'Invoice not found' });
+
+    if (req.user.role === 'teamadmin' && invoice.companyId.toString() !== req.user.companyId.toString()) {
+      return res.status(403).json({ msg: 'Access denied' });
+    }
+
+    await Invoice.findByIdAndDelete(req.params.id);
+    res.json({ msg: 'Invoice deleted successfully' });
+  } catch (err) {
+    console.error('Delete Invoice Error:', err);
     res.status(500).json({ msg: 'Server error', error: err.message });
   }
 });

@@ -7,7 +7,7 @@
   <title>Dashboard - ArGen</title>
   <link rel="icon" type="image/png" href="../images/ArGen Logo.png">
   <link
-    href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono&display=swap"
+    href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono&family=Instrument+Serif:ital@0;1&display=swap"
     rel="stylesheet">
   <link rel="stylesheet" href="../css/style.css">
   <style>
@@ -24,17 +24,38 @@
     }
 
     .stat-card {
-      background: rgba(255, 255, 255, 0.03);
-      border: 1px solid rgba(255, 255, 255, 0.08);
-      padding: 1.5rem;
-      border-radius: 12px;
+      background: rgba(255, 255, 255, 0.02);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      padding: 1.75rem;
+      border-radius: 16px;
+      box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
+      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .stat-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0; height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(43, 96, 226, 0.2), transparent);
+    }
+
+    .stat-card:hover {
+      border-color: rgba(43, 96, 226, 0.3);
+      transform: translateY(-2px);
+      box-shadow: 0 12px 40px 0 rgba(43, 96, 226, 0.1);
     }
 
     .stat-value {
-      font-size: 2rem;
-      font-weight: 700;
+      font-size: 2.25rem;
+      font-weight: 800;
       color: #fff;
       margin: 0.5rem 0;
+      letter-spacing: -0.02em;
+      font-family: var(--font-display);
     }
 
     .stat-label {
@@ -47,26 +68,31 @@
 
     .batch-card {
       background: rgba(255, 255, 255, 0.02);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
       border: 1px solid rgba(255, 255, 255, 0.05);
       border-radius: 16px;
       padding: 2rem;
       margin-bottom: 1.5rem;
-      transition: all 0.3s var(--cb);
+      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
       display: flex;
       justify-content: space-between;
       align-items: center;
+      box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.2);
     }
 
     .batch-card:hover {
       background: rgba(255, 255, 255, 0.04);
       border-color: var(--argen-blue);
       transform: translateY(-2px);
+      box-shadow: 0 12px 40px 0 rgba(43, 96, 226, 0.1);
     }
 
     .batch-info h3 {
       font-size: 1.25rem;
       margin-bottom: 0.5rem;
       color: #fff;
+      font-family: var(--font-display);
     }
 
     .batch-meta {
@@ -76,14 +102,19 @@
     }
 
     .invite-box {
-      background: rgba(43, 96, 226, 0.05);
-      border: 1px dashed var(--argen-blue);
+      background: rgba(43, 96, 226, 0.03);
+      border: 1px dashed rgba(43, 96, 226, 0.3);
       padding: 1.5rem;
       border-radius: 12px;
       margin-bottom: 3rem;
       display: flex;
       justify-content: space-between;
       align-items: center;
+      transition: border-color 0.3s ease;
+    }
+
+    .invite-box:hover {
+      border-color: var(--argen-blue);
     }
 
     .modal {
@@ -92,8 +123,9 @@
       left: 0;
       width: 100%;
       height: 100%;
-      background: rgba(0, 0, 0, 0.8);
-      backdrop-filter: blur(10px);
+      background: rgba(0, 0, 0, 0.85);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
       display: none;
       z-index: 1000;
       align-items: center;
@@ -101,13 +133,15 @@
     }
 
     .modal-content {
-      background: #0a0a0a;
-      border: 1px solid var(--border-light);
+      background: #070709;
+      border: 1px solid rgba(255, 255, 255, 0.08);
       padding: 2.5rem;
-      border-radius: 16px;
+      border-radius: 20px;
       width: 90%;
       max-width: 500px;
+      box-shadow: 0 24px 60px rgba(0, 0, 0, 0.6);
     }
+
     .grid-4 {
       display: grid;
       grid-template-columns: repeat(4, 1fr);
@@ -249,6 +283,34 @@
       <div id="flaggedPanel" class="stat-card" style="border-color: #ff4444; display: none; margin-bottom: 1.5rem;">
         <h3 class="stat-label" style="color: #ff4444; margin-bottom: 1rem;">Flagged Submissions (Adversarial Detection)</h3>
         <div id="flaggedList"></div>
+      </div>
+
+      <!-- Panel 13: Corporate Billing & Invoices -->
+      <div class="stat-card" style="margin-bottom: 1.5rem;">
+        <h3 class="stat-label" style="margin-bottom: 1.5rem; color: var(--argen-blue); display: flex; align-items: center; justify-content: space-between;">
+          <span>Corporate Billing & Invoices</span>
+          <span style="font-size: 0.65rem; color: var(--text-sec); font-family: var(--font-mono); font-weight: normal; text-transform: none;">Auto-synchronized with SVB & Whop Ledger</span>
+        </h3>
+        
+        <div style="overflow-x: auto;">
+          <table style="width: 100%; border-collapse: collapse; font-family: var(--font-mono); font-size: 0.75rem; text-align: left;">
+            <thead>
+              <tr style="border-bottom: 1px solid rgba(255,255,255,0.08); color: var(--text-sec);">
+                <th style="padding: 0.75rem 0.5rem; font-weight: 600;">INVOICE #</th>
+                <th style="padding: 0.75rem 0.5rem; font-weight: 600;">DATE</th>
+                <th style="padding: 0.75rem 0.5rem; font-weight: 600;">SCOPE</th>
+                <th style="padding: 0.75rem 0.5rem; font-weight: 600; text-align: right;">TOTAL</th>
+                <th style="padding: 0.75rem 0.5rem; font-weight: 600; text-align: center;">STATUS</th>
+                <th style="padding: 0.75rem 0.5rem; font-weight: 600; text-align: right; width: 140px;">ACTION</th>
+              </tr>
+            </thead>
+            <tbody id="dashboardInvoicesList">
+              <tr>
+                <td colspan="6" style="padding: 2rem; text-align: center; color: var(--text-sec);">Synchronizing secure ledger...</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
       </div>
 
       <div style="display: flex; gap: 1rem; align-items: center; background: rgba(255,255,255,0.02); padding: 1.5rem; border-radius: 12px; border: 1px solid var(--border-light);">

@@ -1,0 +1,807 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Invoice - ArGen AI Workflow Intelligence</title>
+  <link rel="icon" type="image/png" href="../images/ArGen Logo.png">
+  <link
+    href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;700&display=swap"
+    rel="stylesheet">
+  <link rel="stylesheet" href="../css/style.css">
+
+  <style>
+    :root {
+      --invoice-bg: #0a0a0a;
+      --invoice-card-bg: rgba(255, 255, 255, 0.02);
+      --invoice-border: rgba(255, 255, 255, 0.08);
+      --invoice-text: #f3f4f6;
+      --invoice-text-sec: #9ca3af;
+      --invoice-accent: #00ff88;
+      --invoice-accent-dim: rgba(0, 255, 136, 0.15);
+    }
+
+    body {
+      background-color: #000;
+      color: var(--invoice-text);
+      font-family: 'Inter', sans-serif;
+    }
+
+    .invoice-screen-container {
+      min-height: 100vh;
+      padding: 3rem 1.5rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+    }
+
+    /* Interactive Floating Action Bar */
+    .invoice-actions {
+      display: flex;
+      gap: 1rem;
+      margin-bottom: 2rem;
+      width: 100%;
+      max-width: 850px;
+      justify-content: space-between;
+      align-items: center;
+      background: rgba(10, 10, 10, 0.8);
+      backdrop-filter: blur(16px);
+      padding: 1rem 1.5rem;
+      border: 1px solid var(--invoice-border);
+      border-radius: 12px;
+    }
+
+    .action-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      background: var(--invoice-accent);
+      color: #000;
+      font-family: 'JetBrains Mono', monospace;
+      font-weight: 700;
+      font-size: 0.85rem;
+      padding: 0.75rem 1.5rem;
+      border-radius: 6px;
+      border: none;
+      cursor: pointer;
+      transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .action-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 20px rgba(0, 255, 136, 0.4);
+    }
+
+    .action-btn.secondary {
+      background: transparent;
+      color: #fff;
+      border: 1px solid var(--invoice-border);
+    }
+
+    .action-btn.secondary:hover {
+      background: rgba(255, 255, 255, 0.05);
+      border-color: rgba(255, 255, 255, 0.2);
+      box-shadow: none;
+    }
+
+    /* High-Fidelity Premium Invoice Page Sheet */
+    .invoice-sheet {
+      width: 100%;
+      max-width: 850px;
+      background: var(--invoice-bg);
+      border: 1px solid var(--invoice-border);
+      border-radius: 16px;
+      padding: 4rem;
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* Subtle grid line style watermark inside sheet */
+    .invoice-sheet::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 4px;
+      background: linear-gradient(90deg, var(--invoice-accent), #00bbff);
+    }
+
+    /* Header Block */
+    .invoice-header {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 2rem;
+      border-bottom: 1px solid var(--invoice-border);
+      padding-bottom: 2.5rem;
+      margin-bottom: 3rem;
+    }
+
+    .provider-details h2 {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-size: 1.4rem;
+      font-weight: 800;
+      margin-bottom: 1rem;
+      letter-spacing: -0.02em;
+    }
+
+    .provider-meta {
+      font-size: 0.85rem;
+      color: var(--invoice-text-sec);
+      line-height: 1.6;
+    }
+
+    .provider-meta div {
+      margin-bottom: 0.25rem;
+    }
+
+    .invoice-brand-block {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      text-align: right;
+    }
+
+    .invoice-title {
+      font-size: 3rem;
+      font-weight: 900;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: #fff;
+      line-height: 1;
+      margin-bottom: 1.5rem;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+    }
+
+    .invoice-meta-grid {
+      display: grid;
+      grid-template-columns: auto 1fr;
+      gap: 0.5rem 1.5rem;
+      font-size: 0.85rem;
+      font-family: 'JetBrains Mono', monospace;
+    }
+
+    .meta-label {
+      color: var(--invoice-text-sec);
+      text-transform: uppercase;
+      font-weight: 700;
+    }
+
+    .meta-val {
+      color: #fff;
+      font-weight: 700;
+    }
+
+    /* Middle Panels: Client Details vs Project Details */
+    .invoice-details-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 2rem;
+      margin-bottom: 3.5rem;
+    }
+
+    .detail-card {
+      background: var(--invoice-card-bg);
+      border: 1px solid var(--invoice-border);
+      border-radius: 8px;
+      padding: 1.75rem;
+    }
+
+    .detail-card-title {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.75rem;
+      color: var(--invoice-accent);
+      text-transform: uppercase;
+      font-weight: 700;
+      border-bottom: 1px solid var(--invoice-border);
+      padding-bottom: 0.75rem;
+      margin-bottom: 1rem;
+      letter-spacing: 0.05em;
+    }
+
+    .detail-item {
+      margin-bottom: 0.75rem;
+      font-size: 0.85rem;
+      line-height: 1.5;
+    }
+
+    .detail-item:last-child {
+      margin-bottom: 0;
+    }
+
+    .detail-label {
+      color: var(--invoice-text-sec);
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      margin-bottom: 0.15rem;
+      font-family: 'JetBrains Mono', monospace;
+    }
+
+    .detail-value {
+      font-weight: 600;
+      color: #fff;
+    }
+
+    /* Items Table */
+    .invoice-table-container {
+      margin-bottom: 3.5rem;
+    }
+
+    .invoice-table {
+      width: 100%;
+      border-collapse: collapse;
+      text-align: left;
+    }
+
+    .invoice-table th {
+      background: #111;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      color: var(--invoice-accent);
+      padding: 1rem 1.5rem;
+      border: 1px solid var(--invoice-border);
+      letter-spacing: 0.05em;
+    }
+
+    .invoice-table td {
+      padding: 1.25rem 1.5rem;
+      border: 1px solid var(--invoice-border);
+      font-size: 0.9rem;
+      line-height: 1.5;
+    }
+
+    .invoice-table tr:nth-child(even) {
+      background: rgba(255, 255, 255, 0.01);
+    }
+
+    .amount-cell {
+      text-align: right;
+      font-family: 'JetBrains Mono', monospace;
+      font-weight: 700;
+      width: 180px;
+    }
+
+    /* Total row summary box */
+    .total-highlight-row {
+      display: flex;
+      justify-content: flex-end;
+      margin-top: -1px;
+    }
+
+    .total-box {
+      background: rgba(0, 255, 136, 0.05);
+      border: 1px solid var(--invoice-accent);
+      padding: 1.25rem 2rem;
+      display: flex;
+      align-items: center;
+      gap: 3rem;
+      border-radius: 0 0 8px 8px;
+    }
+
+    .total-label {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-size: 1rem;
+      font-weight: 800;
+      color: #fff;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .total-value-big {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 1.6rem;
+      font-weight: 700;
+      color: var(--invoice-accent);
+    }
+
+    /* Bottom: Payment Info vs Terms & Conditions */
+    .invoice-footer-grid {
+      display: grid;
+      grid-template-columns: 1.2fr 1fr;
+      gap: 3rem;
+      border-bottom: 1px solid var(--invoice-border);
+      padding-bottom: 3rem;
+      margin-bottom: 3.5rem;
+    }
+
+    .payment-methods-card h3 {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.8rem;
+      text-transform: uppercase;
+      color: var(--invoice-accent);
+      margin-bottom: 1rem;
+      letter-spacing: 0.05em;
+    }
+
+    .payment-method-block {
+      background: rgba(255, 255, 255, 0.01);
+      border: 1px solid var(--invoice-border);
+      border-radius: 6px;
+      padding: 1rem;
+      margin-bottom: 1rem;
+    }
+
+    .payment-method-block:last-child {
+      margin-bottom: 0;
+    }
+
+    .method-title {
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      font-family: 'JetBrains Mono', monospace;
+      color: #fff;
+      font-weight: 700;
+      margin-bottom: 0.5rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .method-title::before {
+      content: '';
+      display: inline-block;
+      width: 6px;
+      height: 6px;
+      background: var(--invoice-accent);
+      border-radius: 50%;
+    }
+
+    .method-details {
+      font-size: 0.75rem;
+      color: var(--invoice-text-sec);
+      line-height: 1.6;
+      font-family: 'JetBrains Mono', monospace;
+    }
+
+    .terms-box h3 {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.8rem;
+      text-transform: uppercase;
+      color: #fff;
+      margin-bottom: 1rem;
+      letter-spacing: 0.05em;
+    }
+
+    .terms-text {
+      font-size: 0.75rem;
+      color: var(--invoice-text-sec);
+      line-height: 1.6;
+    }
+
+    /* Signature Double Block */
+    .signature-container {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 4rem;
+      margin-bottom: 3.5rem;
+    }
+
+    .signature-box {
+      border-top: 1px solid #333;
+      padding-top: 1rem;
+      text-align: center;
+    }
+
+    .signature-title {
+      font-size: 0.7rem;
+      font-family: 'JetBrains Mono', monospace;
+      text-transform: uppercase;
+      color: var(--invoice-text-sec);
+      letter-spacing: 0.05em;
+      margin-bottom: 0.5rem;
+    }
+
+    .signature-line-desc {
+      font-size: 0.65rem;
+      color: #555;
+      font-family: 'JetBrains Mono', monospace;
+    }
+
+    /* Center copyright footer */
+    .licensing-disclaimer {
+      text-align: center;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.65rem;
+      color: #555;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      border-top: 1px solid var(--invoice-border);
+      padding-top: 1.5rem;
+    }
+
+    /* =========================================================================
+       PRINT SYSTEM STYLING (@media print)
+       Forces perfect white-background high-contrast direct PDF export.
+       ========================================================================= */
+    @media print {
+      body {
+        background-color: #fff !important;
+        color: #000 !important;
+        font-family: 'Inter', sans-serif !important;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+      }
+
+      /* Hide interactive headers, navigation, and floating action button panels */
+      header,
+      .nav,
+      .mobile-menu,
+      .footer,
+      .invoice-actions {
+        display: none !important;
+      }
+
+      .invoice-screen-container {
+        padding: 0 !important;
+        min-height: auto !important;
+      }
+
+      .invoice-sheet {
+        max-width: 100% !important;
+        border: none !important;
+        box-shadow: none !important;
+        padding: 2rem 0 !important;
+        background: #fff !important;
+      }
+
+      .invoice-sheet::before {
+        display: none !important;
+      }
+
+      .invoice-header {
+        border-bottom: 2px solid #000 !important;
+      }
+
+      .invoice-title {
+        color: #000 !important;
+      }
+
+      .meta-val,
+      .detail-value,
+      .method-title {
+        color: #000 !important;
+      }
+
+      .provider-meta,
+      .invoice-meta-grid,
+      .detail-card,
+      .invoice-table td,
+      .method-details,
+      .terms-text,
+      .signature-title {
+        color: #111 !important;
+      }
+
+      .detail-card {
+        background: #fff !important;
+        border: 1px solid #000 !important;
+      }
+
+      .detail-card-title {
+        color: #000 !important;
+        border-bottom: 1px solid #000 !important;
+      }
+
+      .invoice-table th {
+        background: #000 !important;
+        color: #fff !important;
+        border: 1px solid #000 !important;
+      }
+
+      .invoice-table td {
+        border: 1px solid #000 !important;
+      }
+
+      .total-box {
+        background: #fff !important;
+        border: 2px solid #000 !important;
+      }
+
+      .total-label {
+        color: #000 !important;
+      }
+
+      .total-value-big {
+        color: #000 !important;
+      }
+
+      .payment-method-block {
+        background: #fff !important;
+        border: 1px solid #000 !important;
+      }
+
+      .licensing-disclaimer {
+        color: #000 !important;
+        border-top: 1px solid #000 !important;
+      }
+
+      .signature-box {
+        border-top: 1px solid #000 !important;
+      }
+
+      .signature-line-desc {
+        color: #000 !important;
+      }
+    }
+  </style>
+</head>
+
+<body class="bg-black">
+  <header id="nav" class="nav">
+    <div class="nav-inner">
+      <a href="/" class="nav-logo">
+        <img src="../images/ArGen Logo.png" alt="ArGen" class="logo-img" style="height: 32px;">
+      </a>
+      <nav class="nav-links">
+        <a href="/dashboard" class="nav-link">Dashboard</a>
+        <a href="/admin-portal" class="nav-link" id="navAdminPortal">Admin Portal</a>
+      </nav>
+      <a href="/login" class="nav-cta" id="authBtn">Log In</a>
+    </div>
+  </header>
+
+  <div class="invoice-screen-container">
+    <!-- Floating Action Menu -->
+    <div class="invoice-actions">
+      <div style="display: flex; align-items: center; gap: 0.75rem;">
+        <span class="badge badge-active" style="background: var(--invoice-accent-dim); color: var(--invoice-accent); font-family: 'JetBrains Mono', monospace; font-size: 0.7rem; border: 1px solid var(--invoice-accent);">CLIENT VIEW</span>
+        <h4 style="font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 700; margin: 0;">Interactive Portal</h4>
+      </div>
+      <div style="display: flex; gap: 0.75rem;">
+        <button class="action-btn secondary" onclick="window.history.back()">
+          ← Back
+        </button>
+        <button class="action-btn" onclick="window.print()">
+          Download PDF / Print
+        </button>
+      </div>
+    </div>
+
+    <!-- Printable Invoice Sheet -->
+    <div class="invoice-sheet" id="invoiceSheet">
+      <div class="invoice-header">
+        <div class="provider-details">
+          <h2>ArGen</h2>
+          <div class="provider-meta">
+            <div><strong>ArGen AI Workflow Intelligence</strong></div>
+            <div>Phone: +1 (555) 019-2834</div>
+            <div>100 Pine St, Suite 2400</div>
+            <div>San Francisco, CA</div>
+            <div>Email: billing@argen.isira.club</div>
+          </div>
+        </div>
+        <div class="invoice-brand-block">
+          <div class="invoice-title">INVOICE</div>
+          <div class="invoice-meta-grid">
+            <span class="meta-label">DATE:</span>
+            <span class="meta-val" id="invDate">May 18, 2026</span>
+            <span class="meta-label">INVOICE #:</span>
+            <span class="meta-val" id="invNumber">INV-783941</span>
+            <span class="meta-label">PO #:</span>
+            <span class="meta-val" id="invPo">12-34-56-7890</span>
+            <span class="meta-label">FOR:</span>
+            <span class="meta-val" id="invFor">Enterprise Platform Access</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Left Middle: Bill To vs Right Middle: Project Info -->
+      <div class="invoice-details-grid">
+        <div class="detail-card">
+          <div class="detail-card-title">BILL TO:</div>
+          <div class="detail-item">
+            <div class="detail-label">Client Name</div>
+            <div class="detail-value" id="clientName">Acme Corporation</div>
+          </div>
+          <div class="detail-item">
+            <div class="detail-label">Billing Address</div>
+            <div class="detail-value" id="clientAddress">123 Enterprise Dr, Austin, TX</div>
+          </div>
+          <div class="detail-item">
+            <div class="detail-label">Contact Email</div>
+            <div class="detail-value" id="clientContact">billing@acme.com</div>
+          </div>
+        </div>
+
+        <div class="detail-card">
+          <div class="detail-card-title">PROJECT DETAILS:</div>
+          <div class="detail-item">
+            <div class="detail-label">Product / Scope</div>
+            <div class="detail-value" id="prodName">ArGen Enterprise SaaS Platform License</div>
+          </div>
+          <div class="detail-item">
+            <div class="detail-label">Use & License Terms</div>
+            <div class="detail-value" id="usageTerms">Unlimited usage for verified domain members</div>
+          </div>
+          <div class="detail-item">
+            <div class="detail-label">Period of Use</div>
+            <div class="detail-value" id="periodUse">Unlimited / Annual Subscription</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Invoice Line Items Table -->
+      <div class="invoice-table-container">
+        <table class="invoice-table">
+          <thead>
+            <tr>
+              <th>DESCRIPTION / DELIVERABLES</th>
+              <th style="text-align: right;">AMOUNT (USD)</th>
+            </tr>
+          </thead>
+          <tbody id="invoiceItems">
+            <tr>
+              <td>ArGen Enterprise Annual Platform License (Seat Limit: 15)</td>
+              <td class="amount-cell">$1,200.00</td>
+            </tr>
+          </tbody>
+        </table>
+        <div class="total-highlight-row">
+          <div class="total-box">
+            <span class="total-label">TOTAL DUE:</span>
+            <span class="total-value-big" id="invTotal">$1,200.00</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Payment Methods & Terms -->
+      <div class="invoice-footer-grid">
+        <div class="payment-methods-card">
+          <h3>PAYMENT METHODS:</h3>
+          <div class="payment-method-block">
+            <div class="method-title">BANK TRANSFER (Preferred)</div>
+            <div class="method-details">
+              <div>Bank: Silicon Valley Bank</div>
+              <div>Account Number: •••• •••• 9821</div>
+              <div>Routing Number: 021000021</div>
+              <div>EIN/Tax ID: 12-3456789</div>
+            </div>
+          </div>
+          <div class="payment-method-block">
+            <div class="method-title">ZELLE TRANSFER</div>
+            <div class="method-details">
+              <div>Registered Phone: +1 (555) 019-2834</div>
+              <div>Payment Description: Specify Invoice Number</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="terms-box">
+          <h3>TERMS & CONDITIONS:</h3>
+          <div class="terms-text" id="paymentTerms">
+            Payment is due upon receipt of this invoice unless otherwise agreed in writing. A late fee of 5% may be applied to balances unpaid after 30 days. Final deliverables, including edited footage and project files, may be withheld until payment has been received in full. Thank you for your prompt payment and continued business.
+          </div>
+        </div>
+      </div>
+
+      <!-- Double Signatures Block -->
+      <div class="signature-container">
+        <div class="signature-box" style="margin-top: 2rem;">
+          <div class="signature-title">AUTHORIZED SIGNATURE</div>
+          <div class="signature-line-desc">ArGen Accounts Operations / Date</div>
+        </div>
+        <div class="signature-box" style="margin-top: 2rem;">
+          <div class="signature-title">CLIENT SIGNATURE</div>
+          <div class="signature-line-desc">Accepted By / Date</div>
+        </div>
+      </div>
+
+      <!-- Licensing Bottom Centered Disclaimer -->
+      <div class="licensing-disclaimer">
+        RIGHTS LICENSED ONLY UPON FULL PAYMENT OF TOTAL BILLING
+      </div>
+    </div>
+  </div>
+
+  <script src="../js/api.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', async () => {
+      // Determine session auth status for navigation header controls
+      const userStr = localStorage.getItem('user');
+      const authBtn = document.getElementById('authBtn');
+      const navAdminPortal = document.getElementById('navAdminPortal');
+      
+      if (userStr) {
+        const user = JSON.parse(userStr);
+        authBtn.textContent = 'Log Out';
+        authBtn.href = '#';
+        authBtn.addEventListener('click', (e) => {
+          e.preventDefault();
+          argenApi.logout();
+        });
+        
+        if (user.role !== 'teamadmin' && user.role !== 'superadmin') {
+          if (navAdminPortal) navAdminPortal.style.display = 'none';
+        }
+      } else {
+        if (navAdminPortal) navAdminPortal.style.display = 'none';
+      }
+
+      // Fetch dynamic Invoice details via ID query param
+      const urlParams = new URLSearchParams(window.location.search);
+      const invoiceId = urlParams.get('id');
+
+      if (invoiceId) {
+        try {
+          const invoice = await argenApi.getPublicInvoice(invoiceId);
+          renderInvoiceData(invoice);
+        } catch (err) {
+          console.error('Failed to load invoice details:', err);
+          alert('Could not retrieve invoice data. Rendering fallback values.');
+        }
+      }
+    });
+
+    function renderInvoiceData(invoice) {
+      if (!invoice) return;
+
+      // Render header dates & metadata
+      if (invoice.date) {
+        const d = new Date(invoice.date);
+        document.getElementById('invDate').textContent = d.toLocaleDateString('en-US', {
+          year: 'numeric', month: 'long', day: 'numeric'
+        });
+      }
+      if (invoice.invoiceNumber) {
+        document.getElementById('invNumber').textContent = invoice.invoiceNumber;
+      }
+      if (invoice.poNumber) {
+        document.getElementById('invPo').textContent = invoice.poNumber;
+      }
+      
+      const compName = invoice.companyId && invoice.companyId.name ? invoice.companyId.name : invoice.clientName;
+      document.getElementById('invFor').textContent = compName;
+      document.getElementById('clientName').textContent = invoice.clientName || compName;
+      
+      if (invoice.clientAddress) {
+        document.getElementById('clientAddress').textContent = invoice.clientAddress;
+      }
+      if (invoice.clientContact) {
+        document.getElementById('clientContact').textContent = invoice.clientContact;
+      }
+      if (invoice.productName) {
+        document.getElementById('prodName').textContent = invoice.productName;
+      }
+      if (invoice.usageTerms) {
+        document.getElementById('usageTerms').textContent = invoice.usageTerms;
+      }
+      if (invoice.periodOfUse) {
+        document.getElementById('periodUse').textContent = invoice.periodOfUse;
+      }
+      if (invoice.paymentTerms) {
+        document.getElementById('paymentTerms').textContent = invoice.paymentTerms;
+      }
+
+      // Render table items
+      const itemsContainer = document.getElementById('invoiceItems');
+      itemsContainer.innerHTML = '';
+      if (invoice.items && invoice.items.length > 0) {
+        invoice.items.forEach(item => {
+          const tr = document.createElement('tr');
+          tr.innerHTML = `
+            <td>${item.description}</td>
+            <td class="amount-cell">$${parseFloat(item.amount).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</td>
+          `;
+          itemsContainer.appendChild(tr);
+        });
+      } else {
+        itemsContainer.innerHTML = `
+          <tr>
+            <td>ArGen Enterprise Annual Platform License (Seat Limit: 15)</td>
+            <td class="amount-cell">$1,200.00</td>
+          </tr>
+        `;
+      }
+
+      // Render total
+      const totalAmt = invoice.totalDue || invoice.subtotal || 1200.00;
+      document.getElementById('invTotal').textContent = `$${parseFloat(totalAmt).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+    }
+  </script>
+</body>
+
+</html>

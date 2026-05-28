@@ -7,7 +7,7 @@
   <title>Take Evaluation - ArGen</title>
   <link rel="icon" type="image/png" href="../images/ArGen Logo.png">
   <link
-    href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono&display=swap"
+    href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono&family=Instrument+Serif:ital@0;1&display=swap"
     rel="stylesheet">
   <link rel="stylesheet" href="../css/style.css">
   <style>
@@ -27,10 +27,22 @@
     .challenge-display {
       position: sticky;
       top: 120px;
-      background: rgba(255, 255, 255, 0.03);
-      border: 1px solid var(--border-light);
+      background: rgba(255, 255, 255, 0.02);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid rgba(255, 255, 255, 0.05);
       padding: 2.5rem;
-      border-radius: 16px;
+      border-radius: 20px;
+      box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .challenge-display::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0; height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(43, 96, 226, 0.2), transparent);
     }
 
     .challenge-type {
@@ -49,6 +61,7 @@
       color: #fff;
       margin-bottom: 1.5rem;
       line-height: 1.2;
+      font-family: var(--font-display);
     }
 
     .challenge-description {
@@ -92,22 +105,24 @@
     .eval-textarea {
       width: 100%;
       min-height: 200px;
-      background: rgba(0, 0, 0, 0.3);
-      border: 1px solid var(--border-light);
-      border-radius: 12px;
+      background: rgba(0, 0, 0, 0.4);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 16px;
       padding: 1.5rem;
       color: #fff;
       font-family: 'Inter', sans-serif;
-      font-size: 0.9rem;
+      font-size: 0.95rem;
       line-height: 1.6;
       resize: vertical;
-      transition: all 0.3s var(--cb);
+      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+      box-shadow: inset 0 2px 8px rgba(0, 0, 0, 0.5);
     }
 
     .eval-textarea:focus {
       border-color: var(--argen-blue);
       outline: none;
-      background: rgba(43, 96, 226, 0.05);
+      background: rgba(43, 96, 226, 0.03);
+      box-shadow: 0 0 20px rgba(43, 96, 226, 0.15), inset 0 2px 8px rgba(0, 0, 0, 0.5);
     }
 
     .eval-footer {
@@ -116,7 +131,7 @@
       align-items: center;
       margin-top: 3rem;
       padding-top: 2rem;
-      border-top: 1px solid var(--border-light);
+      border-top: 1px solid rgba(255, 255, 255, 0.05);
     }
 
     @media (max-width: 768px) {

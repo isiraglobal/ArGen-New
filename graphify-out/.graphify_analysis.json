@@ -1,0 +1,541 @@
+{
+  "communities": {
+    "0": [
+      "backend_middleware_auth_js",
+      "backend_models_company_js",
+      "backend_routes_benchmark_js",
+      "backend_routes_evaluations_js",
+      "backend_routes_scheduler_js",
+      "middleware_auth_authorize",
+      "middleware_auth_company",
+      "middleware_auth_isapproved",
+      "middleware_auth_jwt",
+      "middleware_auth_protect",
+      "models_company_companyschema",
+      "models_company_mongoose",
+      "routes_benchmark_express",
+      "routes_benchmark_protect_authorize",
+      "routes_benchmark_router",
+      "routes_benchmark_runcalibration",
+      "routes_evaluations_challenge",
+      "routes_evaluations_company",
+      "routes_evaluations_express",
+      "routes_evaluations_generatechallenge",
+      "routes_evaluations_protect_authorize_isapproved",
+      "routes_evaluations_router",
+      "routes_evaluations_user",
+      "routes_scheduler_company",
+      "routes_scheduler_createemailtemplate",
+      "routes_scheduler_express",
+      "routes_scheduler_generateweeklyreport_generatecoachingnudge",
+      "routes_scheduler_html",
+      "routes_scheduler_protect_authorize",
+      "routes_scheduler_response",
+      "routes_scheduler_router",
+      "routes_scheduler_sendemail",
+      "routes_scheduler_startofday",
+      "routes_scheduler_startofweek",
+      "routes_scheduler_startofyesterday",
+      "routes_scheduler_user"
+    ],
+    "1": [
+      "backend_models_challenge_js",
+      "backend_models_response_js",
+      "backend_routes_challenges_js",
+      "backend_routes_responses_js",
+      "models_challenge_challengeschema",
+      "models_challenge_mongoose",
+      "models_evaluation_evaluationschema",
+      "models_evaluation_mongoose",
+      "models_response_mongoose",
+      "models_response_responseschema",
+      "routes_challenges_challenge",
+      "routes_challenges_evaluation",
+      "routes_challenges_express",
+      "routes_challenges_newresponse",
+      "routes_challenges_protect",
+      "routes_challenges_response",
+      "routes_challenges_router",
+      "routes_responses_dims",
+      "routes_responses_evaluation",
+      "routes_responses_express",
+      "routes_responses_minindex",
+      "routes_responses_protect_isapproved_authorize",
+      "routes_responses_response",
+      "routes_responses_router",
+      "routes_responses_scoreresponse",
+      "routes_responses_scores",
+      "routes_responses_startofday"
+    ],
+    "2": [
+      "frontend_js_script_js",
+      "js_script_ai_config",
+      "js_script_bootlines",
+      "js_script_boottick",
+      "js_script_chathistory",
+      "js_script_colors",
+      "js_script_initaccordions",
+      "js_script_initaibar",
+      "js_script_initall",
+      "js_script_initauthui",
+      "js_script_initcounters",
+      "js_script_initgsap",
+      "js_script_initlenis",
+      "js_script_initmobilemenu",
+      "js_script_initnav",
+      "js_script_initparticles",
+      "js_script_loader",
+      "js_script_loaderfill",
+      "js_script_loaderlines",
+      "js_script_loaderpct",
+      "js_script_mouse",
+      "js_script_particles",
+      "js_script_renderparticles",
+      "js_script_resizecanvas",
+      "js_script_rippletarget",
+      "js_script_spawngrid"
+    ],
+    "3": [
+      "backend_package_author",
+      "backend_package_dependencies",
+      "backend_package_dependencies_bcryptjs",
+      "backend_package_dependencies_cors",
+      "backend_package_dependencies_dotenv",
+      "backend_package_dependencies_express",
+      "backend_package_dependencies_express_mongo_sanitize",
+      "backend_package_dependencies_express_rate_limit",
+      "backend_package_dependencies_helmet",
+      "backend_package_dependencies_jsonwebtoken",
+      "backend_package_dependencies_mongoose",
+      "backend_package_dependencies_nodemailer",
+      "backend_package_dependencies_whop_sdk",
+      "backend_package_description",
+      "backend_package_devdependencies",
+      "backend_package_devdependencies_nodemon",
+      "backend_package_json",
+      "backend_package_keywords",
+      "backend_package_license",
+      "backend_package_main",
+      "backend_package_name",
+      "backend_package_scripts",
+      "backend_package_scripts_dev",
+      "backend_package_scripts_start",
+      "backend_package_version"
+    ],
+    "4": [
+      "backend_models_invitation_js",
+      "backend_routes_whop_js",
+      "backend_test_email_dotenv",
+      "backend_test_email_js",
+      "backend_test_email_path",
+      "backend_utils_email_js",
+      "models_invitation_invitationschema",
+      "models_invitation_mongoose",
+      "models_subscription_mongoose",
+      "models_subscription_subscriptionschema",
+      "routes_whop_company",
+      "routes_whop_crypto",
+      "routes_whop_expectedsignature",
+      "routes_whop_express",
+      "routes_whop_handlemembershipvalid",
+      "routes_whop_invitation",
+      "routes_whop_router",
+      "routes_whop_sendemail",
+      "routes_whop_subscription",
+      "routes_whop_whop",
+      "utils_email_sendemail",
+      "utils_sendemail_nodemailer",
+      "utils_sendemail_sendemail"
+    ],
+    "5": [
+      "backend_routes_auth_js",
+      "backend_utils_emailtemplate_js",
+      "routes_auth_bcrypt",
+      "routes_auth_company",
+      "routes_auth_createemailtemplate",
+      "routes_auth_crypto",
+      "routes_auth_express",
+      "routes_auth_html",
+      "routes_auth_invitation",
+      "routes_auth_invitecode",
+      "routes_auth_jwt",
+      "routes_auth_payload",
+      "routes_auth_protect",
+      "routes_auth_resetpasswordtoken",
+      "routes_auth_resettoken",
+      "routes_auth_router",
+      "routes_auth_sendemail",
+      "routes_auth_user",
+      "utils_emailtemplate_createemailtemplate",
+      "utils_emailtemplates_createemailtemplate",
+      "utils_emailtemplates_generatepasswordcodeemail",
+      "utils_emailtemplates_generateupdateemail",
+      "utils_emailtemplates_generatewelcomeemail"
+    ],
+    "6": [
+      "argen_new_look_project_state_filestructure",
+      "argen_new_look_project_state_filestructure_backend",
+      "argen_new_look_project_state_filestructure_docs",
+      "argen_new_look_project_state_filestructure_frontend",
+      "argen_new_look_project_state_frontend_css",
+      "argen_new_look_project_state_frontend_html",
+      "argen_new_look_project_state_frontend_images",
+      "argen_new_look_project_state_frontend_js",
+      "argen_new_look_project_state_metadata",
+      "argen_new_look_project_state_metadata_createdat",
+      "argen_new_look_project_state_metadata_lastupdated",
+      "argen_new_look_project_state_metadata_nextreview",
+      "argen_new_look_project_state_metadata_statussummary",
+      "argen_new_look_project_state_phases",
+      "argen_new_look_project_state_project",
+      "argen_new_look_project_state_project_created",
+      "argen_new_look_project_state_project_description",
+      "argen_new_look_project_state_project_name",
+      "argen_new_look_project_state_project_totaltokensbudget",
+      "argen_new_look_project_state_project_totaltokensused",
+      "argen_new_look_project_state_project_version",
+      "project_state_json"
+    ],
+    "7": [
+      "argen_new_look_test_flow_company",
+      "argen_new_look_test_flow_mongoose",
+      "argen_new_look_test_flow_response",
+      "argen_new_look_test_flow_runtest",
+      "argen_new_look_test_flow_scoreresponse_generateweeklyreport_generatecoachingnudge",
+      "argen_new_look_test_flow_user",
+      "backend_utils_ai_agents_js",
+      "backend_utils_calibration_js",
+      "routes_responses_challenge",
+      "test_flow_js",
+      "utils_ai_agents_callanthropic",
+      "utils_ai_agents_callgemini",
+      "utils_ai_agents_callopenai",
+      "utils_ai_agents_fallbackaicall",
+      "utils_ai_agents_generatechallenge",
+      "utils_ai_agents_generatecoachingnudge",
+      "utils_ai_agents_generateweeklyreport",
+      "utils_ai_agents_recordmetric",
+      "utils_ai_agents_researchcompany",
+      "utils_ai_agents_scoreresponse",
+      "utils_calibration_runcalibration",
+      "utils_calibration_scoreresponse"
+    ],
+    "8": [
+      "backend_models_user_js",
+      "backend_scripts_initadmin_js",
+      "backend_test_db_login_bcrypt",
+      "backend_test_db_login_company",
+      "backend_test_db_login_dotenv",
+      "backend_test_db_login_js",
+      "backend_test_db_login_jwt",
+      "backend_test_db_login_mongoose",
+      "backend_test_db_login_path",
+      "backend_test_db_login_test",
+      "backend_test_db_login_user",
+      "models_user_bcrypt",
+      "models_user_mongoose",
+      "models_user_userschema",
+      "scripts_initadmin_bcrypt",
+      "scripts_initadmin_dotenv",
+      "scripts_initadmin_initadmin",
+      "scripts_initadmin_mongoose",
+      "scripts_initadmin_user"
+    ],
+    "9": [
+      "backend_routes_admin_js",
+      "models_systemmetric_mongoose",
+      "models_systemmetric_systemmetricschema",
+      "routes_admin_company",
+      "routes_admin_createemailtemplate",
+      "routes_admin_crypto",
+      "routes_admin_express",
+      "routes_admin_formatted",
+      "routes_admin_html",
+      "routes_admin_invitation",
+      "routes_admin_mongoose",
+      "routes_admin_protect_authorize",
+      "routes_admin_researchcompany",
+      "routes_admin_response",
+      "routes_admin_router",
+      "routes_admin_sendemail",
+      "routes_admin_systemmetric",
+      "routes_admin_token",
+      "routes_admin_user"
+    ],
+    "10": [
+      "argen_new_look_package_dependencies",
+      "argen_new_look_package_dependencies_bcryptjs",
+      "argen_new_look_package_dependencies_cors",
+      "argen_new_look_package_dependencies_dotenv",
+      "argen_new_look_package_dependencies_express",
+      "argen_new_look_package_dependencies_express_mongo_sanitize",
+      "argen_new_look_package_dependencies_express_rate_limit",
+      "argen_new_look_package_dependencies_helmet",
+      "argen_new_look_package_dependencies_jsonwebtoken",
+      "argen_new_look_package_dependencies_mongoose",
+      "argen_new_look_package_dependencies_nodemailer",
+      "argen_new_look_package_dependencies_whop_sdk",
+      "argen_new_look_package_name",
+      "argen_new_look_package_private",
+      "argen_new_look_package_version",
+      "package_json"
+    ],
+    "11": [
+      "frontend_js_dashboard_js",
+      "js_dashboard_checkflaggedsubmissions",
+      "js_dashboard_copyinvitecode",
+      "js_dashboard_generatepdfreport",
+      "js_dashboard_initadmindashboard",
+      "js_dashboard_initmemberdashboard",
+      "js_dashboard_renderadminleaderboard",
+      "js_dashboard_renderadminstats",
+      "js_dashboard_rendercharts",
+      "js_dashboard_renderheatmap",
+      "js_dashboard_renderhistory",
+      "js_dashboard_rendermemberleaderboard",
+      "js_dashboard_role",
+      "js_dashboard_triggeraicycle",
+      "js_dashboard_user"
+    ],
+    "12": [
+      "backend_routes_leaderboard_js",
+      "routes_leaderboard_day",
+      "routes_leaderboard_express",
+      "routes_leaderboard_finalleaderboard",
+      "routes_leaderboard_now",
+      "routes_leaderboard_protect_isapproved",
+      "routes_leaderboard_response",
+      "routes_leaderboard_router",
+      "routes_leaderboard_startofweek",
+      "routes_leaderboard_totalscore",
+      "routes_leaderboard_user"
+    ],
+    "13": [
+      "api_index_app",
+      "api_index_js",
+      "backend_server_app",
+      "backend_server_connectdb",
+      "backend_server_cors",
+      "backend_server_dotenv",
+      "backend_server_express",
+      "backend_server_js",
+      "backend_server_mongoose",
+      "backend_server_path"
+    ],
+    "14": [
+      "frontend_js_auth_guard_js",
+      "js_auth_guard_isprotected",
+      "js_auth_guard_memberpaths",
+      "js_auth_guard_role",
+      "js_auth_guard_superadminpaths",
+      "js_auth_guard_teamadminpaths",
+      "js_auth_guard_token",
+      "js_auth_guard_userstr"
+    ],
+    "15": [
+      "scratch_fix_roles_checkroles",
+      "scratch_fix_roles_dotenv",
+      "scratch_fix_roles_js",
+      "scratch_fix_roles_mongoose",
+      "scratch_fix_roles_path",
+      "scratch_fix_roles_user"
+    ],
+    "16": [
+      "argen_new_look_vercel_headers",
+      "argen_new_look_vercel_name",
+      "argen_new_look_vercel_public",
+      "argen_new_look_vercel_rewrites",
+      "argen_new_look_vercel_version",
+      "vercel_json"
+    ],
+    "17": [
+      "backend_middleware_adminauth_js",
+      "middleware_adminauth_decoded",
+      "middleware_adminauth_jwt",
+      "middleware_adminauth_token"
+    ],
+    "18": [
+      "frontend_js_api_js",
+      "js_api_api",
+      "js_api_api_base_url",
+      "js_api_getbaseurl"
+    ],
+    "19": [
+      "scratch_check_db_dotenv",
+      "scratch_check_db_js",
+      "scratch_check_db_mongoose",
+      "scratch_check_db_path"
+    ],
+    "20": [
+      "backend_models_pilotrequest_js",
+      "models_pilotrequest_mongoose",
+      "models_pilotrequest_pilotrequestschema"
+    ],
+    "21": [
+      "backend_models_team_js",
+      "models_team_mongoose",
+      "models_team_teamschema"
+    ],
+    "22": [
+      "backend_routes_ai_js",
+      "routes_ai_express",
+      "routes_ai_router"
+    ],
+    "23": [
+      "scratch_test_port_http",
+      "scratch_test_port_js",
+      "scratch_test_port_server"
+    ],
+    "24": [
+      "scratch_add_canonical_py"
+    ],
+    "25": [
+      "scratch_clean_blog_links_py"
+    ],
+    "26": [
+      "scratch_fix_asset_paths_py"
+    ]
+  },
+  "cohesion": {
+    "0": 0.07,
+    "1": 0.08,
+    "2": 0.11,
+    "3": 0.08,
+    "4": 0.09,
+    "5": 0.1,
+    "6": 0.09,
+    "7": 0.17,
+    "8": 0.11,
+    "9": 0.11,
+    "10": 0.12,
+    "11": 0.2,
+    "12": 0.18,
+    "13": 0.2,
+    "14": 0.25,
+    "15": 0.33,
+    "16": 0.33,
+    "17": 0.5,
+    "18": 0.5,
+    "19": 0.5,
+    "20": 0.67,
+    "21": 0.67,
+    "22": 0.67,
+    "23": 0.67,
+    "24": 1.0,
+    "25": 1.0,
+    "26": 1.0
+  },
+  "gods": [
+    {
+      "id": "argen_new_look_package_dependencies",
+      "label": "dependencies",
+      "degree": 12
+    },
+    {
+      "id": "backend_package_dependencies",
+      "label": "dependencies",
+      "degree": 12
+    },
+    {
+      "id": "js_script_initall",
+      "label": "initAll()",
+      "degree": 10
+    },
+    {
+      "id": "middleware_auth_protect",
+      "label": "protect()",
+      "degree": 9
+    },
+    {
+      "id": "utils_ai_agents_scoreresponse",
+      "label": "scoreResponse()",
+      "degree": 8
+    },
+    {
+      "id": "utils_email_sendemail",
+      "label": "sendEmail()",
+      "degree": 8
+    },
+    {
+      "id": "argen_new_look_project_state_project",
+      "label": "project",
+      "degree": 7
+    },
+    {
+      "id": "utils_emailtemplate_createemailtemplate",
+      "label": "createEmailTemplate()",
+      "degree": 7
+    },
+    {
+      "id": "js_dashboard_initadmindashboard",
+      "label": "initAdminDashboard()",
+      "degree": 6
+    },
+    {
+      "id": "middleware_auth_authorize",
+      "label": "authorize()",
+      "degree": 6
+    }
+  ],
+  "surprises": [
+    {
+      "source": "runTest()",
+      "target": "scoreResponse()",
+      "source_files": [
+        "test-flow.js",
+        "backend/utils/ai-agents.js"
+      ],
+      "confidence": "EXTRACTED",
+      "relation": "calls",
+      "why": "connects across different repos/directories"
+    },
+    {
+      "source": "runTest()",
+      "target": "generateCoachingNudge()",
+      "source_files": [
+        "test-flow.js",
+        "backend/utils/ai-agents.js"
+      ],
+      "confidence": "EXTRACTED",
+      "relation": "calls",
+      "why": "connects across different repos/directories"
+    },
+    {
+      "source": "runTest()",
+      "target": "generateWeeklyReport()",
+      "source_files": [
+        "test-flow.js",
+        "backend/utils/ai-agents.js"
+      ],
+      "confidence": "EXTRACTED",
+      "relation": "calls",
+      "why": "connects across different repos/directories"
+    },
+    {
+      "source": "handleMembershipValid()",
+      "target": "generateWelcomeEmail()",
+      "source_files": [
+        "backend/routes/whop.js",
+        "backend/utils/emailTemplates.js"
+      ],
+      "confidence": "INFERRED",
+      "relation": "calls",
+      "why": "inferred connection - not explicitly stated in source; bridges separate communities"
+    },
+    {
+      "source": "generatePasswordCodeEmail()",
+      "target": "createEmailTemplate()",
+      "source_files": [
+        "backend/utils/emailTemplates.js",
+        "backend/utils/emailTemplate.js"
+      ],
+      "confidence": "EXTRACTED",
+      "relation": "calls",
+      "why": "peripheral node `generatePasswordCodeEmail()` unexpectedly reaches hub `createEmailTemplate()`"
+    }
+  ],
+  "tokens": {
+    "input": 0,
+    "output": 0
+  }
+}

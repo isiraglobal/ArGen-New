@@ -1,0 +1,197 @@
+# ArGen Platform — Project Context for AI Agents
+
+> **READ THIS FIRST:** This file is the single source of truth for the ArGen platform. Every AI agent, assistant, or developer starting work on this project MUST read this file before making any changes.
+
+---
+
+## 🎯 What Is ArGen?
+
+ArGen (**AI Workflow Intelligence Platform**) is a B2B SaaS product that autonomously evaluates how well employees use AI tools in their daily workflows. It is NOT a quiz app — it is a scoring and intelligence engine for enterprise procurement and HR decisions.
+
+**Live URL:** https://argen.isira.club  
+**GitHub Repo:** https://github.com/isiraglobal/ArGen-New  
+**Brand Name:** ArGen — "AI Workflow Intelligence"
+
+---
+
+## 🏗️ Architecture Overview
+
+```
+ArGen - New Look/
+├── frontend/            # Static HTML/CSS/JS frontend (no framework)
+│   ├── html/            # All page HTML files
+│   ├── css/style.css    # Single global stylesheet — brand design system
+│   ├── js/              # Client-side JavaScript
+│   │   ├── api.js       # API client — all backend calls go here
+│   │   ├── auth-guard.js # Client-side route protection
+│   │   └── dashboard.js, take-evaluation.js, etc.
+│   └── images/          # Brand assets (ArGen Logo.png, etc.)
+├── backend/             # Node.js/Express API server
+│   ├── server.js        # Express app entry point + MongoDB connection
+│   ├── routes/          # All API route handlers
+│   │   ├── auth.js      # Login, register, JWT, password reset
+│   │   ├── admin.js     # TeamAdmin + Superadmin dashboard APIs
+│   │   ├── challenges.js # Challenge CRUD + submission
+│   │   ├── evaluations.js # Evaluation batch management
+│   │   ├── responses.js # Scoring + response history
+│   │   ├── ai.js        # AI proxy endpoint (OpenAI)
+│   │   ├── scheduler.js # Automated email/coaching scheduler
+│   │   ├── benchmark.js # Calibration & benchmarking
+│   │   └── leaderboard.js # Team rankings
+│   ├── models/          # Mongoose schemas (User, Company, Challenge, Response, Evaluation, etc.)
+│   ├── middleware/auth.js # JWT protect + role authorize middleware
+│   └── utils/
+│       ├── ai-agents.js # 5 AI agents: Research, Challenge Generator, Scorer, Report Writer, Coach
+│       ├── sendEmail.js # Nodemailer email dispatcher
+│       └── emailTemplate.js # Brutalist HTML email template factory
+├── api/index.js         # Vercel serverless entry point (imports backend/server.js)
+├── vercel.json          # Vercel routing + rewrite rules
+├── .env                 # Environment variables (see section below)
+└── graphify-out/        # AI knowledge graph — use /graphify to query this project
+```
+
+---
+
+## 🧠 User Roles
+
+| Role | Access | Description |
+|------|--------|-------------|
+| `superadmin` | Everything | Platform owner (ArGen team). Manages all companies. |
+| `teamadmin` | Company-level | Company admin. Manages members, runs reports, sees team analytics. |
+| `member` | Personal | Employee. Takes challenges, sees personal dashboard. |
+
+**Login bypass for testing:**
+- Email: `admin@argen` / Password: `argen@admin` → logs in as **superadmin/teamadmin** (bypass, no DB needed)
+- Email: `test@argen` / Password: `argen@admin` → logs in as **test teamadmin**
+
+---
+
+## 🔌 API Base URL Resolution
+
+The `frontend/js/api.js` file auto-detects the environment:
+- **Production** (argen.isira.club): calls `/api/*` (same domain, Vercel serverless)
+- **Local** (localhost): calls `http://localhost:3001/api`
+
+---
+
+## 🗄️ Database
+
+- **Provider:** MongoDB Atlas
+- **URI:** Stored in `.env` as `MONGO_URI`
+- **Connection:** `mongodb+srv://<username>:<password>@argen.bfcvejd.mongodb.net/?appName=ArGen` (configured securely in `.env`)
+- **Fallback:** If connection fails, `global.MOCK_DB = true` — all routes return hardcoded mock data so the app doesn't crash
+- **IP Whitelist:** Set to `0.0.0.0/0` (open) in MongoDB Atlas Network Access
+
+---
+
+## 🤖 5 AI Agents (backend/utils/ai-agents.js)
+
+All agents use a **fallback chain**: Anthropic Claude → Gemini → OpenAI. If all fail, a deterministic mock kicks in.
+
+1. **Research Agent** — Profiles a company's industry, AI tools, tone, competitors
+2. **Challenge Generator** — Creates a personalized daily AI challenge per employee role/department  
+3. **Scoring Agent** — Scores submissions 0-100 across 4 dimensions: Clarity, Constraint Application, Output Specificity, Iteration Quality. Detects adversarial inputs (prompt injection, low-effort, AI-generated boilerplate)
+4. **Report Writer** — Generates weekly Markdown executive reports with workflow ROI analysis
+5. **Coaching Agent** — Writes 3-5 sentence personalized nudges based on submission performance + streak
+
+---
+
+## 🎨 Design System
+
+- **Theme:** Dark brutalist / premium SaaS. Black backgrounds (#0a0a0a), electric green accents (#00ff88), sharp typography.
+- **Font:** Inter (Google Fonts)
+- **Logo:** `frontend/images/ArGen Logo.png` — must be visible at top of EVERY page
+- **CSS:** All styles in `frontend/css/style.css`. No Tailwind, no frameworks — pure CSS custom properties.
+- **Brand color vars:** `--accent: #00ff88`, `--bg: #0a0a0a`, `--card-bg: rgba(255,255,255,0.03)`
+
+---
+
+## 🚀 Deployment
+
+- **Hosting:** Vercel (connected to GitHub `isiraglobal/ArGen-New` repo)
+- **Trigger:** Any `git push origin main` triggers a Vercel rebuild
+- **Serverless Entry:** `api/index.js` → imports `backend/server.js` → exports Express app
+- **Static Files:** Served directly by Vercel from `frontend/`
+- **Rewrites:** Configured in `vercel.json` — `/api/*` → `api/index.js`, all other routes → corresponding HTML files
+
+---
+
+## ⚙️ Environment Variables (.env)
+
+| Key | Purpose |
+|-----|---------|
+| `MONGO_URI` | MongoDB Atlas connection string |
+| `JWT_SECRET` | JSON Web Token signing secret |
+| `ADMIN_EMAIL` / `ADMIN_PASSWORD` | Superadmin login bypass |
+| `ANTHROPIC_API_KEY` | Claude API for AI agents (primary) |
+| `GEMINI_API_KEY` | Gemini API for AI agents (fallback) |
+| `OPENAI_API_KEY` / `AI_API_KEY` | OpenAI for AI agents (fallback) |
+| `EMAIL_USER` / `EMAIL_PASS` | Gmail SMTP for automated emails |
+| `WHOP_API_KEY` | Whop payment platform integration |
+| `CRON_SECRET` | Secret for scheduler cron endpoints |
+| `GOOGLE_CLIENT_ID/SECRET` | Google OAuth (not yet fully implemented) |
+
+**Note:** `.env` is gitignored. For Vercel production, set these same vars in the Vercel dashboard under Project → Settings → Environment Variables.
+
+---
+
+## 🐛 Known Issues & History
+
+### Resolved
+- ✅ `api/index.js` had a literal `\n` instead of a real newline (caused `FUNCTION_INVOCATION_FAILED` on all Vercel API calls). Fixed.
+- ✅ Root `package.json` was missing `helmet`, `express-rate-limit`, `express-mongo-sanitize`, `@whop/sdk`. Fixed.
+- ✅ macOS EPERM port binding — resolved by removing Screen Time/content restrictions on user's machine
+- ✅ MongoDB Atlas SQL connection string (wrong format) — replaced with standard `mongodb+srv://` URI
+- ✅ Auth guard bypasses via clean URLs (no `.html` extension) — fixed in `auth-guard.js`
+- ✅ Scroll indicator obscuring UI clicks — fixed with `pointer-events: none` in `style.css`
+- ✅ Admin portal layout broken — refactored to CSS grid sidebar layout
+- ✅ Missing mockup images causing 404 — replaced with working remote images
+
+### Pending / In Progress
+- ⚠️ **Server-side auth:** `auth-guard.js` is client-side only. Users can bypass by disabling JS. Migration to server-side middleware is the next priority.
+- ⚠️ **MOCK_DB mode on production:** If MongoDB fails to connect on Vercel cold starts, the app silently falls back to mock data. Verify live DB is connected by hitting `/api/health`.
+- ⚠️ **Whop payment flow:** Route is commented out in `server.js`. Not yet fully wired.
+- ⚠️ **Google OAuth:** Keys exist in `.env` but implementation is incomplete.
+
+---
+
+## 📋 Page Inventory
+
+| Route | HTML File | Auth Required | Role |
+|-------|-----------|---------------|------|
+| `/` | `index.html` | No | Public |
+| `/login` | `login.html` | No | Public |
+| `/registration` | `registration.html` | No | Public |
+| `/dashboard` | `dashboard.html` | Yes | member |
+| `/admin-portal` | `admin-portal.html` | Yes | teamadmin |
+| `/take-evaluation` | `take-evaluation.html` | Yes | member |
+| `/evaluate` | `evaluate.html` | Yes | member |
+| `/challenges` | `challenges.html` | Yes | member |
+| `/teams` | `teams.html` | Yes | teamadmin |
+| `/pricing` | `pricing.html` | No | Public |
+| `/about` | `about.html` | No | Public |
+| `/contact` | `contact.html` | No | Public |
+| `/waitlist` | `waitlist.html` | No | Public |
+| `/privacy` | `privacy.html` | No | Public |
+| `/terms` | `terms.html` | No | Public |
+| `/forgot-password` | `forgot-password.html` | No | Public |
+| `/reset-password` | `reset-password.html` | No | Public |
+
+---
+
+## 🔄 graphify Knowledge Graph
+
+This project has a live graphify knowledge graph in `graphify-out/`. To query the project structure:
+```
+/graphify query "how does scoring work"
+/graphify explain "scoreResponse"
+/graphify path "login" "dashboard"
+```
+
+The graph auto-rebuilds on every `git commit` via git hooks. To manually rebuild:
+```bash
+GEMINI_API_KEY=<YOUR_GEMINI_API_KEY> graphify extract . --backend gemini
+```
+
+---
+*Last updated: May 2026 | Maintained by ArGen Development Team*

@@ -218,6 +218,35 @@ const api = {
     async triggerDailyCycle() {
         return this.request('/scheduler/daily', { method: 'POST' });
     },
+
+    // ── Invoices ──────────────────────────────────────────
+    async getInvoices() {
+        return this.request('/admin/invoices');
+    },
+
+    async getPublicInvoice(id) {
+        return this.request(`/admin/invoices/public/${id}`);
+    },
+
+    async createInvoice(invoiceData) {
+        return this.request('/admin/invoices', {
+            method: 'POST',
+            body: JSON.stringify(invoiceData)
+        });
+    },
+
+    async updateInvoice(id, invoiceData) {
+        return this.request(`/admin/invoices/${id}`, {
+            method: 'PUT',
+            body: JSON.stringify(invoiceData)
+        });
+    },
+
+    async deleteInvoice(id) {
+        return this.request(`/admin/invoices/${id}`, {
+            method: 'DELETE'
+        });
+    }
 };
 
 window.argenApi = api;

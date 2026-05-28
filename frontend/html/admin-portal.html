@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Admin Portal - ArGen</title>
   <link rel="icon" type="image/png" href="../images/ArGen Logo.png">
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="../css/style.css">
   <style>
     .admin-grid {
@@ -15,15 +15,32 @@
       margin-top: 2rem;
     }
     .request-card {
-      background: var(--charcoal);
-      border: 1px solid var(--border-light);
-      padding: 1.5rem;
-      border-radius: 8px;
+      background: rgba(255, 255, 255, 0.02);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      padding: 1.75rem;
+      border-radius: 16px;
+      box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
+      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+      position: relative;
+      overflow: hidden;
       display: flex;
       flex-wrap: wrap;
       justify-content: space-between;
       align-items: center;
       gap: 1.5rem;
+    }
+    .request-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0; height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(43, 96, 226, 0.2), transparent);
+    }
+    .request-card:hover {
+      border-color: rgba(43, 96, 226, 0.3);
+      transform: translateY(-2px);
+      box-shadow: 0 12px 40px 0 rgba(43, 96, 226, 0.1);
     }
     .request-info { flex: 1; min-width: 250px; }
     .request-actions { flex-shrink: 0; }
@@ -40,6 +57,40 @@
     .status-approved { background: rgba(0,255,0,0.1); color: var(--green); border: 1px solid var(--green); }
     .btn-approve { background: var(--argen-blue); color: var(--white); border: none; padding: 8px 16px; border-radius: 4px; cursor: pointer; font-family: var(--font-mono); font-size: 0.8rem; }
     .btn-approve:disabled { opacity: 0.5; cursor: not-allowed; }
+
+    /* Premium Navigation Sidebar Style override */
+    .auth-tabs {
+      background: rgba(255, 255, 255, 0.02) !important;
+      backdrop-filter: blur(16px);
+      border: 1px solid rgba(255, 255, 255, 0.05) !important;
+      padding: 0.75rem !important;
+      border-radius: 16px !important;
+      box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
+    }
+    .auth-tab {
+      padding: 12px 20px;
+      font-family: var(--font-mono);
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: var(--text-sec);
+      cursor: pointer;
+      border-radius: 8px;
+      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+      font-weight: 600;
+      border: 1px solid transparent;
+    }
+    .auth-tab.active {
+      background: rgba(43, 96, 226, 0.1);
+      color: var(--cyan-accent);
+      border-color: rgba(6, 182, 212, 0.3);
+      box-shadow: 0 4px 20px rgba(6, 182, 212, 0.15);
+    }
+    .auth-tab:hover:not(.active) {
+      background: rgba(255, 255, 255, 0.04);
+      color: #fff;
+      border-color: rgba(255, 255, 255, 0.08);
+    }
   </style>
 </head>
 <body class="bg-black">
@@ -74,6 +125,7 @@
           <div class="auth-tab" onclick="switchView('users')">User Audit</div>
           <div class="auth-tab" onclick="switchView('invitations')">Invitations</div>
           <div class="auth-tab" onclick="switchView('monitor')">System Monitor</div>
+          <div class="auth-tab" onclick="switchView('billing')">Billing & Invoices</div>
         </div>
 
         <div class="tab-content-area" style="min-width: 0;">
@@ -81,6 +133,19 @@
           <div id="companiesView" class="tab-view">
             <div id="companiesList" class="admin-grid">
               <div style="color: var(--text-sec); text-align: center; padding: 4rem;">Synchronizing organizational data...</div>
+            </div>
+          </div>
+
+          <!-- Billing & Invoices Tab -->
+          <div id="billingView" class="tab-view" style="display: none;">
+            <div class="request-card" style="margin-bottom: 2rem; display: block;">
+              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; flex-wrap: wrap; gap: 1rem;">
+                <h3 style="margin: 0; color: #fff;">Invoice Catalog</h3>
+                <button onclick="openCreateInvoiceModal()" class="btn" style="padding: 10px 20px; font-size: 0.75rem; background: var(--green); color: #000; border: none; font-weight: 700; border-radius: 4px; font-family: var(--font-mono); cursor: pointer;">CREATE MANUAL INVOICE</button>
+              </div>
+              <div id="invoicesList" class="admin-grid">
+                <div style="color: var(--text-sec); text-align: center; padding: 4rem;">Synchronizing billing transactions...</div>
+              </div>
             </div>
           </div>
 
@@ -173,7 +238,7 @@
       document.querySelectorAll('.tab-view').forEach(v => v.style.display = 'none');
       document.querySelectorAll('.auth-tab').forEach(t => t.classList.remove('active'));
       
-      const tabs = ['companies', 'users', 'invitations', 'monitor'];
+      const tabs = ['companies', 'users', 'invitations', 'monitor', 'billing'];
       const tabIdx = tabs.indexOf(view);
       if (tabIdx !== -1) {
         document.querySelectorAll('.auth-tab')[tabIdx].classList.add('active');
@@ -184,6 +249,7 @@
       if (view === 'users') fetchUsers();
       if (view === 'invitations') fetchInvitations();
       if (view === 'monitor') fetchMonitorData();
+      if (view === 'billing') fetchInvoices();
     }
 
     async function fetchMonitorData() {
@@ -369,7 +435,207 @@
       } catch (err) { alert(err.message); }
     }
 
+    // ── Invoice Management Console Logic ─────────────────
+    async function fetchInvoices() {
+      try {
+        const invoices = await argenApi.getInvoices();
+        const container = document.getElementById('invoicesList');
+        if (!invoices || invoices.length === 0) {
+          container.innerHTML = '<div style="color: var(--text-sec); text-align: center; padding: 4rem; font-family: var(--font-mono);">No invoice records found.</div>';
+          return;
+        }
+        container.innerHTML = invoices.map(inv => `
+          <div class="request-card">
+            <div class="request-info">
+              <span class="status-badge status-${inv.status ? inv.status.toLowerCase() : 'draft'}">${inv.status || 'Draft'}</span>
+              <h3 style="margin-top:0.5rem; font-family: var(--font-mono);">${inv.invoiceNumber}</h3>
+              <p>${inv.clientName} • $${parseFloat(inv.totalDue || inv.subtotal || 0).toLocaleString('en-US', { minimumFractionDigits: 2 })}</p>
+              <p style="font-size: 0.75rem; color: var(--text-sec); margin-top: 0.25rem;">PO: ${inv.poNumber} | Date: ${new Date(inv.date).toLocaleDateString()}</p>
+            </div>
+            <div class="request-actions" style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
+              <a href="/invoice?id=${inv._id}" target="_blank" class="btn" style="padding: 8px 16px; font-size: 0.7rem; background: var(--green); color: #000; border: none; font-weight: 700; border-radius: 4px; font-family: var(--font-mono); text-decoration: none; display: inline-flex; align-items: center; justify-content: center;">VIEW / PRINT</a>
+              <button class="btn btn-dark" onclick="openEditInvoiceModal('${inv._id}')" style="padding: 8px 16px; font-size: 0.7rem; font-family: var(--font-mono);">EDIT</button>
+              <button class="btn btn-dark" onclick="deleteInvoiceRecord('${inv._id}')" style="padding: 8px 16px; font-size: 0.7rem; background: rgba(239, 68, 68, 0.1); border-color: rgba(239, 68, 68, 0.2); color: #ef4444; font-family: var(--font-mono);">DELETE</button>
+            </div>
+          </div>
+        `).join('');
+      } catch (err) {
+        console.error('Fetch invoices error:', err);
+        document.getElementById('invoicesList').innerHTML = '<div style="color: var(--text-sec); text-align: center; padding: 4rem; font-family: var(--font-mono);">Error synchronizing invoices list.</div>';
+      }
+    }
+
+    function openCreateInvoiceModal() {
+      document.getElementById('modalTitle').textContent = 'Create Custom Invoice';
+      document.getElementById('editInvoiceId').value = '';
+      document.getElementById('inv-clientName').value = '';
+      document.getElementById('inv-clientContact').value = '';
+      document.getElementById('inv-clientAddress').value = '';
+      document.getElementById('inv-productName').value = 'ArGen Enterprise SaaS Platform License';
+      document.getElementById('inv-poNumber').value = '12-34-56-7890';
+      document.getElementById('inv-usageTerms').value = 'Unlimited usage for verified domain members';
+      document.getElementById('inv-periodOfUse').value = 'Unlimited / Annual Subscription';
+      document.getElementById('itemDesc').value = 'ArGen Enterprise Annual Platform License (Seat Limit: 15)';
+      document.getElementById('itemAmount').value = '1200';
+      document.getElementById('inv-status').value = 'Draft';
+      
+      document.getElementById('invoiceModal').style.display = 'flex';
+    }
+
+    async function openEditInvoiceModal(id) {
+      try {
+        const inv = await argenApi.getPublicInvoice(id);
+        
+        document.getElementById('modalTitle').textContent = 'Edit Invoice details';
+        document.getElementById('editInvoiceId').value = id;
+        document.getElementById('inv-clientName').value = inv.clientName || '';
+        document.getElementById('inv-clientContact').value = inv.clientContact || '';
+        document.getElementById('inv-clientAddress').value = inv.clientAddress || '';
+        document.getElementById('inv-productName').value = inv.productName || 'ArGen Enterprise SaaS Platform License';
+        document.getElementById('inv-poNumber').value = inv.poNumber || '12-34-56-7890';
+        document.getElementById('inv-usageTerms').value = inv.usageTerms || 'Unlimited usage for verified domain members';
+        document.getElementById('inv-periodOfUse').value = inv.periodOfUse || 'Unlimited / Annual Subscription';
+        
+        if (inv.items && inv.items.length > 0) {
+          document.getElementById('itemDesc').value = inv.items[0].description;
+          document.getElementById('itemAmount').value = inv.items[0].amount;
+        } else {
+          document.getElementById('itemDesc').value = 'ArGen Enterprise Annual Platform License (Seat Limit: 15)';
+          document.getElementById('itemAmount').value = '1200';
+        }
+        
+        document.getElementById('inv-status').value = inv.status || 'Draft';
+        document.getElementById('invoiceModal').style.display = 'flex';
+      } catch (err) {
+        alert('Could not fetch invoice details: ' + err.message);
+      }
+    }
+
+    function closeInvoiceModal() {
+      document.getElementById('invoiceModal').style.display = 'none';
+    }
+
+    async function deleteInvoiceRecord(id) {
+      if (!confirm('Are you absolutely sure you want to delete this invoice record permanently?')) return;
+      try {
+        await argenApi.deleteInvoice(id);
+        fetchInvoices();
+      } catch (err) {
+        alert('Failed to delete invoice: ' + err.message);
+      }
+    }
+
+    document.getElementById('invoiceForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const id = document.getElementById('editInvoiceId').value;
+      const invoiceData = {
+        clientName: document.getElementById('inv-clientName').value,
+        clientContact: document.getElementById('inv-clientContact').value,
+        clientAddress: document.getElementById('inv-clientAddress').value,
+        productName: document.getElementById('inv-productName').value,
+        poNumber: document.getElementById('inv-poNumber').value,
+        usageTerms: document.getElementById('inv-usageTerms').value,
+        periodOfUse: document.getElementById('inv-periodOfUse').value,
+        items: [
+          {
+            description: document.getElementById('itemDesc').value,
+            amount: parseFloat(document.getElementById('itemAmount').value) || 0
+          }
+        ],
+        status: document.getElementById('inv-status').value
+      };
+
+      try {
+        if (id) {
+          await argenApi.updateInvoice(id, invoiceData);
+        } else {
+          await argenApi.createInvoice(invoiceData);
+        }
+        closeInvoiceModal();
+        fetchInvoices();
+      } catch (err) {
+        alert('Failed to save invoice details: ' + err.message);
+      }
+    });
+
     window.onload = () => fetchCompanies();
   </script>
+
+  <!-- Premium Invoice Modal Container -->
+  <div id="invoiceModal" style="display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.85); z-index: 10000; align-items: center; justify-content: center; backdrop-filter: blur(8px); padding: 1.5rem;">
+    <div class="request-card" style="width: 100%; max-width: 650px; display: block; max-height: 90vh; overflow-y: auto; border: 1px solid rgba(0, 255, 136, 0.2); box-shadow: 0 0 30px rgba(0, 255, 136, 0.05); text-align: left;">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; border-bottom: 1px solid rgba(255,255,255,0.05); padding-bottom: 1rem;">
+        <h3 id="modalTitle" style="color: #fff; margin: 0; font-family: var(--font-mono); font-size: 1rem;">CREATE INVOICE</h3>
+        <button onclick="closeInvoiceModal()" style="background: transparent; border: none; color: var(--text-sec); cursor: pointer; font-size: 1.5rem; font-weight: bold; line-height: 1;">&times;</button>
+      </div>
+      <form id="invoiceForm">
+        <input type="hidden" id="editInvoiceId">
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1rem;">
+          <div class="form-group" style="margin-bottom: 0;">
+            <label class="form-label" style="font-size: 0.65rem;">CLIENT NAME *</label>
+            <input type="text" id="inv-clientName" class="form-input" required style="padding: 10px; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.1); color: #fff;">
+          </div>
+          <div class="form-group" style="margin-bottom: 0;">
+            <label class="form-label" style="font-size: 0.65rem;">CLIENT EMAIL *</label>
+            <input type="email" id="inv-clientContact" class="form-input" required style="padding: 10px; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.1); color: #fff;">
+          </div>
+        </div>
+        <div class="form-group" style="margin-bottom: 1rem;">
+          <label class="form-label" style="font-size: 0.65rem;">CLIENT ADDRESS</label>
+          <input type="text" id="inv-clientAddress" class="form-input" placeholder="Corporate Headquarters" style="padding: 10px; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.1); color: #fff;">
+        </div>
+        <div style="display: grid; grid-template-columns: 1.5fr 1fr; gap: 1rem; margin-bottom: 1rem;">
+          <div class="form-group" style="margin-bottom: 0;">
+            <label class="form-label" style="font-size: 0.65rem;">PRODUCT NAME</label>
+            <input type="text" id="inv-productName" class="form-input" value="ArGen Enterprise SaaS Platform License" style="padding: 10px; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.1); color: #fff;">
+          </div>
+          <div class="form-group" style="margin-bottom: 0;">
+            <label class="form-label" style="font-size: 0.65rem;">PO NUMBER</label>
+            <input type="text" id="inv-poNumber" class="form-input" value="12-34-56-7890" style="padding: 10px; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.1); color: #fff;">
+          </div>
+        </div>
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1rem;">
+          <div class="form-group" style="margin-bottom: 0;">
+            <label class="form-label" style="font-size: 0.65rem;">USAGE TERMS</label>
+            <input type="text" id="inv-usageTerms" class="form-input" value="Unlimited usage for verified domain members" style="padding: 10px; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.1); color: #fff;">
+          </div>
+          <div class="form-group" style="margin-bottom: 0;">
+            <label class="form-label" style="font-size: 0.65rem;">PERIOD OF USE</label>
+            <input type="text" id="inv-periodOfUse" class="form-input" value="Unlimited / Annual Subscription" style="padding: 10px; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.1); color: #fff;">
+          </div>
+        </div>
+        
+        <div style="border-top: 1px solid rgba(255,255,255,0.05); padding-top: 1rem; margin-bottom: 1.5rem;">
+          <h4 style="font-family: var(--font-mono); font-size: 0.7rem; color: var(--green); margin-bottom: 0.75rem; text-transform: uppercase;">Line Items</h4>
+          <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 1rem;">
+            <div class="form-group" style="margin-bottom: 0;">
+              <label class="form-label" style="font-size: 0.6rem;">ITEM DESCRIPTION</label>
+              <input type="text" id="itemDesc" class="form-input" value="ArGen Enterprise Annual Platform License (Seat Limit: 15)" style="padding: 10px; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.1); color: #fff;">
+            </div>
+            <div class="form-group" style="margin-bottom: 0;">
+              <label class="form-label" style="font-size: 0.6rem;">AMOUNT (USD)</label>
+              <input type="number" id="itemAmount" class="form-input" value="1200" style="padding: 10px; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.1); color: #fff;">
+            </div>
+          </div>
+        </div>
+
+        <div style="display: grid; grid-template-columns: 1fr 1.2fr; gap: 1rem; margin-bottom: 0.5rem; border-top: 1px solid rgba(255,255,255,0.05); padding-top: 1rem;">
+          <div class="form-group" style="margin-bottom: 0;">
+            <label class="form-label" style="font-size: 0.65rem;">STATUS</label>
+            <select id="inv-status" class="form-input" style="padding: 10px; background: #000; border: 1px solid rgba(255,255,255,0.1); color: #fff; width: 100%; border-radius: 4px;">
+              <option value="Draft">Draft</option>
+              <option value="Sent">Sent</option>
+              <option value="Paid">Paid</option>
+              <option value="Overdue">Overdue</option>
+            </select>
+          </div>
+          <div style="display: flex; gap: 0.5rem; align-items: flex-end;">
+            <button type="button" class="btn btn-dark" onclick="closeInvoiceModal()" style="flex: 1; height: 42px; font-family: var(--font-mono); font-size: 0.75rem;">CANCEL</button>
+            <button type="submit" class="btn" style="flex: 1.5; height: 42px; background: var(--green); color: #000; font-family: var(--font-mono); font-weight: bold; border: none; border-radius: 4px; cursor: pointer;">SAVE INVOICE</button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
 </body>
 </html>

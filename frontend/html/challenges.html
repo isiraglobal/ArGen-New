@@ -18,16 +18,26 @@
       margin-top: 3rem;
     }
     .challenge-card {
-      background: var(--charcoal);
-      border: 1px solid var(--border-light);
-      border-radius: 12px;
+      background: rgba(255, 255, 255, 0.02);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      border-radius: 16px;
       overflow: hidden;
       position: relative;
-      transition: border-color 0.3s ease, transform 0.3s ease;
+      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+      box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
+    }
+    .challenge-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0; height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(43, 96, 226, 0.2), transparent);
     }
     .challenge-card:hover {
-      border-color: var(--argen-blue);
+      border-color: rgba(43, 96, 226, 0.3);
       transform: translateY(-4px);
+      box-shadow: 0 16px 48px 0 rgba(43, 96, 226, 0.15);
     }
     .challenge-card.locked {
       opacity: 0.75;
@@ -37,7 +47,7 @@
       display: flex;
       justify-content: space-between;
       align-items: flex-start;
-      border-bottom: 1px solid var(--border-light);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
     }
     .challenge-num {
       font-family: var(--font-mono);
@@ -97,7 +107,7 @@
       position: absolute;
       bottom: 0; left: 0; right: 0;
       height: 60%;
-      background: linear-gradient(to bottom, transparent, var(--charcoal));
+      background: linear-gradient(to bottom, transparent, rgba(10, 10, 12, 0.95));
       border-radius: 0 0 8px 8px;
     }
     .locked-overlay {

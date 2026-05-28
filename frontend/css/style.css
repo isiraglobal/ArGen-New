@@ -77,6 +77,18 @@ body {
   overflow-x: hidden;
   -webkit-font-smoothing: antialiased;
   cursor: default;
+  position: relative;
+  min-height: 100vh;
+}
+
+body::before {
+  content: '';
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: radial-gradient(circle at 10% 20%, rgba(43, 96, 226, 0.05) 0%, transparent 40%),
+              radial-gradient(circle at 90% 80%, rgba(6, 182, 212, 0.03) 0%, transparent 40%);
+  z-index: -1;
+  pointer-events: none;
 }
 
 a {
@@ -134,16 +146,18 @@ strong {
 .soul-text {
   font-family: var(--font-soul);
   font-style: italic;
-  font-size: 1.1em;
+  font-size: 1.15em;
   color: var(--argen-blue);
   background: linear-gradient(120deg, var(--argen-blue) 0%, var(--cyan-accent) 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   display: inline-block;
   transform: rotate(-1deg);
-  margin: 0 0.1em;
-  vertical-align: bottom;
-  line-height: 1;
+  margin: 0 0.15em;
+  vertical-align: baseline;
+  line-height: 1.25;
+  padding: 0.05em 0.35em 0.05em 0.2em;
+  overflow: visible;
 }
 
 .section-cream .soul-text {

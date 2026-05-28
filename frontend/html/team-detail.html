@@ -11,10 +11,27 @@
   <script src="../js/api.js"></script>
   <style>
     .dimension-card {
-      background: var(--charcoal);
-      border: 1px solid var(--border-light);
-      padding: 2rem;
-      border-radius: 12px;
+      background: rgba(255, 255, 255, 0.02);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      padding: 2.25rem;
+      border-radius: 16px;
+      box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
+      position: relative;
+      overflow: hidden;
+      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .dimension-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0; height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(43, 96, 226, 0.2), transparent);
+    }
+    .dimension-card:hover {
+      border-color: rgba(43, 96, 226, 0.3);
+      transform: translateY(-2px);
+      box-shadow: 0 12px 40px 0 rgba(43, 96, 226, 0.1);
     }
     .score-circle {
       width: 120px;
@@ -219,15 +236,16 @@
         const memberGrid = document.getElementById('memberGrid');
         if (team.members && team.members.length > 0) {
           memberGrid.innerHTML = team.members.map(member => \`
-            <div class="card" style="background: var(--charcoal); padding: 2rem;">
+            <div class="card" style="background: rgba(255, 255, 255, 0.02); border: 1px solid rgba(255, 255, 255, 0.05); border-radius: 16px; padding: 2rem; box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.2); transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1); position: relative; overflow: hidden;" onmouseover="this.style.borderColor='rgba(43, 96, 226, 0.3)'; this.style.transform='translateY(-2px)'" onmouseout="this.style.borderColor='rgba(255, 255, 255, 0.05)'; this.style.transform='none'">
+              <div style="position: absolute; top: 0; left: 0; right: 0; height: 1px; background: linear-gradient(90deg, transparent, rgba(43, 96, 226, 0.2), transparent);"></div>
               <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 1.5rem;">
-                <div style="width: 48px; height: 48px; background: var(--argen-blue); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-family: var(--font-mono); color: white;">\${member.name.charAt(0)}</div>
+                <div style="width: 48px; height: 48px; background: rgba(43, 96, 226, 0.15); border: 1px solid var(--argen-blue); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-family: var(--font-mono); color: white; font-weight: 600;">\${member.name.charAt(0)}</div>
                 <div>
                   <span style="display: block; color: var(--white); font-weight: 600;">\${member.name}</span>
                   <span class="stat-label">\${member.role || 'Member'}</span>
                 </div>
               </div>
-              <div style="display: flex; justify-content: space-between; border-top: 1px solid var(--border-light); padding-top: 1rem;">
+              <div style="display: flex; justify-content: space-between; border-top: 1px solid rgba(255, 255, 255, 0.05); padding-top: 1rem;">
                 <span class="stat-label">SCORE</span>
                 <span style="font-family: var(--font-display); font-size: 1.5rem; color: var(--emerald-cta);">\${member.score || '--'}</span>
               </div>

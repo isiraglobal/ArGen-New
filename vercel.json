@@ -20,6 +20,7 @@
     { "source": "/terms", "destination": "/frontend/html/terms.html" },
     { "source": "/waitlist", "destination": "/frontend/html/waitlist.html" },
     { "source": "/registration", "destination": "/frontend/html/registration.html" },
+    { "source": "/invoice", "destination": "/frontend/html/invoice.html" },
     { "source": "/dashboard", "destination": "/frontend/html/dashboard.html" },
     { "source": "/take-evaluation", "destination": "/frontend/html/take-evaluation.html" },
     { "source": "/(css|js|images)/(.*)", "destination": "/frontend/$1/$2" }

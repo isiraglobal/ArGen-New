@@ -53,8 +53,24 @@ app.get('/api/health', (req, res) => {
   });
 });
 
+// Serve static assets (css, js, images)
+app.use('/css', express.static(path.join(__dirname, '../frontend/css')));
+app.use('/js', express.static(path.join(__dirname, '../frontend/js')));
+app.use('/images', express.static(path.join(__dirname, '../frontend/images')));
+
+// Root landing page
 app.get('/', (req, res) => {
-  res.send('ArGen API is running...');
+  res.sendFile(path.join(__dirname, '../frontend/html/index.html'));
+});
+
+// Clean URLs handler mapping to HTML files
+app.get('/:page', (req, res, next) => {
+  const page = req.params.page;
+  if (page.includes('.') || page === 'api') return next();
+  const filePath = path.join(__dirname, `../frontend/html/${page}.html`);
+  res.sendFile(filePath, (err) => {
+    if (err) next();
+  });
 });
 
 // Connect to MongoDB
@@ -98,7 +114,7 @@ app.use(async (req, res, next) => {
 // For local development
 if (process.env.NODE_ENV !== 'production') {
     const PORT = parseInt(process.env.PORT) || 3001;
-    app.listen(PORT, '127.0.0.1', () => console.log(`Server running on http://127.0.0.1:${PORT}`));
+    app.listen(PORT, '127.0.0.1', () => console.log(`Server running on port ${PORT} (local loopback)`));
 }
 
 module.exports = app;
