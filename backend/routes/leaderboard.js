@@ -1,8 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const { protect, isApproved } = require('../middleware/auth');
-const User = require('../models/User');
-const Response = require('../models/Response');
+const { db } = require('../utils/supabase');
 
 // @route   GET api/leaderboard
 // @desc    Get weekly leaderboard for the user's company
@@ -17,6 +16,7 @@ router.get('/', protect, isApproved, async (req, res) => {
       { id: 'mock-5', userId: 'mock-5', name: 'Marcus T.', totalScore: 68.0, currentStreak: 1, daysCompleted: 3, rank: 5 }
     ]);
   }
+
   try {
     // 1. Get start of current week (Monday 00:00)
     const now = new Date();
@@ -26,25 +26,37 @@ router.get('/', protect, isApproved, async (req, res) => {
     startOfWeek.setHours(0, 0, 0, 0);
 
     // 2. Fetch all users in company
-    const users = await User.find({ companyId: req.user.companyId }).select('name role currentStreak');
-    
+    const usersSnap = await db.collection('users')
+      .where('companyId', '==', req.user.companyId)
+      .get();
+
+    const users = usersSnap.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+
     // 3. Aggregate scores for each user since start of week
     const leaderboard = await Promise.all(users.map(async (u) => {
-      const responses = await Response.find({
-        user: u._id,
-        createdAt: { $gte: startOfWeek }
+      const respSnap = await db.collection('responses')
+        .where('user', '==', u.id)
+        .get();
+
+      // Filter in-memory for this week (Supabase adapter doesn't support date comparisons yet)
+      const weeklyResponses = respSnap.docs.filter(doc => {
+        const data = doc.data();
+        const createdAt = data.createdAt ? new Date(data.createdAt) : new Date(0);
+        return createdAt >= startOfWeek;
       });
 
-      const totalScore = responses.reduce((acc, r) => acc + (r.scores?.total || 0), 0);
-      const daysCompleted = responses.length;
+      const totalScore = weeklyResponses.reduce((acc, doc) => {
+        const r = doc.data();
+        return acc + (r.scores?.total || 0);
+      }, 0);
 
       return {
-        id: u._id,
+        id: u.id,
         name: u.name,
         score: totalScore,
-        daysCompleted,
-        streak: u.currentStreak,
-        isMe: u._id.toString() === req.user.id
+        daysCompleted: weeklyResponses.length,
+        streak: u.currentStreak || 0,
+        isMe: u.id === req.user.id
       };
     }));
 
@@ -66,7 +78,7 @@ router.get('/', protect, isApproved, async (req, res) => {
 
     res.json(finalLeaderboard);
   } catch (err) {
-    console.error(err.message);
+    console.error('Leaderboard Error:', err.message);
     res.status(500).send('Server error');
   }
 });

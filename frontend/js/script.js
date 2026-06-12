@@ -447,50 +447,74 @@
     // ── HORIZONTAL SCROLL PIN (How It Works) ──
     const howTrack = document.getElementById('howTrack');
     if (howTrack) {
-      const stepsCount = howTrack.querySelectorAll('.how-step').length;
-      const scrollDist = howTrack.scrollWidth - window.innerWidth + 200; // Added extra padding for the last item
-      const mainAnim = gsap.to(howTrack, {
-        x: -scrollDist,
-        ease: 'none',
-        scrollTrigger: {
-          trigger: '.how-section',
-          start: 'top top',
-          end: '+=' + (scrollDist + 2000), // Increased to make scrolling feel more paced and delayed
-          pin: true,
-          scrub: 1.5,
-          anticipatePin: 1,
-          snap: {
-            snapTo: 1 / (stepsCount - 1),
-            duration: { min: 0.2, max: 0.5 },
-            ease: 'power1.inOut'
-          }
-        }
-      });
+      const mm = gsap.matchMedia();
 
-      // Animate each step
-      howTrack.querySelectorAll('.how-step').forEach(step => {
-        gsap.from(step.querySelector('.step-num-big'), {
-          x: 100, opacity: 0, duration: 0.7,
+      mm.add("(min-width: 769px)", () => {
+        // Desktop horizontal scroll animation
+        const stepsCount = howTrack.querySelectorAll('.how-step').length;
+        const scrollDist = howTrack.scrollWidth - window.innerWidth + 200;
+        const mainAnim = gsap.to(howTrack, {
+          x: -scrollDist,
+          ease: 'none',
           scrollTrigger: {
-            trigger: step,
-            containerAnimation: mainAnim,
-            start: 'left 85%',
-            toggleActions: 'play none none none'
+            trigger: '.how-section',
+            start: 'top top',
+            end: '+=' + (scrollDist + 2000),
+            pin: true,
+            scrub: 1.5,
+            anticipatePin: 1,
+            snap: {
+              snapTo: 1 / (stepsCount - 1),
+              duration: { min: 0.2, max: 0.5 },
+              ease: 'power1.inOut'
+            }
           }
         });
-        gsap.from(step.querySelector('.step-content'), {
-          y: 50, opacity: 0, duration: 0.8,
-          scrollTrigger: {
-            trigger: step,
-            containerAnimation: mainAnim,
-            start: 'left 75%',
-            toggleActions: 'play none none none'
-          }
+
+        howTrack.querySelectorAll('.how-step').forEach(step => {
+          gsap.from(step.querySelector('.step-num-big'), {
+            x: 100, opacity: 0, duration: 0.7,
+            scrollTrigger: {
+              trigger: step,
+              containerAnimation: mainAnim,
+              start: 'left 85%',
+              toggleActions: 'play none none none'
+            }
+          });
+          gsap.from(step.querySelector('.step-content'), {
+            y: 50, opacity: 0, duration: 0.8,
+            scrollTrigger: {
+              trigger: step,
+              containerAnimation: mainAnim,
+              start: 'left 75%',
+              toggleActions: 'play none none none'
+            }
+          });
         });
       });
-    }
 
-    // ── Pricing cards ──
+      mm.add("(max-width: 768px)", () => {
+        // Mobile vertical animation (no horizontal pin)
+        howTrack.querySelectorAll('.how-step').forEach(step => {
+          gsap.from(step.querySelector('.step-num-big'), {
+            x: -50, opacity: 0, duration: 0.8,
+            scrollTrigger: {
+              trigger: step,
+              start: 'top 85%',
+              toggleActions: 'play none none none'
+            }
+          });
+          gsap.from(step.querySelector('.step-content'), {
+            y: 30, opacity: 0, duration: 0.8,
+            scrollTrigger: {
+              trigger: step,
+              start: 'top 80%',
+              toggleActions: 'play none none none'
+            }
+          });
+        });
+      });
+    }    // ── Pricing cards ──
     gsap.set('.price-card', { y: 60, opacity: 0, scale: 0.96 });
     gsap.to('.price-card', {
       scrollTrigger: { trigger: '.pricing-grid', start: 'top 82%' },

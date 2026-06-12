@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Security Gateway - ArGen</title>
+  <link rel="icon" type="image/png" href="../images/ArGen Logo.png">
+  <link
+    href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono&display=swap"
+    rel="stylesheet">
+  <link rel="stylesheet" href="../css/style.css">
+
+  <style>
+    :root {
+      --accent: #00ff88;
+      --bg: #0a0a0a;
+    }
+
+    .oauth-page {
+      min-height: 100dvh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem 1.5rem;
+      background: var(--bg);
+      position: relative;
+      overflow: hidden;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+    }
+
+    .oauth-bg-blob {
+      position: absolute;
+      width: 600px;
+      height: 600px;
+      background: radial-gradient(circle, rgba(0, 255, 136, 0.06) 0%, transparent 70%);
+      filter: blur(80px);
+      z-index: 0;
+      pointer-events: none;
+    }
+
+    .oauth-card {
+      width: 100%;
+      max-width: 500px;
+      background: rgba(10, 10, 10, 0.85);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: 1px solid rgba(0, 255, 136, 0.15);
+      border-radius: 12px;
+      padding: 2.5rem;
+      position: relative;
+      z-index: 1;
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.6);
+      text-align: center;
+    }
+
+    .logo-container {
+      margin-bottom: 2rem;
+    }
+
+    .logo-container img {
+      height: 64px;
+      filter: drop-shadow(0 0 10px rgba(0, 255, 136, 0.2));
+    }
+
+    .terminal {
+      background: rgba(0, 0, 0, 0.6);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      border-radius: 8px;
+      padding: 1.5rem;
+      text-align: left;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.85rem;
+      color: #a0a0a0;
+      margin-bottom: 2rem;
+      min-height: 160px;
+      box-shadow: inset 0 2px 8px rgba(0,0,0,0.8);
+    }
+
+    .terminal-line {
+      margin: 0.4rem 0;
+      line-height: 1.4;
+    }
+
+    .terminal-line .prompt {
+      color: var(--accent);
+      margin-right: 0.5rem;
+    }
+
+    .terminal-line.success {
+      color: #00ff88;
+    }
+
+    .terminal-line.error {
+      color: #ff4a4a;
+    }
+
+    .progress-bar-container {
+      width: 100%;
+      height: 4px;
+      background: rgba(255, 255, 255, 0.05);
+      border-radius: 2px;
+      overflow: hidden;
+      margin-top: 1.5rem;
+    }
+
+    .progress-bar {
+      width: 0%;
+      height: 100%;
+      background: var(--accent);
+      box-shadow: 0 0 10px var(--accent);
+      transition: width 0.4s ease;
+    }
+
+    .error-container {
+      display: none;
+      margin-top: 1rem;
+    }
+
+    .error-msg {
+      color: #ff4a4a;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.8rem;
+      background: rgba(255, 74, 74, 0.1);
+      border: 1px solid rgba(255, 74, 74, 0.2);
+      padding: 1rem;
+      border-radius: 6px;
+      margin-bottom: 1.5rem;
+      word-break: break-word;
+      text-align: left;
+    }
+
+    .btn {
+      width: 100%;
+      padding: 12px;
+      border-radius: 6px;
+      font-weight: 600;
+      font-size: 0.9rem;
+      letter-spacing: 0.5px;
+      transition: all 0.2s ease;
+      cursor: pointer;
+      text-transform: uppercase;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+    }
+
+    .btn-accent {
+      background: var(--accent);
+      color: #000;
+      border: none;
+      box-shadow: 0 4px 20px rgba(0, 255, 136, 0.2);
+    }
+
+    .btn-accent:hover {
+      background: #00dd77;
+      transform: translateY(-1px);
+      box-shadow: 0 6px 24px rgba(0, 255, 136, 0.3);
+    }
+
+    .btn-outline {
+      background: transparent;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      color: #fff;
+    }
+
+    .btn-outline:hover {
+      background: rgba(255, 255, 255, 0.03);
+      border-color: rgba(255, 255, 255, 0.2);
+    }
+  </style>
+
+  <!-- Load config and API clients -->
+  <script src="../js/api.js"></script>
+  <script type="module" src="../js/supabase-config.js"></script>
+  <script>
+    window.si = window.si || function () { (window.siq = window.siq || []).push(arguments); };
+  </script>
+  <script defer src="/_vercel/speed-insights/script.js"></script>
+</head>
+
+<body>
+  <div class="oauth-page">
+    <div class="oauth-bg-blob"></div>
+
+    <div class="oauth-card">
+      <div class="logo-container">
+        <img src="../images/ArGen Logo.png" alt="ArGen Logo">
+      </div>
+
+      <h2 style="font-size: 1.25rem; font-weight: 700; margin-bottom: 0.5rem; color: #fff;">Access Authorization</h2>
+      <p style="font-size: 0.85rem; color: #888; margin-bottom: 1.5rem;">Validating secure connection credentials...</p>
+
+      <div class="terminal" id="terminal">
+        <div class="terminal-line"><span class="prompt">></span>Initializing handshake with Supabase Auth...</div>
+      </div>
+
+      <div class="progress-bar-container">
+        <div class="progress-bar" id="progressBar"></div>
+      </div>
+
+      <div class="error-container" id="errorContainer">
+        <div class="error-msg" id="errorMsg">Authentication verification failed.</div>
+        <button onclick="window.location.href='/login'" class="btn btn-outline">Return to Access Portal</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Console log utility inside terminal
+    function logToTerminal(message, type = 'info') {
+      const term = document.getElementById('terminal');
+      const line = document.createElement('div');
+      line.className = `terminal-line ${type}`;
+      line.innerHTML = `<span class="prompt">></span>${message}`;
+      term.appendChild(line);
+      term.scrollTop = term.scrollHeight;
+    }
+
+    function updateProgress(percentage) {
+      document.getElementById('progressBar').style.width = `${percentage}%`;
+    }
+
+    function showFailure(errMessage) {
+      logToTerminal('Authentication handshake failed.', 'error');
+      document.getElementById('progressBar').style.background = '#ff4a4a';
+      document.getElementById('progressBar').style.boxShadow = '0 0 10px #ff4a4a';
+      document.getElementById('errorMsg').innerText = errMessage;
+      document.getElementById('errorContainer').style.display = 'block';
+    }
+
+    // Process token verification on load
+    window.addEventListener('DOMContentLoaded', async () => {
+      updateProgress(10);
+      
+      // Wait for Supabase SDK loading and window initialization (max 5 seconds)
+      let attempts = 0;
+      while (!window.supabaseAuthHelpers && attempts < 50) {
+        await new Promise(r => setTimeout(r, 100));
+        attempts++;
+      }
+
+      if (!window.supabaseAuthHelpers) {
+        showFailure('Supabase Client failed to load. Please verify API configurations.');
+        return;
+      }
+
+      logToTerminal('Supabase client loaded successfully.', 'success');
+      updateProgress(30);
+
+      try {
+        logToTerminal('Retrieving authentication session details...');
+        const session = await window.supabaseAuthHelpers.getSession();
+        
+        if (!session) {
+          // If not loaded immediately, check if it registers in state listener shortly (implicit callback latency)
+          logToTerminal('No active session found in cache. Listening for auth callback...');
+          
+          let resolvedSession = null;
+          // Setup a 4 second timeout for callback parsing
+          const authPromise = new Promise((resolve) => {
+            const { data: { subscription } } = window.supabaseAuthHelpers.onAuthStateChange((event, newSession) => {
+              if (newSession) {
+                subscription.unsubscribe();
+                resolve(newSession);
+              }
+            });
+            setTimeout(() => {
+              subscription.unsubscribe();
+              resolve(null);
+            }, 4000);
+          });
+
+          resolvedSession = await authPromise;
+          
+          if (!resolvedSession) {
+            throw new Error('Authentication callback timeout. No session token was received.');
+          }
+          
+          logToTerminal('Parsed token payload from callback.', 'success');
+          verifySessionAndProceed(resolvedSession);
+        } else {
+          logToTerminal('Active session located successfully.', 'success');
+          verifySessionAndProceed(session);
+        }
+
+      } catch (err) {
+        showFailure(err.message);
+      }
+    });
+
+    async function verifySessionAndProceed(session) {
+      updateProgress(60);
+      try {
+        const token = session.access_token;
+        logToTerminal('Establishing local session cache...');
+        
+        // Sync token in localStorage & cookies (supabase-config.js event handles this, but force it for safety)
+        localStorage.setItem('argen_token', token);
+        
+        logToTerminal('Synchronizing profile data from ArGen database...');
+        
+        // Fetch user object from /api/auth/me
+        const user = await window.argenApi.getMe();
+        
+        logToTerminal(`Profile located. Authenticated as: ${user.name} (${user.role})`, 'success');
+        updateProgress(90);
+
+        // Store user profile in local storage & cookies
+        localStorage.setItem('user', JSON.stringify(user));
+        window.argenApi.setCookie('user', JSON.stringify(user), 7);
+        window.argenApi.setCookie('argen_token', token, 7);
+
+        logToTerminal('Verification complete. Redirecting to terminal dashboard...', 'success');
+        updateProgress(100);
+
+        setTimeout(() => {
+          const role = user.role.toLowerCase();
+          if (role === 'superadmin') {
+            window.location.href = '/admin-portal';
+          } else {
+            window.location.href = '/teams'; // Direct to teams dashboard
+          }
+        }, 1000);
+
+      } catch (err) {
+        showFailure(err.message || 'Failed to synchronize user data.');
+      }
+    }
+  </script>
+</body>
+
+</html>

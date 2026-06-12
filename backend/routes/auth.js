@@ -1,13 +1,19 @@
 const express = require('express');
 const router = express.Router();
-const jwt = require('jsonwebtoken');
-const bcrypt = require('bcryptjs');
 const crypto = require('crypto');
-const User = require('../models/User');
-const Company = require('../models/Company');
-const Invitation = require('../models/Invitation');
+const bcrypt = require('bcryptjs');
+const { auth, db, supabase } = require('../utils/supabase');
 const sendEmail = require('../utils/sendEmail');
 const { createEmailTemplate } = require('../utils/emailTemplate');
+const { protect } = require('../middleware/auth');
+
+// Helper to authenticate user using Supabase Auth
+const signInWithSupabase = async (email, password) => {
+  if (!supabase) throw new Error('Supabase not initialized');
+  const { data, error } = await supabase.auth.signInWithPassword({ email, password });
+  if (error) throw new Error(error.message);
+  return data; // { user, session }
+};
 
 // @route   GET api/auth/invitation/:token
 // @desc    Verify invitation token
@@ -22,11 +28,20 @@ router.get('/invitation/:token', async (req, res) => {
         companyName: 'Mock Corp'
       });
     }
-    const invitation = await Invitation.findOne({ token: req.params.token, used: false });
-    if (!invitation) {
+
+    const invitationsRef = db.collection('invitations');
+    const snapshot = await invitationsRef
+      .where('token', '==', req.params.token)
+      .where('used', '==', false)
+      .limit(1)
+      .get();
+
+    if (snapshot.empty) {
       return res.status(404).json({ message: 'Invalid or expired invitation link' });
     }
-    res.json(invitation);
+
+    const doc = snapshot.docs[0];
+    res.json({ id: doc.id, ...doc.data() });
   } catch (err) {
     console.error('Invitation Verification Error:', err);
     res.status(500).json({ message: 'Server Error', error: err.message });
@@ -46,66 +61,95 @@ router.post('/register-company', async (req, res) => {
       inviteCode: 'MOCK1234'
     });
   }
+
   try {
-    // If token provided, verify invitation
-    let invitation = null;
+    // 1. Verify token if provided
+    let invitationDoc = null;
     if (token) {
-      invitation = await Invitation.findOne({ token, used: false });
-      if (!invitation) {
+      const snapshot = await db.collection('invitations')
+        .where('token', '==', token)
+        .where('used', '==', false)
+        .limit(1)
+        .get();
+
+      if (snapshot.empty) {
         return res.status(400).json({ message: 'Invalid invitation token' });
       }
+      invitationDoc = snapshot.docs[0];
     }
 
-    let company = await Company.findOne({ name: companyName });
-    if (company) {
+    // 2. Check if company exists
+    const companySnapshot = await db.collection('companies')
+      .where('name', '==', companyName)
+      .limit(1)
+      .get();
+
+    if (!companySnapshot.empty) {
       return res.status(400).json({ message: 'Company already exists' });
     }
 
-    // Generate unique 8-char invite code
+    // 3. Generate unique invite code
     const inviteCode = Math.random().toString(36).substring(2, 10).toUpperCase();
 
-    company = new Company({
+    // Create Company Doc
+    const companyData = {
       name: companyName,
       industry,
       size,
       country,
       primaryContact: { name, email },
       inviteCode,
-      status: invitation ? 'active' : 'pending' // Auto-approve if invited
-    });
+      status: invitationDoc ? 'active' : 'pending',
+      createdAt: new Date()
+    };
+    
+    const companyRef = await db.collection('companies').add(companyData);
 
-    await company.save();
-
-    // Create Admin User
-    let user = await User.findOne({ email });
-    if (user) {
-      return res.status(400).json({ message: 'User already exists' });
+    // 4. Create Admin User in Firebase Auth
+    let userRecord;
+    try {
+      userRecord = await auth.createUser({
+        email,
+        password,
+        displayName: name,
+        emailVerified: true
+      });
+    } catch (authErr) {
+      // Rollback company creation if auth fails
+      await companyRef.delete();
+      return res.status(400).json({ message: authErr.message });
     }
 
-    const salt = await bcrypt.genSalt(10);
-    const hashedPassword = await bcrypt.hash(password, salt);
-
-    user = new User({
+    // 5. Store user profile in Firestore
+    const userData = {
       name,
       email,
-      password: hashedPassword,
       role: 'teamadmin',
-      companyId: company._id
+      companyId: companyRef.id,
+      createdAt: new Date()
+    };
+    
+    await db.collection('users').doc(userRecord.uid).set(userData);
+
+    // Set Custom User Claims for role-based security
+    await auth.setCustomUserClaims(userRecord.uid, {
+      role: 'teamadmin',
+      companyId: companyRef.id
     });
-    await user.save();
 
     // Mark invitation as used
-    if (invitation) {
-      invitation.used = true;
-      invitation.usedBy = user._id;
-      invitation.usedAt = Date.now();
-      await invitation.save();
+    if (invitationDoc) {
+      await invitationDoc.ref.update({
+        used: true,
+        usedBy: userRecord.uid,
+        usedAt: new Date()
+      });
     }
 
     res.status(201).json({ 
       msg: 'Company registration successful. Pending App Admin approval.',
-      companyId: company._id,
-      inviteCode: company.inviteCode
+      companyId: companyRef.id,
+      inviteCode: inviteCode
     });
 
   } catch (err) {
@@ -121,155 +165,91 @@ router.post('/login', async (req, res) => {
   const { email, password } = req.body;
 
   try {
-    // 1. Check for Superadmin Bypass (via Environment Variables)
-    const adminEmail = process.env.ADMIN_EMAIL || 'admin@argen.ai';
-    const adminPass = process.env.ADMIN_PASSWORD || 'ArGenAdmin2026';
+    const adminEmail = process.env.ADMIN_EMAIL || 'admin@argen';
+    const adminPass = process.env.ADMIN_PASSWORD || 'argen@admin';
 
-    // 1.5 Test User Bypass (Hidden backdoor for admin testing)
-    if ((email === 'test@argen' && password === adminPass) || (email === 'admin@argen' && password === 'argen@admin')) {
-      try {
-        let company = null;
-        let testUser = null;
-
-        // Try DB operations, but catch errors to allow mock fallback
-        try {
-          company = await Company.findOne({ name: 'ArGen Test Corp' });
-          if (!company && mongoose.connection.readyState === 1) {
-            company = new Company({
-              name: 'ArGen Test Corp',
-              industry: 'Technology',
-              size: '1-10',
-              country: 'US',
-              primaryContact: { name: 'Test User', email: email },
-              inviteCode: 'TEST1234',
-              status: 'active'
-            });
-            await company.save();
-          }
-          
-          testUser = await User.findOne({ email });
-          if (!testUser && mongoose.connection.readyState === 1) {
-            testUser = new User({
-              name: email === 'admin@argen' ? 'System Admin' : 'Test TeamAdmin',
-              email,
-              password: 'mockpassword', 
-              role: 'teamadmin',
-              companyId: company ? company._id : null
-            });
-            await testUser.save();
-          }
-        } catch (dbErr) {
-          console.warn('DB error during bypass, using memory mock:', dbErr.message);
-        }
-
-        // Final mock fallback if DB failed or returned null
-        const mockUser = testUser || {
-          id: 'mock-user-id',
-          name: email === 'admin@argen' ? 'System Admin (Mock)' : 'Test User (Mock)',
-          email,
-          role: 'teamadmin',
-          companyId: company ? company._id : 'mock-company-id'
-        };
-
-        const payload = { 
-          user: { 
-            id: mockUser.id || mockUser._id, 
-            role: mockUser.role, 
-            companyId: mockUser.companyId 
-          } 
-        };
-
-        jwt.sign(payload, process.env.JWT_SECRET || 'secret', { expiresIn: '5d' }, (err, token) => {
-          if (err) {
-            console.error('JWT Sign Error:', err);
-            return res.status(500).json({ msg: 'Token generation failed' });
-          }
-          res.json({ 
-            token, 
-            user: { 
-              id: mockUser.id || mockUser._id, 
-              name: mockUser.name, 
-              email: mockUser.email, 
-              role: mockUser.role, 
-              companyId: mockUser.companyId 
-            } 
-          });
-        });
-        return; 
-      } catch (bypassErr) {
-        console.error('Bypass Logic Error:', bypassErr);
-        return res.status(500).json({ msg: 'Bypass initialization failed', error: bypassErr.message });
-      }
-    }
-
-    if (email === adminEmail && password === adminPass) {
-      let user = await User.findOne({ email: adminEmail });
+    // 1. Admin/Test User Bypasses
+    if ((email === 'test@argen' && password === adminPass) || (email === adminEmail && password === adminPass)) {
+      const isSuperadmin = email === adminEmail;
+      const mockUser = {
+        uid: 'mock-uid',
+        name: isSuperadmin ? 'System Admin (Mock)' : 'Test User (Mock)',
+        email,
+        role: isSuperadmin ? 'superadmin' : 'teamadmin',
+        companyId: 'mock-company-id'
+      };
       
-      // If admin doesn't exist in DB but matches Env Vars, create a temporary session user
-      // or just use the one from DB if it exists (preferred for consistency)
-      if (!user) {
-        // Auto-create superadmin if it doesn't exist but env vars are provided
-        const salt = await bcrypt.genSalt(10);
-        const hashedPassword = await bcrypt.hash(adminPass, salt);
-        user = new User({
-          name: 'System Architect',
-          email: adminEmail,
-          password: hashedPassword,
-          role: 'superadmin'
-        });
-        await user.save();
-      }
-
-      const payload = { user: { id: user.id, role: 'superadmin', companyId: null } };
-      return jwt.sign(payload, process.env.JWT_SECRET || 'secret', { expiresIn: '5d' }, (err, token) => {
-        if (err) throw err;
-        res.json({ token, user: { id: user.id, name: user.name, email: user.email, role: 'superadmin', companyId: null } });
+      return res.json({
+        token: 'mock-token',
+        user: {
+          id: mockUser.uid,
+          name: mockUser.name,
+          email: mockUser.email,
+          role: mockUser.role,
+          companyId: mockUser.companyId
+        }
       });
     }
 
-    // 2. Normal Login Flow
-    let user = await User.findOne({ email }).populate('companyId');
-    if (!user) {
+    // 2. Perform Supabase Auth Sign-in
+    let supabaseSession;
+    try {
+      supabaseSession = await signInWithSupabase(email, password);
+    } catch (authErr) {
       return res.status(400).json({ msg: 'Invalid Credentials' });
     }
 
-    const isMatch = await bcrypt.compare(password, user.password);
-    if (!isMatch) {
-      return res.status(400).json({ msg: 'Invalid Credentials' });
+    const uid = supabaseSession.user.id;
+    const token = supabaseSession.session.access_token;
+
+    // 3. Fetch User profile details from Supabase DB
+    const userDoc = await db.collection('users').doc(uid).get();
+    if (!userDoc.exists) {
+      return res.status(400).json({ msg: 'User profile not found.' });
     }
 
-    // Check Company Status (for non-superadmins)
-    if (user.role !== 'superadmin') {
-      if (!user.companyId || user.companyId.status !== 'active') {
+    const user = userDoc.data();
+
+    // 4. Validate Company Status (non-superadmins)
+    if (user.role !== 'superadmin' && user.companyId) {
+      const companyDoc = await db.collection('companies').doc(user.companyId).get();
+      if (!companyDoc.exists || companyDoc.data().status !== 'active') {
         return res.status(403).json({ 
           msg: 'Your company account is pending approval or has been suspended. Please contact the App Admin.' 
         });
       }
     }
 
-    const payload = {
-      user: {
-        id: user.id,
-        role: user.role,
-        companyId: user.companyId ? user.companyId._id : null
-      }
-    };
+    if (user.email && user.email.includes('.')) {
+      sendEmail({
+        email: user.email,
+        subject: 'Security Alert: New Login to ArGen',
+        html: createEmailTemplate({
+          title: 'New Login Detected - ArGen',
+          preheader: 'A new login was detected on your ArGen account.',
+          bodyContent: `
+            <h1>New Login Detected</h1>
+            <p>Hello ${user.name || 'User'},</p>
+            <p>A new login was detected on your ArGen account on ${new Date().toUTCString()}.</p>
+            <p>If this was you, you can safely ignore this email. If you did not log in, please secure your account immediately or contact ArGen support.</p>
+          `,
+          buttonText: 'Secure Account',
+          buttonUrl: 'https://argen.isira.club/forgot-password'
+        })
+      }).catch(emailErr => console.error('Failed to send login alert email:', emailErr.message));
+    }
 
-    jwt.sign(
-      payload,
-      process.env.JWT_SECRET || 'secret',
-      { expiresIn: '5d' },
-      (err, token) => {
-        if (err) throw err;
-        res.json({ token, user: {
-          id: user.id,
-          name: user.name,
-          email: user.email,
-          role: user.role,
-          companyId: user.companyId ? user.companyId._id : null
-        }});
+    res.json({
+      token,
+      user: {
+        id: uid,
+        name: user.name,
+        email: user.email,
+        role: user.role,
+        companyId: user.companyId || null
       }
-    );
+    });
+
   } catch (err) {
     console.error('Login Error:', err);
     res.status(500).json({ msg: 'Server error', error: err.message });
@@ -279,7 +259,6 @@ router.post('/login', async (req, res) => {
 // @route   GET api/auth/me
 // @desc    Get current authenticated user's profile
 // @access  Private
-const { protect } = require('../middleware/auth');
 router.get('/me', protect, async (req, res) => {
   if (global.MOCK_DB) {
     return res.json({
@@ -293,10 +272,47 @@ router.get('/me', protect, async (req, res) => {
       weakestDimension: 'iteration_quality'
     });
   }
+  
   try {
-    const user = await User.findById(req.user.id).select('-password');
-    if (!user) return res.status(404).json({ msg: 'User not found' });
-    res.json(user);
+    let userDoc = await db.collection('users').doc(req.user.id).get();
+    
+    if (!userDoc.exists) {
+      // Check if a user with the same email exists in the database
+      const emailSnapshot = await db.collection('users')
+        .where('email', '==', req.user.email)
+        .limit(1)
+        .get();
+        
+      if (!emailSnapshot.empty) {
+        // Link existing user profile with the new Supabase Auth UID
+        const existingDoc = emailSnapshot.docs[0];
+        const existingData = existingDoc.data();
+        
+        // Delete old document and create/set new one with correct ID
+        await existingDoc.ref.delete();
+        await db.collection('users').doc(req.user.id).set(existingData);
+        
+        userDoc = await db.collection('users').doc(req.user.id).get();
+        console.log(`Linked profile for email ${req.user.email} with new Supabase UID ${req.user.id}`);
+      } else {
+        // Auto-create a default profile for new Google OAuth sign-ups
+        const defaultName = req.user.email ? req.user.email.split('@')[0] : 'User';
+        const userData = {
+          name: defaultName.charAt(0).toUpperCase() + defaultName.slice(1),
+          email: req.user.email,
+          role: 'member',
+          companyId: null,
+          jobRole: '',
+          department: '',
+          createdAt: new Date()
+        };
+        await db.collection('users').doc(req.user.id).set(userData);
+        userDoc = await db.collection('users').doc(req.user.id).get();
+        console.log(`Created new default profile for Google login: ${req.user.email}`);
+      }
+    }
+    
+    res.json({ id: userDoc.id, ...userDoc.data() });
   } catch (err) {
     console.error('Get Me Error:', err);
     res.status(500).json({ msg: 'Server error' });
@@ -321,62 +337,71 @@ router.post('/join-team', async (req, res) => {
       }
     });
   }
+
   try {
     // 1. Validate Invite Code
-    const company = await Company.findOne({ inviteCode: inviteCode.toUpperCase() });
-    if (!company) {
+    const companySnapshot = await db.collection('companies')
+      .where('inviteCode', '==', inviteCode.toUpperCase())
+      .limit(1)
+      .get();
+
+    if (companySnapshot.empty) {
       return res.status(400).json({ msg: 'Invalid Invite Code' });
     }
+
+    const companyDoc = companySnapshot.docs[0];
+    const company = companyDoc.data();
 
     if (company.status !== 'active') {
       return res.status(403).json({ msg: 'Company account is not active' });
     }
 
-    // 2. Check if user exists
-    let user = await User.findOne({ email });
-    if (user) {
-      return res.status(400).json({ msg: 'User already exists' });
+    // 2. Create User in Firebase Auth
+    let userRecord;
+    try {
+      userRecord = await auth.createUser({
+        email,
+        password,
+        displayName: name,
+        emailVerified: true
+      });
+    } catch (authErr) {
+      return res.status(400).json({ msg: authErr.message });
     }
 
-    // 3. Create User (Role: Member)
-    const salt = await bcrypt.genSalt(10);
-    const hashedPassword = await bcrypt.hash(password, salt);
-
-    user = new User({
+    // 3. Store profile details in Firestore
+    const userData = {
       name,
       email,
-      password: hashedPassword,
       role: 'member',
-      companyId: company._id,
-      jobRole,
-      department
-    });
-
-    await user.save();
-
-    const payload = {
-      user: {
-        id: user.id,
-        role: user.role,
-        companyId: user.companyId
-      }
+      companyId: companyDoc.id,
+      jobRole: jobRole || '',
+      department: department || '',
+      createdAt: new Date()
     };
 
-    jwt.sign(
-      payload,
-      process.env.JWT_SECRET || 'secret',
-      { expiresIn: '5d' },
-      (err, token) => {
-        if (err) throw err;
-        res.json({ token, user: {
-          id: user.id,
-          name: user.name,
-          email: user.email,
-          role: user.role,
-          companyId: user.companyId
-        }});
+    await db.collection('users').doc(userRecord.uid).set(userData);
+
+    // Set Custom Claims for role checks
+    await auth.setCustomUserClaims(userRecord.uid, {
+      role: 'member',
+      companyId: companyDoc.id
+    });
+
+    // 4. Authenticate newly registered user to return session details
+    const supabaseSession = await signInWithSupabase(email, password);
+
+    res.json({
+      token: supabaseSession.session.access_token,
+      user: {
+        id: userRecord.uid,
+        name,
+        email,
+        role: 'member',
+        companyId: companyDoc.id
       }
-    );
+    });
+
   } catch (err) {
     console.error('Join Team Error:', err);
     res.status(500).json({ msg: 'Server error', error: err.message });
@@ -384,56 +409,113 @@ router.post('/join-team', async (req, res) => {
 });
 
 // @route   POST api/auth/forgot-password
-// @desc    Generate reset token and send email
+// @desc    Generate reset link via Supabase Auth
 // @access  Public
 router.post('/forgot-password', async (req, res) => {
   const { email } = req.body;
+  const emailLower = email.toLowerCase();
 
   try {
-    const user = await User.findOne({ email });
-    if (!user) {
-      return res.status(404).json({ message: 'User not found' });
+    const token = crypto.randomBytes(20).toString('hex');
+    let userProfile = null;
+    let userDocId = null;
+
+    if (!global.MOCK_DB) {
+      const snapshot = await db.collection('users')
+        .where('email', '==', emailLower)
+        .limit(1)
+        .get();
+      if (!snapshot.empty) {
+        const doc = snapshot.docs[0];
+        userProfile = doc.data();
+        userDocId = doc.id;
+        await doc.ref.update({
+          resetPasswordToken: token,
+          resetPasswordExpire: new Date(Date.now() + 3600000) // 1 hour
+        });
+      }
     }
 
-    // Create reset token
-    const resetToken = crypto.randomBytes(20).toString('hex');
-
-    // Hash token and set to field
-    user.resetPasswordToken = crypto.createHash('sha256').update(resetToken).digest('hex');
-    user.resetPasswordExpire = Date.now() + 10 * 60 * 1000; // 10 mins
-
-    await user.save();
-
-    // Create reset URL
-    const resetUrl = `${req.protocol}://${req.get('host')}/reset-password?token=${resetToken}`;
+    let resetUrl;
+    if (global.MOCK_DB) {
+      resetUrl = `${req.protocol}://${req.get('host')}/reset-password?token=${token}`;
+    } else {
+      try {
+        resetUrl = await auth.generatePasswordResetLink(emailLower, {
+          url: `${req.protocol}://${req.get('host')}/reset-password`
+        });
+      } catch (supabaseErr) {
+        console.log(`[Forgot Password] Supabase generateLink failed: ${supabaseErr.message}`);
+        
+        // If the user is not found in Supabase Auth but exists in our users collection,
+        // we create the user in Supabase Auth and link their profile!
+        if (userProfile && (supabaseErr.message.includes('User not found') || supabaseErr.message.includes('user_not_found') || supabaseErr.status === 404 || supabaseErr.message.includes('not found'))) {
+          console.log(`[Forgot Password] User exists in database but not in Supabase Auth. Auto-linking...`);
+          
+          // Generate a secure random password for initial creation
+          const tempPassword = crypto.randomBytes(16).toString('hex') + 'A1!';
+          
+          // Create the user in Supabase Auth
+          const userRecord = await auth.createUser({
+            email: emailLower,
+            password: tempPassword,
+            displayName: userProfile.name || 'User',
+            emailVerified: true
+          });
+          
+          const newUid = userRecord.uid;
+          
+          // Set custom user claims/metadata
+          await auth.setCustomUserClaims(newUid, {
+            role: userProfile.role || 'member',
+            companyId: userProfile.companyId || null
+          });
+          
+          // Link the database profile by rewriting it with the new Supabase UID
+          // Delete old profile doc if its ID is different from the new Supabase UID
+          if (userDocId !== newUid) {
+            await db.collection('users').doc(userDocId).delete();
+            // Update the reset tokens in the linked profile data
+            const updatedProfile = {
+              ...userProfile,
+              resetPasswordToken: token,
+              resetPasswordExpire: new Date(Date.now() + 3600000)
+            };
+            await db.collection('users').doc(newUid).set(updatedProfile);
+          }
+          
+          console.log(`[Forgot Password] Successfully linked DB profile to new Supabase Auth user ${newUid}`);
+          
+          // Retry generating the reset link
+          resetUrl = await auth.generatePasswordResetLink(emailLower, {
+            url: `${req.protocol}://${req.get('host')}/reset-password`
+          });
+        } else {
+          // Re-throw if it's a different error
+          throw supabaseErr;
+        }
+      }
+    }
 
     const html = createEmailTemplate({
-        title: 'Password Reset - ArGen',
-        preheader: 'Secure link to reset your ArGen password.',
-        bodyContent: `
-            <h1>Password Reset</h1>
-            <p>You are receiving this email because a password reset was requested for your ArGen account.</p>
-            <p>Click the secure link below to set a new password. This link will expire in 10 minutes.</p>
-        `,
-        buttonText: 'Reset Password',
-        buttonUrl: resetUrl
+      title: 'Password Reset - ArGen',
+      preheader: 'Secure link to reset your ArGen password.',
+      bodyContent: `
+          <h1>Password Reset</h1>
+          <p>You are receiving this email because a password reset was requested for your ArGen account.</p>
+          <p>Click the secure link below to set a new password.</p>
+      `,
+      buttonText: 'Reset Password',
+      buttonUrl: resetUrl
     });
 
-    try {
-      await sendEmail({
-        email: user.email,
-        subject: 'Password Reset - ArGen',
-        html
-      });
+    await sendEmail({
+      email: emailLower,
+      subject: 'Password Reset - ArGen',
+      html
+    });
 
-      res.status(200).json({ message: 'Email sent' });
-    } catch (err) {
-      console.error(err);
-      user.resetPasswordToken = undefined;
-      user.resetPasswordExpire = undefined;
-      await user.save();
-      return res.status(500).json({ message: 'Email could not be sent' });
-    }
+    res.status(200).json({ message: 'Email sent' });
   } catch (err) {
     console.error('Forgot Password Error:', err);
     res.status(500).json({ message: 'Server Error', error: err.message });
@@ -441,30 +523,43 @@ router.post('/forgot-password', async (req, res) => {
 });
 
 // @route   POST api/auth/reset-password/:token
-// @desc    Reset password using token
+// @desc    Reset password in database-only mode
 // @access  Public
 router.post('/reset-password/:token', async (req, res) => {
+  const { token } = req.params;
+  const { password } = req.body;
+
+  if (global.MOCK_DB) {
+    return res.json({ message: 'Password reset successful (Mock Mode)' });
+  }
+
   try {
-    // Get hashed token
-    const resetPasswordToken = crypto.createHash('sha256').update(req.params.token).digest('hex');
+    const snapshot = await db.collection('users')
+      .where('resetPasswordToken', '==', token)
+      .limit(1)
+      .get();
 
-    const user = await User.findOne({
-      resetPasswordToken,
-      resetPasswordExpire: { $gt: Date.now() }
-    });
-
-    if (!user) {
-      return res.status(400).json({ message: 'Invalid or expired token' });
+    if (snapshot.empty) {
+      return res.status(400).json({ message: 'Invalid or expired reset token' });
     }
 
-    // Set new password
-    user.password = req.body.password;
-    user.resetPasswordToken = undefined;
-    user.resetPasswordExpire = undefined;
+    const userDoc = snapshot.docs[0];
+    const userData = userDoc.data();
 
-    await user.save();
+    if (userData.resetPasswordExpire && new Date(userData.resetPasswordExpire) < new Date()) {
+      return res.status(400).json({ message: 'Token has expired' });
+    }
 
-    res.status(200).json({ message: 'Password reset successful' });
+    const salt = await bcrypt.genSalt(10);
+    const hashedPassword = await bcrypt.hash(password, salt);
+
+    await userDoc.ref.update({
+      password: hashedPassword,
+      resetPasswordToken: null,
+      resetPasswordExpire: null
+    });
+
+    res.json({ message: 'Password reset successful' });
   } catch (err) {
     console.error('Reset Password Error:', err);
     res.status(500).json({ message: 'Server Error', error: err.message });
@@ -482,13 +577,17 @@ router.post('/verify-passcode', async (req, res) => {
   }
 
   try {
-    const company = await Company.findOne({ inviteCode: inviteCode.toUpperCase() });
+    const snapshot = await db.collection('companies')
+      .where('inviteCode', '==', inviteCode.toUpperCase())
+      .limit(1)
+      .get();
     
-    if (!company) {
+    if (snapshot.empty) {
       return res.status(400).json({ valid: false, message: 'Invalid Passcode' });
     }
 
-    res.json({ valid: true, companyName: company.name });
+    const companyDoc = snapshot.docs[0];
+    res.json({ valid: true, companyName: companyDoc.data().name });
   } catch (err) {
     console.error('Passcode Verification Error:', err);
     res.status(500).json({ message: 'Server Error', error: err.message });

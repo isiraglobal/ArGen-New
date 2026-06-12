@@ -10,6 +10,7 @@
     href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono&display=swap"
     rel="stylesheet">
   <link rel="stylesheet" href="../css/style.css">
+  <script src="../js/auth-guard.js"></script>
   <style>
     .passcode-page {
       min-height: 100dvh;
@@ -67,14 +68,17 @@
       box-shadow: 0 0 20px rgba(43, 96, 226, 0.15), inset 0 2px 8px rgba(0, 0, 0, 0.5);
     }
   </style>
+  <script>
+    window.si = window.si || function () { (window.siq = window.siq || []).push(arguments); };
+  </script>
+  <script defer src="/_vercel/speed-insights/script.js"></script>
 </head>
 
 <body class="bg-black">
-  <script src="../js/auth-guard.js"></script>
   
   <div class="passcode-page">
     <div class="passcode-card">
-      <img src="../images/ArGen Logo.png" alt="ArGen" style="width: 40px; margin-bottom: 2rem;">
+      <img src="../images/ArGen Logo.png" alt="ArGen" style="height: 64px; width: auto; margin-bottom: 2rem;">
       <h1 class="card-h3" style="font-size: 1.5rem;">Team <i class="soul-text">Verification</i></h1>
       <p style="color: var(--text-sec); font-size: 0.85rem; margin-top: 0.5rem;">Enter your team's secure access passcode to proceed to the workspace.</p>
       
@@ -82,6 +86,10 @@
         <input type="text" id="passcode" class="passcode-input" placeholder="••••••••" maxlength="8" required autofocus>
         <button type="submit" class="btn btn-primary w-full" style="width: 100%; padding: 1rem;">Verify Access</button>
       </form>
+
+      <div style="text-align: center; margin-top: 1.5rem;">
+        <a href="javascript:void(0)" id="demoModeLink" style="color: var(--accent); font-size: 0.72rem; text-decoration: none; font-family: var(--font-mono); letter-spacing: 0.5px; font-weight: 700;">&gt; EXPLORE DEMO WORKSPACE</a>
+      </div>
       
       <div id="errorMsg" style="color: #ef4444; font-family: var(--font-mono); font-size: 0.7rem; margin-top: 1.5rem; display: none;">
         INVALID_PASSCODE: Access Denied
@@ -92,6 +100,24 @@
   <script src="../js/api.js"></script>
   <script>
     const user = JSON.parse(localStorage.getItem('user'));
+    
+    // Demo Mode Trigger
+    const demoLink = document.getElementById('demoModeLink');
+    if (demoLink) {
+      demoLink.addEventListener('click', () => {
+        localStorage.setItem('is_demo_mode', 'true');
+        localStorage.setItem('argen_token', 'demo-token');
+        localStorage.setItem('user', JSON.stringify({
+          id: 'demo-user-id',
+          name: 'Guest Explorer',
+          email: 'guest@demo.argen',
+          role: 'teamadmin',
+          companyId: 'demo-company-id'
+        }));
+        sessionStorage.setItem('team_verified', 'true');
+        window.location.href = '/dashboard';
+      });
+    }
     
     // If team admin or superadmin, they might have already bypassed this or have different flow
     // but the user said "everybody" or "after login". Let's apply it to all for now or gate it.

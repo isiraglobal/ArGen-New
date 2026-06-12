@@ -243,23 +243,26 @@ function renderMemberLeaderboard(leaderboard) {
 
 function renderHistory(history) {
     const container = document.getElementById('historyList');
-    if (!history.length) {
+    if (!history || !history.length) {
         container.innerHTML = '<p class="batch-meta">Your performance history will appear here.</p>';
         return;
     }
 
-    container.innerHTML = history.slice(0, 5).map(h => `
+    container.innerHTML = history.slice(0, 5).map(h => {
+        const score = h.overallScore != null ? h.overallScore : (h.scores?.total != null ? h.scores.total : 0);
+        const rating = score >= 80 ? 'ELITE' : 'STABLE';
+        return `
         <div class="batch-card" style="padding: 1.25rem;">
             <div class="batch-info">
-                <span class="batch-meta" style="color: var(--argen-blue); font-size: 0.6rem;">${new Date(h.createdAt).toLocaleDateString()}</span>
+                <span class="batch-meta" style="color: var(--argen-blue); font-size: 0.6rem;">${h.createdAt ? new Date(h.createdAt).toLocaleDateString() : '---'}</span>
                 <h3 style="font-size: 1rem; margin-top: 0.25rem;">${h.challengeId?.title || 'Daily Intelligence'}</h3>
             </div>
             <div style="text-align: right;">
-                <div style="font-size: 1.25rem; font-weight: 800;">${h.overallScore.toFixed(1)}</div>
-                <div class="batch-meta" style="font-size: 0.55rem;">RATING: ${h.overallScore >= 8 ? 'ELITE' : 'STABLE'}</div>
+                <div style="font-size: 1.25rem; font-weight: 800;">${Number(score).toFixed(1)}</div>
+                <div class="batch-meta" style="font-size: 0.55rem;">RATING: ${rating}</div>
             </div>
         </div>
-    `).join('');
+    `}).join('');
 }
 
 async function checkFlaggedSubmissions() {

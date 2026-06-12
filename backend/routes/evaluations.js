@@ -1,11 +1,10 @@
 const express = require('express');
 const router = express.Router();
-const Evaluation = require('../models/Evaluation');
-const Challenge = require('../models/Challenge');
-const User = require('../models/User');
-const Company = require('../models/Company');
+const { db } = require('../utils/supabase');
 const { generateChallenge } = require('../utils/ai-agents');
 const { protect, authorize, isApproved } = require('../middleware/auth');
+const sendEmail = require('../utils/sendEmail');
+const { createEmailTemplate } = require('../utils/emailTemplate');
 
 // @route   POST api/evaluations/generate-ai
 // @desc    Trigger AI Intelligence Cycle to generate challenges
@@ -19,52 +18,102 @@ router.post('/generate-ai', protect, isApproved, authorize('teamadmin'), async (
       challenges: ['mock-ch-1', 'mock-ch-2']
     });
   }
+  
   try {
-    const company = await Company.findById(req.user.companyId);
-    const users = await User.find({ companyId: req.user.companyId, role: 'member' });
+    const companyDoc = await db.collection('companies').doc(req.user.companyId).get();
+    if (!companyDoc.exists) {
+      return res.status(404).json({ msg: 'Company not found' });
+    }
+    const company = { id: companyDoc.id, ...companyDoc.data() };
+
+    const usersSnapshot = await db.collection('users')
+      .where('companyId', '==', req.user.companyId)
+      .where('role', '==', 'member')
+      .get();
+
+    const users = [];
+    usersSnapshot.forEach(doc => {
+      users.push({ id: doc.id, ...doc.data() });
+    });
 
     if (users.length === 0) {
       return res.status(400).json({ msg: 'No members found in this company to evaluate.' });
     }
 
-    // Create a new evaluation batch
-    const evaluation = new Evaluation({
+    const evaluationData = {
       title: `AI Intelligence Cycle - ${new Date().toLocaleDateString()}`,
       description: 'Autonomously generated challenges based on team roles and performance history.',
-      companyId: company._id,
+      companyId: req.user.companyId,
       createdBy: req.user.id,
       deadline: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000), // 7 days from now
-      status: 'active'
+      status: 'active',
+      challenges: [],
+      createdAt: new Date()
+    };
+
+    // Generate challenges concurrently for all members to prevent Vercel serverless timeouts
+    const challengePromises = users.map(async (member) => {
+      try {
+        const challengeData = await generateChallenge(member, company);
+        
+        const challengeObj = {
+          challengeId: `CHG-${Date.now()}-${member.id.substring(0, 4)}`,
+          name: challengeData.name || challengeData.title || 'Personalized Challenge',
+          title: challengeData.title || challengeData.name || 'Personalized Challenge',
+          scenario: challengeData.scenario || challengeData.text || '',
+          type: challengeData.type || 'General',
+          difficulty: challengeData.difficulty || 'Intermediate',
+          text: challengeData.text || challengeData.scenario || '',
+          wordLimit: challengeData.wordLimit || 500,
+          timeEstimate: challengeData.timeEstimate || 20,
+          dimensions: challengeData.dimensions || {},
+          active: true,
+          companyId: req.user.companyId,
+          createdAt: new Date()
+        };
+
+        const challengeRef = await db.collection('challenges').add(challengeObj);
+
+        // Send challenge notification email to member asynchronously
+        if (member.email && member.email.includes('.')) {
+          sendEmail({
+            email: member.email,
+            subject: 'New AI Workflow Challenge Assigned!',
+            html: createEmailTemplate({
+              title: 'New Daily Challenge',
+              preheader: `You have a new challenge: ${challengeObj.name}`,
+              bodyContent: `
+                <h1>Challenge Assigned</h1>
+                <p>Hello ${member.name || 'Team Member'},</p>
+                <p>A new personalized challenge has been generated for you based on your role: <strong>${challengeObj.name}</strong>.</p>
+                <p>This challenge is estimated to take ${challengeObj.timeEstimate} minutes.</p>
+              `,
+              buttonText: 'Start Challenge',
+              buttonUrl: 'https://argen.isira.club/dashboard'
+            })
+          }).catch(emailErr => console.error(`Failed to send challenge email to ${member.email}:`, emailErr.message));
+        }
+
+        return challengeRef.id;
+      } catch (err) {
+        console.error(`Failed to generate challenge for member ${member.id}:`, err.message);
+        return null;
+      }
     });
 
-    const challengeIds = [];
+    const generatedIds = await Promise.all(challengePromises);
+    const challengeIds = generatedIds.filter(Boolean);
 
-    // Generate challenges for the team (one per role type to start with, or per user)
-    // For simplicity, we'll generate one for each member's role
-    for (const member of users) {
-      const challengeData = await generateChallenge(member, company);
-      
-      const challenge = new Challenge({
-        challengeId: `CHG-${Date.now()}-${member._id.toString().substring(0,4)}`,
-        name: challengeData.name,
-        type: challengeData.type,
-        difficulty: challengeData.difficulty,
-        text: challengeData.text,
-        wordLimit: challengeData.wordLimit,
-        timeEstimate: challengeData.timeEstimate,
-        dimensions: challengeData.dimensions
-      });
-
-      await challenge.save();
-      challengeIds.push(challenge._id);
+    if (challengeIds.length === 0) {
+      return res.status(500).json({ msg: 'Failed to generate any challenges.' });
     }
 
-    evaluation.challenges = challengeIds;
-    await evaluation.save();
+    evaluationData.challenges = challengeIds;
+    const evalRef = await db.collection('evaluations').add(evaluationData);
 
-    res.status(201).json(evaluation);
+    res.status(201).json({ _id: evalRef.id, ...evaluationData });
   } catch (err) {
-    console.error(err.message);
+    console.error('Trigger AI Intelligence Cycle Error:', err);
     res.status(500).send('Server error');
   }
 });
@@ -76,20 +125,21 @@ router.post('/', protect, isApproved, authorize('teamadmin'), async (req, res) =
   const { title, description, challengeIds, deadline } = req.body;
 
   try {
-    const evaluation = new Evaluation({
+    const evaluationData = {
       title,
       description,
       companyId: req.user.companyId,
       createdBy: req.user.id,
-      challenges: challengeIds,
-      deadline,
-      status: 'active'
-    });
+      challenges: challengeIds || [],
+      deadline: deadline ? new Date(deadline) : new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
+      status: 'active',
+      createdAt: new Date()
+    };
 
-    await evaluation.save();
-    res.status(201).json(evaluation);
+    const docRef = await db.collection('evaluations').add(evaluationData);
+    res.status(201).json({ _id: docRef.id, ...evaluationData });
   } catch (err) {
-    console.error(err.message);
+    console.error('Create Evaluation Batch Error:', err);
     res.status(500).send('Server error');
   }
 });
@@ -104,13 +154,40 @@ router.get('/', protect, isApproved, async (req, res) => {
       { _id: 'mock-2', title: 'Onboarding Assessment', status: 'completed', createdAt: new Date(Date.now() - 86400000) }
     ]);
   }
+  
   try {
-    const evaluations = await Evaluation.find({ companyId: req.user.companyId })
-      .populate('challenges', 'title difficulty category')
-      .sort({ createdAt: -1 });
+    const snapshot = await db.collection('evaluations')
+      .where('companyId', '==', req.user.companyId)
+      .get();
+      
+    const evaluations = [];
+    for (const doc of snapshot.docs) {
+      const data = doc.data();
+      
+      // Populate challenge previews
+      const populatedChallenges = [];
+      if (data.challenges && Array.isArray(data.challenges)) {
+        for (const chId of data.challenges) {
+          const chDoc = await db.collection('challenges').doc(chId).get();
+          if (chDoc.exists) {
+            populatedChallenges.push({ id: chDoc.id, ...chDoc.data() });
+          }
+        }
+      }
+      
+      evaluations.push({
+        _id: doc.id,
+        ...data,
+        challenges: populatedChallenges
+      });
+    }
+    
+    // Sort in-memory
+    evaluations.sort((a, b) => b.createdAt - a.createdAt);
+    
     res.json(evaluations);
   } catch (err) {
-    console.error(err.message);
+    console.error('Fetch Evaluations Error:', err);
     res.status(500).send('Server error');
   }
 });
@@ -120,18 +197,32 @@ router.get('/', protect, isApproved, async (req, res) => {
 // @access  Private
 router.get('/:id', protect, isApproved, async (req, res) => {
   try {
-    const evaluation = await Evaluation.findOne({ 
-      _id: req.params.id, 
-      companyId: req.user.companyId 
-    }).populate('challenges');
+    const doc = await db.collection('evaluations').doc(req.params.id).get();
 
-    if (!evaluation) {
+    if (!doc.exists || doc.data().companyId !== req.user.companyId) {
       return res.status(404).json({ msg: 'Evaluation not found' });
     }
 
-    res.json(evaluation);
+    const data = doc.data();
+    
+    // Populate full challenge details
+    const populatedChallenges = [];
+    if (data.challenges && Array.isArray(data.challenges)) {
+      for (const chId of data.challenges) {
+        const chDoc = await db.collection('challenges').doc(chId).get();
+        if (chDoc.exists) {
+          populatedChallenges.push({ id: chDoc.id, ...chDoc.data() });
+        }
+      }
+    }
+
+    res.json({
+      _id: doc.id,
+      ...data,
+      challenges: populatedChallenges
+    });
   } catch (err) {
-    console.error(err.message);
+    console.error('Fetch Evaluation Detail Error:', err);
     res.status(500).send('Server error');
   }
 });

@@ -1,5 +1,15 @@
-const jwt = require('jsonwebtoken');
-const Company = require('../models/Company');
+const { auth, db } = require('../utils/supabase');
+
+// Helper to parse cookies from headers
+const parseCookies = (cookieHeader) => {
+  const list = {};
+  if (!cookieHeader) return list;
+  cookieHeader.split(';').forEach(cookie => {
+    const parts = cookie.split('=');
+    list[parts.shift().trim()] = decodeURIComponent(parts.join('='));
+  });
+  return list;
+};
 
 const protect = async (req, res, next) => {
   let token = req.header('Authorization');
@@ -10,15 +20,68 @@ const protect = async (req, res, next) => {
     token = req.header('x-auth-token');
   }
 
+  // Fallback: Check in Cookies
+  if (!token && req.headers.cookie) {
+    const cookies = parseCookies(req.headers.cookie);
+    token = cookies['argen_token'] || cookies['argen_admin_token'];
+  }
+
   if (!token) {
     return res.status(401).json({ msg: 'No token, authorization denied' });
   }
 
+  // Allow CRON_SECRET bypass for automated jobs
+  if (process.env.CRON_SECRET && token === process.env.CRON_SECRET) {
+    req.user = {
+      id: 'cron-system',
+      uid: 'cron-system',
+      email: 'cron@argen.isira.club',
+      role: 'superadmin'
+    };
+    return next();
+  }
+
+  // Handle local development / testing token bypasses
+  if (token === 'mock-token' || global.MOCK_DB) {
+    req.user = {
+      id: 'mock-uid',
+      uid: 'mock-uid',
+      email: 'admin@argen.ai',
+      role: 'teamadmin',
+      companyId: 'mock-company-id'
+    };
+    return next();
+  }
+
   try {
-    const decoded = jwt.verify(token, process.env.JWT_SECRET || 'secret');
-    req.user = decoded.user;
+    // Verify Supabase Auth Token
+    const decodedToken = await auth.verifyIdToken(token);
+    
+    // Retrieve additional user info (role, companyId) from database
+    const userDoc = await db.collection('users').doc(decodedToken.uid).get();
+    
+    if (userDoc.exists) {
+      const userData = userDoc.data();
+      req.user = {
+        id: decodedToken.uid,
+        uid: decodedToken.uid,
+        email: decodedToken.email,
+        role: userData.role || 'member',
+        companyId: userData.companyId || null
+      };
+    } else {
+      // Create lightweight fallback user object from claims
+      req.user = {
+        id: decodedToken.uid,
+        uid: decodedToken.uid,
+        email: decodedToken.email,
+        role: decodedToken.role || 'member',
+        companyId: decodedToken.companyId || null
+      };
+    }
     next();
   } catch (err) {
+    console.error('Supabase Auth Token Verification Error:', err);
     res.status(401).json({ msg: 'Token is not valid' });
   }
 };
@@ -39,20 +102,25 @@ const authorize = (...roles) => {
 // Check if company is active
 const isApproved = async (req, res, next) => {
   try {
-    // MOCK_DB bypass: skip DB check entirely in offline/mock mode
     if (global.MOCK_DB) return next();
     if (req.user.role && req.user.role.toLowerCase() === 'superadmin') return next();
+    if (!req.user.companyId) {
+      return res.status(403).json({ msg: 'Access denied. No company associated with this account.' });
+    }
     
-    const company = await Company.findById(req.user.companyId);
-    if (!company || company.status !== 'active') {
+    // Check company status in Firestore
+    const companyDoc = await db.collection('companies').doc(req.user.companyId).get();
+    if (!companyDoc.exists || companyDoc.data().status !== 'active') {
       return res.status(403).json({
         msg: 'Access denied. Your company account is not active. Please contact the App Admin.'
       });
     }
     next();
   } catch (err) {
+    console.error('Approval Check Error:', err);
     res.status(500).json({ msg: 'Server error in approval check' });
   }
 };
 
 module.exports = { protect, authorize, isApproved };
+

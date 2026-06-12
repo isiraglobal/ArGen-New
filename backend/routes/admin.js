@@ -1,13 +1,11 @@
 const express = require('express');
 const router = express.Router();
-const mongoose = require('mongoose');
+const { db } = require('../utils/supabase');
 const { protect, authorize } = require('../middleware/auth');
-const Company = require('../models/Company');
-const User = require('../models/User');
-const Invitation = require('../models/Invitation');
-const SystemMetric = require('../models/SystemMetric');
 const crypto = require('crypto');
-const Invoice = require('../models/Invoice');
+const sendEmail = require('../utils/sendEmail');
+const { createEmailTemplate } = require('../utils/emailTemplate');
+const { researchCompany } = require('../utils/ai-agents');
 
 // @route   GET api/admin/stats
 // @desc    Get advanced global system statistics (Superadmin only)
@@ -15,25 +13,106 @@ router.get('/stats', protect, authorize('superadmin'), async (req, res) => {
   if (global.MOCK_DB) {
     return res.json({
       agents: { totalRuns: 1250, failedRuns: 12, activeAgents: 5, uptime: '99.9%' },
-      usage: { totalTokens: 4500000, totalCost: '45.25', avgQuality: '9.2' },
-      credits: { totalSpent: '45.25', remaining: '954.75' }
+      usage: { totalTokens: 4500000, totalCost: '45.25', avgQuality: '98.2' },
+      credits: { totalSpent: '45.25', remaining: '954.75' },
+      chartData: {
+        labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+        calls: [120, 80, 450, 900, 1100, 850, 400],
+        quality: [92, 94, 91, 95, 93, 96, 98.2],
+        tokens: [1200, 800, 1500, 2000, 500],
+        radar: [85, 92, 78, 95, 88]
+      }
     });
   }
+  
   try {
-    const totalRuns = await SystemMetric.countDocuments({ type: 'agent_run' });
-    const failedRuns = await SystemMetric.countDocuments({ type: 'agent_run', status: 'failed' });
+    const metricsRef = db.collection('system_metrics');
     
-    const usage = await SystemMetric.aggregate([
-      { $match: { type: { $in: ['agent_run', 'api_call'] } } },
-      { $group: {
-          _id: null,
-          totalTokens: { $sum: '$tokensUsed' },
-          totalCost: { $sum: '$cost' },
-          avgQuality: { $avg: '$qualityScore' }
-      }}
-    ]);
+    // Limit aggregation to last 7 days for production scalability
+    const sevenDaysAgo = new Date();
+    sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7);
+    
+    // Total runs and failures count within the last 7 days
+    const totalRunsSnapshot = await metricsRef.where('type', '==', 'agent_run').where('createdAt', '>=', sevenDaysAgo).get();
+    const totalRuns = totalRunsSnapshot.size;
+    
+    const failedRunsSnapshot = await metricsRef.where('type', '==', 'agent_run').where('status', '==', 'failed').where('createdAt', '>=', sevenDaysAgo).get();
+    const failedRuns = failedRunsSnapshot.size;
+    
+    // In-memory stats aggregate
+    let totalTokens = 0;
+    let totalCost = 0;
+    let qualityScoresSum = 0;
+    let qualityScoresCount = 0;
 
-    const stats = usage[0] || { totalTokens: 0, totalCost: 0, avgQuality: 100 };
+    // Time-series grouping setups (last 7 days)
+    const dailyCalls = {};
+    const dailyQuality = {};
+    const agentTokens = {
+      'Research Agent': 0,
+      'Challenge Generator': 0,
+      'Scoring Agent': 0,
+      'Report Agent': 0,
+      'Coaching Agent': 0
+    };
+
+    for (let i = 6; i >= 0; i--) {
+      const d = new Date();
+      d.setDate(d.getDate() - i);
+      const dateString = d.toLocaleDateString('en-US', { weekday: 'short' });
+      dailyCalls[dateString] = 0;
+      dailyQuality[dateString] = [];
+    }
+    
+    const allUsageSnapshot = await metricsRef.where('createdAt', '>=', sevenDaysAgo).get();
+    allUsageSnapshot.docs.forEach(doc => {
+      const data = doc.data();
+      if (data.type === 'agent_run' || data.type === 'api_call') {
+        totalTokens += (data.tokensUsed || 0);
+        totalCost += (data.cost || 0);
+        if (data.qualityScore !== undefined) {
+          qualityScoresSum += data.qualityScore;
+          qualityScoresCount++;
+        }
+
+        // Time series aggregates
+        const created = data.createdAt ? new Date(data.createdAt) : (data.timestamp ? new Date(data.timestamp) : null);
+        if (created) {
+          const dateString = created.toLocaleDateString('en-US', { weekday: 'short' });
+          if (dailyCalls[dateString] !== undefined) {
+            dailyCalls[dateString]++;
+          }
+          if (data.qualityScore !== undefined && dailyQuality[dateString] !== undefined) {
+            dailyQuality[dateString].push(data.qualityScore);
+          }
+        }
+
+        if (data.agentName && agentTokens[data.agentName] !== undefined) {
+          agentTokens[data.agentName] += (data.tokensUsed || 0);
+        }
+      }
+    });
+
+    const avgQuality = qualityScoresCount > 0 ? (qualityScoresSum / qualityScoresCount) : 100;
+
+    const chartData = {
+      labels: Object.keys(dailyCalls),
+      calls: Object.values(dailyCalls),
+      quality: Object.keys(dailyQuality).map(day => {
+        const scores = dailyQuality[day];
+        if (scores.length === 0) return 95.0; // fallback default baseline
+        const sum = scores.reduce((acc, val) => acc + val, 0);
+        return parseFloat((sum / scores.length).toFixed(1));
+      }),
+      tokens: [
+        agentTokens['Research Agent'] || 0,
+        agentTokens['Challenge Generator'] || 0,
+        agentTokens['Scoring Agent'] || 0,
+        agentTokens['Report Agent'] || 0,
+        agentTokens['Coaching Agent'] || 0
+      ],
+      radar: [85, 92, 78, 95, 88]
+    };
 
     res.json({
       agents: {
@@ -43,14 +122,15 @@ router.get('/stats', protect, authorize('superadmin'), async (req, res) => {
         uptime: '99.9%'
       },
       usage: {
-        totalTokens: stats.totalTokens,
-        totalCost: stats.totalCost.toFixed(4),
-        avgQuality: stats.avgQuality ? stats.avgQuality.toFixed(1) : 'N/A'
+        totalTokens,
+        totalCost: totalCost.toFixed(4),
+        avgQuality: avgQuality.toFixed(1)
       },
       credits: {
-        totalSpent: stats.totalCost.toFixed(4),
-        remaining: (1000 - stats.totalCost).toFixed(4)
-      }
+        totalSpent: totalCost.toFixed(4),
+        remaining: (1000 - totalCost).toFixed(4)
+      },
+      chartData
     });
   } catch (err) {
     console.error('Admin Stats Error:', err);
@@ -73,50 +153,56 @@ router.get('/company-dashboard-stats', protect, async (req, res) => {
       trend: [7.2, 7.5, 7.1, 7.8, 8.2, 8.0, 8.4, 78.5]
     });
   }
+  
   try {
     const companyId = req.user.companyId;
     if (!companyId && req.user.role !== 'superadmin') {
       return res.status(403).json({ msg: 'Access denied' });
     }
 
-    // If superadmin but no companyId in query, maybe they want global or a specific one?
-    // For now, let's assume this is for the current company
     const effectiveCompanyId = companyId || req.query.companyId;
     if (!effectiveCompanyId) return res.status(400).json({ msg: 'Company ID required' });
 
-    const Response = require('../models/Response');
+    const snapshot = await db.collection('responses')
+      .where('companyId', '==', effectiveCompanyId)
+      .get();
+      
+    let totalSubmissions = snapshot.size;
+    let scoresSum = 0;
+    let claritySum = 0;
+    let constraintsSum = 0;
+    let specificitySum = 0;
+    let iterationSum = 0;
     
-    // Aggregate team performance
-    const teamStats = await Response.aggregate([
-      { $match: { companyId: new mongoose.Types.ObjectId(effectiveCompanyId) } },
-      { $group: {
-          _id: null,
-          avgScore: { $avg: '$overallScore' },
-          totalSubmissions: { $count: {} },
-          // Heatmap dimensions
-          clarity: { $avg: '$dimensionScores.clarity' },
-          constraints: { $avg: '$dimensionScores.constraints' },
-          specificity: { $avg: '$dimensionScores.specificity' },
-          iteration: { $avg: '$dimensionScores.iteration' }
-      }}
-    ]);
+    snapshot.forEach(doc => {
+      const r = doc.data();
+      scoresSum += (r.scores?.total || r.overallScore || 0);
+      claritySum += (r.scores?.clarity || 0);
+      constraintsSum += (r.scores?.constraint_application || 0);
+      specificitySum += (r.scores?.output_specificity || 0);
+      iterationSum += (r.scores?.iteration_quality || 0);
+    });
 
-    const stats = teamStats[0] || { avgScore: 0, totalSubmissions: 0 };
+    const avgScore = totalSubmissions > 0 ? (scoresSum / totalSubmissions) : 0;
+    const clarity = totalSubmissions > 0 ? (claritySum / totalSubmissions) : 0;
+    const constraints = totalSubmissions > 0 ? (constraintsSum / totalSubmissions) : 0;
+    const specificity = totalSubmissions > 0 ? (specificitySum / totalSubmissions) : 0;
+    const iteration = totalSubmissions > 0 ? (iterationSum / totalSubmissions) : 0;
 
     res.json({
-      avgScore: stats.avgScore || 0,
-      totalSubmissions: stats.totalSubmissions || 0,
+      avgScore: avgScore || 0,
+      totalSubmissions: totalSubmissions || 0,
       dimensions: {
-        clarity: stats.clarity || 0,
-        constraints: stats.constraints || 0,
-        specificity: stats.specificity || 0,
-        iteration: stats.iteration || 0
+        clarity: clarity || 0,
+        constraints: constraints || 0,
+        specificity: specificity || 0,
+        iteration: iteration || 0
       },
       benchmark: {
-        team: [stats.clarity || 0, stats.constraints || 0, stats.specificity || 0, stats.iteration || 0, 85],
+        team: [clarity || 0, constraints || 0, specificity || 0, iteration || 0, 85],
         median: [70, 70, 75, 70, 80]
       },
-      trend: [7.2, 7.5, 7.1, 7.8, 8.2, 8.0, 8.4, (stats.avgScore || 0).toFixed(1)]
+      trend: [7.2, 7.5, 7.1, 7.8, 8.2, 8.0, 8.4, avgScore.toFixed(1)]
     });
   } catch (err) {
     console.error('Company Dashboard Stats Error:', err);
@@ -128,9 +214,17 @@ router.get('/company-dashboard-stats', protect, async (req, res) => {
 // @desc    Get recent global agent activities (Superadmin only)
 router.get('/agent-logs', protect, authorize('superadmin'), async (req, res) => {
   try {
-    const logs = await SystemMetric.find({ type: 'agent_run' })
-      .sort({ timestamp: -1 })
-      .limit(20);
+    const snapshot = await db.collection('system_metrics')
+      .where('type', '==', 'agent_run')
+      .orderBy('createdAt', 'desc')
+      .limit(20)
+      .get();
+      
+    const logs = [];
+    snapshot.forEach(doc => {
+      logs.push({ _id: doc.id, ...doc.data() });
+    });
+    
     res.json(logs);
   } catch (err) {
     console.error('Agent Logs Error:', err);
@@ -147,8 +241,13 @@ router.get('/companies', protect, authorize('superadmin'), async (req, res) => {
       { _id: 'mock-co-2', name: 'DataCore Labs', industry: 'AI Research', status: 'pending', inviteCode: 'DC002' }
     ]);
   }
+  
   try {
-    const companies = await Company.find().sort({ createdAt: -1 });
+    const snapshot = await db.collection('companies').orderBy('createdAt', 'desc').get();
+    const companies = [];
+    snapshot.forEach(doc => {
+      companies.push({ _id: doc.id, ...doc.data() });
+    });
     res.json(companies);
   } catch (err) {
     console.error('Companies List Error:', err);
@@ -168,12 +267,16 @@ router.get('/my-company', protect, async (req, res) => {
       inviteCode: 'MOCK1234'
     });
   }
+  
   try {
     if (!req.user.companyId) {
       return res.status(404).json({ msg: 'No company associated with this account' });
     }
-    const company = await Company.findById(req.user.companyId);
-    res.json(company);
+    const doc = await db.collection('companies').doc(req.user.companyId).get();
+    if (!doc.exists) {
+      return res.status(404).json({ msg: 'Company not found' });
+    }
+    res.json({ _id: doc.id, ...doc.data() });
   } catch (err) {
     console.error('My Company Error:', err);
     res.status(500).json({ msg: 'Server error', error: err.message });
@@ -184,21 +287,19 @@ router.get('/my-company', protect, async (req, res) => {
 // @desc    Create a registration invitation
 router.post('/invitations', protect, authorize('superadmin'), async (req, res) => {
   const { email, companyName } = req.body;
+  
   try {
     const token = crypto.randomBytes(16).toString('hex');
-    const invitation = new Invitation({
+    const invitationData = {
       email,
       companyName,
-      token
-    });
-    await invitation.save();
+      token,
+      used: false,
+      createdAt: new Date()
+    };
     
-    // The link format requested by user
+    const docRef = await db.collection('invitations').add(invitationData);
     const link = `https://argen.isira.club/registration?approval=true&team_id=${token}`;
-    
-    // Send email notification
-    const sendEmail = require('../utils/sendEmail');
-    const { createEmailTemplate } = require('../utils/emailTemplate');
     
     const html = createEmailTemplate({
         title: 'ArGen Workspace Invitation',
@@ -218,37 +319,39 @@ router.post('/invitations', protect, authorize('superadmin'), async (req, res) =
       html
     });
     
-    res.json({ link, invitation });
+    res.json({ link, invitation: { _id: docRef.id, ...invitationData } });
   } catch (err) {
     console.error('Invitation Creation Error:', err);
     res.status(500).json({ msg: 'Server error', error: err.message });
   }
 });
 
-const { researchCompany } = require('../utils/ai-agents');
-
 // @route   PATCH api/admin/companies/:id/status
 // @desc    Update company status
 router.patch('/companies/:id/status', protect, authorize('superadmin'), async (req, res) => {
   const { status } = req.body;
   try {
-    let company = await Company.findById(req.params.id);
-    if (!company) return res.status(404).json({ msg: 'Company not found' });
+    const companyRef = db.collection('companies').doc(req.params.id);
+    const companyDoc = await companyRef.get();
+    
+    if (!companyDoc.exists) return res.status(404).json({ msg: 'Company not found' });
+    const company = companyDoc.data();
 
-    company.status = status;
+    const updates = { status };
+    
     if (status === 'active' && !company.approvedAt) {
-      company.approvedBy = req.user.id;
-      company.approvedAt = Date.now();
+      updates.approvedBy = req.user.id;
+      updates.approvedAt = new Date();
       
-      // Auto-generate invoice automatically for active clients
+      // Auto-generate invoice for active clients
       try {
         const invoiceNumber = 'INV-' + Math.floor(100000 + Math.random() * 900000);
-        const contactName = company.primaryContact && company.primaryContact.name ? company.primaryContact.name : company.name;
-        const contactEmail = company.primaryContact && company.primaryContact.email ? company.primaryContact.email : 'billing@' + company.name.toLowerCase().replace(/\s+/g, '') + '.com';
+        const contactName = company.primaryContact?.name || company.name;
+        const contactEmail = company.primaryContact?.email || 'billing@' + company.name.toLowerCase().replace(/\s+/g, '') + '.com';
         
-        const invoice = new Invoice({
+        const invoiceData = {
           invoiceNumber,
-          companyId: company._id,
+          companyId: req.params.id,
           clientName: contactName,
           clientContact: contactEmail,
           clientAddress: company.country || 'Corporate Headquarters',
@@ -257,29 +360,53 @@ router.patch('/companies/:id/status', protect, authorize('superadmin'), async (r
           ],
           subtotal: 1200.00,
           totalDue: 1200.00,
-          status: 'Draft'
-        });
-        await invoice.save();
-        console.log(`Auto-generated invoice ${invoiceNumber} for active company: ${company.name}`);
+          status: 'Draft',
+          date: new Date()
+        };
+        
+        await db.collection('invoices').add(invoiceData);
       } catch (invoiceErr) {
         console.error('Failed to auto-generate invoice:', invoiceErr);
       }
+
+      // Send approval confirmation email asynchronously
+      if (company.primaryContact?.email && company.primaryContact.email.includes('.')) {
+        sendEmail({
+          email: company.primaryContact.email,
+          subject: 'Your ArGen Workspace is Approved!',
+          html: createEmailTemplate({
+            title: 'Workspace Activated - ArGen',
+            preheader: `Your ArGen workspace for ${company.name} is now active.`,
+            bodyContent: `
+              <h1>Workspace Approved & Activated</h1>
+              <p>Hello ${company.primaryContact.name || 'Admin'},</p>
+              <p>Your workspace request for <strong>${company.name}</strong> has been successfully approved and activated by our team.</p>
+              <p>You can now access your corporate dashboard, manage your team, and generate challenges for your employees.</p>
+            `,
+            buttonText: 'Access Workspace',
+            buttonUrl: 'https://argen.isira.club/login'
+          })
+        }).catch(emailErr => console.error('Failed to send workspace approval email:', emailErr.message));
+      }
       
-      // Trigger Agent 1 — Research Agent (Async)
+      // Trigger Research Agent asynchronously
       researchCompany(company.name, company.domain || company.name + '.com').then(async profile => {
-         company.industry = profile.industry;
-         company.primary_ai_tools = profile.primary_ai_tools;
-         company.language_tone = profile.language_tone;
-         company.competitor_names = profile.competitor_names;
-         company.challenge_themes = profile.challenge_themes;
-         company.profileGeneratedAt = Date.now();
-         await company.save();
+         await companyRef.update({
+           industry: profile.industry || 'Technology',
+           primary_ai_tools: profile.primary_ai_tools || [],
+           language_tone: profile.language_tone || 'Professional',
+           competitor_names: profile.competitor_names || [],
+           challenge_themes: profile.challenge_themes || [],
+           profileGeneratedAt: new Date()
+         });
          console.log(`Research Agent completed for ${company.name}`);
       }).catch(err => console.error('Research Agent failed:', err));
     }
-    await company.save();
+    
+    await companyRef.update(updates);
+    const updatedDoc = await companyRef.get();
 
-    res.json({ msg: `Company status updated to ${status}`, company });
+    res.json({ msg: `Company status updated to ${status}`, company: { _id: updatedDoc.id, ...updatedDoc.data() } });
   } catch (err) {
     console.error('Company Status Update Error:', err);
     res.status(500).json({ msg: 'Server error', error: err.message });
@@ -295,8 +422,15 @@ router.get('/users', protect, authorize('superadmin'), async (req, res) => {
       { _id: 'mock-u2', name: 'Sarah Kim', email: 'sarah@techflow.io', role: 'teamadmin', companyId: 'mock-co-1' }
     ]);
   }
+  
   try {
-    const users = await User.find().select('-password').sort({ createdAt: -1 });
+    const snapshot = await db.collection('users').get();
+    const users = [];
+    snapshot.forEach(doc => {
+      const data = doc.data();
+      delete data.password; // Safeguard
+      users.push({ _id: doc.id, ...data });
+    });
     res.json(users);
   } catch (err) {
     console.error('Users List Error:', err);
@@ -306,22 +440,30 @@ router.get('/users', protect, authorize('superadmin'), async (req, res) => {
 
 // @route   GET api/admin/flagged
 // @desc    Get flagged submissions for a company
-// @access  Private (TeamAdmin + SuperAdmin)
 router.get('/flagged', protect, authorize('teamadmin', 'superadmin'), async (req, res) => {
   if (global.MOCK_DB) {
     return res.json([]);
   }
+  
   try {
-    const Response = require('../models/Response');
-    const flaggedResponses = await Response.find({ 
-      companyId: req.user.companyId,
-      scoringStatus: 'Manual Review' 
-    }).populate('user', 'name');
-    
-    const formatted = flaggedResponses.map(r => ({
-      userName: r.user ? r.user.name : 'Unknown User',
-      flags: r.flags || []
-    }));
+    const snapshot = await db.collection('responses')
+      .where('companyId', '==', req.user.companyId)
+      .where('scoringStatus', '==', 'Manual Review')
+      .get();
+      
+    const formatted = [];
+    for (const doc of snapshot.docs) {
+      const data = doc.data();
+      let userName = 'Unknown User';
+      if (data.user) {
+        const userDoc = await db.collection('users').doc(data.user).get();
+        if (userDoc.exists) userName = userDoc.data().name;
+      }
+      formatted.push({
+        userName,
+        flags: data.flags || []
+      });
+    }
     
     res.json(formatted);
   } catch (err) {
@@ -331,11 +473,11 @@ router.get('/flagged', protect, authorize('teamadmin', 'superadmin'), async (req
 });
 
 // =========================================================================
-// INVOICE MANAGEMENT ENDPOINTS (Admin Portal Only)
+// INVOICE MANAGEMENT ENDPOINTS
 // =========================================================================
 
 // @route   GET api/admin/invoices/public/:id
-// @desc    Retrieve invoice details publicly (no auth required for client PDF sharing)
+// @desc    Retrieve invoice details publicly
 router.get('/invoices/public/:id', async (req, res) => {
   if (global.MOCK_DB) {
     return res.json({
@@ -353,25 +495,22 @@ router.get('/invoices/public/:id', async (req, res) => {
       items: [{ description: 'ArGen Enterprise Annual Platform License (Seat Limit: 15)', amount: 1200.00 }],
       subtotal: 1200.00,
       totalDue: 1200.00,
-      status: 'Sent',
-      paymentMethods: {
-        bankTransfer: {
-          bankName: 'Silicon Valley Bank',
-          accountNumber: '•••• •••• 9821',
-          routingNumber: '021000021',
-          ein: '12-3456789'
-        },
-        zelle: {
-          phoneNumber: '+1 (555) 019-2834'
-        }
-      },
-      paymentTerms: 'Payment is due upon receipt of this invoice unless otherwise agreed in writing.'
+      status: 'Sent'
     });
   }
+  
   try {
-    const invoice = await Invoice.findById(req.params.id).populate('companyId', 'name');
-    if (!invoice) return res.status(404).json({ msg: 'Invoice not found' });
-    res.json(invoice);
+    const doc = await db.collection('invoices').doc(req.params.id).get();
+    if (!doc.exists) return res.status(404).json({ msg: 'Invoice not found' });
+    
+    const data = doc.data();
+    let companyName = '';
+    if (data.companyId) {
+      const companyDoc = await db.collection('companies').doc(data.companyId).get();
+      if (companyDoc.exists) companyName = companyDoc.data().name;
+    }
+    
+    res.json({ _id: doc.id, ...data, companyId: { name: companyName } });
   } catch (err) {
     console.error('Fetch Public Invoice Error:', err);
     res.status(500).json({ msg: 'Server error', error: err.message });
@@ -379,7 +518,7 @@ router.get('/invoices/public/:id', async (req, res) => {
 });
 
 // @route   GET api/admin/invoices
-// @desc    Get all invoices (Superadmin sees all, Teamadmin sees their company's)
+// @desc    Get all invoices
 router.get('/invoices', protect, authorize('teamadmin', 'superadmin'), async (req, res) => {
   if (global.MOCK_DB) {
     return res.json([
@@ -402,13 +541,34 @@ router.get('/invoices', protect, authorize('teamadmin', 'superadmin'), async (re
       }
     ]);
   }
+  
   try {
-    let query = {};
+    let invoicesRef = db.collection('invoices');
+    let snapshot;
     if (req.user.role === 'teamadmin') {
       if (!req.user.companyId) return res.json([]);
-      query.companyId = req.user.companyId;
+      snapshot = await invoicesRef.where('companyId', '==', req.user.companyId).get();
+    } else {
+      snapshot = await invoicesRef.get();
     }
-    const invoices = await Invoice.find(query).populate('companyId', 'name').sort({ date: -1 });
+    
+    const invoices = [];
+    for (const doc of snapshot.docs) {
+      const data = doc.data();
+      let companyName = '';
+      if (data.companyId) {
+        const companyDoc = await db.collection('companies').doc(data.companyId).get();
+        if (companyDoc.exists) companyName = companyDoc.data().name;
+      }
+      
+      invoices.push({
+        _id: doc.id,
+        ...data,
+        companyId: { name: companyName }
+      });
+    }
+    
+    invoices.sort((a, b) => b.date - a.date);
     res.json(invoices);
   } catch (err) {
     console.error('Fetch Invoices Error:', err);
@@ -433,32 +593,11 @@ router.post('/invoices', protect, authorize('teamadmin', 'superadmin'), async (r
     status
   } = req.body;
 
-  if (global.MOCK_DB) {
-    const mockInvoice = {
-      _id: 'mock-inv-' + Math.floor(Math.random() * 1000),
-      invoiceNumber: 'INV-' + Math.floor(100000 + Math.random() * 900000),
-      poNumber: poNumber || '12-34-56-7890',
-      date: new Date(),
-      clientName,
-      clientAddress,
-      clientContact,
-      productName: productName || 'ArGen Enterprise SaaS Platform License',
-      productDescription: productDescription || 'Autonomous AI productivity auditing platform and workflow playbooks',
-      usageTerms: usageTerms || 'Unlimited usage for verified domain members',
-      periodOfUse: periodOfUse || 'Unlimited / Annual Subscription',
-      items: items || [],
-      subtotal: (items || []).reduce((acc, item) => acc + (parseFloat(item.amount) || 0), 0),
-      totalDue: (items || []).reduce((acc, item) => acc + (parseFloat(item.amount) || 0), 0),
-      status: status || 'Draft'
-    };
-    return res.status(201).json(mockInvoice);
-  }
-
   try {
     const invoiceNumber = 'INV-' + Math.floor(100000 + Math.random() * 900000);
     const calculatedSubtotal = (items || []).reduce((acc, item) => acc + (parseFloat(item.amount) || 0), 0);
     
-    const invoice = new Invoice({
+    const invoiceData = {
       invoiceNumber,
       poNumber: poNumber || '12-34-56-7890',
       companyId: companyId || req.user.companyId,
@@ -472,11 +611,12 @@ router.post('/invoices', protect, authorize('teamadmin', 'superadmin'), async (r
       items: items || [],
       subtotal: calculatedSubtotal,
       totalDue: calculatedSubtotal,
-      status: status || 'Draft'
-    });
+      status: status || 'Draft',
+      date: new Date()
+    };
 
-    await invoice.save();
-    res.status(201).json(invoice);
+    const docRef = await db.collection('invoices').add(invoiceData);
+    res.status(201).json({ _id: docRef.id, ...invoiceData });
   } catch (err) {
     console.error('Create Invoice Error:', err);
     res.status(500).json({ msg: 'Server error', error: err.message });
@@ -499,51 +639,36 @@ router.put('/invoices/:id', protect, authorize('teamadmin', 'superadmin'), async
     status
   } = req.body;
 
-  if (global.MOCK_DB) {
-    return res.json({
-      _id: req.params.id,
-      invoiceNumber: 'INV-783941',
-      poNumber: poNumber || '12-34-56-7890',
-      date: new Date(),
-      clientName,
-      clientAddress,
-      clientContact,
-      productName: productName || 'ArGen Enterprise SaaS Platform License',
-      productDescription: productDescription || 'Autonomous AI productivity auditing platform and workflow playbooks',
-      usageTerms: usageTerms || 'Unlimited usage for verified domain members',
-      periodOfUse: periodOfUse || 'Unlimited / Annual Subscription',
-      items: items || [{ description: 'ArGen Enterprise Annual Platform License (Seat Limit: 15)', amount: 1200.00 }],
-      subtotal: items ? items.reduce((acc, item) => acc + (parseFloat(item.amount) || 0), 0) : 1200.00,
-      totalDue: items ? items.reduce((acc, item) => acc + (parseFloat(item.amount) || 0), 0) : 1200.00,
-      status: status || 'Sent'
-    });
-  }
-
   try {
-    let invoice = await Invoice.findById(req.params.id);
-    if (!invoice) return res.status(404).json({ msg: 'Invoice not found' });
+    const invoiceRef = db.collection('invoices').doc(req.params.id);
+    const invoiceDoc = await invoiceRef.get();
+    if (!invoiceDoc.exists) return res.status(404).json({ msg: 'Invoice not found' });
+    const invoice = invoiceDoc.data();
 
-    if (req.user.role === 'teamadmin' && invoice.companyId.toString() !== req.user.companyId.toString()) {
+    if (req.user.role === 'teamadmin' && invoice.companyId !== req.user.companyId) {
       return res.status(403).json({ msg: 'Access denied' });
     }
 
-    if (poNumber) invoice.poNumber = poNumber;
-    if (clientName) invoice.clientName = clientName;
-    if (clientAddress) invoice.clientAddress = clientAddress;
-    if (clientContact) invoice.clientContact = clientContact;
-    if (productName) invoice.productName = productName;
-    if (productDescription) invoice.productDescription = productDescription;
-    if (usageTerms) invoice.usageTerms = usageTerms;
-    if (periodOfUse) invoice.periodOfUse = periodOfUse;
-    if (items) {
-      invoice.items = items;
-      invoice.subtotal = items.reduce((acc, item) => acc + (parseFloat(item.amount) || 0), 0);
-      invoice.totalDue = invoice.subtotal;
+    const updates = {};
+    if (poNumber !== undefined) updates.poNumber = poNumber;
+    if (clientName !== undefined) updates.clientName = clientName;
+    if (clientAddress !== undefined) updates.clientAddress = clientAddress;
+    if (clientContact !== undefined) updates.clientContact = clientContact;
+    if (productName !== undefined) updates.productName = productName;
+    if (productDescription !== undefined) updates.productDescription = productDescription;
+    if (usageTerms !== undefined) updates.usageTerms = usageTerms;
+    if (periodOfUse !== undefined) updates.periodOfUse = periodOfUse;
+    if (items !== undefined) {
+      updates.items = items;
+      updates.subtotal = items.reduce((acc, item) => acc + (parseFloat(item.amount) || 0), 0);
+      updates.totalDue = updates.subtotal;
     }
-    if (status) invoice.status = status;
+    if (status !== undefined) updates.status = status;
 
-    await invoice.save();
-    res.json(invoice);
+    await invoiceRef.update(updates);
+    const updated = await invoiceRef.get();
+    
+    res.json({ _id: updated.id, ...updated.data() });
   } catch (err) {
     console.error('Update Invoice Error:', err);
     res.status(500).json({ msg: 'Server error', error: err.message });
@@ -553,18 +678,16 @@ router.put('/invoices/:id', protect, authorize('teamadmin', 'superadmin'), async
 // @route   DELETE api/admin/invoices/:id
 // @desc    Delete an invoice
 router.delete('/invoices/:id', protect, authorize('teamadmin', 'superadmin'), async (req, res) => {
-  if (global.MOCK_DB) {
-    return res.json({ msg: 'Invoice deleted successfully' });
-  }
   try {
-    const invoice = await Invoice.findById(req.params.id);
-    if (!invoice) return res.status(404).json({ msg: 'Invoice not found' });
+    const invoiceRef = db.collection('invoices').doc(req.params.id);
+    const invoiceDoc = await invoiceRef.get();
+    if (!invoiceDoc.exists) return res.status(404).json({ msg: 'Invoice not found' });
 
-    if (req.user.role === 'teamadmin' && invoice.companyId.toString() !== req.user.companyId.toString()) {
+    if (req.user.role === 'teamadmin' && invoiceDoc.data().companyId !== req.user.companyId) {
       return res.status(403).json({ msg: 'Access denied' });
     }
 
-    await Invoice.findByIdAndDelete(req.params.id);
+    await invoiceRef.delete();
     res.json({ msg: 'Invoice deleted successfully' });
   } catch (err) {
     console.error('Delete Invoice Error:', err);

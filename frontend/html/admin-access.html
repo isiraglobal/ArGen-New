@@ -7,6 +7,7 @@
   <link rel="icon" type="image/png" href="../images/ArGen Logo.png">
   <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Inter:wght@400;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="../css/style.css">
+  <script src="../js/auth-guard.js"></script>
   <style>
     :root {
       --admin-accent: #ef4444; /* Alert Red for Admin */
@@ -53,7 +54,8 @@
     }
 
     .admin-header img {
-      width: 40px;
+      height: 64px;
+      width: auto;
       filter: grayscale(1) brightness(2) sepia(1) hue-rotate(-50deg) saturate(5); /* Make it red */
       margin-bottom: 1rem;
     }
@@ -149,6 +151,10 @@
       100% { top: 100%; }
     }
   </style>
+  <script>
+    window.si = window.si || function () { (window.siq = window.siq || []).push(arguments); };
+  </script>
+  <script defer src="/_vercel/speed-insights/script.js"></script>
 </head>
 <body>
   <div class="admin-bg"></div>
@@ -191,12 +197,7 @@
       btn.textContent = 'AUTHORIZING...';
 
       try {
-        const data = await argenApi.login(email, password);
-        
-        if (data.user.role !== 'superadmin') {
-            throw new Error('ACCESS_DENIED: Insufficient Privileges');
-        }
-
+        const data = await argenApi.adminLogin(email, password);
         window.location.href = '/admin-portal';
       } catch (err) {
         errorEl.textContent = err.message;

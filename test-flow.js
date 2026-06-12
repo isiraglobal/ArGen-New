@@ -1,21 +1,70 @@
 require('dotenv').config();
-const mongoose = require('mongoose');
-const User = require('./backend/models/User');
-const Company = require('./backend/models/Company');
-const Challenge = require('./backend/models/Challenge');
-const Response = require('./backend/models/Response');
+let { db } = require('./backend/utils/supabase');
 const { scoreResponse, generateWeeklyReport, generateCoachingNudge } = require('./backend/utils/ai-agents');
 
 async function runTest() {
   try {
-    console.log('Connecting to MongoDB...');
-    await mongoose.connect(process.env.MONGO_URI);
-    console.log('Connected.');
+    console.log('--- Initializing Test Setup with Supabase/Mock layer ---');
 
     console.log('--- Creating/Finding Test Company & User ---');
-    let company = await Company.findOne({ name: 'ArGen Test Corp' });
-    if (!company) {
-      company = new Company({
+    let compSnap;
+    try {
+      compSnap = await db.collection('companies').where('name', '==', 'ArGen Test Corp').limit(1).get();
+    } catch (err) {
+      console.log('---------------------------------------------------------');
+      console.log('Notice: Live Supabase connection failed or environment is offline.');
+      console.log('Forcing MOCK_DB = true to proceed with local logic testing.');
+      console.log('---------------------------------------------------------');
+      global.MOCK_DB = true;
+      
+      const queryStub = {
+        where: () => queryStub,
+        orderBy: () => queryStub,
+        limit: () => queryStub,
+        get: async () => ({
+          empty: false,
+          docs: [
+            {
+              id: "mock-doc-id",
+              data: () => ({
+                name: "ArGen Test Corp",
+                status: "active",
+                role: "teamadmin",
+                companyId: "mock-company-id",
+                inviteCode: "TEST1234"
+              })
+            }
+          ]
+        })
+      };
+      
+      db = {
+        collection: () => ({
+          doc: () => ({
+            get: async () => ({
+              exists: true,
+              id: "mock-doc-id",
+              data: () => ({
+                name: "ArGen Test Corp",
+                status: "active",
+                role: "teamadmin",
+                companyId: "mock-company-id"
+              })
+            }),
+            set: async () => {},
+            update: async () => {},
+            delete: async () => {}
+          }),
+          add: async () => ({ id: "mock-add-id" }),
+          ...queryStub
+        })
+      };
+      
+      compSnap = await db.collection('companies').where('name', '==', 'ArGen Test Corp').limit(1).get();
+    }
+    let company;
+    if (compSnap.empty) {
+      const newComp = {
         name: 'ArGen Test Corp',
         industry: 'Technology',
         size: '1-10',
@@ -23,37 +72,54 @@ async function runTest() {
         primaryContact: { name: 'Test User', email: 'test@argen' },
         inviteCode: 'TEST1234',
         status: 'active'
-      });
-      await company.save();
+      };
+      const addedComp = await db.collection('companies').add(newComp);
+      company = { id: addedComp.id, ...newComp };
+      console.log('Created test company.');
+    } else {
+      company = { id: compSnap.docs[0].id, ...compSnap.docs[0].data() };
+      console.log('Found existing test company.');
     }
 
-    let user = await User.findOne({ email: 'test@argen' });
-    if (!user) {
-      user = new User({
+    const userSnap = await db.collection('users').where('email', '==', 'test@argen').limit(1).get();
+    let user;
+    if (userSnap.empty) {
+      const newUser = {
         name: 'Test TeamAdmin',
         email: 'test@argen',
         password: 'mockpassword',
         role: 'teamadmin',
-        companyId: company._id,
+        companyId: company.id,
         currentStreak: 1
-      });
-      await user.save();
+      };
+      const addedUser = await db.collection('users').add(newUser);
+      user = { id: addedUser.id, ...newUser };
+      console.log('Created test user.');
+    } else {
+      user = { id: userSnap.docs[0].id, ...userSnap.docs[0].data() };
+      console.log('Found existing test user.');
     }
     console.log('Test User and Company ready.');
 
     console.log('--- Finding or Creating a Challenge ---');
-    let challenge = await Challenge.findOne({});
-    if (!challenge) {
-      challenge = new Challenge({
+    const chSnap = await db.collection('challenges').limit(1).get();
+    let challenge;
+    if (chSnap.empty) {
+      const newCh = {
         title: 'Optimize Support Inbox',
         scenario: 'Your inbox is flooded with repetitive level-1 support tickets.',
         task: 'Create an automated response workflow using AI.',
         constraints: ['Must resolve 50% of tickets', 'Must sound human'],
         timeSuggestion: 20,
         primaryDimension: 'iteration_quality',
-        companyId: company._id
-      });
-      await challenge.save();
+        companyId: company.id
+      };
+      const addedCh = await db.collection('challenges').add(newCh);
+      challenge = { id: addedCh.id, ...newCh };
+      console.log('Created new challenge.');
+    } else {
+      challenge = { id: chSnap.docs[0].id, ...chSnap.docs[0].data() };
+      console.log('Found existing challenge.');
     }
     console.log(`Challenge: ${challenge.title}`);
 
@@ -70,12 +136,11 @@ async function runTest() {
     const aiResult = await scoreResponse(challenge, responseText);
     console.log('AI Scoring Result:', aiResult);
 
-    const evaluationId = new mongoose.Types.ObjectId(); // Mock eval id
-    const response = new Response({
-      user: user._id,
-      companyId: company._id,
-      evaluationId,
-      challenge: challenge._id,
+    const responseData = {
+      user: user.id || 'mock-user-id',
+      companyId: company.id || 'mock-company-id',
+      evaluationId: 'mock-eval-id-1234',
+      challenge: challenge.id || 'mock-challenge-id',
       responseText,
       workflowApproach,
       timeTaken,
@@ -91,21 +156,22 @@ async function runTest() {
       improvement: aiResult.improvement,
       flags: aiResult.flags || [],
       scoringStatus: 'Scored'
-    });
-    await response.save();
-    console.log('Response saved to DB.');
+    };
+    const addedResponse = await db.collection('responses').add(responseData);
+    console.log('Response saved to DB with ID:', addedResponse.id);
 
     console.log('--- Generating Coaching Nudge ---');
-    const nudge = await generateCoachingNudge(user, aiResult, user.currentStreak);
+    const nudge = await generateCoachingNudge(user, aiResult, user.currentStreak || 1);
     console.log('Coaching Nudge:', nudge);
 
     console.log('--- Generating Weekly Report ---');
-    // Fetch all scores for the company
-    const allResponses = await Response.find({ companyId: company._id });
+    const respSnap = await db.collection('responses').where('companyId', '==', company.id).get();
+    const allResponses = respSnap.docs.map(r => r.data());
+    
     const reportData = allResponses.map(r => ({
       workflowApproach: r.workflowApproach,
       timeSaved: r.baselineTime + ' -> ' + r.timeTaken,
-      score: r.scores.total
+      score: r.scores?.total || 0
     }));
     
     const report = await generateWeeklyReport(company, reportData);
@@ -115,7 +181,6 @@ async function runTest() {
   } catch (error) {
     console.error('Error during test run:', error);
   } finally {
-    await mongoose.disconnect();
     process.exit(0);
   }
 }

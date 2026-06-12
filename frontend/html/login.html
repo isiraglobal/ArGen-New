@@ -10,6 +10,7 @@
     href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono&display=swap"
     rel="stylesheet">
   <link rel="stylesheet" href="../css/style.css">
+  <script src="../js/auth-guard.js"></script>
 
   <style>
     :root {
@@ -192,13 +193,17 @@
       }
     }
   </style>
+  <script>
+    window.si = window.si || function () { (window.siq = window.siq || []).push(arguments); };
+  </script>
+  <script defer src="/_vercel/speed-insights/script.js"></script>
 </head>
 
 <body class="bg-black">
     <header id="nav" class="nav">
     <div class="nav-inner">
       <a href="/" class="nav-logo">
-        <img src="../images/ArGen Logo.png" alt="ArGen" class="logo-img" style="height: 32px;">
+        <img src="../images/ArGen Logo.png" alt="ArGen" class="logo-img">
       </a>
       <nav class="nav-links">
         <a href="/#how" class="nav-link">How It Works</a>
@@ -233,7 +238,7 @@
 
     <div style="text-align: center; margin-bottom: 3rem; position: relative; z-index: 1;">
       <a href="/">
-        <img src="../images/ArGen Logo.png" alt="ArGen" style="width: 50px; margin: 0 auto 1.5rem;">
+        <img src="../images/ArGen Logo.png" alt="ArGen" style="height: 72px; width: auto; margin: 0 auto 1.5rem;">
       </a>
       <h1 class="section-h2" style="margin-bottom: 0.5rem; font-size: 2.5rem; letter-spacing: -0.03em;">Access <i class="soul-text">Portal</i></h1>
       <p class="section-sub" style="font-size: 0.95rem; opacity: 0.7;">Secure, multi-tenant workspace management</p>
@@ -259,137 +264,193 @@
           </div>
         </div>
         <button type="submit" class="btn btn-primary btn-auth">Authenticate</button>
+        
+        <div style="display: flex; align-items: center; justify-content: center; gap: 10px; margin: 1.5rem 0;">
+          <div style="height: 1px; background: rgba(255,255,255,0.1); flex: 1;"></div>
+          <span style="font-family: var(--font-mono); font-size: 0.65rem; color: var(--text-sec); text-transform: uppercase;">or</span>
+          <div style="height: 1px; background: rgba(255,255,255,0.1); flex: 1;"></div>
+        </div>
+        
+        <button type="button" id="googleLoginBtn" class="btn btn-dark btn-auth" style="display: flex; align-items: center; justify-content: center; gap: 10px; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.1); color: #fff; cursor: pointer; transition: all 0.3s var(--cb);">
+          <svg style="width: 18px; height: 18px;" viewBox="0 0 24 24">
+            <path fill="#EA4335" d="M12 5c1.6 0 3 .6 4.1 1.7l3.1-3.1C17.3 1.8 14.8 1 12 1 7.3 1 3.4 3.7 1.5 7.7l3.9 3C6.3 7.8 8.9 5 12 5z"/>
+            <path fill="#4285F4" d="M23.5 12.3c0-.8-.1-1.7-.2-2.3H12v4.4h6.5c-.3 1.5-1.1 2.8-2.4 3.7l3.7 2.9c2.2-2 3.7-5 3.7-8.7z"/>
+            <path fill="#FBBC05" d="M5.4 14.7c-.2-.6-.4-1.3-.4-2.7s.2-2.1.4-2.7l-3.9-3C.6 8.3 0 10.1 0 12s.6 3.7 1.5 5.7l3.9-3z"/>
+            <path fill="#34A853" d="M12 23c3.2 0 6-1.1 8-3l-3.7-2.9c-1.1.7-2.5 1.2-4.3 1.2-3.1 0-5.7-2.8-6.6-5.7l-3.9 3C3.4 20.3 7.3 23 12 23z"/>
+          </svg>
+          Sign in with Google
+        </button>
+
+        <div style="text-align: center; margin-top: 1.5rem;">
+          <a href="javascript:void(0)" id="demoModeLink" style="color: var(--accent); font-size: 0.72rem; text-decoration: none; font-family: var(--font-mono); letter-spacing: 0.5px; font-weight: 700;">&gt; EXPLORE DEMO WORKSPACE</a>
+        </div>
       </form>
+ 
+       <div id="authMessage" class="auth-message"></div>
+     </div>
+   </div>
+ 
+   <!-- Forgot Password Modal -->
+   <div id="forgotPasswordModal" class="modal" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); backdrop-filter: blur(10px); display: none; z-index: 2000; align-items: center; justify-content: center;">
+     <div style="background: #0a0a0a; border: 1px solid rgba(255,255,255,0.1); padding: 2.5rem; border-radius: 16px; width: 90%; max-width: 400px;">
+       <h3 class="card-h3" style="margin-bottom: 1rem; font-size: 1.5rem;">Reset <i class="soul-text">Access</i></h3>
+       <p style="color: var(--text-sec); font-size: 0.85rem; margin-bottom: 2rem; line-height: 1.6;">Enter your email address and we'll send you a secure link to reset your password.</p>
+       <form id="forgotPasswordForm">
+         <div class="form-group">
+           <label class="form-label">Email Address</label>
+           <input type="email" id="forgot-email" class="form-input" placeholder="name@company.com" required>
+         </div>
+         <div style="display: flex; gap: 1rem; margin-top: 2.5rem;">
+           <button type="button" class="btn btn-dark" style="flex: 1;" onclick="closeForgotPassword()">Cancel</button>
+           <button type="submit" class="btn btn-primary" style="flex: 1;">Send Link</button>
+         </div>
+       </form>
+     </div>
+   </div>
+ 
+       </div>
+   </main>
+   <footer class="footer">
+     <div class="container">
+       <div class="footer-grid">
+         <div class="footer-brand">
+           <a href="/" class="footer-logo">ArGen</a>
+           <p class="footer-desc">The enterprise-grade standard for AI engineering evaluation and talent intelligence.</p>
+         </div>
+         <div class="footer-links">
+           <span class="footer-label">Product</span>
+           <a href="/evaluate" class="footer-link">Evaluate</a>
+           <a href="/pricing" class="footer-link">Pricing</a>
+           <a href="/challenges" class="footer-link">Challenges</a>
+         </div>
+         <div class="footer-links">
+           <span class="footer-label">Connect</span>
+           <a href="/about" class="footer-link">About</a>
+           <a href="/contact" class="footer-link">Contact</a>
+         </div>
+         <div class="footer-links">
+           <span class="footer-label">Legal</span>
+           <a href="/privacy" class="footer-link">Privacy</a>
+           <a href="/terms" class="footer-link">Terms</a>
+         </div>
+       </div>
+       <div class="footer-bottom">
+         <span>© 2026 ArGen. All rights reserved.</span>
+         <span class="footer-made">Built with obsession<span class="blink">_</span></span>
+       </div>
+     </div>
+   </footer>
+   <script type="module" src="../js/supabase-config.js"></script>
+   <script src="../js/api.js"></script>
+   <script>
+     document.addEventListener('DOMContentLoaded', () => {
+       const messageEl = document.getElementById('authMessage');
+ 
+       const showMessage = (msg, type = 'error') => {
+         messageEl.textContent = msg;
+         messageEl.className = `auth-message ${type}`;
+         messageEl.style.display = 'block';
+         setTimeout(() => {
+             messageEl.style.display = 'none';
+         }, 8000);
+       };
+ 
+       // Login Submission
+       document.getElementById('loginForm').addEventListener('submit', async (e) => {
+         e.preventDefault();
+         const email = e.target.querySelector('input[type="email"]').value;
+         const password = e.target.querySelector('input[type="password"]').value;
+ 
+         try {
+           const data = await argenApi.login(email, password);
+           showMessage('Login successful! Redirecting...', 'success');
+           
+           setTimeout(() => {
+             const role = data.user.role.toLowerCase();
+             if (role === 'superadmin') {
+               showMessage('Administrative account detected. Redirecting to secure terminal...', 'success');
+               setTimeout(() => {
+                 window.location.href = '/admin-portal';
+               }, 1500);
+             } else if (role === 'teamadmin') {
+               window.location.href = '/teams';
+             } else {
+               window.location.href = '/teams'; // Members also need team verification
+             }
+           }, 1000);
+         } catch (error) {
+           showMessage(error.message);
+         }
+       });
+ 
+       // Google Sign-In Submission
+       document.getElementById('googleLoginBtn').addEventListener('click', async () => {
+         try {
+           if (!window.supabaseAuthHelpers) {
+             // Fallback: if Supabase not initialized, use backend API login with Google OAuth redirect
+             throw new Error("Google Sign-In requires Supabase to be configured. Contact your admin.");
+           }
+           
+           // Trigger Supabase Google OAuth — redirects to Google then back to /teams
+           showMessage('Redirecting to Google authentication...', 'success');
+           await window.supabaseAuthHelpers.signInWithGoogle();
+           // Note: page redirect is handled by Supabase OAuth redirect URL
+           
+         } catch (error) {
+           showMessage(error.message);
+         }
+       });
 
-      <div id="authMessage" class="auth-message"></div>
-    </div>
-  </div>
-
-  <!-- Forgot Password Modal -->
-  <div id="forgotPasswordModal" class="modal" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); backdrop-filter: blur(10px); display: none; z-index: 2000; align-items: center; justify-content: center;">
-    <div style="background: #0a0a0a; border: 1px solid rgba(255,255,255,0.1); padding: 2.5rem; border-radius: 16px; width: 90%; max-width: 400px;">
-      <h3 class="card-h3" style="margin-bottom: 1rem; font-size: 1.5rem;">Reset <i class="soul-text">Access</i></h3>
-      <p style="color: var(--text-sec); font-size: 0.85rem; margin-bottom: 2rem; line-height: 1.6;">Enter your email address and we'll send you a secure link to reset your password.</p>
-      <form id="forgotPasswordForm">
-        <div class="form-group">
-          <label class="form-label">Email Address</label>
-          <input type="email" id="forgot-email" class="form-input" placeholder="name@company.com" required>
-        </div>
-        <div style="display: flex; gap: 1rem; margin-top: 2.5rem;">
-          <button type="button" class="btn btn-dark" style="flex: 1;" onclick="closeForgotPassword()">Cancel</button>
-          <button type="submit" class="btn btn-primary" style="flex: 1;">Send Link</button>
-        </div>
-      </form>
-    </div>
-  </div>
-
-      </div>
-  </main>
-  <footer class="footer">
-    <div class="container">
-      <div class="footer-grid">
-        <div class="footer-brand">
-          <a href="/" class="footer-logo">ArGen</a>
-          <p class="footer-desc">The enterprise-grade standard for AI engineering evaluation and talent intelligence.</p>
-        </div>
-        <div class="footer-links">
-          <span class="footer-label">Product</span>
-          <a href="/evaluate" class="footer-link">Evaluate</a>
-          <a href="/pricing" class="footer-link">Pricing</a>
-          <a href="/challenges" class="footer-link">Challenges</a>
-        </div>
-        <div class="footer-links">
-          <span class="footer-label">Connect</span>
-          <a href="/about" class="footer-link">About</a>
-          <a href="/contact" class="footer-link">Contact</a>
-        </div>
-        <div class="footer-links">
-          <span class="footer-label">Legal</span>
-          <a href="/privacy" class="footer-link">Privacy</a>
-          <a href="/terms" class="footer-link">Terms</a>
-        </div>
-      </div>
-      <div class="footer-bottom">
-        <span>© 2026 ArGen. All rights reserved.</span>
-        <span class="footer-made">Built with obsession<span class="blink">_</span></span>
-      </div>
-    </div>
-  </footer>
-  <script src="../js/api.js"></script>
-  <script>
-    document.addEventListener('DOMContentLoaded', () => {
-      const messageEl = document.getElementById('authMessage');
-
-      const showMessage = (msg, type = 'error') => {
-        messageEl.textContent = msg;
-        messageEl.className = `auth-message ${type}`;
-        messageEl.style.display = 'block';
-        setTimeout(() => {
-            messageEl.style.display = 'none';
-        }, 8000);
-      };
-
-      // Login Submission
-      document.getElementById('loginForm').addEventListener('submit', async (e) => {
-        e.preventDefault();
-        const email = e.target.querySelector('input[type="email"]').value;
-        const password = e.target.querySelector('input[type="password"]').value;
-
-        try {
-          const data = await argenApi.login(email, password);
-          showMessage('Login successful! Redirecting...', 'success');
-          
-          setTimeout(() => {
-            const role = data.user.role.toLowerCase();
-            if (role === 'superadmin') {
-              showMessage('Administrative account detected. Redirecting to secure terminal...', 'success');
-              setTimeout(() => {
-                window.location.href = '/admin-portal';
-              }, 1500);
-            } else if (role === 'teamadmin') {
-              window.location.href = '/teams';
-            } else {
-              window.location.href = '/teams'; // Members also need team verification
-            }
-          }, 1000);
-        } catch (error) {
-          showMessage(error.message);
-        }
-      });
-    });
-
-    // Forgot Password Logic
-    function openForgotPassword() {
-      document.getElementById('forgotPasswordModal').style.display = 'flex';
-    }
-
-    function closeForgotPassword() {
-      document.getElementById('forgotPasswordModal').style.display = 'none';
-    }
-
-    document.getElementById('forgotPasswordForm').addEventListener('submit', async (e) => {
-      e.preventDefault();
-      const email = document.getElementById('forgot-email').value;
-      const btn = e.target.querySelector('button[type="submit"]');
-      
-      btn.disabled = true;
-      btn.textContent = 'Sending...';
-
-      try {
-        await argenApi.request('/auth/forgot-password', {
-          method: 'POST',
-          body: JSON.stringify({ email })
-        });
-        alert('If an account exists with this email, a reset link has been sent.');
-        closeForgotPassword();
-      } catch (err) {
-        alert(err.message);
-      } finally {
-        btn.disabled = false;
-        btn.textContent = 'Send Link';
-      }
-    });
-  </script>
-</body>
-
+       // Demo Mode Trigger
+       const demoLink = document.getElementById('demoModeLink');
+       if (demoLink) {
+         demoLink.addEventListener('click', () => {
+           localStorage.setItem('is_demo_mode', 'true');
+           localStorage.setItem('argen_token', 'demo-token');
+           localStorage.setItem('user', JSON.stringify({
+             id: 'demo-user-id',
+             name: 'Guest Explorer',
+             email: 'guest@demo.argen',
+             role: 'teamadmin',
+             companyId: 'demo-company-id'
+           }));
+           sessionStorage.setItem('team_verified', 'true');
+           window.location.href = '/dashboard';
+         });
+       }
+     });
+ 
+     // Forgot Password Logic
+     function openForgotPassword() {
+       document.getElementById('forgotPasswordModal').style.display = 'flex';
+     }
+ 
+     function closeForgotPassword() {
+       document.getElementById('forgotPasswordModal').style.display = 'none';
+     }
+ 
+     document.getElementById('forgotPasswordForm').addEventListener('submit', async (e) => {
+       e.preventDefault();
+       const email = document.getElementById('forgot-email').value;
+       const btn = e.target.querySelector('button[type="submit"]');
+       
+       btn.disabled = true;
+       btn.textContent = 'Sending...';
+ 
+       try {
+         await argenApi.request('/auth/forgot-password', {
+           method: 'POST',
+           body: JSON.stringify({ email })
+         });
+         alert('If an account exists with this email, a reset link has been sent.');
+         closeForgotPassword();
+       } catch (err) {
+         alert(err.message);
+       } finally {
+         btn.disabled = false;
+         btn.textContent = 'Send Link';
+       }
+     });
+   </script>
+ </body>
 </html>

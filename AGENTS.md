@@ -86,7 +86,7 @@ The `frontend/js/api.js` file auto-detects the environment:
 
 ## 🤖 5 AI Agents (backend/utils/ai-agents.js)
 
-All agents use a **fallback chain**: Anthropic Claude → Gemini → OpenAI. If all fail, a deterministic mock kicks in.
+All agents use a primary provider chain prioritizing NVIDIA NIM models (Llama 3.3 70B & Llama 3.1 8B) with fallback to Anthropic Claude → Gemini → OpenAI. If all fail, a deterministic mock kicks in.
 
 1. **Research Agent** — Profiles a company's industry, AI tools, tone, competitors
 2. **Challenge Generator** — Creates a personalized daily AI challenge per employee role/department  
@@ -120,10 +120,15 @@ All agents use a **fallback chain**: Anthropic Claude → Gemini → OpenAI. If 
 
 | Key | Purpose |
 |-----|---------|
-| `MONGO_URI` | MongoDB Atlas connection string |
+| `SUPABASE_URL` | Supabase project URL |
+| `SUPABASE_ANON_KEY` | Supabase anonymous public API key |
+| `SUPABASE_SERVICE_ROLE_KEY` | Supabase service role private API key (DB access bypass) |
 | `JWT_SECRET` | JSON Web Token signing secret |
-| `ADMIN_EMAIL` / `ADMIN_PASSWORD` | Superadmin login bypass |
-| `ANTHROPIC_API_KEY` | Claude API for AI agents (primary) |
+| `ADMIN_EMAIL` / `ADMIN_PASSWORD` | Superadmin login bypass credentials |
+| `NVIDIA_API_KEY` | NVIDIA NIM global fallback API key |
+| `META_LLAMA_3_1_8B_INSTRUCT_API_KEY` | NVIDIA NIM API key for `meta/llama-3.1-8b-instruct` |
+| `META_LLAMA_3_3_70B_INSTRUCT_API_KEY` | NVIDIA NIM API key for `meta/llama-3.3-70b-instruct` |
+| `ANTHROPIC_API_KEY` | Claude API for AI agents (fallback) |
 | `GEMINI_API_KEY` | Gemini API for AI agents (fallback) |
 | `OPENAI_API_KEY` / `AI_API_KEY` | OpenAI for AI agents (fallback) |
 | `EMAIL_USER` / `EMAIL_PASS` | Gmail SMTP for automated emails |

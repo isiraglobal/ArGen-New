@@ -1,8 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const Response = require('../models/Response');
-const Evaluation = require('../models/Evaluation');
-const Challenge = require('../models/Challenge');
+const { db } = require('../utils/supabase');
 const { scoreResponse } = require('../utils/ai-agents');
 const { protect, isApproved, authorize } = require('../middleware/auth');
 
@@ -28,25 +26,36 @@ router.post('/submit', protect, isApproved, authorize('member', 'teamadmin', 'su
 
   try {
     // 1. Verify evaluation and challenge
-    const evaluation = await Evaluation.findOne({ _id: evaluationId, companyId: req.user.companyId });
-    if (!evaluation) {
+    const evaluationDoc = await db.collection('evaluations').doc(evaluationId).get();
+    if (!evaluationDoc.exists || evaluationDoc.data().companyId !== req.user.companyId) {
       return res.status(404).json({ msg: 'Evaluation batch not found' });
     }
 
-    const challenge = await Challenge.findById(challengeId);
-    if (!challenge) {
+    const challengeDoc = await db.collection('challenges').doc(challengeId).get();
+    if (!challengeDoc.exists) {
       return res.status(404).json({ msg: 'Challenge not found' });
     }
+    const challenge = { id: challengeDoc.id, ...challengeDoc.data() };
 
     // 2. Check for duplicate submission today
     const startOfDay = new Date();
     startOfDay.setHours(0, 0, 0, 0);
-    const existing = await Response.findOne({
-      user: req.user.id,
-      challenge: challengeId,
-      createdAt: { $gte: startOfDay }
+    
+    const duplicateSnapshot = await db.collection('responses')
+      .where('user', '==', req.user.id)
+      .where('challenge', '==', challengeId)
+      .get();
+      
+    let isDuplicate = false;
+    duplicateSnapshot.forEach(doc => {
+      const data = doc.data();
+      const createdAt = data.createdAt?.toDate ? data.createdAt.toDate() : new Date(data.createdAt);
+      if (createdAt >= startOfDay) {
+        isDuplicate = true;
+      }
     });
-    if (existing) {
+
+    if (isDuplicate) {
       if (process.env.NODE_ENV === 'production') {
         return res.status(400).json({ msg: 'You have already submitted a response for this challenge today.' });
       } else {
@@ -57,15 +66,15 @@ router.post('/submit', protect, isApproved, authorize('member', 'teamadmin', 'su
     // 3. Call AI Scoring Agent
     const aiResult = await scoreResponse(challenge, responseText);
     
-    const response = new Response({
+    const responseData = {
       user: req.user.id,
       companyId: req.user.companyId,
       evaluationId,
       challenge: challengeId,
       responseText,
-      workflowApproach,
-      timeTaken,
-      baselineTime,
+      workflowApproach: workflowApproach || '',
+      timeTaken: timeTaken || 0,
+      baselineTime: baselineTime || 0,
       scores: {
         clarity: aiResult.clarity,
         constraint_application: aiResult.constraint_application,
@@ -77,30 +86,36 @@ router.post('/submit', protect, isApproved, authorize('member', 'teamadmin', 'su
       improvement: aiResult.improvement,
       flags: aiResult.flags || [],
       scoringStatus: aiResult.flags?.length > 0 ? 'Manual Review' : 'Scored',
-      modelUsed: 'gpt-4o'
-    });
+      modelUsed: 'gpt-4o',
+      createdAt: new Date()
+    };
 
-    await response.save();
+    const docRef = await db.collection('responses').add(responseData);
 
-    // 4. Update User Streak
-    const user = await require('../models/User').findById(req.user.id);
-    if (user) {
-      user.currentStreak += 1;
-      if (user.currentStreak > user.longestStreak) {
-        user.longestStreak = user.currentStreak;
-      }
-      // Update weakest dimension based on this score
+    // 4. Update User Streak and weaker dimension
+    const userDocRef = db.collection('users').doc(req.user.id);
+    const userDoc = await userDocRef.get();
+    
+    if (userDoc.exists) {
+      const user = userDoc.data();
+      const currentStreak = (user.currentStreak || 0) + 1;
+      const longestStreak = Math.max(user.longestStreak || 0, currentStreak);
+      
       const dims = ['clarity', 'constraint_application', 'output_specificity', 'iteration_quality'];
       const scores = [aiResult.clarity, aiResult.constraint_application, aiResult.output_specificity, aiResult.iteration_quality];
       const minIndex = scores.indexOf(Math.min(...scores));
-      user.weakestDimension = dims[minIndex];
+      const weakestDimension = dims[minIndex];
       
-      await user.save();
+      await userDocRef.update({
+        currentStreak,
+        longestStreak,
+        weakestDimension
+      });
     }
 
-    res.status(201).json(response);
+    res.status(201).json({ _id: docRef.id, ...responseData });
   } catch (err) {
-    console.error(err.message);
+    console.error('Submit Response Error:', err);
     res.status(500).send('Server error');
   }
 });
@@ -116,14 +131,38 @@ router.get('/my', protect, isApproved, async (req, res) => {
       { _id: 'mock-r3', challengeId: { title: 'Adversarial Output Audit' }, overallScore: 91, createdAt: new Date(Date.now() - 86400000 * 3) }
     ]);
   }
+  
   try {
-    const responses = await Response.find({ user: req.user.id })
-      .populate('challenge', 'title')
-      .populate('evaluationId', 'title')
-      .sort({ createdAt: -1 });
+    const snapshot = await db.collection('responses')
+      .where('user', '==', req.user.id)
+      .get();
+      
+    const responses = [];
+    for (const doc of snapshot.docs) {
+      const data = doc.data();
+      
+      // Basic populate for challenge details
+      let challengeTitle = 'General Challenge';
+      if (data.challenge) {
+        const challengeDoc = await db.collection('challenges').doc(data.challenge).get();
+        if (challengeDoc.exists) {
+          challengeTitle = challengeDoc.data().title || challengeDoc.data().name;
+        }
+      }
+      
+      responses.push({
+        _id: doc.id,
+        ...data,
+        challengeId: { title: challengeTitle }
+      });
+    }
+    
+    // Sort in-memory descending by date
+    responses.sort((a, b) => b.createdAt - a.createdAt);
+    
     res.json(responses);
   } catch (err) {
-    console.error(err.message);
+    console.error('Fetch My Responses Error:', err);
     res.status(500).send('Server error');
   }
 });
@@ -133,14 +172,36 @@ router.get('/my', protect, isApproved, async (req, res) => {
 // @access  Private (TeamAdmin)
 router.get('/batch/:batchId', protect, isApproved, authorize('teamadmin'), async (req, res) => {
   try {
-    const responses = await Response.find({ 
-      evaluationId: req.params.batchId,
-      companyId: req.user.companyId 
-    }).populate('user', 'name email');
+    const snapshot = await db.collection('responses')
+      .where('evaluationId', '==', req.params.batchId)
+      .where('companyId', '==', req.user.companyId)
+      .get();
+      
+    const responses = [];
+    for (const doc of snapshot.docs) {
+      const data = doc.data();
+      
+      // Basic populate for user profile details
+      let userName = 'Anonymous';
+      let userEmail = '';
+      if (data.user) {
+        const userDoc = await db.collection('users').doc(data.user).get();
+        if (userDoc.exists) {
+          userName = userDoc.data().name;
+          userEmail = userDoc.data().email;
+        }
+      }
+      
+      responses.push({
+        _id: doc.id,
+        ...data,
+        user: { name: userName, email: userEmail }
+      });
+    }
     
     res.json(responses);
   } catch (err) {
-    console.error(err.message);
+    console.error('Fetch Batch Responses Error:', err);
     res.status(500).send('Server error');
   }
 });

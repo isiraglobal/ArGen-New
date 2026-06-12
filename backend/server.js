@@ -1,5 +1,4 @@
 const express = require('express');
-const mongoose = require('mongoose');
 const cors = require('cors');
 const dotenv = require('dotenv');
 // const helmet = require('helmet');
@@ -29,7 +28,7 @@ app.use('/api', limiter);
 app.use(cors());
 
 // Whop Webhook needs raw body, mount it before express.json
-// app.use('/api/whop', require('./routes/whop'));
+app.use('/api/whop', require('./routes/whop'));
 
 app.use(express.json());
 // Routes
@@ -43,13 +42,23 @@ app.use('/api/scheduler', require('./routes/scheduler'));
 app.use('/api/benchmark', require('./routes/benchmark'));
 app.use('/api/leaderboard', require('./routes/leaderboard'));
 
+const { db } = require('./utils/supabase');
+
 // Health Check
 app.get('/api/health', (req, res) => {
   res.json({
     status: 'online',
     timestamp: new Date(),
-    database: mongoose.connection.readyState === 1 ? 'connected' : 'disconnected',
+    database: global.MOCK_DB ? 'mock' : 'supabase-postgres',
     version: '1.0.0'
+  });
+});
+
+// Serve client-side Supabase keys securely
+app.get('/api/config', (req, res) => {
+  res.json({
+    supabaseUrl: process.env.SUPABASE_URL || '',
+    supabaseAnonKey: process.env.SUPABASE_ANON_KEY || ''
   });
 });
 
@@ -73,43 +82,6 @@ app.get('/:page', (req, res, next) => {
   });
 });
 
-// Connect to MongoDB
-const MONGO_URI = process.env.MONGO_URI || 'mongodb://localhost:27017/argen';
-
-// Database connection logic for serverless
-global.MOCK_DB = false;
-let isConnected = false;
-const connectDB = async () => {
-    if (isConnected) return;
-    try {
-        console.log('Attempting MongoDB Connection...');
-        // Set a timeout for the connection attempt to avoid hanging
-        await mongoose.connect(MONGO_URI, { 
-            serverSelectionTimeoutMS: 5000,
-            connectTimeoutMS: 5000 
-        });
-        isConnected = true;
-        global.MOCK_DB = false;
-        console.log('MongoDB Connected');
-    } catch (err) {
-        if (err.message.includes('querySrv')) {
-            console.error('--- DNS RESOLUTION FAILURE ---');
-            console.error('Could not resolve MongoDB Atlas SRV record. This often happens on restricted networks.');
-            console.error('Workaround: Use a standard connection string (mongodb://) instead of (mongodb+srv://).');
-        } else {
-            console.error('MongoDB Connection Error:', err.message);
-        }
-        console.log('--- CRITICAL: RUNNING IN MOCK DB MODE ---');
-        global.MOCK_DB = true;
-        isConnected = true; // Set to true to stop repeated failing attempts during this process
-    }
-};
-
-// Middleware to ensure DB is connected before handling requests
-app.use(async (req, res, next) => {
-    await connectDB();
-    next();
-});
 
 // For local development
 if (process.env.NODE_ENV !== 'production') {

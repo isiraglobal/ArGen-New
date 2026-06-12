@@ -12,6 +12,7 @@
     { "source": "/evaluate", "destination": "/frontend/html/evaluate.html" },
     { "source": "/challenges", "destination": "/frontend/html/challenges.html" },
     { "source": "/login", "destination": "/frontend/html/login.html" },
+    { "source": "/oauth", "destination": "/frontend/html/oauth.html" },
     { "source": "/forgot-password", "destination": "/frontend/html/forgot-password.html" },
     { "source": "/reset-password", "destination": "/frontend/html/reset-password.html" },
     { "source": "/teams", "destination": "/frontend/html/teams.html" },
@@ -25,12 +26,22 @@
     { "source": "/take-evaluation", "destination": "/frontend/html/take-evaluation.html" },
     { "source": "/(css|js|images)/(.*)", "destination": "/frontend/$1/$2" }
   ],
-  "headers": [
+  "crons": [
     {
-      "source": "/(.*)",
-      "headers": [
-        { "key": "Access-Control-Allow-Origin", "value": "*" }
-      ]
+      "path": "/api/scheduler/daily-nudges",
+      "schedule": "0 9 * * *"
+    },
+    {
+      "path": "/api/scheduler/weekly-reports",
+      "schedule": "0 9 * * 1"
+    },
+    {
+      "path": "/api/scheduler/streak-check",
+      "schedule": "0 0 * * *"
+    },
+    {
+      "path": "/api/scheduler/daily",
+      "schedule": "0 2 * * *"
     }
   ]
 }

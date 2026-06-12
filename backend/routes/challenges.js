@@ -1,8 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const Challenge = require('../models/Challenge');
-const Evaluation = require('../models/Evaluation');
-const Response = require('../models/Response');
+const { db } = require('../utils/supabase');
 const { protect } = require('../middleware/auth');
 
 // @route   GET api/challenges/active
@@ -31,27 +29,33 @@ router.get('/active', protect, async (req, res) => {
       }
     ]);
   }
+  
   try {
     const user = req.user;
     
-    // Find challenges for this user's company and matching role/dept
-    // Or general ones
-    const challenges = await Challenge.find({
-      companyId: user.companyId,
-      $or: [
-        { targetedRole: user.jobRole },
-        { targetedDept: user.department },
-        { targetedRole: 'All' },
-        { targetedRole: { $exists: false } }
-      ],
-      active: true
-    }).sort({ createdAt: -1 });
+    // Fetch challenges for the user's company that are active
+    const challengesRef = db.collection('challenges');
+    const snapshot = await challengesRef
+      .where('companyId', '==', user.companyId)
+      .where('active', '==', true)
+      .get();
+      
+    let challenges = [];
+    snapshot.forEach(doc => {
+      challenges.push({ _id: doc.id, ...doc.data() });
+    });
+    
+    // Filter personalized role/dept matching in memory
+    challenges = challenges.filter(ch => {
+      return !ch.targetedRole || 
+             ch.targetedRole === 'All' || 
+             ch.targetedRole === user.jobRole || 
+             ch.targetedDept === user.department;
+    });
 
-    // In a real agentic flow, we might trigger generation if 0 found
-    // For now, return what we have
     res.json(challenges);
   } catch (err) {
-    console.error(err.message);
+    console.error('Fetch Active Challenges Error:', err);
     res.status(500).send('Server Error');
   }
 });
@@ -88,11 +92,19 @@ router.get('/', protect, async (req, res) => {
       }
     ]);
   }
+  
   try {
-    const challenges = await Challenge.find().sort({ createdAt: -1 });
+    const challengesRef = db.collection('challenges');
+    const snapshot = await challengesRef.orderBy('createdAt', 'desc').get();
+    
+    const challenges = [];
+    snapshot.forEach(doc => {
+      challenges.push({ _id: doc.id, ...doc.data() });
+    });
+    
     res.json(challenges);
   } catch (err) {
-    console.error(err.message);
+    console.error('Fetch Challenges Error:', err);
     res.status(500).send('Server Error');
   }
 });
@@ -108,21 +120,24 @@ router.post('/:id/submit', protect, async (req, res) => {
       msg: 'MOCK MODE: Submission received successfully.'
     });
   }
+  
   const { promptText, modelOutput, evaluationId } = req.body;
 
   try {
-    const newResponse = new Response({
+    const responseData = {
       user: req.user.id,
       challenge: req.params.id,
-      evaluation: evaluationId,
+      evaluation: evaluationId || null,
       promptText,
-      modelOutput
-    });
+      modelOutput,
+      createdAt: new Date(),
+      status: 'Pending'
+    };
 
-    const response = await newResponse.save();
-    res.json(response);
+    const docRef = await db.collection('responses').add(responseData);
+    res.json({ _id: docRef.id, ...responseData });
   } catch (err) {
-    console.error(err.message);
+    console.error('Submit Response Error:', err);
     res.status(500).send('Server Error');
   }
 });

@@ -1,4 +1,4 @@
-const SystemMetric = require('../models/SystemMetric');
+const { db } = require('./supabase');
 
 // AI Fallback Call logic
 async function callAnthropic(apiKey, systemPrompt, userPrompt, useJson, maxTokens) {
@@ -83,9 +83,46 @@ async function callOpenAI(apiKey, systemPrompt, userPrompt, useJson, maxTokens) 
   return { content: data.choices[0].message.content, tokens: data.usage?.total_tokens || 0 };
 }
 
-async function fallbackAiCall(systemPrompt, userPrompt, useJson, maxTokens) {
-  // Provider fallback order
+async function callNvidia(apiKey, systemPrompt, userPrompt, useJson, maxTokens, modelOverride) {
+  const model = modelOverride || process.env.NVIDIA_MODEL_NAME || 'meta/llama-3.3-70b-instruct';
+  const body = {
+    model: model,
+    max_tokens: maxTokens || 1500,
+    messages: [
+      { role: 'system', content: systemPrompt },
+      { role: 'user', content: userPrompt || "Please proceed." }
+    ]
+  };
+  if (useJson) body.response_format = { type: "json_object" };
+
+  const response = await fetch('https://integrate.api.nvidia.com/v1/chat/completions', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${apiKey}`
+    },
+    body: JSON.stringify(body)
+  });
+
+  if (!response.ok) throw new Error(`NVIDIA Error: ${await response.text()}`);
+  const data = await response.json();
+  return { content: data.choices[0].message.content, tokens: data.usage?.total_tokens || 0 };
+}
+
+function getApiKeyForModel(modelName) {
+  if (!modelName) return process.env.NVIDIA_API_KEY;
+  const envKey = modelName
+    .toUpperCase()
+    .replace(/[^A-Z0-9]/g, '_') + '_API_KEY';
+  return process.env[envKey] || process.env.NVIDIA_API_KEY;
+}
+
+async function fallbackAiCall(systemPrompt, userPrompt, useJson, maxTokens, modelOverride, apiKeyOverride) {
+  const nvidiaKey = apiKeyOverride || getApiKeyForModel(modelOverride || 'meta/llama-3.3-70b-instruct');
+
+  // Provider fallback order - Priority given to NVIDIA NIM models
   const providers = [
+    { name: 'nvidia', key: nvidiaKey, fn: callNvidia },
     { name: 'anthropic', key: process.env.ANTHROPIC_API_KEY, fn: callAnthropic },
     { name: 'gemini', key: process.env.GEMINI_API_KEY, fn: callGemini },
     { name: 'openai', key: process.env.OPENAI_API_KEY || process.env.AI_API_KEY, fn: callOpenAI }
@@ -97,8 +134,9 @@ async function fallbackAiCall(systemPrompt, userPrompt, useJson, maxTokens) {
     if (!provider.key) continue;
 
     try {
-      console.log(`[AI Engine] Attempting request via ${provider.name.toUpperCase()}...`);
-      return await provider.fn(provider.key, systemPrompt, userPrompt, useJson, maxTokens);
+      const activeModel = provider.name === 'nvidia' ? (modelOverride || 'default') : 'default';
+      console.log(`[AI Engine] Attempting request via ${provider.name.toUpperCase()} (model: ${activeModel})...`);
+      return await provider.fn(provider.key, systemPrompt, userPrompt, useJson, maxTokens, provider.name === 'nvidia' ? modelOverride : undefined);
     } catch (err) {
       console.warn(`[AI Fallback] ${provider.name.toUpperCase()} failed: ${err.message}. Routing to next provider...`);
       lastError = err;
@@ -180,14 +218,16 @@ This week, the operations team demonstrated exceptional adaptation in AI workflo
 // Helper to record metrics
 async function recordMetric(type, agentName, data, tokens = 0, cost = 0, quality = 100) {
     try {
-        await SystemMetric.create({
+        await db.collection('system_metrics').add({
             type,
             agentName,
             status: data.error ? 'failed' : 'success',
             tokensUsed: tokens,
             cost: cost || (tokens * 0.00001), 
             qualityScore: quality,
-            metadata: { error: data.error }
+            metadata: { error: data.error },
+            createdAt: new Date(),
+            timestamp: new Date()
         });
     } catch (err) {
         console.error('Failed to record metric:', err);
@@ -218,7 +258,7 @@ Return ONLY valid JSON matching this schema:
 `;
 
     try {
-        const { content, tokens } = await fallbackAiCall(prompt, `Company: ${companyName}, Domain: ${domain}`, true, 600);
+        const { content, tokens } = await fallbackAiCall(prompt, `Company: ${companyName}, Domain: ${domain}`, true, 600, 'meta/llama-3.1-8b-instruct');
         const result = JSON.parse(content);
         await recordMetric('agent_run', 'Research Agent', result, tokens);
         return result;
@@ -261,7 +301,7 @@ JSON Schema:
 `;
 
     try {
-        const { content, tokens } = await fallbackAiCall(prompt, 'Generate challenge JSON.', true, 800);
+        const { content, tokens } = await fallbackAiCall(prompt, 'Generate challenge JSON.', true, 800, 'meta/llama-3.3-70b-instruct');
         const result = JSON.parse(content);
         await recordMetric('agent_run', 'Challenge Generator', result, tokens);
         return result;
@@ -306,7 +346,7 @@ Return ONLY JSON:
     const userMsg = `CHALLENGE:\n${challenge.scenario} | ${challenge.task}\n\nRESPONSE:\n${responseText}`;
 
     try {
-        const { content, tokens } = await fallbackAiCall(prompt, userMsg, true, 800);
+        const { content, tokens } = await fallbackAiCall(prompt, userMsg, true, 800, 'meta/llama-3.3-70b-instruct');
         const result = JSON.parse(content);
         result.total_score = result.clarity + result.constraint_application + result.output_specificity + result.iteration_quality;
         
@@ -335,7 +375,7 @@ Output Format: Markdown with sections for Executive Summary, Top Discovered Work
 `;
 
     try {
-        const { content, tokens } = await fallbackAiCall(prompt, 'Write report.', false, 2500);
+        const { content, tokens } = await fallbackAiCall(prompt, 'Write report.', false, 2500, 'meta/llama-3.3-70b-instruct');
         await recordMetric('agent_run', 'Report Agent', { length: content.length }, tokens);
         return content;
     } catch (err) {
@@ -361,7 +401,7 @@ INPUT:
 `;
 
     try {
-        const { content, tokens } = await fallbackAiCall(prompt, 'Write nudge.', false, 300);
+        const { content, tokens } = await fallbackAiCall(prompt, 'Write nudge.', false, 300, 'meta/llama-3.1-8b-instruct');
         await recordMetric('agent_run', 'Coaching Agent', { length: content.length }, tokens);
         return content;
     } catch (err) {

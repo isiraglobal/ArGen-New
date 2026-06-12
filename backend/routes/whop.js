@@ -2,10 +2,10 @@ const express = require('express');
 const router = express.Router();
 const crypto = require('crypto');
 const { Whop } = require('@whop/sdk');
-const Company = require('../models/Company');
-const Subscription = require('../models/Subscription');
-const Invitation = require('../models/Invitation');
-const { sendEmail } = require('../utils/email');
+const { db } = require('../utils/supabase');
+const sendEmail = require('../utils/sendEmail');
+const { createEmailTemplate } = require('../utils/emailTemplate');
+const { protect } = require('../middleware/auth');
 
 // Initialize Whop SDK
 const whop = new Whop({
@@ -90,7 +90,7 @@ router.post('/webhook', express.raw({type: 'application/json'}), async (req, res
 
 // GET /api/whop/portal
 // Protected: Only accessible to TeamAdmin
-router.get('/portal', async (req, res) => {
+router.get('/portal', protect, async (req, res) => {
   try {
     if (!req.user || req.user.role !== 'teamadmin') {
       return res.status(401).json({ error: 'Unauthorized. TeamAdmin only.' });
@@ -121,55 +121,79 @@ async function handleMembershipValid(data) {
   }
 
   // Check if subscription already exists
-  const existingSub = await Subscription.findOne({ whopMembershipId });
-  if (existingSub) {
-    existingSub.status = 'active';
-    await existingSub.save();
-    await Company.findByIdAndUpdate(existingSub.companyId, { subscriptionStatus: 'active' });
+  const subSnap = await db.collection('subscriptions')
+    .where('whopMembershipId', '==', whopMembershipId)
+    .get();
+
+  if (!subSnap.empty) {
+    const subDoc = subSnap.docs[0];
+    await subDoc.ref.update({ status: 'active' });
+    
+    const companyId = subDoc.data().companyId;
+    await db.collection('companies').doc(companyId).update({ subscriptionStatus: 'active' });
     return;
   }
 
-  // Create Company
-  const newCompany = await Company.create({
+  // Create Company doc
+  const newCompany = {
     name: companyName,
     whopUserId,
     plan,
     seatLimit,
     subscriptionStatus: 'active',
-    status: 'active'
-  });
+    status: 'active',
+    createdAt: new Date()
+  };
+  const compRef = await db.collection('companies').add(newCompany);
+  const companyId = compRef.id;
 
-  // Create Subscription
-  await Subscription.create({
-    companyId: newCompany._id,
+  // Create Subscription doc
+  const newSub = {
+    companyId,
     whopMembershipId,
     whopUserId,
     plan,
     seatLimit,
-    status: 'active'
-  });
+    status: 'active',
+    createdAt: new Date()
+  };
+  await db.collection('subscriptions').add(newSub);
 
   // Generate Invite Token
   const token = crypto.randomBytes(32).toString('hex');
   const expiresAt = new Date();
   expiresAt.setHours(expiresAt.getHours() + 48); // 48 hr expiry
 
-  await Invitation.create({
-    companyId: newCompany._id,
+  const newInvitation = {
+    companyId,
     token,
     expiresAt,
     createdBy: null,
-    status: 'pending'
-  });
+    status: 'pending',
+    used: false,
+    createdAt: new Date()
+  };
+  await db.collection('invitations').add(newInvitation);
 
   // Send Welcome Email
-  const { generateWelcomeEmail } = require('../utils/emailTemplates');
-  const registrationLink = `${process.env.CLIENT_URL || 'http://localhost:5001'}/registration?approval=true&team_id=${token}`;
+  const registrationLink = `${process.env.CLIENT_URL || 'https://argen.isira.club'}/registration?approval=true&team_id=${token}`;
   
+  const html = createEmailTemplate({
+    title: 'Welcome to ArGen! Complete your setup',
+    preheader: 'Complete your administrative setup and invite your team.',
+    bodyContent: `
+        <h1>Welcome to ArGen</h1>
+        <p>Your subscription is active for <strong>${companyName}</strong> with a seat limit of <strong>${seatLimit}</strong>.</p>
+        <p>Click the secure link below to complete your administrative setup and invite your team members.</p>
+    `,
+    buttonText: 'Complete Setup',
+    buttonUrl: registrationLink
+  });
+
   await sendEmail({
-    email: email, // updated parameter for sendEmail.js
+    email: email,
     subject: `Welcome to ArGen! Complete your setup`,
-    html: generateWelcomeEmail(companyName, registrationLink)
+    html
   });
 
   console.log(`Auto-onboarded company: ${companyName} with ${seatLimit} seats`);
@@ -178,16 +202,16 @@ async function handleMembershipValid(data) {
 async function handleMembershipInvalid(data) {
   const whopMembershipId = data.id;
   
-  const sub = await Subscription.findOneAndUpdate(
-    { whopMembershipId },
-    { status: 'cancelled' }
-  );
+  const subSnap = await db.collection('subscriptions')
+    .where('whopMembershipId', '==', whopMembershipId)
+    .get();
 
-  if (sub) {
-    await Company.findByIdAndUpdate(
-      sub.companyId,
-      { subscriptionStatus: 'cancelled' }
-    );
+  if (!subSnap.empty) {
+    const subDoc = subSnap.docs[0];
+    await subDoc.ref.update({ status: 'cancelled' });
+
+    const companyId = subDoc.data().companyId;
+    await db.collection('companies').doc(companyId).update({ subscriptionStatus: 'cancelled' });
   }
 }
 

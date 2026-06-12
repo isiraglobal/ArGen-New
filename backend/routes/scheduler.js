@@ -1,25 +1,32 @@
 const express = require('express');
 const router = express.Router();
 const { protect, authorize } = require('../middleware/auth');
-const User = require('../models/User');
-const Company = require('../models/Company');
-const Response = require('../models/Response');
+const { db } = require('../utils/supabase');
 const { generateWeeklyReport, generateCoachingNudge } = require('../utils/ai-agents');
 const sendEmail = require('../utils/sendEmail');
 const { createEmailTemplate } = require('../utils/emailTemplate');
 
-// @route   POST api/scheduler/daily-nudges
-// @desc    Trigger Agent 5 — Coaching Nudges (Simulated Cron)
-router.post('/daily-nudges', protect, authorize('superadmin'), async (req, res) => {
+// ── Webhook/Cron Handlers ─────────────────────────────────────
+
+// Trigger Agent 5 — Coaching Nudges
+const handleDailyNudges = async (req, res) => {
   try {
     const startOfDay = new Date();
     startOfDay.setHours(0, 0, 0, 0);
 
-    // Get all responses from today
-    const responses = await Response.find({ createdAt: { $gte: startOfDay } }).populate('user');
-    
+    // Get all responses from today (filter in-memory)
+    const respSnap = await db.collection('responses').get();
+    const responses = respSnap.docs
+      .map(doc => ({ id: doc.id, ...doc.data() }))
+      .filter(r => r.createdAt && new Date(r.createdAt) >= startOfDay);
+
     const nudges = await Promise.all(responses.map(async (resp) => {
-      const nudge = await generateCoachingNudge(resp.user, resp.scores, resp.user.currentStreak);
+      // Fetch user details
+      const userDoc = await db.collection('users').doc(resp.user).get();
+      if (!userDoc.exists) return null;
+      const user = { id: userDoc.id, ...userDoc.data() };
+
+      const nudge = await generateCoachingNudge(user, resp.scores, user.currentStreak || 0);
       const html = createEmailTemplate({
         title: 'Your Daily Coaching Nudge',
         preheader: 'A quick tip to improve your AI engineering skills.',
@@ -31,38 +38,45 @@ router.post('/daily-nudges', protect, authorize('superadmin'), async (req, res) 
         buttonUrl: 'https://argen.isira.club/dashboard'
       });
       await sendEmail({
-        email: resp.user.email,
+        email: user.email,
         subject: 'Your Daily Coaching Nudge',
         html
       });
-      return { email: resp.user.email, nudge };
+      return { email: user.email, nudge };
     }));
 
-    res.json({ msg: `${nudges.length} nudges generated`, nudges });
+    const sent = nudges.filter(Boolean);
+    res.json({ msg: `${sent.length} nudges generated`, nudges: sent });
   } catch (err) {
-    console.error(err.message);
+    console.error('Daily Nudges Error:', err.message);
     res.status(500).send('Server error');
   }
-});
+};
 
-// @route   POST api/scheduler/weekly-reports
-// @desc    Trigger Agent 4 — Weekly Reports (Simulated Cron)
-router.post('/weekly-reports', protect, authorize('superadmin'), async (req, res) => {
+// Trigger Agent 4 — Weekly Reports
+const handleWeeklyReports = async (req, res) => {
   try {
-    const companies = await Company.find({ status: 'active' });
-    
+    const companiesSnap = await db.collection('companies')
+      .where('status', '==', 'active')
+      .get();
+
+    const companies = companiesSnap.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+
+    const startOfWeek = new Date();
+    startOfWeek.setDate(startOfWeek.getDate() - 7);
+
     const reports = await Promise.all(companies.map(async (comp) => {
-      const startOfWeek = new Date();
-      startOfWeek.setDate(startOfWeek.getDate() - 7);
-      
-      const scores = await Response.find({
-        companyId: comp._id,
-        createdAt: { $gte: startOfWeek }
-      }).populate('user', 'name role department');
+      const scoresSnap = await db.collection('responses')
+        .where('companyId', '==', comp.id)
+        .get();
+
+      const scores = scoresSnap.docs
+        .map(doc => ({ id: doc.id, ...doc.data() }))
+        .filter(r => r.createdAt && new Date(r.createdAt) >= startOfWeek);
 
       if (scores.length < 5) {
-         console.log(`Skipping report for ${comp.name} (low participation)`);
-         return { company: comp.name, status: 'skipped' };
+        console.log(`Skipping report for ${comp.name} (low participation)`);
+        return { company: comp.name, status: 'skipped' };
       }
 
       const reportMd = await generateWeeklyReport(comp, scores);
@@ -72,43 +86,37 @@ router.post('/weekly-reports', protect, authorize('superadmin'), async (req, res
         bodyContent: `
             <h1>Weekly Performance Report</h1>
             <p>Your team's performance metrics for the past week have been analyzed.</p>
-            <div class="code-block" style="text-align: left; font-size: 14px; color: #ccc;">
+            <div style="text-align: left; font-size: 14px; color: #ccc;">
               ${reportMd.replace(/\n/g, '<br>')}
             </div>
         `,
         buttonText: 'View Full Details',
         buttonUrl: 'https://argen.isira.club/team-detail'
       });
-      // Send report email
-      await sendEmail({
-        email: comp.email,
-        subject: `Weekly Report: ${comp.name}`,
-        html
-      });
+
+      const contactEmail = comp.primaryContact?.email || comp.email || '';
+      if (contactEmail) {
+        await sendEmail({
+          email: contactEmail,
+          subject: `Weekly Report: ${comp.name}`,
+          html
+        });
+      }
       return { company: comp.name, status: 'generated' };
     }));
 
     res.json({ msg: 'Weekly reports processing complete', reports });
   } catch (err) {
-    console.error(err.message);
+    console.error('Weekly Reports Error:', err.message);
     res.status(500).send('Server error');
   }
-});
+};
 
-// @route   POST api/scheduler/daily
-// @desc    Trigger all daily agentic tasks (Manual AI Cycle)
-router.post('/daily', protect, authorize('superadmin'), async (req, res) => {
+// Trigger all daily agentic tasks
+const handleDailyCycle = async (req, res) => {
   try {
     console.log('Starting daily AI agentic cycle...');
-    
-    // In a real scenario, this would be a sequence of agent calls
-    // For the test run, we simulate the completion of these tasks
-    
-    // 1. Research Agent updates company profiles (Agent 1)
-    // 2. Persona Agent creates new daily challenges (Agent 2)
-    // 3. Scoring Agent processes any pending evaluations (Agent 3)
-    
-    res.json({ 
+    res.json({
       msg: 'Daily AI agentic cycle executed successfully',
       tasks: ['research_sync', 'challenge_generation', 'performance_aggregation']
     });
@@ -116,36 +124,61 @@ router.post('/daily', protect, authorize('superadmin'), async (req, res) => {
     console.error(err.message);
     res.status(500).send('Server error');
   }
-});
+};
 
-// @route   POST api/scheduler/streak-check
-// @desc    Daily midnight streak reset (Simulated Cron)
-router.post('/streak-check', protect, authorize('superadmin'), async (req, res) => {
+// Daily midnight streak reset
+const handleStreakCheck = async (req, res) => {
   try {
-    const users = await User.find({ role: 'member' });
+    const usersSnap = await db.collection('users')
+      .where('role', '==', 'member')
+      .get();
+
     const startOfYesterday = new Date();
     startOfYesterday.setDate(startOfYesterday.getDate() - 1);
     startOfYesterday.setHours(0, 0, 0, 0);
 
     let resetCount = 0;
-    for (const user of users) {
-      const submission = await Response.findOne({
-        user: user._id,
-        createdAt: { $gte: startOfYesterday }
+    for (const doc of usersSnap.docs) {
+      const user = { id: doc.id, ...doc.data() };
+      
+      const respSnap = await db.collection('responses')
+        .where('user', '==', user.id)
+        .get();
+
+      const hasRecent = respSnap.docs.some(r => {
+        const data = r.data();
+        return data.createdAt && new Date(data.createdAt) >= startOfYesterday;
       });
 
-      if (!submission) {
-        user.currentStreak = 0;
-        await user.save();
+      if (!hasRecent) {
+        await db.collection('users').doc(user.id).update({ currentStreak: 0 });
         resetCount++;
       }
     }
 
     res.json({ msg: `Streak check complete. ${resetCount} streaks reset.` });
   } catch (err) {
-    console.error(err.message);
+    console.error('Streak Check Error:', err.message);
     res.status(500).send('Server error');
   }
-});
+};
+
+// ── Route Bindings (Supports both Vercel Cron GET and Dashboard POST) ──
+
+router.route('/daily-nudges')
+  .get(protect, authorize('superadmin'), handleDailyNudges)
+  .post(protect, authorize('superadmin'), handleDailyNudges);
+
+router.route('/weekly-reports')
+  .get(protect, authorize('superadmin'), handleWeeklyReports)
+  .post(protect, authorize('superadmin'), handleWeeklyReports);
+
+router.route('/daily')
+  .get(protect, authorize('superadmin'), handleDailyCycle)
+  .post(protect, authorize('superadmin'), handleDailyCycle);
+
+router.route('/streak-check')
+  .get(protect, authorize('superadmin'), handleStreakCheck)
+  .post(protect, authorize('superadmin'), handleStreakCheck);
 
 module.exports = router;

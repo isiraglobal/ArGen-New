@@ -7,6 +7,7 @@
   <link rel="icon" type="image/png" href="../images/ArGen Logo.png">
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="../css/style.css">
+  <script src="../js/auth-guard.js"></script>
   <style>
     .admin-grid {
       display: grid;
@@ -92,9 +93,12 @@
       border-color: rgba(255, 255, 255, 0.08);
     }
   </style>
+  <script>
+    window.si = window.si || function () { (window.siq = window.siq || []).push(arguments); };
+  </script>
+  <script defer src="/_vercel/speed-insights/script.js"></script>
 </head>
 <body class="bg-black">
-  <script src="../js/auth-guard.js"></script>
   <header class="nav nav-always-visible">
     <div class="nav-inner">
       <a href="/" class="nav-logo">
@@ -274,7 +278,7 @@
       container.innerHTML = logs.map(log => `
         <div style="padding: 0.5rem; border-bottom: 1px solid rgba(255,255,255,0.05); display: flex; justify-content: space-between;">
           <span>
-            <span style="color: var(--text-sec);">${new Date(log.timestamp).toLocaleTimeString()}</span>
+            <span style="color: var(--text-sec);">${new Date(log.timestamp || log.createdAt).toLocaleTimeString()}</span>
             <span style="color: var(--argen-blue); margin-left: 0.5rem;">[${log.agentName.toUpperCase()}]</span>
           </span>
           <span style="color: ${log.status === 'success' ? 'var(--green)' : '#ef4444'}">${log.tokensUsed} tokens</span>
@@ -283,16 +287,24 @@
     }
 
     function initCharts(stats) {
+      const cData = stats.chartData || {
+        labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+        calls: [120, 80, 450, 900, 1100, 850, 400],
+        quality: [92, 94, 91, 95, 93, 96, parseFloat(stats.usage.avgQuality || 95)],
+        tokens: [1200, 800, 1500, 2000, 500],
+        radar: [85, 92, 78, 95, 88]
+      };
+
       // Usage Chart
       const ctxU = document.getElementById('usageChart').getContext('2d');
       if (charts.usage) charts.usage.destroy();
       charts.usage = new Chart(ctxU, {
         type: 'line',
         data: {
-          labels: ['12am', '4am', '8am', '12pm', '4pm', '8pm', 'Now'],
+          labels: cData.labels,
           datasets: [{
             label: 'API Calls',
-            data: [120, 80, 450, 900, 1100, 850, 400],
+            data: cData.calls,
             borderColor: '#2b60e2',
             tension: 0.4,
             fill: true,
@@ -308,10 +320,10 @@
       charts.quality = new Chart(ctxQ, {
         type: 'line',
         data: {
-          labels: ['M', 'T', 'W', 'T', 'F', 'S', 'S'],
+          labels: cData.labels,
           datasets: [{
             label: 'Avg Quality',
-            data: [92, 94, 91, 95, 93, 96, parseFloat(stats.usage.avgQuality)],
+            data: cData.quality,
             borderColor: '#2b60e2',
             tension: 0.4,
             fill: true,
@@ -330,7 +342,7 @@
           labels: ['Res', 'Cha', 'Sco', 'Rep', 'Coa'],
           datasets: [{
             label: 'Tokens',
-            data: [1200, 800, 1500, 2000, 500],
+            data: cData.tokens,
             backgroundColor: 'rgba(43, 96, 226, 0.5)',
             borderRadius: 4
           }]
@@ -347,7 +359,7 @@
           labels: ['Speed', 'Accuracy', 'Cost', 'Soul', 'Reliability'],
           datasets: [{
             label: 'Current Status',
-            data: [85, 92, 78, 95, 88],
+            data: cData.radar,
             borderColor: '#2b60e2',
             backgroundColor: 'rgba(43, 96, 226, 0.1)'
           }]
