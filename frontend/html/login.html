@@ -187,8 +187,36 @@
       gap: 1rem;
     }
 
+    .auth-process {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.75rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .auth-process-step {
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 8px;
+      padding: 0.9rem;
+      background: rgba(255, 255, 255, 0.025);
+    }
+
+    .auth-process-step strong {
+      display: block;
+      color: #fff;
+      font-size: 0.8rem;
+      margin-bottom: 0.25rem;
+    }
+
+    .auth-process-step span {
+      color: var(--text-sec);
+      font-size: 0.72rem;
+      line-height: 1.45;
+    }
+
     @media (max-width: 480px) {
-      .form-row {
+      .form-row,
+      .auth-process {
         grid-template-columns: 1fr;
       }
     }
@@ -210,7 +238,7 @@
         <a href="/pricing" class="nav-link">Pricing</a>
         <a href="/about" class="nav-link">About</a>
       </nav>
-      <a href="/evaluate" class="nav-cta">Get Started →</a>
+      <a href="/login" class="nav-cta">Login First →</a>
       <button class="nav-burger" id="burger" aria-label="Menu">
         <span></span><span></span><span></span>
       </button>
@@ -227,7 +255,7 @@
         <a href="/contact" class="mm-link">05 Contact</a>
       </div>
       <div class="mm-footer">
-        <a href="/evaluate" class="btn btn-primary btn-full">Get Started</a>
+        <a href="/login" class="btn btn-primary btn-full">Login First</a>
       </div>
     </div>
   </div>
@@ -240,11 +268,22 @@
       <a href="/">
         <img src="../images/ArGen Logo.png" alt="ArGen" style="height: 72px; width: auto; margin: 0 auto 1.5rem;">
       </a>
-      <h1 class="section-h2" style="margin-bottom: 0.5rem; font-size: 2.5rem; letter-spacing: -0.03em;">Access <i class="soul-text">Portal</i></h1>
-      <p class="section-sub" style="font-size: 0.95rem; opacity: 0.7;">Secure, multi-tenant workspace management</p>
+      <h1 class="section-h2" style="margin-bottom: 0.5rem; font-size: clamp(2.6rem, 6vw, 4.2rem); letter-spacing: -0.03em;">Step 1: <i class="soul-text">Supabase Login</i></h1>
+      <p class="section-sub" style="font-size: 1.05rem; opacity: 0.8; max-width: 620px; margin: 0 auto;">Authenticate first. Then ArGen asks for the team code and employee profile details so every workspace stays tied to an individual login.</p>
     </div>
 
     <div class="auth-card">
+      <div class="auth-process">
+        <div class="auth-process-step">
+          <strong>1. Secure Login</strong>
+          <span>Email/password or Google through Supabase Auth.</span>
+        </div>
+        <div class="auth-process-step">
+          <strong>2. Team Code + Profile</strong>
+          <span>After login, submit HR essentials and the team code.</span>
+        </div>
+      </div>
+
       <div class="auth-tabs">
         <div class="auth-tab active" id="loginTab">Login</div>
         <div class="auth-tab" onclick="window.location.href='/waitlist'">Join Waiting List</div>
@@ -319,7 +358,7 @@
          </div>
          <div class="footer-links">
            <span class="footer-label">Product</span>
-           <a href="/evaluate" class="footer-link">Evaluate</a>
+           <a href="/login" class="footer-link">Login First</a>
            <a href="/pricing" class="footer-link">Pricing</a>
            <a href="/challenges" class="footer-link">Challenges</a>
          </div>
@@ -340,9 +379,9 @@
        </div>
      </div>
    </footer>
-   <script type="module" src="../js/supabase-config.js"></script>
-   <script src="../js/api.js"></script>
-   <script>
+  <script src="../js/api.js"></script>
+  <script type="module" src="../js/supabase-config.js"></script>
+  <script>
      document.addEventListener('DOMContentLoaded', () => {
        const messageEl = document.getElementById('authMessage');
  
@@ -356,26 +395,41 @@
        };
  
        // Login Submission
+       const params = new URLSearchParams(window.location.search);
+       const codeFromUrl = params.get('code');
+       if (codeFromUrl) {
+         sessionStorage.setItem('pending_team_code', codeFromUrl.toUpperCase());
+         localStorage.setItem('pending_team_code', codeFromUrl.toUpperCase());
+       }
+
        document.getElementById('loginForm').addEventListener('submit', async (e) => {
          e.preventDefault();
          const email = e.target.querySelector('input[type="email"]').value;
          const password = e.target.querySelector('input[type="password"]').value;
+         const teamCode = sessionStorage.getItem('pending_team_code') || localStorage.getItem('pending_team_code') || '';
  
          try {
            const data = await argenApi.login(email, password);
            showMessage('Login successful! Redirecting...', 'success');
            
-           setTimeout(() => {
+           setTimeout(async () => {
+             const me = await argenApi.getMe();
+             localStorage.setItem('user', JSON.stringify(me));
+             argenApi.setCookie('user', JSON.stringify(me), 7);
+             if (!me.profileComplete) {
+               window.location.href = teamCode ? `/onboarding?code=${encodeURIComponent(teamCode)}` : '/onboarding';
+               return;
+             }
+             if (me.companyId) sessionStorage.setItem('team_verified', 'true');
              const role = data.user.role.toLowerCase();
              if (role === 'superadmin') {
                showMessage('Administrative account detected. Redirecting to secure terminal...', 'success');
-               setTimeout(() => {
-                 window.location.href = '/admin-portal';
-               }, 1500);
+               setTimeout(() => { window.location.href = '/admin-portal'; }, 1500);
              } else if (role === 'teamadmin') {
-               window.location.href = '/teams';
+               const next = new URLSearchParams(window.location.search).get('redirect') || '/dashboard';
+               window.location.href = next;
              } else {
-               window.location.href = '/teams'; // Members also need team verification
+               window.location.href = '/dashboard';
              }
            }, 1000);
          } catch (error) {
@@ -412,7 +466,9 @@
              name: 'Guest Explorer',
              email: 'guest@demo.argen',
              role: 'teamadmin',
-             companyId: 'demo-company-id'
+             companyId: 'demo-company-id',
+             profileComplete: true,
+             profileStatus: 'approved'
            }));
            sessionStorage.setItem('team_verified', 'true');
            window.location.href = '/dashboard';

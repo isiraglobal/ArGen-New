@@ -5,8 +5,8 @@
     "semantic_hash": "7986ac9025c4170791538f88db307c86"
   },
   "/Users/lakshitsinghvi/Documents/ArGen - New Look/vercel.json": {
-    "mtime": 1781270406.7827952,
-    "ast_hash": "3f224ea19139dd57ad4616b588f84b54",
+    "mtime": 1781560083.9147837,
+    "ast_hash": "b2056ca28148f1b3d6cadaec03e33afc",
     "semantic_hash": ""
   },
   "/Users/lakshitsinghvi/Documents/ArGen - New Look/test-flow.js": {
@@ -14,19 +14,34 @@
     "ast_hash": "2d1f5a70aecc55c7a6e2fd3e081a144d",
     "semantic_hash": ""
   },
+  "/Users/lakshitsinghvi/Documents/ArGen - New Look/get_passcode.js": {
+    "mtime": 1781290761.129255,
+    "ast_hash": "ecee94f72184e0a02522a5baa29c8af0",
+    "semantic_hash": ""
+  },
   "/Users/lakshitsinghvi/Documents/ArGen - New Look/package.json": {
     "mtime": 1781270755.1203287,
     "ast_hash": "19f1530c858487fe16506c5c05d364ac",
     "semantic_hash": ""
   },
+  "/Users/lakshitsinghvi/Documents/ArGen - New Look/frontend/js/onboarding.js": {
+    "mtime": 1781610133.9357557,
+    "ast_hash": "83fe056a75a4f7ae2b20c6c4e06c833e",
+    "semantic_hash": ""
+  },
+  "/Users/lakshitsinghvi/Documents/ArGen - New Look/frontend/js/connect.js": {
+    "mtime": 1781558578.9302316,
+    "ast_hash": "762e82970600d36be1257b8523bead01",
+    "semantic_hash": ""
+  },
   "/Users/lakshitsinghvi/Documents/ArGen - New Look/frontend/js/auth-guard.js": {
-    "mtime": 1781270595.7609267,
-    "ast_hash": "9a8463f70132a122481132c517d7e0b1",
+    "mtime": 1781611034.5333192,
+    "ast_hash": "473eae3f5ca761c62c082c5d718a574d",
     "semantic_hash": ""
   },
   "/Users/lakshitsinghvi/Documents/ArGen - New Look/frontend/js/script.js": {
-    "mtime": 1781271072.9469388,
-    "ast_hash": "da6f7e52174966b76c9f7c8c73388d84",
+    "mtime": 1781610748.1105912,
+    "ast_hash": "2abc3f54de72d036ce53d0b86bb6dd2a",
     "semantic_hash": ""
   },
   "/Users/lakshitsinghvi/Documents/ArGen - New Look/frontend/js/supabase-config.js": {
@@ -35,13 +50,13 @@
     "semantic_hash": ""
   },
   "/Users/lakshitsinghvi/Documents/ArGen - New Look/frontend/js/dashboard.js": {
-    "mtime": 1781270188.5705588,
-    "ast_hash": "ddec7575d3b1a9823686e6cfa2717f6b",
+    "mtime": 1781610782.4812236,
+    "ast_hash": "d06faa7b0f0f24696eeae68074efb108",
     "semantic_hash": ""
   },
   "/Users/lakshitsinghvi/Documents/ArGen - New Look/frontend/js/api.js": {
-    "mtime": 1781290112.4748871,
-    "ast_hash": "b2f38c2cf933c77056d8dbbe74679c89",
+    "mtime": 1781610079.4664474,
+    "ast_hash": "f5092f199387ea3625cd5fdc4d3f8e48",
     "semantic_hash": ""
   },
   "/Users/lakshitsinghvi/Documents/ArGen - New Look/frontend/js/firebase-config.js": {
@@ -49,9 +64,14 @@
     "ast_hash": "968c438f5f8bace59654213b90c6baf9",
     "semantic_hash": ""
   },
+  "/Users/lakshitsinghvi/Documents/ArGen - New Look/frontend/js/ops-dashboard.js": {
+    "mtime": 1781610379.3672807,
+    "ast_hash": "abaa582e7143d28f038daa94903450ce",
+    "semantic_hash": ""
+  },
   "/Users/lakshitsinghvi/Documents/ArGen - New Look/backend/server.js": {
-    "mtime": 1781287918.9515715,
-    "ast_hash": "96c04e642fb7295956137595c72c1830",
+    "mtime": 1781560113.0958097,
+    "ast_hash": "26e6d33d7c47b83b3e46662ab74e03d8",
     "semantic_hash": ""
   },
   "/Users/lakshitsinghvi/Documents/ArGen - New Look/backend/test_db_login.js": {
@@ -70,8 +90,8 @@
     "semantic_hash": "c097c6f47c27688ca670cf21e3914389"
   },
   "/Users/lakshitsinghvi/Documents/ArGen - New Look/backend/middleware/auth.js": {
-    "mtime": 1781270399.210216,
-    "ast_hash": "56dbc429e4c4300bdb31ec0f022ce0d5",
+    "mtime": 1781558539.4045932,
+    "ast_hash": "0588d1febb08614d2d199f3c7cec5f1b",
     "semantic_hash": ""
   },
   "/Users/lakshitsinghvi/Documents/ArGen - New Look/backend/middleware/adminAuth.js": {
@@ -84,9 +104,14 @@
     "ast_hash": "a871cbf9d68301f88d0a7d81e93fffb3",
     "semantic_hash": "a871cbf9d68301f88d0a7d81e93fffb3"
   },
+  "/Users/lakshitsinghvi/Documents/ArGen - New Look/backend/utils/ai-providers.js": {
+    "mtime": 1781558496.491833,
+    "ast_hash": "57e0c5000405a91244acb9cba8779a55",
+    "semantic_hash": ""
+  },
   "/Users/lakshitsinghvi/Documents/ArGen - New Look/backend/utils/supabase.js": {
-    "mtime": 1781118736.8855991,
-    "ast_hash": "ba801797994d7ce2505f9a923bd7fda1",
+    "mtime": 1781535725.5613844,
+    "ast_hash": "4a90ecd6a98b82c69f7cdfc0d4a74c80",
     "semantic_hash": ""
   },
   "/Users/lakshitsinghvi/Documents/ArGen - New Look/backend/utils/emailTemplate.js": {
@@ -95,14 +120,14 @@
     "semantic_hash": "70bf08bea78d024d9639bb707ffcf8a7"
   },
   "/Users/lakshitsinghvi/Documents/ArGen - New Look/backend/utils/ai-agents.js": {
-    "mtime": 1781271859.4659917,
-    "ast_hash": "ee70ed0a115d98e83ca44baf32fb1d73",
+    "mtime": 1781535797.2495534,
+    "ast_hash": "66d64dcc55af4cc24cbf13b73aec5615",
     "semantic_hash": ""
   },
   "/Users/lakshitsinghvi/Documents/ArGen - New Look/backend/utils/calibration.js": {
-    "mtime": 1778343032.366706,
-    "ast_hash": "00debad4770d2e5f6783f58a31d07fff",
-    "semantic_hash": "00debad4770d2e5f6783f58a31d07fff"
+    "mtime": 1781558468.011362,
+    "ast_hash": "a0596ae0489ec6dac07d323e966792ca",
+    "semantic_hash": ""
   },
   "/Users/lakshitsinghvi/Documents/ArGen - New Look/backend/utils/emailTemplates.js": {
     "mtime": 1778524572.615196,
@@ -180,8 +205,8 @@
     "semantic_hash": "f6b3451b06233db97bf4eb6f140db07b"
   },
   "/Users/lakshitsinghvi/Documents/ArGen - New Look/backend/scripts/supabase-schema.sql": {
-    "mtime": 1781209469.7811384,
-    "ast_hash": "75d98f7a23c4cd6a564621fe46141c79",
+    "mtime": 1781559961.831653,
+    "ast_hash": "04605423d55e9e2eeb5605520dc820c9",
     "semantic_hash": ""
   },
   "/Users/lakshitsinghvi/Documents/ArGen - New Look/backend/routes/ai.js": {
@@ -189,19 +214,29 @@
     "ast_hash": "43f27365daa09f922367f09850081ec6",
     "semantic_hash": ""
   },
+  "/Users/lakshitsinghvi/Documents/ArGen - New Look/backend/routes/hr.js": {
+    "mtime": 1781610049.5261436,
+    "ast_hash": "bd19e3424001e04ad42edebea717e42f",
+    "semantic_hash": ""
+  },
   "/Users/lakshitsinghvi/Documents/ArGen - New Look/backend/routes/evaluations.js": {
-    "mtime": 1781288143.8782156,
-    "ast_hash": "c7b4835c1e2ad11e0bc57c8fc6018bbb",
+    "mtime": 1781558468.2648163,
+    "ast_hash": "5c5e5d6ac04c0bc9aa8b3eed7ca84c4f",
     "semantic_hash": ""
   },
   "/Users/lakshitsinghvi/Documents/ArGen - New Look/backend/routes/responses.js": {
-    "mtime": 1781118771.3082604,
-    "ast_hash": "31b667517805b8122774068b3337e019",
+    "mtime": 1781535767.1180577,
+    "ast_hash": "fe627f7cb47d591978cf473f4244f2ec",
     "semantic_hash": ""
   },
   "/Users/lakshitsinghvi/Documents/ArGen - New Look/backend/routes/auth.js": {
-    "mtime": 1781288060.900119,
-    "ast_hash": "8771a9e740bdd3a353c6893c2fd8e04f",
+    "mtime": 1781609988.6028724,
+    "ast_hash": "e84423fdbc15ce97fff880e8666e9620",
+    "semantic_hash": ""
+  },
+  "/Users/lakshitsinghvi/Documents/ArGen - New Look/backend/routes/connect.js": {
+    "mtime": 1781558504.2165043,
+    "ast_hash": "4bb1bb0c2c2b0d3f973662c6a9ca8c11",
     "semantic_hash": ""
   },
   "/Users/lakshitsinghvi/Documents/ArGen - New Look/backend/routes/leaderboard.js": {
@@ -215,13 +250,18 @@
     "semantic_hash": "f5d28fc67d36f46fc96e77583285408d"
   },
   "/Users/lakshitsinghvi/Documents/ArGen - New Look/backend/routes/whop.js": {
-    "mtime": 1781287928.062806,
-    "ast_hash": "604f097bf65a53c310b791026c7c5e2d",
+    "mtime": 1781558549.2748592,
+    "ast_hash": "0006e7908154693314bf82e09d63bce6",
+    "semantic_hash": ""
+  },
+  "/Users/lakshitsinghvi/Documents/ArGen - New Look/backend/routes/analytics.js": {
+    "mtime": 1781558511.0988786,
+    "ast_hash": "4bce70255afd554abe846bb6bf2e34b6",
     "semantic_hash": ""
   },
   "/Users/lakshitsinghvi/Documents/ArGen - New Look/backend/routes/scheduler.js": {
-    "mtime": 1781288122.9532,
-    "ast_hash": "6654a7f4e9e27f58bb104bb8514c9d64",
+    "mtime": 1781558621.4346979,
+    "ast_hash": "ff33c350b8f83a4d3e2ac108e971cd40",
     "semantic_hash": ""
   },
   "/Users/lakshitsinghvi/Documents/ArGen - New Look/backend/routes/challenges.js": {
@@ -230,14 +270,19 @@
     "semantic_hash": ""
   },
   "/Users/lakshitsinghvi/Documents/ArGen - New Look/backend/routes/admin.js": {
-    "mtime": 1781288099.6307313,
-    "ast_hash": "4edc391eca6f3056d13a138501ee42c9",
+    "mtime": 1781610026.869405,
+    "ast_hash": "624119a8f9be2bda1ee022d60f648b5d",
     "semantic_hash": ""
   },
   "/Users/lakshitsinghvi/Documents/ArGen - New Look/scratch/add_canonical.py": {
     "mtime": 1778181021.0235014,
     "ast_hash": "6c4d5dec60250e996faf58227c605ac0",
     "semantic_hash": "6c4d5dec60250e996faf58227c605ac0"
+  },
+  "/Users/lakshitsinghvi/Documents/ArGen - New Look/scratch/check_column_types.js": {
+    "mtime": 1781529247.627139,
+    "ast_hash": "45ea91dc875730c00ef1e54c625ff337",
+    "semantic_hash": ""
   },
   "/Users/lakshitsinghvi/Documents/ArGen - New Look/scratch/fix-roles.js": {
     "mtime": 1778952530.1218555,
@@ -254,10 +299,30 @@
     "ast_hash": "82e98cd29d853630dbf300a6517c4160",
     "semantic_hash": "82e98cd29d853630dbf300a6517c4160"
   },
+  "/Users/lakshitsinghvi/Documents/ArGen - New Look/scratch/inspect_db.js": {
+    "mtime": 1781529216.26987,
+    "ast_hash": "65db3d696942c32869efefc8ec06f7f4",
+    "semantic_hash": ""
+  },
+  "/Users/lakshitsinghvi/Documents/ArGen - New Look/scratch/run_migration.js": {
+    "mtime": 1781530908.8081155,
+    "ast_hash": "18d57dc39e271de953032bc6dd2cd142",
+    "semantic_hash": ""
+  },
+  "/Users/lakshitsinghvi/Documents/ArGen - New Look/scratch/automate_tests.py": {
+    "mtime": 1781529301.2328002,
+    "ast_hash": "7a231a80dd5f541b197cec3c6da5538f",
+    "semantic_hash": ""
+  },
   "/Users/lakshitsinghvi/Documents/ArGen - New Look/scratch/check_db.js": {
     "mtime": 1778964454.721863,
     "ast_hash": "892c1261b604b31ab7b0a1b12f7205e2",
     "semantic_hash": "892c1261b604b31ab7b0a1b12f7205e2"
+  },
+  "/Users/lakshitsinghvi/Documents/ArGen - New Look/scratch/migrations.sql": {
+    "mtime": 1781535313.21721,
+    "ast_hash": "5f31009040f21c2ca957e5d0b2318527",
+    "semantic_hash": ""
   },
   "/Users/lakshitsinghvi/Documents/ArGen - New Look/scratch/fix_asset_paths.py": {
     "mtime": 1778180990.1004453,
@@ -285,33 +350,33 @@
     "semantic_hash": ""
   },
   "/Users/lakshitsinghvi/Documents/ArGen - New Look/frontend/html/evaluate.html": {
-    "mtime": 1781270789.81779,
-    "ast_hash": "bdb773498f53fec3174eb510e9223122",
+    "mtime": 1781610748.1040971,
+    "ast_hash": "87a2ba958502903b5867f185564627ba",
     "semantic_hash": ""
   },
   "/Users/lakshitsinghvi/Documents/ArGen - New Look/frontend/html/admin-portal.html": {
-    "mtime": 1781270789.816088,
-    "ast_hash": "28756e9ba33e516050253b7f31bb899c",
+    "mtime": 1781560106.107748,
+    "ast_hash": "5e57f5cff0cdc7bb6d22d4e3e7a84f7d",
     "semantic_hash": ""
   },
   "/Users/lakshitsinghvi/Documents/ArGen - New Look/frontend/html/take-evaluation.html": {
-    "mtime": 1781270789.822261,
-    "ast_hash": "10f3a426abf104ae7fd2b12961f37efe",
+    "mtime": 1781530763.9935923,
+    "ast_hash": "319069e9a204e73f3bed9d97d0ee60ee",
     "semantic_hash": ""
   },
   "/Users/lakshitsinghvi/Documents/ArGen - New Look/frontend/html/payment-success.html": {
-    "mtime": 1781270824.2397718,
-    "ast_hash": "4e479b0e889338543afa4a2bee24ad8b",
+    "mtime": 1781610748.1048565,
+    "ast_hash": "dfeb1a701ce13b8089cf8057fc314e5f",
     "semantic_hash": ""
   },
   "/Users/lakshitsinghvi/Documents/ArGen - New Look/frontend/html/index.html": {
-    "mtime": 1781287951.6460164,
-    "ast_hash": "36f6fc81a9006d29f22533f89b6c418e",
+    "mtime": 1781610748.1052656,
+    "ast_hash": "2b0d13f91adc5289960a0c30bdd544c1",
     "semantic_hash": ""
   },
   "/Users/lakshitsinghvi/Documents/ArGen - New Look/frontend/html/about.html": {
-    "mtime": 1781287959.8013048,
-    "ast_hash": "16c3823a12caa195d50eecf426a82752",
+    "mtime": 1781610748.1061828,
+    "ast_hash": "f52cd059e88dfa5202a951ad35c8c6df",
     "semantic_hash": ""
   },
   "/Users/lakshitsinghvi/Documents/ArGen - New Look/frontend/html/admin-access.html": {
@@ -325,43 +390,43 @@
     "semantic_hash": ""
   },
   "/Users/lakshitsinghvi/Documents/ArGen - New Look/frontend/html/contact.html": {
-    "mtime": 1781270789.817067,
-    "ast_hash": "6072d7022e5b3c172ebc14639381fd4c",
+    "mtime": 1781610748.1067286,
+    "ast_hash": "5a48bb9f3ced5efee49aebd4c24be15b",
     "semantic_hash": ""
   },
   "/Users/lakshitsinghvi/Documents/ArGen - New Look/frontend/html/team-detail.html": {
-    "mtime": 1781270789.822492,
-    "ast_hash": "2b3538908228c34d1c7598b0e2621a87",
+    "mtime": 1781610748.1069753,
+    "ast_hash": "955c6379431522d0f78f80371f145a35",
     "semantic_hash": ""
   },
   "/Users/lakshitsinghvi/Documents/ArGen - New Look/frontend/html/pricing.html": {
-    "mtime": 1781270824.2400858,
-    "ast_hash": "940b1ac933993d6483c05b7eee9d4c57",
+    "mtime": 1781610748.1073868,
+    "ast_hash": "dfd96824c90b1fcdb5e8c910de91ad92",
     "semantic_hash": ""
   },
   "/Users/lakshitsinghvi/Documents/ArGen - New Look/frontend/html/terms.html": {
-    "mtime": 1781270789.8231516,
-    "ast_hash": "2d85789f4ad7e62a983bfc4faa7bd215",
+    "mtime": 1781610748.1077185,
+    "ast_hash": "9ba6cd0cefe1ee8764cbbaff5ac90502",
     "semantic_hash": ""
   },
   "/Users/lakshitsinghvi/Documents/ArGen - New Look/frontend/html/login.html": {
-    "mtime": 1781290137.0965796,
-    "ast_hash": "9b38cf883a7565159906a82104156004",
+    "mtime": 1781610748.1082845,
+    "ast_hash": "40ae0dfbda51a66935188450f16e12a0",
     "semantic_hash": ""
   },
   "/Users/lakshitsinghvi/Documents/ArGen - New Look/frontend/html/oauth.html": {
-    "mtime": 1781270824.2391233,
-    "ast_hash": "3118660d5171fb2fe7bfd589aaf276b6",
+    "mtime": 1781610172.132946,
+    "ast_hash": "284816704eaf920663ad2e85a6aa13b8",
     "semantic_hash": ""
   },
   "/Users/lakshitsinghvi/Documents/ArGen - New Look/frontend/html/dashboard.html": {
-    "mtime": 1781270789.8174348,
-    "ast_hash": "af64a5440bf1cfbb92155dce6ef8a40f",
+    "mtime": 1781610214.968266,
+    "ast_hash": "488dc72b4e69f86097f931fb85a6dd5a",
     "semantic_hash": ""
   },
   "/Users/lakshitsinghvi/Documents/ArGen - New Look/frontend/html/payment-failed.html": {
-    "mtime": 1781270824.239533,
-    "ast_hash": "4b2f36f770105929f366772309486ee9",
+    "mtime": 1781610748.1086636,
+    "ast_hash": "7b85572865716520bd042bf6660b8adc",
     "semantic_hash": ""
   },
   "/Users/lakshitsinghvi/Documents/ArGen - New Look/frontend/html/teams.html": {
@@ -370,13 +435,13 @@
     "semantic_hash": ""
   },
   "/Users/lakshitsinghvi/Documents/ArGen - New Look/frontend/html/registration.html": {
-    "mtime": 1781270824.2405372,
-    "ast_hash": "ec3b54e905ec506799cdbb21d48c243b",
+    "mtime": 1781610748.1091528,
+    "ast_hash": "2c7e6eb21172e9b468e599dd59b4ab4e",
     "semantic_hash": ""
   },
   "/Users/lakshitsinghvi/Documents/ArGen - New Look/frontend/html/challenges.html": {
-    "mtime": 1781270789.816649,
-    "ast_hash": "68f63f31a78039e220e860a04576add9",
+    "mtime": 1781610748.1095371,
+    "ast_hash": "897040e425f2412f1d596ada963768f6",
     "semantic_hash": ""
   },
   "/Users/lakshitsinghvi/Documents/ArGen - New Look/frontend/html/robots.txt": {
@@ -385,13 +450,28 @@
     "semantic_hash": "8d7d334b3470c025a9e8f3abdae4205e"
   },
   "/Users/lakshitsinghvi/Documents/ArGen - New Look/frontend/html/waitlist.html": {
-    "mtime": 1781270789.823443,
-    "ast_hash": "bfdeac4eb9e6a293701d0913f02a0fbf",
+    "mtime": 1781610748.1098056,
+    "ast_hash": "48c7a3512339777c33947e6c52331e85",
+    "semantic_hash": ""
+  },
+  "/Users/lakshitsinghvi/Documents/ArGen - New Look/frontend/html/connect.html": {
+    "mtime": 1781558572.4998062,
+    "ast_hash": "c480bf59cf7693886105b0228a3f836a",
     "semantic_hash": ""
   },
   "/Users/lakshitsinghvi/Documents/ArGen - New Look/frontend/html/privacy.html": {
-    "mtime": 1781270789.821602,
-    "ast_hash": "d9fe954830c1fda6982df2f6c98eaf00",
+    "mtime": 1781610748.110108,
+    "ast_hash": "36918a70f82e442ed9984a27f3cee5df",
+    "semantic_hash": ""
+  },
+  "/Users/lakshitsinghvi/Documents/ArGen - New Look/frontend/html/onboarding.html": {
+    "mtime": 1781610123.8369212,
+    "ast_hash": "e569503575ee591ef1d6c854097bedd9",
+    "semantic_hash": ""
+  },
+  "/Users/lakshitsinghvi/Documents/ArGen - New Look/backend/ENV.md": {
+    "mtime": 1781558613.5999174,
+    "ast_hash": "d23b0fbe9f403445222ed95eefaff955",
     "semantic_hash": ""
   },
   "/Users/lakshitsinghvi/Documents/ArGen - New Look/docs/Stabilization_Plan.md": {
@@ -453,5 +533,30 @@
     "mtime": 1777279785.2577844,
     "ast_hash": "080a1ebc83a2fc21d944dfa9eb999bc4",
     "semantic_hash": "080a1ebc83a2fc21d944dfa9eb999bc4"
+  },
+  "/Users/lakshitsinghvi/Documents/ArGen - New Look/scratch/screenshots/01_homepage.png": {
+    "mtime": 1781529308.1567717,
+    "ast_hash": "350d0ce4f2e5b252b38c596bfb170aaf",
+    "semantic_hash": ""
+  },
+  "/Users/lakshitsinghvi/Documents/ArGen - New Look/scratch/screenshots/03_superadmin_logged_in.png": {
+    "mtime": 1781529311.9745162,
+    "ast_hash": "aea25f5bdda8a7550c6288fd7775ec82",
+    "semantic_hash": ""
+  },
+  "/Users/lakshitsinghvi/Documents/ArGen - New Look/scratch/screenshots/02_login_page.png": {
+    "mtime": 1781529308.875375,
+    "ast_hash": "65be31adbe8dd0bd89ff7bb7cb1335be",
+    "semantic_hash": ""
+  },
+  "/Users/lakshitsinghvi/Documents/ArGen - New Look/scratch/screenshots/error.png": {
+    "mtime": 1781529343.0740213,
+    "ast_hash": "aea25f5bdda8a7550c6288fd7775ec82",
+    "semantic_hash": ""
+  },
+  "/Users/lakshitsinghvi/Documents/ArGen - New Look/scratch/screenshots/04_admin_portal.png": {
+    "mtime": 1781529312.5208836,
+    "ast_hash": "aea25f5bdda8a7550c6288fd7775ec82",
+    "semantic_hash": ""
   }
 }

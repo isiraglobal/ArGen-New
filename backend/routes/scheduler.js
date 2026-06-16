@@ -74,12 +74,25 @@ const handleWeeklyReports = async (req, res) => {
         .map(doc => ({ id: doc.id, ...doc.data() }))
         .filter(r => r.createdAt && new Date(r.createdAt) >= startOfWeek);
 
-      if (scores.length < 5) {
-        console.log(`Skipping report for ${comp.name} (low participation)`);
+      const usageSnap = await db.collection('ai_usage_events')
+        .where('companyId', '==', comp.id)
+        .get();
+      const usageEvents = usageSnap.docs
+        .map(doc => doc.data())
+        .filter(e => e.eventTimestamp && new Date(e.eventTimestamp) >= startOfWeek);
+
+      if (scores.length < 5 && usageEvents.length < 5) {
+        console.log(`Skipping report for ${comp.name} (low participation and no usage data)`);
         return { company: comp.name, status: 'skipped' };
       }
 
-      const reportMd = await generateWeeklyReport(comp, scores);
+      const reportContext = { ...comp, usageEvents, usageSummary: {
+        totalRequests: usageEvents.length,
+        totalCost: usageEvents.reduce((s, e) => s + (parseFloat(e.costUsd) || 0), 0).toFixed(2),
+        providers: [...new Set(usageEvents.map(e => e.provider))]
+      }};
+
+      const reportMd = await generateWeeklyReport(reportContext, scores);
       const html = createEmailTemplate({
         title: `Weekly Report: ${comp.name}`,
         preheader: `Your team's weekly performance summary is ready.`,
@@ -116,9 +129,15 @@ const handleWeeklyReports = async (req, res) => {
 const handleDailyCycle = async (req, res) => {
   try {
     console.log('Starting daily AI agentic cycle...');
+    const { syncAllConnections } = require('../utils/ai-providers');
+    const syncResult = await syncAllConnections().catch(err => {
+      console.error('Daily cycle sync error:', err.message);
+      return { synced: 0, total: 0, error: err.message };
+    });
     res.json({
       msg: 'Daily AI agentic cycle executed successfully',
-      tasks: ['research_sync', 'challenge_generation', 'performance_aggregation']
+      tasks: ['usage_sync', 'performance_aggregation'],
+      syncResult
     });
   } catch (err) {
     console.error(err.message);
@@ -180,5 +199,20 @@ router.route('/daily')
 router.route('/streak-check')
   .get(protect, authorize('superadmin'), handleStreakCheck)
   .post(protect, authorize('superadmin'), handleStreakCheck);
+
+const handleSyncConnections = async (req, res) => {
+  try {
+    const { syncAllConnections } = require('../utils/ai-providers');
+    const result = await syncAllConnections();
+    res.json({ msg: 'AI usage sync complete', ...result });
+  } catch (err) {
+    console.error('Sync Connections Error:', err.message);
+    res.status(500).json({ error: err.message });
+  }
+};
+
+router.route('/sync-connections')
+  .get(protect, authorize('superadmin'), handleSyncConnections)
+  .post(protect, authorize('superadmin'), handleSyncConnections);
 
 module.exports = router;

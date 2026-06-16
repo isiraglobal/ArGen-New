@@ -105,7 +105,7 @@ router.post('/register-company', async (req, res) => {
     
     const companyRef = await db.collection('companies').add(companyData);
 
-    // 4. Create Admin User in Firebase Auth
+    // 4. Create Admin User in Supabase Auth
     let userRecord;
     try {
       userRecord = await auth.createUser({
@@ -120,18 +120,30 @@ router.post('/register-company', async (req, res) => {
       return res.status(400).json({ message: authErr.message });
     }
 
-    // 5. Store user profile in Firestore
+    // 5. Store user profile in Supabase DB
+    const salt = await bcrypt.genSalt(10);
+    const hashedPassword = await bcrypt.hash(password, salt);
+    const isInvitedAdmin = Boolean(invitationDoc);
     const userData = {
       name,
       email,
+      password: hashedPassword,
       role: 'teamadmin',
       companyId: companyRef.id,
+      jobRole: 'Workspace Administrator',
+      department: 'Administration',
+      phone: '',
+      employeeId: '',
+      departmentId: '',
+      profileComplete: true,
+      profileStatus: isInvitedAdmin ? 'approved' : 'pending_admin',
+      isApproved: isInvitedAdmin,
       createdAt: new Date()
     };
     
     await db.collection('users').doc(userRecord.uid).set(userData);
 
-    // Set Custom User Claims for role-based security
+    // Set role claims in Supabase Auth metadata
     await auth.setCustomUserClaims(userRecord.uid, {
       role: 'teamadmin',
       companyId: companyRef.id
@@ -246,7 +258,15 @@ router.post('/login', async (req, res) => {
         name: user.name,
         email: user.email,
         role: user.role,
-        companyId: user.companyId || null
+        companyId: user.companyId || null,
+        phone: user.phone || '',
+        jobRole: user.jobRole || '',
+        department: user.department || '',
+        departmentId: user.departmentId || '',
+        employeeId: user.employeeId || '',
+        profileComplete: user.profileComplete !== false,
+        profileStatus: user.profileStatus || 'pending',
+        isApproved: Boolean(user.isApproved)
       }
     });
 
@@ -269,7 +289,9 @@ router.get('/me', protect, async (req, res) => {
       companyId: req.user.companyId || 'mock-company-id',
       currentStreak: 3,
       longestStreak: 7,
-      weakestDimension: 'iteration_quality'
+      weakestDimension: 'iteration_quality',
+      profileComplete: true,
+      profileStatus: 'approved'
     });
   }
   
@@ -304,6 +326,11 @@ router.get('/me', protect, async (req, res) => {
           companyId: null,
           jobRole: '',
           department: '',
+          phone: '',
+          employeeId: '',
+          departmentId: '',
+          profileComplete: false,
+          profileStatus: 'pending',
           createdAt: new Date()
         };
         await db.collection('users').doc(req.user.id).set(userData);
@@ -323,7 +350,21 @@ router.get('/me', protect, async (req, res) => {
 // @desc    Register a member via invite code
 // @access  Public
 router.post('/join-team', async (req, res) => {
-  const { name, email, password, inviteCode, jobRole, department } = req.body;
+  const {
+    name,
+    email,
+    password,
+    inviteCode,
+    phone,
+    jobRole,
+    department,
+    departmentId,
+    employeeId,
+    employmentType,
+    manager,
+    workLocation,
+    startDate
+  } = req.body;
 
   if (global.MOCK_DB) {
     return res.json({ 
@@ -339,6 +380,10 @@ router.post('/join-team', async (req, res) => {
   }
 
   try {
+    if (!name || !email || !password || !inviteCode) {
+      return res.status(400).json({ msg: 'Name, email, password, and team invite code are required' });
+    }
+
     // 1. Validate Invite Code
     const companySnapshot = await db.collection('companies')
       .where('inviteCode', '==', inviteCode.toUpperCase())
@@ -356,7 +401,7 @@ router.post('/join-team', async (req, res) => {
       return res.status(403).json({ msg: 'Company account is not active' });
     }
 
-    // 2. Create User in Firebase Auth
+    // 2. Create User in Supabase Auth
     let userRecord;
     try {
       userRecord = await auth.createUser({
@@ -369,20 +414,33 @@ router.post('/join-team', async (req, res) => {
       return res.status(400).json({ msg: authErr.message });
     }
 
-    // 3. Store profile details in Firestore
+    // 3. Hash password and store profile in Supabase DB
+    const salt = await bcrypt.genSalt(10);
+    const hashedPassword = await bcrypt.hash(password, salt);
     const userData = {
       name,
       email,
+      password: hashedPassword,
       role: 'member',
       companyId: companyDoc.id,
+      phone: phone || '',
       jobRole: jobRole || '',
       department: department || '',
+      departmentId: departmentId || '',
+      employeeId: employeeId || '',
+      employmentType: employmentType || 'Full-time',
+      manager: manager || '',
+      workLocation: workLocation || '',
+      startDate: startDate || '',
+      profileComplete: true,
+      profileStatus: 'pending',
+      isApproved: false,
       createdAt: new Date()
     };
 
     await db.collection('users').doc(userRecord.uid).set(userData);
 
-    // Set Custom Claims for role checks
+    // Set role claims in Supabase Auth metadata
     await auth.setCustomUserClaims(userRecord.uid, {
       role: 'member',
       companyId: companyDoc.id
@@ -398,7 +456,15 @@ router.post('/join-team', async (req, res) => {
         name,
         email,
         role: 'member',
-        companyId: companyDoc.id
+        companyId: companyDoc.id,
+        phone: phone || '',
+        jobRole: jobRole || '',
+        department: department || '',
+        departmentId: departmentId || '',
+        employeeId: employeeId || '',
+        profileComplete: true,
+        profileStatus: 'pending',
+        isApproved: false
       }
     });
 
@@ -591,6 +657,104 @@ router.post('/verify-passcode', async (req, res) => {
   } catch (err) {
     console.error('Passcode Verification Error:', err);
     res.status(500).json({ message: 'Server Error', error: err.message });
+  }
+});
+
+// @route   POST api/auth/complete-profile
+// @desc    Employee completes profile after Supabase login
+// @access  Private
+router.post('/complete-profile', protect, async (req, res) => {
+  const {
+    name,
+    phone,
+    jobRole,
+    department,
+    departmentId,
+    employeeId,
+    inviteCode,
+    employmentType,
+    manager,
+    workLocation,
+    startDate
+  } = req.body;
+
+  if (global.MOCK_DB) {
+    return res.json({
+      user: { ...req.user, name, phone, profileComplete: true, profileStatus: 'approved' },
+      redirect: '/dashboard'
+    });
+  }
+
+  try {
+    const userDoc = await db.collection('users').doc(req.user.id).get();
+    const existingUser = userDoc.exists ? userDoc.data() : {};
+    const normalizedInviteCode = inviteCode ? inviteCode.toUpperCase().trim() : '';
+    const hasCompany = Boolean(existingUser.companyId || req.user.companyId);
+
+    if (!name || !phone || !jobRole || !department || !employeeId) {
+      return res.status(400).json({ msg: 'Name, phone, job role, department, and employee ID are required' });
+    }
+
+    if (!hasCompany && !normalizedInviteCode) {
+      return res.status(400).json({ msg: 'Team invite code is required to attach your profile to a workspace' });
+    }
+
+    const updates = {
+      name: name || req.user.email?.split('@')[0],
+      phone: phone || '',
+      jobRole: jobRole || '',
+      department: department || '',
+      departmentId: departmentId || '',
+      employeeId: employeeId || '',
+      employmentType: employmentType || existingUser.employmentType || 'Full-time',
+      manager: manager || existingUser.manager || '',
+      workLocation: workLocation || existingUser.workLocation || '',
+      startDate: startDate || existingUser.startDate || '',
+      profileComplete: true,
+      profileStatus: (existingUser.role === 'teamadmin' || existingUser.role === 'superadmin') ? 'approved' : 'pending',
+      updatedAt: new Date()
+    };
+
+    // Join company via invite code if provided
+    if (normalizedInviteCode) {
+      const companySnap = await db.collection('companies')
+        .where('inviteCode', '==', normalizedInviteCode)
+        .limit(1)
+        .get();
+      if (companySnap.empty) {
+        return res.status(400).json({ msg: 'Invalid team invite code' });
+      }
+      const company = companySnap.docs[0].data();
+      if (company.status !== 'active') {
+        return res.status(403).json({ msg: 'This workspace is not active yet. Ask your HR admin to confirm approval.' });
+      }
+      updates.companyId = companySnap.docs[0].id;
+      updates.role = existingUser.role === 'teamadmin' ? 'teamadmin' : 'member';
+    }
+
+    if (userDoc.exists) {
+      await db.collection('users').doc(req.user.id).update(updates);
+    } else {
+      await db.collection('users').doc(req.user.id).set({
+        email: req.user.email,
+        role: updates.role || 'member',
+        companyId: updates.companyId || null,
+        createdAt: new Date(),
+        ...updates
+      });
+    }
+
+    const refreshed = await db.collection('users').doc(req.user.id).get();
+    const userData = { id: refreshed.id, ...refreshed.data() };
+
+    let redirect = '/dashboard';
+    if (userData.role === 'teamadmin') redirect = '/connect';
+    if (userData.role === 'superadmin') redirect = '/admin-portal';
+
+    res.json({ user: userData, redirect });
+  } catch (err) {
+    console.error('Complete Profile Error:', err);
+    res.status(500).json({ msg: 'Server error', error: err.message });
   }
 });
 

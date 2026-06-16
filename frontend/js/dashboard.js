@@ -6,13 +6,19 @@ document.addEventListener('DOMContentLoaded', () => {
         return;
     }
 
+    if (user.profileComplete === false) {
+        window.location.href = '/onboarding';
+        return;
+    }
+
     document.getElementById('profileName').textContent = user.name.toUpperCase();
     document.getElementById('profileRole').textContent = `ID_${user.role.toUpperCase()}`;
     document.getElementById('welcomeText').innerHTML = `Welcome back, <i class="soul-text">${user.name.split(' ')[0]}</i>`;
 
     const role = user.role.toLowerCase();
     if (role === 'teamadmin' || role === 'superadmin') {
-        document.getElementById('adminSection').style.display = 'block';
+        document.getElementById('opsShell').style.display = 'grid';
+        document.getElementById('adminSection').style.display = 'none';
         initAdminDashboard();
     } else {
         document.getElementById('memberSection').style.display = 'block';
@@ -20,26 +26,148 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 });
 
+async function loadAIIntelligence() {
+    try {
+        const [summary, roi] = await Promise.all([
+            argenApi.getAnalyticsSummary(),
+            argenApi.getAnalyticsROI()
+        ]);
+
+        const hasData = summary.summary.totalRequests > 0 || Object.keys(summary.byProvider || {}).length > 0;
+        const emptyState = document.getElementById('aiEmptyState');
+        const intelSection = document.getElementById('aiIntelSection');
+        if (emptyState && intelSection) {
+            emptyState.style.display = hasData ? 'none' : 'block';
+            intelSection.style.display = hasData ? 'block' : 'none';
+        }
+
+        const spendEl = document.getElementById('total-ai-spend');
+        const usersEl = document.getElementById('ai-active-users');
+        const roiEl = document.getElementById('ai-roi');
+        const hoursEl = document.getElementById('hours-saved');
+
+        if (spendEl) spendEl.textContent = `$${summary.summary.totalCostUsd}`;
+        if (usersEl) usersEl.textContent = summary.summary.activeUsers;
+        if (roiEl) roiEl.textContent = `${roi.roiPercent}%`;
+        if (hoursEl) hoursEl.textContent = `${roi.estimatedHoursSaved}h`;
+
+        if (hasData) {
+            renderProviderChart(summary.byProvider);
+            renderAITrendChart(summary.byDay);
+        }
+    } catch (err) {
+        console.error('AI Intelligence load error:', err);
+    }
+}
+
+function renderProviderChart(byProvider) {
+    const ctx = document.getElementById('provider-chart')?.getContext('2d');
+    if (!ctx || !byProvider) return;
+    new Chart(ctx, {
+        type: 'doughnut',
+        data: {
+            labels: Object.keys(byProvider),
+            datasets: [{
+                data: Object.values(byProvider).map(p => p.requests),
+                backgroundColor: ['#2b60e2', '#00ff88', '#ff6b6b', '#ffa726', '#ab47bc']
+            }]
+        },
+        options: {
+            plugins: { legend: { labels: { color: 'rgba(255,255,255,0.6)', font: { size: 10 } } } }
+        }
+    });
+}
+
+function renderAITrendChart(byDay) {
+    const ctx = document.getElementById('ai-trend-chart')?.getContext('2d');
+    if (!ctx || !byDay) return;
+    new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: byDay.map(d => d.date),
+            datasets: [{
+                label: 'AI Requests',
+                data: byDay.map(d => d.requests),
+                borderColor: '#00ff88',
+                backgroundColor: 'rgba(0,255,136,0.1)',
+                fill: true,
+                tension: 0.3,
+                pointRadius: 2
+            }]
+        },
+        options: {
+            scales: {
+                x: { ticks: { color: 'rgba(255,255,255,0.3)', font: { size: 9 } }, grid: { color: 'rgba(255,255,255,0.05)' } },
+                y: { ticks: { color: 'rgba(255,255,255,0.3)', font: { size: 9 } }, grid: { color: 'rgba(255,255,255,0.05)' } }
+            },
+            plugins: { legend: { display: false } }
+        }
+    });
+}
+
 async function initAdminDashboard() {
     try {
         const company = await argenApi.getMyCompany();
         if (company) {
-            document.getElementById('orgName').textContent = company.name.toUpperCase();
-            document.getElementById('inviteCodeDisplay').textContent = company.inviteCode;
+            const orgName = document.getElementById('orgName');
+            const opsOrgName = document.getElementById('opsOrgName');
+            const inviteCodeDisplay = document.getElementById('inviteCodeDisplay');
+            if (orgName) orgName.textContent = (company.name || 'Workspace').toUpperCase();
+            if (opsOrgName) opsOrgName.textContent = company.name || 'Workspace';
+            if (inviteCodeDisplay) inviteCodeDisplay.textContent = company.inviteCode || '—';
         }
-
-        const leaderboard = await argenApi.getLeaderboard();
-        renderAdminLeaderboard(leaderboard);
-
-        const stats = await argenApi.getDashboardStats();
-        renderAdminStats(leaderboard, stats);
-        renderCharts(stats);
-        renderHeatmap(stats);
-        checkFlaggedSubmissions();
-        loadDashboardInvoices();
     } catch (err) {
         console.error('Admin Dashboard Error:', err);
     }
+}
+
+function distributeOpsPanels() {
+    const admin = document.getElementById('adminSection');
+    if (!admin) return;
+
+    const overviewTarget = document.getElementById('opsOverviewContent');
+    const aiTarget = document.getElementById('opsAiContent');
+    const invoicesTarget = document.getElementById('opsInvoicesContent');
+
+    // Move AI intelligence section
+    if (aiTarget) {
+        let aiWrapper = null;
+        for (const child of [...admin.children]) {
+            if (child.textContent?.includes('AI Usage Intelligence')) {
+                aiWrapper = child;
+                break;
+            }
+        }
+        if (aiWrapper) aiTarget.appendChild(aiWrapper);
+    }
+
+    // Move remaining admin content to overview
+    if (overviewTarget) {
+        while (admin.firstChild) {
+            overviewTarget.appendChild(admin.firstChild);
+        }
+    }
+
+    // Move invoices from overview to invoices panel if present
+    const invoiceCard = overviewTarget?.querySelector('#dashboardInvoicesList')?.closest('.stat-card');
+    if (invoicesTarget && invoiceCard) {
+        invoicesTarget.appendChild(invoiceCard);
+    }
+
+    admin.style.display = 'none';
+
+    argenApi.getConnections().then(data => {
+        const el = document.getElementById('opsSubsSummary');
+        if (!el) return;
+        const conns = data.connections || [];
+        if (!conns.length) {
+            el.innerHTML = 'No AI tools connected. <a href="/connect" style="color:#00ff88">Connect now →</a>';
+        } else {
+            el.innerHTML = conns.map(c =>
+                `<div style="padding:0.5rem 0;border-bottom:1px solid rgba(255,255,255,0.05)"><strong style="color:#fff">${c.provider}</strong> — <span style="color:${c.status==='active'?'#00ff88':'orange'}">${c.status}</span>${c.lastSynced ? ` · synced ${new Date(c.lastSynced).toLocaleDateString()}` : ''}</div>`
+            ).join('');
+        }
+    }).catch(() => {});
 }
 
 function renderAdminStats(leaderboard, stats) {

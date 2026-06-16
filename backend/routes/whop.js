@@ -130,7 +130,11 @@ async function handleMembershipValid(data) {
     await subDoc.ref.update({ status: 'active' });
     
     const companyId = subDoc.data().companyId;
-    await db.collection('companies').doc(companyId).update({ subscriptionStatus: 'active' });
+    await db.collection('companies').doc(companyId).update({
+      subscriptionStatus: 'active',
+      status: 'active',
+      paidAt: new Date().toISOString()
+    });
     return;
   }
 
@@ -142,6 +146,7 @@ async function handleMembershipValid(data) {
     seatLimit,
     subscriptionStatus: 'active',
     status: 'active',
+    paidAt: new Date().toISOString(),
     createdAt: new Date()
   };
   const compRef = await db.collection('companies').add(newCompany);
@@ -158,6 +163,20 @@ async function handleMembershipValid(data) {
     createdAt: new Date()
   };
   await db.collection('subscriptions').add(newSub);
+
+  // Create invoice record
+  const amount = data.checkout_configuration?.initial_price || data.plan?.initial_price || 0;
+  await db.collection('invoices').add({
+    companyId,
+    clientName: companyName,
+    productName: `ArGen ${plan} Plan`,
+    productDescription: `${seatLimit} seats — AI Workflow Intelligence Platform`,
+    subtotal: parseFloat(amount) || 0,
+    totalDue: parseFloat(amount) || 0,
+    status: 'Paid',
+    date: new Date().toISOString(),
+    createdAt: new Date()
+  });
 
   // Generate Invite Token
   const token = crypto.randomBytes(32).toString('hex');
@@ -211,7 +230,10 @@ async function handleMembershipInvalid(data) {
     await subDoc.ref.update({ status: 'cancelled' });
 
     const companyId = subDoc.data().companyId;
-    await db.collection('companies').doc(companyId).update({ subscriptionStatus: 'cancelled' });
+    await db.collection('companies').doc(companyId).update({
+      subscriptionStatus: 'cancelled',
+      status: 'suspended'
+    });
   }
 }
 

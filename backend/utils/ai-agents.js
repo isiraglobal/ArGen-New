@@ -37,7 +37,7 @@ async function callAnthropic(apiKey, systemPrompt, userPrompt, useJson, maxToken
 }
 
 async function callGemini(apiKey, systemPrompt, userPrompt, useJson, maxTokens) {
-  const model = "gemini-1.5-flash";
+  const model = "gemini-2.0-flash-lite";
   const url = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${apiKey}`;
   
   const body = {
@@ -136,7 +136,9 @@ async function fallbackAiCall(systemPrompt, userPrompt, useJson, maxTokens, mode
     try {
       const activeModel = provider.name === 'nvidia' ? (modelOverride || 'default') : 'default';
       console.log(`[AI Engine] Attempting request via ${provider.name.toUpperCase()} (model: ${activeModel})...`);
-      return await provider.fn(provider.key, systemPrompt, userPrompt, useJson, maxTokens, provider.name === 'nvidia' ? modelOverride : undefined);
+      const result = await provider.fn(provider.key, systemPrompt, userPrompt, useJson, maxTokens, provider.name === 'nvidia' ? modelOverride : undefined);
+      result.modelUsed = provider.name;
+      return result;
     } catch (err) {
       console.warn(`[AI Fallback] ${provider.name.toUpperCase()} failed: ${err.message}. Routing to next provider...`);
       lastError = err;
@@ -212,7 +214,7 @@ This week, the operations team demonstrated exceptional adaptation in AI workflo
     }
   }
 
-  return { content, tokens: 100 };
+  return { content, tokens: 100, modelUsed: 'mock' };
 }
 
 // Helper to record metrics
@@ -346,8 +348,18 @@ Return ONLY JSON:
     const userMsg = `CHALLENGE:\n${challenge.scenario} | ${challenge.task}\n\nRESPONSE:\n${responseText}`;
 
     try {
-        const { content, tokens } = await fallbackAiCall(prompt, userMsg, true, 800, 'meta/llama-3.3-70b-instruct');
-        const result = JSON.parse(content);
+        const { content, tokens, modelUsed } = await fallbackAiCall(prompt, userMsg, true, 800, 'meta/llama-3.3-70b-instruct');
+        const parsed = JSON.parse(content);
+        const result = {
+          clarity: Number(parsed.clarity) || 0,
+          constraint_application: Number(parsed.constraint_application) || 0,
+          output_specificity: Number(parsed.output_specificity) || 0,
+          iteration_quality: Number(parsed.iteration_quality) || 0,
+          justification: parsed.justification || '',
+          improvement: parsed.improvement || '',
+          flags: Array.isArray(parsed.flags) ? parsed.flags : [],
+          modelUsed: modelUsed || 'unknown'
+        };
         result.total_score = result.clarity + result.constraint_application + result.output_specificity + result.iteration_quality;
         
         await recordMetric('api_call', 'Scoring Agent', result, tokens, 0, result.total_score);

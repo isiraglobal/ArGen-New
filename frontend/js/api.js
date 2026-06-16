@@ -196,6 +196,14 @@ const api = {
         localStorage.setItem('user', JSON.stringify(data.user));
         this.setCookie('argen_token', data.token, 7);
         this.setCookie('user', JSON.stringify(data.user), 7);
+        // Superadmins need their token stored under the admin key too,
+        // because the admin portal auth guard checks argen_admin_token.
+        if (data.user && data.user.role === 'superadmin') {
+            localStorage.setItem('argen_admin_token', data.token);
+            localStorage.setItem('admin_user', JSON.stringify(data.user));
+            this.setCookie('argen_admin_token', data.token, 7);
+            this.setCookie('admin_user', JSON.stringify(data.user), 7);
+        }
         return data;
     },
 
@@ -274,9 +282,46 @@ const api = {
                     });
                 } else if (endpoint.includes('/admin/my-company')) {
                     resolve({
+                        _id: "demo-company-id",
                         name: "Acme Global Demo",
-                        inviteCode: "DEMO7777"
+                        status: "active",
+                        inviteCode: "DEMO7777",
+                        registrationUrl: "/login?code=DEMO7777"
                     });
+                } else if (endpoint.includes('/hr/operations-summary')) {
+                    resolve({
+                        company: { id: "demo-company-id", name: "Acme Global Demo", inviteCode: "DEMO7777", status: "active" },
+                        totalEmployees: 4,
+                        approvals: [
+                            { id: "demo-emp-4", name: "Maya Patel", email: "maya@acme.test", profileStatus: "pending", department: "Product" }
+                        ],
+                        departments: [
+                            { id: "ENG-01", name: "Engineering", headcount: 2, approvedProfiles: 2, pendingProfiles: 0, admins: 1 },
+                            { id: "GTM-02", name: "Revenue", headcount: 1, approvedProfiles: 1, pendingProfiles: 0, admins: 0 },
+                            { id: "PRD-03", name: "Product", headcount: 1, approvedProfiles: 0, pendingProfiles: 1, admins: 0 }
+                        ],
+                        employees: [
+                            { id: "demo-emp-1", name: "Sarah Connor", email: "sarah@acme.test", phone: "+1 555 0101", role: "teamadmin", jobRole: "HR Operations Lead", department: "Engineering", departmentId: "ENG-01", employeeId: "EMP-001", employmentType: "Full-time", manager: "Nina Shah", workLocation: "Remote", profileStatus: "approved", isApproved: true },
+                            { id: "demo-emp-2", name: "John Doe", email: "john@acme.test", phone: "+1 555 0102", role: "member", jobRole: "AI Engineer", department: "Engineering", departmentId: "ENG-01", employeeId: "EMP-002", employmentType: "Full-time", manager: "Sarah Connor", workLocation: "New York", profileStatus: "approved", isApproved: true },
+                            { id: "demo-emp-3", name: "Alice Smith", email: "alice@acme.test", phone: "+1 555 0103", role: "member", jobRole: "Revenue Ops", department: "Revenue", departmentId: "GTM-02", employeeId: "EMP-003", employmentType: "Contract", manager: "Sarah Connor", workLocation: "Austin", profileStatus: "approved", isApproved: true },
+                            { id: "demo-emp-4", name: "Maya Patel", email: "maya@acme.test", phone: "+1 555 0104", role: "member", jobRole: "Product Manager", department: "Product", departmentId: "PRD-03", employeeId: "EMP-004", employmentType: "Full-time", manager: "Sarah Connor", workLocation: "San Francisco", profileStatus: "pending", isApproved: false }
+                        ]
+                    });
+                } else if (endpoint.includes('/hr/stats')) {
+                    resolve({ totalEmployees: 4, pendingProfiles: 1, approvedEmployees: 3, departments: 3 });
+                } else if (endpoint.includes('/hr/employees')) {
+                    const employees = [
+                        { id: "demo-emp-1", name: "Sarah Connor", email: "sarah@acme.test", phone: "+1 555 0101", role: "teamadmin", jobRole: "HR Operations Lead", department: "Engineering", departmentId: "ENG-01", employeeId: "EMP-001", employmentType: "Full-time", manager: "Nina Shah", workLocation: "Remote", profileStatus: "approved", isApproved: true },
+                        { id: "demo-emp-2", name: "John Doe", email: "john@acme.test", phone: "+1 555 0102", role: "member", jobRole: "AI Engineer", department: "Engineering", departmentId: "ENG-01", employeeId: "EMP-002", employmentType: "Full-time", manager: "Sarah Connor", workLocation: "New York", profileStatus: "approved", isApproved: true },
+                        { id: "demo-emp-4", name: "Maya Patel", email: "maya@acme.test", phone: "+1 555 0104", role: "member", jobRole: "Product Manager", department: "Product", departmentId: "PRD-03", employeeId: "EMP-004", employmentType: "Full-time", manager: "Sarah Connor", workLocation: "San Francisco", profileStatus: "pending", isApproved: false }
+                    ];
+                    const parts = endpoint.split('/');
+                    const last = parts[parts.length - 1];
+                    if (last && last.startsWith('demo-')) {
+                        resolve(employees.find(emp => emp.id === last) || employees[0]);
+                    } else {
+                        resolve({ employees, total: employees.length });
+                    }
                 } else if (endpoint.includes('/leaderboard')) {
                     resolve([
                         { userId: "user-1", name: "Sarah Connor", totalScore: 92.5, streak: 5, currentStreak: 5 },
@@ -337,6 +382,33 @@ const api = {
                     resolve({ success: true });
                 } else if (endpoint.includes('/auth/verify-passcode')) {
                     resolve({ valid: true });
+                } else if (endpoint.includes('/connect')) {
+                    resolve({ connections: [
+                        { id: 'demo-conn-1', provider: 'openai', status: 'active', connectedAt: new Date().toISOString(), lastSynced: new Date().toISOString() },
+                        { id: 'demo-conn-2', provider: 'anthropic', status: 'pending', connectedAt: new Date().toISOString(), lastSynced: null }
+                    ]});
+                } else if (endpoint.includes('/analytics/summary')) {
+                    resolve({
+                        summary: { totalCostUsd: '12.4500', totalRequests: 847, activeUsers: 8, period: '30d' },
+                        byProvider: { openai: { cost: 8.2, requests: 520 }, anthropic: { cost: 4.25, requests: 327 } },
+                        byDay: [
+                            { date: '2026-06-10', cost: 1.2, requests: 95 },
+                            { date: '2026-06-11', cost: 1.8, requests: 120 },
+                            { date: '2026-06-12', cost: 2.1, requests: 140 }
+                        ]
+                    });
+                } else if (endpoint.includes('/analytics/roi')) {
+                    resolve({
+                        totalCostUsd: '12.45',
+                        estimatedHoursSaved: '112.5',
+                        estimatedValueUsd: '3248.00',
+                        roiPercent: '26000.0',
+                        requestsAnalyzed: 847
+                    });
+                } else if (endpoint.includes('/analytics/users')) {
+                    resolve({ users: [
+                        { userId: 'sarah@acme.com', requests: 210, cost: '3.20', providers: ['openai'] }
+                    ]});
                 } else {
                     resolve({});
                 }
@@ -444,7 +516,10 @@ const api = {
     },
 
     async approveCompany(companyId) {
-        return this.request(`/admin/companies/${companyId}/approve`, { method: 'PATCH' });
+        return this.request(`/admin/companies/${companyId}/status`, {
+            method: 'PATCH',
+            body: JSON.stringify({ status: 'active' })
+        });
     },
 
     async getAllUsers() {
@@ -456,7 +531,7 @@ const api = {
     },
 
     async sendInvitation(email, companyName) {
-        return this.request('/admin/invitations/send', {
+        return this.request('/admin/invitations', {
             method: 'POST',
             body: JSON.stringify({ email, companyName }),
         });
@@ -502,6 +577,87 @@ const api = {
     async deleteInvoice(id) {
         return this.request(`/admin/invoices/${id}`, {
             method: 'DELETE'
+        });
+    },
+
+    // ── AI Connections ────────────────────────────────────
+    async getConnections() {
+        return this.request('/connect');
+    },
+
+    async connectOAuth(provider) {
+        return this.request(`/connect/oauth/${provider}`);
+    },
+
+    async connectApiKey(data) {
+        return this.request('/connect/apikey', {
+            method: 'POST',
+            body: JSON.stringify(data)
+        });
+    },
+
+    async disconnectConnection(connectionId) {
+        return this.request(`/connect/${connectionId}`, { method: 'DELETE' });
+    },
+
+    async syncProvider(provider) {
+        return this.request(`/connect/sync/${provider}`, { method: 'POST' });
+    },
+
+    // ── Analytics ─────────────────────────────────────────
+    async getAnalyticsSummary() {
+        return this.request('/analytics/summary');
+    },
+
+    async getAnalyticsROI() {
+        return this.request('/analytics/roi');
+    },
+
+    async getAnalyticsUsers() {
+        return this.request('/analytics/users');
+    },
+
+    async completeProfile(data) {
+        const result = await this.request('/auth/complete-profile', {
+            method: 'POST',
+            body: JSON.stringify(data)
+        });
+        localStorage.setItem('user', JSON.stringify(result.user));
+        this.setCookie('user', JSON.stringify(result.user), 7);
+        return result;
+    },
+
+    async getHRStats() {
+        return this.request('/hr/stats');
+    },
+
+    async getEmployees() {
+        return this.request('/hr/employees');
+    },
+
+    async getOperationsSummary() {
+        return this.request('/hr/operations-summary');
+    },
+
+    async getEmployee(id) {
+        return this.request(`/hr/employees/${id}`);
+    },
+
+    async updateEmployee(id, data) {
+        return this.request(`/hr/employees/${id}`, {
+            method: 'PATCH',
+            body: JSON.stringify(data)
+        });
+    },
+
+    async generateTeamCode(companyId) {
+        return this.request(`/admin/companies/${companyId}/team-code`, { method: 'POST' });
+    },
+
+    async approveAdmin(companyId, userId) {
+        return this.request(`/admin/companies/${companyId}/approve-admin`, {
+            method: 'POST',
+            body: JSON.stringify({ userId })
         });
     }
 };

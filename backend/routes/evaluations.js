@@ -61,6 +61,7 @@ router.post('/generate-ai', protect, isApproved, authorize('teamadmin'), async (
           name: challengeData.name || challengeData.title || 'Personalized Challenge',
           title: challengeData.title || challengeData.name || 'Personalized Challenge',
           scenario: challengeData.scenario || challengeData.text || '',
+          task: challengeData.task || '',
           type: challengeData.type || 'General',
           difficulty: challengeData.difficulty || 'Intermediate',
           text: challengeData.text || challengeData.scenario || '',

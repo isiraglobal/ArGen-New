@@ -372,17 +372,21 @@
       try {
         const data = await argenApi.request('/admin/companies');
         document.getElementById('companiesList').innerHTML = data.map(co => `
-          <div class="request-card">
-            <div class="request-info">
-              <span class="status-badge status-${co.status}">${co.status}</span>
-              <h3 style="margin-top:0.5rem;">${co.name}</h3>
-              <p>${co.primaryContact.email}</p>
-            </div>
-            <div class="request-actions">
-              <button class="btn-approve" onclick="updateStatus('${co._id}', 'active')">MANAGE</button>
+          <div class="request-card" style="flex-direction:column;align-items:stretch">
+            <div style="display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:1rem;width:100%">
+              <div class="request-info">
+                <span class="status-badge status-${co.status}">${co.status}</span>
+                <h3 style="margin-top:0.5rem;">${co.name}</h3>
+                <p>${co.primaryContact?.email || co.email || '—'}</p>
+                <p style="font-family:var(--font-mono);font-size:0.7rem;margin-top:0.5rem;color:var(--green)">TEAM CODE: ${co.inviteCode || 'NOT SET'}</p>
+              </div>
+              <div class="request-actions" style="display:flex;gap:0.5rem;flex-wrap:wrap">
+                <button class="btn-approve" onclick="updateStatus('${co._id}', 'active')">Approve</button>
+                <button class="btn btn-dark" style="padding:8px 16px;font-size:0.75rem" onclick="generateTeamCode('${co._id}')">Generate Code</button>
+              </div>
             </div>
           </div>
-        `).join('');
+        `).join('') || '<div style="color:var(--text-sec);padding:2rem">No companies</div>';
       } catch (err) { console.error(err); }
     }
 
@@ -393,8 +397,10 @@
           <div class="request-card">
             <div class="request-info">
               <h3 style="margin:0">${user.name}</h3>
-              <p>${user.email} • ${user.role}</p>
+              <p>${user.email} • ${user.role} • ${user.profileStatus || 'pending'}</p>
+              <p style="font-size:0.75rem;color:var(--text-sec)">${user.employeeId || '—'} · ${user.department || '—'} · ${user.phone || '—'}</p>
             </div>
+            ${user.profileStatus === 'pending' && user.companyId ? `<button class="btn-approve" onclick="approveUserAdmin('${user.companyId}','${user.id || user._id}')">Approve Admin</button>` : ''}
           </div>
         `).join('');
       } catch (err) { console.error(err); }
@@ -444,6 +450,22 @@
           body: JSON.stringify({ status })
         });
         fetchCompanies();
+      } catch (err) { alert(err.message); }
+    }
+
+    async function generateTeamCode(companyId) {
+      try {
+        const data = await argenApi.generateTeamCode(companyId);
+        alert(`Team code: ${data.inviteCode}\nShare with employees at /login`);
+        fetchCompanies();
+      } catch (err) { alert(err.message); }
+    }
+
+    async function approveUserAdmin(companyId, userId) {
+      try {
+        await argenApi.approveAdmin(companyId, userId);
+        alert('Admin approved');
+        fetchUsers();
       } catch (err) { alert(err.message); }
     }
 

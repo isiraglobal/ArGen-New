@@ -122,5 +122,65 @@ const isApproved = async (req, res, next) => {
   }
 };
 
-module.exports = { protect, authorize, isApproved };
+async function verifyTokenFromRequest(req) {
+  let token = req.header('Authorization');
+  if (token && token.startsWith('Bearer ')) {
+    token = token.split(' ')[1];
+  } else {
+    token = req.header('x-auth-token');
+  }
+  if (!token && req.headers.cookie) {
+    const cookies = parseCookies(req.headers.cookie);
+    token = cookies['argen_token'] || cookies['argen_admin_token'];
+  }
+  if (!token) return null;
+
+  if (process.env.CRON_SECRET && token === process.env.CRON_SECRET) {
+    return { id: 'cron-system', role: 'superadmin', companyId: null };
+  }
+  if (token === 'mock-token' || global.MOCK_DB) {
+    return { id: 'mock-uid', role: 'teamadmin', companyId: 'mock-company-id' };
+  }
+
+  const decodedToken = await auth.verifyIdToken(token);
+  const userDoc = await db.collection('users').doc(decodedToken.uid).get();
+  if (userDoc.exists) {
+    const userData = userDoc.data();
+    return {
+      id: decodedToken.uid,
+      email: decodedToken.email,
+      role: userData.role || 'member',
+      companyId: userData.companyId || null
+    };
+  }
+  return {
+    id: decodedToken.uid,
+    email: decodedToken.email,
+    role: decodedToken.role || 'member',
+    companyId: decodedToken.companyId || null
+  };
+}
+
+/**
+ * Server-side HTML page guard — redirects unauthenticated users to /login.
+ */
+const requirePageAuth = (roles = null) => async (req, res, next) => {
+  try {
+    const user = await verifyTokenFromRequest(req);
+    if (!user) {
+      return res.redirect(`/login?redirect=${encodeURIComponent(req.originalUrl)}`);
+    }
+    if (roles && !roles.map(r => r.toLowerCase()).includes((user.role || '').toLowerCase())) {
+      if (user.role === 'superadmin') return next();
+      return res.redirect('/dashboard');
+    }
+    req.user = user;
+    next();
+  } catch (err) {
+    console.error('Page Auth Error:', err.message);
+    return res.redirect('/login');
+  }
+};
+
+module.exports = { protect, authorize, isApproved, parseCookies, verifyTokenFromRequest, requirePageAuth };
 

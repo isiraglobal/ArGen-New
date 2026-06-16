@@ -54,14 +54,20 @@ class SupabaseCollectionRef {
         if (q.type === 'where') {
           if (q.op === '==' || q.op === '===') {
             query = query.eq(q.field, q.value);
+          } else if (q.op === '!=') {
+            query = query.neq(q.field, q.value);
+          } else if (q.op === 'in') {
+            query = query.in(q.field, q.value);
           } else if (q.op === '>') {
             query = query.gt(q.field, q.value);
           } else if (q.op === '<') {
             query = query.lt(q.field, q.value);
           } else if (q.op === '>=') {
-            query = query.gte(q.field, q.value);
+            const val = q.value instanceof Date ? q.value.toISOString() : q.value;
+            query = query.gte(q.field, val);
           } else if (q.op === '<=') {
-            query = query.lte(q.field, q.value);
+            const val = q.value instanceof Date ? q.value.toISOString() : q.value;
+            query = query.lte(q.field, val);
           }
         }
       }
@@ -77,22 +83,28 @@ class SupabaseCollectionRef {
       const { data, error } = await query;
       if (error) throw error;
 
+      const client = this.client;
+      const tableName = this.tableName;
+      const docs = (data || []).map(row => ({
+        id: row.id,
+        ref: {
+          update: async (updateData) => {
+            const { error: updateError } = await client.from(tableName).update(updateData).eq('id', row.id);
+            if (updateError) throw updateError;
+          },
+          delete: async () => {
+            const { error: deleteError } = await client.from(tableName).delete().eq('id', row.id);
+            if (deleteError) throw deleteError;
+          }
+        },
+        data: () => row
+      }));
+
       return {
         empty: !data || data.length === 0,
-        docs: (data || []).map(row => ({
-          id: row.id,
-          ref: {
-            update: async (updateData) => {
-              const { error: updateError } = await this.client.from(this.tableName).update(updateData).eq('id', row.id);
-              if (updateError) throw updateError;
-            },
-            delete: async () => {
-              const { error: deleteError } = await this.client.from(this.tableName).delete().eq('id', row.id);
-              if (deleteError) throw deleteError;
-            }
-          },
-          data: () => row
-        }))
+        size: docs.length,
+        forEach: (fn) => docs.forEach(fn),
+        docs: docs
       };
     } catch (err) {
       console.error(`Supabase DB query error on table ${this.tableName}:`, err.message);
@@ -107,9 +119,8 @@ class SupabaseCollectionRef {
       ref: this,
       get: async () => {
         try {
-          const { data, error } = await client.from(tableName).select('*').eq('id', id).single();
-          if (error && error.code !== 'PGRST116') throw error; // PGRST116 is code for 0 rows returned
-          
+          const { data, error } = await client.from(tableName).select('*').eq('id', id).maybeSingle();
+          if (error) throw error;
           return {
             exists: !!data,
             id: id,
@@ -122,7 +133,7 @@ class SupabaseCollectionRef {
       },
       set: async (data, options = {}) => {
         try {
-          const payload = { id, ...data };
+          const payload = sanitizeDates({ id, ...data });
           const { error } = await client.from(tableName).upsert(payload);
           if (error) throw error;
         } catch (err) {
@@ -132,7 +143,8 @@ class SupabaseCollectionRef {
       },
       update: async (data) => {
         try {
-          const { error } = await client.from(tableName).update(data).eq('id', id);
+          const sanitized = sanitizeDates(data);
+          const { error } = await client.from(tableName).update(sanitized).eq('id', id);
           if (error) throw error;
         } catch (err) {
           console.error(`Supabase DB update error on table ${tableName} (ID: ${id}):`, err.message);
@@ -153,8 +165,10 @@ class SupabaseCollectionRef {
 
   async add(data) {
     try {
-      const { data: insertedData, error } = await this.client.from(this.tableName).insert(data).select().single();
+      const sanitized = sanitizeDates(data);
+      const { data: insertedData, error } = await this.client.from(this.tableName).insert(sanitized).select().single();
       if (error) throw error;
+      if (!insertedData?.id) throw new Error(`Insert into ${this.tableName} returned no id`);
       return {
         id: insertedData.id,
         ref: this.doc(insertedData.id)
@@ -164,6 +178,21 @@ class SupabaseCollectionRef {
       throw err;
     }
   }
+}
+
+// Helper: convert JS Date objects to ISO strings (Supabase rejects raw Date objects)
+function sanitizeDates(obj) {
+  if (obj === null || obj === undefined) return obj;
+  if (obj instanceof Date) return obj.toISOString();
+  if (Array.isArray(obj)) return obj.map(sanitizeDates);
+  if (typeof obj === 'object') {
+    const result = {};
+    for (const [k, v] of Object.entries(obj)) {
+      result[k] = sanitizeDates(v);
+    }
+    return result;
+  }
+  return obj;
 }
 
 // Check configuration and initialize
@@ -243,13 +272,13 @@ if (isSupabaseConfigured) {
     };
 
     global.MOCK_DB = false;
-    console.log("Supabase Client initialized successfully with service role.");
+    console.log("✅ Supabase Client initialized successfully with service role.");
   } catch (err) {
-    console.error("Failed to initialize Supabase Client:", err.message);
+    console.error("❌ Failed to initialize Supabase Client:", err.message);
     setupMockLayer();
   }
 } else {
-  console.warn("WARNING: Supabase URL/Key missing. Initializing mock DB layer.");
+  console.warn("⚠️  WARNING: Supabase URL/Key missing. Initializing mock DB layer.");
   setupMockLayer();
 }
 
@@ -262,21 +291,16 @@ function setupMockLayer() {
         where: () => queryStub,
         orderBy: () => queryStub,
         limit: () => queryStub,
-        get: async () => ({
-          empty: false,
-          docs: [
-            {
-              id: "mock-doc-id",
-              data: () => ({
-                name: "Mock Item",
-                status: "active",
-                role: "teamadmin",
-                companyId: "mock-company-id",
-                inviteCode: "MOCK1234"
-              })
-            }
-          ]
-        })
+        get: async () => {
+          const mockRow = { id: "mock-doc-id", name: "Mock Item", status: "active", role: "teamadmin", companyId: "mock-company-id", inviteCode: "MOCK1234" };
+          const mockDoc = { id: mockRow.id, data: () => mockRow, ref: { update: async () => {}, delete: async () => {} } };
+          return {
+            empty: false,
+            size: 1,
+            docs: [mockDoc],
+            forEach: (fn) => [mockDoc].forEach(fn)
+          };
+        }
       };
       return {
         doc: () => ({

@@ -1,6 +1,5 @@
 {
   "version": 2,
-  "public": true,
   "name": "argen-frontend",
   "rewrites": [
     { "source": "/api/(.*)", "destination": "/api/index.js" },
@@ -9,6 +8,7 @@
     { "source": "/pricing", "destination": "/frontend/html/pricing.html" },
     { "source": "/contact", "destination": "/frontend/html/contact.html" },
     { "source": "/admin-portal", "destination": "/frontend/html/admin-portal.html" },
+    { "source": "/admin-access", "destination": "/frontend/html/admin-access.html" },
     { "source": "/evaluate", "destination": "/frontend/html/evaluate.html" },
     { "source": "/challenges", "destination": "/frontend/html/challenges.html" },
     { "source": "/login", "destination": "/frontend/html/login.html" },
@@ -24,6 +24,10 @@
     { "source": "/invoice", "destination": "/frontend/html/invoice.html" },
     { "source": "/dashboard", "destination": "/frontend/html/dashboard.html" },
     { "source": "/take-evaluation", "destination": "/frontend/html/take-evaluation.html" },
+    { "source": "/connect", "destination": "/frontend/html/connect.html" },
+    { "source": "/onboarding", "destination": "/frontend/html/onboarding.html" },
+    { "source": "/payment-success", "destination": "/frontend/html/payment-success.html" },
+    { "source": "/payment-failed", "destination": "/frontend/html/payment-failed.html" },
     { "source": "/(css|js|images)/(.*)", "destination": "/frontend/$1/$2" }
   ],
   "crons": [

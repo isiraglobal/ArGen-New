@@ -303,7 +303,7 @@
       // User is logged in
       if (!document.getElementById('navDashboardLink')) {
         const dashLink = document.createElement('a');
-        dashLink.href = '/teams';
+        dashLink.href = '/dashboard';
         dashLink.className = 'nav-link';
         dashLink.id = 'navDashboardLink';
         dashLink.textContent = 'Dashboard';
@@ -311,13 +311,13 @@
       }
 
       if (navCta) {
-        navCta.textContent = 'Teams Panel →';
-        navCta.href = '/teams';
+        navCta.textContent = 'Dashboard →';
+        navCta.href = '/dashboard';
       }
 
       if (mobileMenu && !document.getElementById('mobileDashboardLink')) {
         const mDashLink = document.createElement('a');
-        mDashLink.href = '/teams';
+        mDashLink.href = '/dashboard';
         mDashLink.className = 'mm-link';
         mDashLink.id = 'mobileDashboardLink';
         mDashLink.textContent = '05 // Dashboard';
