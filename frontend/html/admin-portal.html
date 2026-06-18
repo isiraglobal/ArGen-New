@@ -253,6 +253,60 @@
   <script defer src="/_vercel/speed-insights/script.js"></script>
 </head>
 <body class="bg-black">
+
+  <!-- Passcode Lock Overlay -->
+  <div id="passcodeOverlay" style="position:fixed;inset:0;z-index:99999;background:#0a0a0a;display:flex;align-items:center;justify-content:center;padding:2rem;">
+    <div style="max-width:400px;width:100%;text-align:center;">
+      <img src="../images/ArGen Logo.png" alt="ArGen" style="height:48px;width:auto;margin:0 auto 2rem;">
+      <h2 style="font-size:1.1rem;color:#fff;font-weight:600;margin:0 0 0.25rem;">Admin Portal</h2>
+      <p style="font-size:0.75rem;color:var(--text-sec);margin:0 0 2rem;font-family:var(--font-mono);">Enter passcode to continue</p>
+      <div style="display:flex;flex-direction:column;gap:1rem;align-items:center;">
+        <input type="password" id="passcodeInput" placeholder="••••••••" 
+          style="width:100%;max-width:280px;padding:14px 18px;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.1);border-radius:10px;color:#fff;font-size:1.1rem;text-align:center;font-family:var(--font-mono);letter-spacing:0.3em;outline:none;transition:border-color 0.3s;"
+          onfocus="this.style.borderColor='rgba(255,255,255,0.3)'" onblur="this.style.borderColor='rgba(255,255,255,0.1)'"
+          onkeydown="if(event.key==='Enter') unlockAdminPortal()">
+        <button onclick="unlockAdminPortal()" class="action-btn action-btn-primary" style="padding:12px 40px;font-size:0.8rem;border:none;cursor:pointer;">Unlock</button>
+        <p id="passcodeError" style="font-size:0.7rem;color:#ef4444;font-family:var(--font-mono);display:none;">Invalid passcode</p>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const ADMIN_PASSCODE = 'ADMIN2024';
+    async function unlockAdminPortal() {
+      const input = document.getElementById('passcodeInput').value.trim();
+      const valid = input === ADMIN_PASSCODE;
+      if (valid) {
+        sessionStorage.setItem('admin_portal_unlocked', 'true');
+        document.getElementById('passcodeOverlay').style.display = 'none';
+        document.getElementById('passcodeError').style.display = 'none';
+        document.getElementById('passcodeInput').value = '';
+        return;
+      }
+      try {
+        const res = await fetch('/api/admin/verify-passcode', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ passcode: input })
+        });
+        const data = await res.json();
+        if (data.valid) {
+          sessionStorage.setItem('admin_portal_unlocked', 'true');
+          document.getElementById('passcodeOverlay').style.display = 'none';
+          document.getElementById('passcodeError').style.display = 'none';
+          document.getElementById('passcodeInput').value = '';
+          return;
+        }
+      } catch (e) {}
+      document.getElementById('passcodeError').style.display = 'block';
+      document.getElementById('passcodeInput').value = '';
+      document.getElementById('passcodeInput').focus();
+    }
+    if (sessionStorage.getItem('admin_portal_unlocked') === 'true') {
+      document.getElementById('passcodeOverlay').style.display = 'none';
+    }
+  </script>
+
   <header class="nav nav-always-visible">
     <div class="nav-inner">
       <a href="/" class="nav-logo">
@@ -412,9 +466,9 @@
     async function fetchDashboard() {
       try {
         const stats = await argenApi.request('/admin/stats');
-        document.getElementById('statOrgs').textContent = stats.companies?.total ?? '—';
-        document.getElementById('statUsers').textContent = stats.users?.total ?? '—';
-        document.getElementById('statActiveChallenges').textContent = stats.challenges?.active ?? '—';
+        document.getElementById('statOrgs').textContent = stats.agents?.totalRuns ?? '—';
+        document.getElementById('statUsers').textContent = stats.agents?.activeAgents ?? '—';
+        document.getElementById('statActiveChallenges').textContent = stats.usage?.avgQuality ?? '—';
         document.getElementById('statAvgScore').textContent = (stats.usage?.avgQuality ?? '—') + '%';
         document.getElementById('statCredits').textContent = '$' + (stats.credits?.remaining ?? '—');
 

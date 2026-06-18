@@ -354,6 +354,21 @@ a, button {
   display: flex;
   gap: 2rem;
   min-width: 0;
+  flex-shrink: 1;
+  overflow: hidden;
+}
+
+@media (max-width: 900px) {
+  .nav-links {
+    gap: 1rem;
+  }
+  .nav-link {
+    font-size: 0.8rem;
+  }
+  .nav-cta {
+    font-size: 0.8rem;
+    padding: .4rem .9rem;
+  }
 }
 
 .nav-link {

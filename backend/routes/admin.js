@@ -186,6 +186,18 @@ router.get('/stats', protect, authorize('superadmin'), async (req, res) => {
   }
 });
 
+// @route   POST api/admin/verify-passcode
+// @desc    Verify admin portal passcode
+// @access  Public (rate-limited by nature)
+router.post('/verify-passcode', async (req, res) => {
+  const { passcode } = req.body;
+  const valid = process.env.ADMIN_PORTAL_CODE || 'ADMIN2024';
+  if (passcode === valid) {
+    return res.json({ valid: true });
+  }
+  return res.status(401).json({ valid: false, msg: 'Invalid passcode' });
+});
+
 // @route   GET api/admin/company-dashboard-stats
 // @desc    Get stats for the 12-panel team admin dashboard
 router.get('/company-dashboard-stats', protect, async (req, res) => {

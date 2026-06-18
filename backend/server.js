@@ -167,7 +167,8 @@ app.get('/team/:id', requirePageAuth(['member', 'teamadmin', 'superadmin']), (re
 const publicPages = [
   'about', 'pricing', 'contact', 'login', 'oauth', 'forgot-password',
   'reset-password', 'privacy', 'terms', 'waitlist', 'registration',
-  'invoice', 'evaluate', 'payment-success', 'payment-failed'
+  'invoice', 'evaluate', 'payment-success', 'payment-failed',
+  'cookie-policy', 'gdpr', 'dpa', 'aup'
 ];
 
 publicPages.forEach(page => {

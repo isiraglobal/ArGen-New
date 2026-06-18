@@ -28,6 +28,10 @@
     { "source": "/onboarding", "destination": "/frontend/html/onboarding.html" },
     { "source": "/payment-success", "destination": "/frontend/html/payment-success.html" },
     { "source": "/payment-failed", "destination": "/frontend/html/payment-failed.html" },
+    { "source": "/cookie-policy", "destination": "/frontend/html/cookie-policy.html" },
+    { "source": "/gdpr", "destination": "/frontend/html/gdpr.html" },
+    { "source": "/dpa", "destination": "/frontend/html/dpa.html" },
+    { "source": "/aup", "destination": "/frontend/html/aup.html" },
     { "source": "/(css|js|images)/(.*)", "destination": "/frontend/$1/$2" }
   ],
   "crons": [
