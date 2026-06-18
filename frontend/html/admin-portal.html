@@ -5,92 +5,246 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Admin Portal - ArGen</title>
   <link rel="icon" type="image/png" href="../images/ArGen Logo.png">
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="../css/style.css">
   <script src="../js/auth-guard.js"></script>
   <style>
-    .admin-grid {
+    .admin-layout {
       display: grid;
-      grid-template-columns: 1fr;
-      gap: 1.5rem;
-      margin-top: 2rem;
+      grid-template-columns: 220px 1fr;
+      gap: 2rem;
+      align-items: flex-start;
+      margin-top: 1.5rem;
     }
-    .request-card {
-      background: rgba(255, 255, 255, 0.02);
-      backdrop-filter: blur(16px);
-      -webkit-backdrop-filter: blur(16px);
-      border: 1px solid rgba(255, 255, 255, 0.05);
-      padding: 1.75rem;
-      border-radius: 16px;
-      box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
-      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-      position: relative;
-      overflow: hidden;
+    .admin-sidebar {
+      background: rgba(255,255,255,0.02);
+      border: 1px solid rgba(255,255,255,0.05);
+      border-radius: 12px;
+      padding: 0.75rem;
       display: flex;
-      flex-wrap: wrap;
-      justify-content: space-between;
-      align-items: center;
-      gap: 1.5rem;
+      flex-direction: column;
+      gap: 0.25rem;
+      position: sticky;
+      top: 100px;
     }
-    .request-card::before {
-      content: '';
-      position: absolute;
-      top: 0; left: 0; right: 0; height: 1px;
-      background: linear-gradient(90deg, transparent, rgba(43, 96, 226, 0.2), transparent);
-    }
-    .request-card:hover {
-      border-color: rgba(43, 96, 226, 0.3);
-      transform: translateY(-2px);
-      box-shadow: 0 12px 40px 0 rgba(43, 96, 226, 0.1);
-    }
-    .request-info { flex: 1; min-width: 250px; }
-    .request-actions { flex-shrink: 0; }
-    .request-info h3 { color: var(--white); margin-bottom: 0.5rem; }
-    .request-info p { color: var(--text-sec); font-size: 0.9rem; }
-    .status-badge {
-      padding: 4px 12px;
-      border-radius: 20px;
+    .admin-sidebar .tab-btn {
+      padding: 10px 16px;
+      font-family: var(--font-mono);
       font-size: 0.7rem;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      color: var(--text-sec);
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.2s;
+      border: 1px solid transparent;
+      background: none;
+      text-align: left;
+    }
+    .admin-sidebar .tab-btn:hover {
+      background: rgba(255,255,255,0.04);
+      color: #fff;
+    }
+    .admin-sidebar .tab-btn.active {
+      background: rgba(6,182,212,0.08);
+      color: var(--cyan-accent);
+      border-color: rgba(6,182,212,0.2);
+    }
+    .admin-content { min-width: 0; }
+    .stat-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+    }
+    .stat-card {
+      background: rgba(255,255,255,0.02);
+      border: 1px solid rgba(255,255,255,0.05);
+      border-radius: 12px;
+      padding: 1.25rem;
+      text-align: center;
+    }
+    .stat-card .stat-value {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: #fff;
+      margin: 0.25rem 0;
+    }
+    .stat-card .stat-label {
+      font-size: 0.6rem;
+      color: var(--text-sec);
       font-family: var(--font-mono);
       text-transform: uppercase;
+      letter-spacing: 0.5px;
     }
-    .status-pending { background: rgba(255,165,0,0.1); color: orange; border: 1px solid orange; }
-    .status-approved { background: rgba(0,255,0,0.1); color: var(--green); border: 1px solid var(--green); }
-    .btn-approve { background: var(--argen-blue); color: var(--white); border: none; padding: 8px 16px; border-radius: 4px; cursor: pointer; font-family: var(--font-mono); font-size: 0.8rem; }
-    .btn-approve:disabled { opacity: 0.5; cursor: not-allowed; }
-
-    /* Premium Navigation Sidebar Style override */
-    .auth-tabs {
-      background: rgba(255, 255, 255, 0.02) !important;
-      backdrop-filter: blur(16px);
-      border: 1px solid rgba(255, 255, 255, 0.05) !important;
-      padding: 0.75rem !important;
-      border-radius: 16px !important;
-      box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
+    .data-card {
+      background: rgba(255,255,255,0.02);
+      border: 1px solid rgba(255,255,255,0.05);
+      border-radius: 12px;
+      padding: 1.5rem;
+      margin-bottom: 1rem;
+      transition: border-color 0.2s;
     }
-    .auth-tab {
-      padding: 12px 20px;
+    .data-card:hover { border-color: rgba(255,255,255,0.1); }
+    .data-card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+    .data-card-title { color: #fff; font-size: 1rem; margin: 0 0 0.25rem; }
+    .data-card-sub { color: var(--text-sec); font-size: 0.85rem; margin: 0; }
+    .badge {
+      display: inline-block;
+      padding: 2px 10px;
+      border-radius: 12px;
+      font-size: 0.6rem;
+      font-family: var(--font-mono);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    .badge-active { background: rgba(0,255,0,0.08); color: #22c55e; border: 1px solid rgba(34,197,94,0.2); }
+    .badge-pending { background: rgba(255,165,0,0.08); color: orange; border: 1px solid rgba(255,165,0,0.2); }
+    .badge-inactive { background: rgba(239,68,68,0.08); color: #ef4444; border: 1px solid rgba(239,68,68,0.2); }
+    .badge-draft { background: rgba(255,255,255,0.04); color: var(--text-sec); border: 1px solid rgba(255,255,255,0.1); }
+    .action-btn {
+      padding: 6px 14px;
+      border-radius: 6px;
+      font-size: 0.65rem;
+      font-family: var(--font-mono);
+      cursor: pointer;
+      border: 1px solid rgba(255,255,255,0.1);
+      background: rgba(255,255,255,0.03);
+      color: #fff;
+      transition: all 0.2s;
+    }
+    .action-btn:hover { background: rgba(255,255,255,0.08); }
+    .action-btn-primary { background: var(--cyan-accent); color: #000; border-color: var(--cyan-accent); font-weight: 600; }
+    .action-btn-primary:hover { background: #06b6d4; }
+    .action-btn-danger { border-color: rgba(239,68,68,0.3); color: #ef4444; }
+    .action-btn-danger:hover { background: rgba(239,68,68,0.1); }
+    .action-btn-success { background: rgba(34,197,94,0.1); border-color: rgba(34,197,94,0.3); color: #22c55e; }
+    .action-btn-success:hover { background: rgba(34,197,94,0.2); }
+    .filter-bar {
+      display: flex;
+      gap: 0.75rem;
+      margin-bottom: 1.25rem;
+      flex-wrap: wrap;
+    }
+    .filter-bar input, .filter-bar select {
+      padding: 8px 12px;
+      background: rgba(255,255,255,0.03);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 6px;
+      color: #fff;
+      font-size: 0.75rem;
+      font-family: var(--font-mono);
+    }
+    .filter-bar input::placeholder { color: var(--text-sec); }
+    .modal-overlay {
+      display: none;
+      position: fixed; inset: 0;
+      background: rgba(0,0,0,0.85);
+      backdrop-filter: blur(8px);
+      z-index: 10000;
+      align-items: center;
+      justify-content: center;
+      padding: 1.5rem;
+    }
+    .modal-overlay.open { display: flex; }
+    .modal-content {
+      background: rgba(10,10,10,0.95);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 16px;
+      padding: 2rem;
+      width: 100%;
+      max-width: 560px;
+      max-height: 85vh;
+      overflow-y: auto;
+    }
+    .modal-content h3 {
+      font-size: 1rem;
+      color: #fff;
+      margin: 0 0 1.5rem;
+      font-family: var(--font-mono);
+    }
+    .modal-content .form-group { margin-bottom: 1rem; }
+    .modal-content .form-label {
+      display: block;
+      font-size: 0.6rem;
+      color: var(--text-sec);
+      font-family: var(--font-mono);
+      text-transform: uppercase;
+      margin-bottom: 0.35rem;
+    }
+    .modal-content .form-input {
+      width: 100%;
+      padding: 10px;
+      background: rgba(255,255,255,0.03);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 6px;
+      color: #fff;
+      font-size: 0.8rem;
+    }
+    .modal-content .form-input:focus {
+      outline: none;
+      border-color: var(--cyan-accent);
+    }
+    .modal-actions {
+      display: flex;
+      gap: 0.75rem;
+      margin-top: 1.5rem;
+      justify-content: flex-end;
+    }
+    .chart-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+    }
+    .chart-card {
+      background: rgba(255,255,255,0.02);
+      border: 1px solid rgba(255,255,255,0.05);
+      border-radius: 12px;
+      padding: 1rem;
+      min-height: 200px;
+    }
+    .chart-card.full { grid-column: 1 / -1; min-height: 300px; }
+    .chart-card canvas { width: 100% !important; height: 100% !important; }
+    .log-container {
+      max-height: 200px;
+      overflow-y: auto;
+      font-family: var(--font-mono);
+      font-size: 0.65rem;
+    }
+    .log-container > div {
+      padding: 0.4rem 0;
+      border-bottom: 1px solid rgba(255,255,255,0.03);
+      display: flex;
+      justify-content: space-between;
+    }
+    .empty-state {
+      text-align: center;
+      padding: 4rem 2rem;
+      color: var(--text-sec);
       font-family: var(--font-mono);
       font-size: 0.75rem;
-      text-transform: uppercase;
-      letter-spacing: 1px;
-      color: var(--text-sec);
-      cursor: pointer;
+    }
+    .invite-link-display {
+      margin-top: 1rem;
+      padding: 1rem;
+      background: rgba(0,0,0,0.3);
+      border: 1px dashed rgba(255,255,255,0.1);
       border-radius: 8px;
-      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-      font-weight: 600;
-      border: 1px solid transparent;
     }
-    .auth-tab.active {
-      background: rgba(43, 96, 226, 0.1);
+    .invite-link-display input {
+      width: 100%;
+      background: transparent;
+      border: none;
       color: var(--cyan-accent);
-      border-color: rgba(6, 182, 212, 0.3);
-      box-shadow: 0 4px 20px rgba(6, 182, 212, 0.15);
-    }
-    .auth-tab:hover:not(.active) {
-      background: rgba(255, 255, 255, 0.04);
-      color: #fff;
-      border-color: rgba(255, 255, 255, 0.08);
+      font-family: var(--font-mono);
+      font-size: 0.7rem;
     }
   </style>
   <script>
@@ -105,128 +259,122 @@
         <img src="../images/ArGen Logo.png" alt="ArGen" class="logo-img">
       </a>
       <div style="display: flex; align-items: center; gap: 1.5rem;">
-        <div style="color: var(--white); font-family: var(--font-mono); font-size: 0.7rem;">[ADMIN_SYSTEM_v1.0]</div>
-        <button onclick="argenApi.logout()" class="btn btn-dark" style="padding: 8px 16px; font-size: 0.7rem;">LOGOUT</button>
+        <div style="color: rgba(255,255,255,0.4); font-family: var(--font-mono); font-size: 0.65rem;">ADMIN</div>
+        <button onclick="argenApi.logout()" class="action-btn action-btn-danger" style="font-size: 0.65rem; padding: 6px 14px;">LOGOUT</button>
       </div>
     </div>
   </header>
 
-  <section class="section" style="padding-top: 120px;">
+  <section class="section" style="padding-top: 100px;">
     <div class="container">
-      <div style="display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 3rem;">
+      <div style="display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 2rem;">
         <div>
-          <h1 class="section-h2">Control <i class="soul-text">Center</i></h1>
-          <p class="section-sub">App Admin: Manage organizational lifecycles</p>
-        </div>
-        <div style="font-family: var(--font-mono); font-size: 0.7rem; color: var(--text-sec);">
-          [STATUS: ENCRYPTED_OVERWATCH]
+          <h1 class="section-h2" style="font-size: 1.75rem;">Admin <i style="font-style: italic; color: var(--cyan-accent);">Portal</i></h1>
+          <p class="section-sub" style="font-size: 0.85rem;">Manage organizations, users, and platform operations</p>
         </div>
       </div>
 
-      <div style="display: grid; grid-template-columns: 250px 1fr; gap: 2rem; align-items: flex-start;">
-        <div class="auth-tabs" style="display: flex; flex-direction: column; gap: 0.5rem; background: rgba(0,0,0,0.2); padding: 1rem; border-radius: 8px; border: 1px solid rgba(255,255,255,0.05);">
-          <div class="auth-tab active" onclick="switchView('companies')">Organizations</div>
-          <div class="auth-tab" onclick="switchView('users')">User Audit</div>
-          <div class="auth-tab" onclick="switchView('invitations')">Invitations</div>
-          <div class="auth-tab" onclick="switchView('monitor')">System Monitor</div>
-          <div class="auth-tab" onclick="switchView('billing')">Billing & Invoices</div>
+      <div class="admin-layout">
+        <div class="admin-sidebar">
+          <button class="tab-btn active" data-tab="dashboard">Dashboard</button>
+          <button class="tab-btn" data-tab="organizations">Organizations</button>
+          <button class="tab-btn" data-tab="users">Users</button>
+          <button class="tab-btn" data-tab="invitations">Invitations</button>
+          <button class="tab-btn" data-tab="monitor">Monitor</button>
+          <button class="tab-btn" data-tab="invoices">Invoices</button>
         </div>
 
-        <div class="tab-content-area" style="min-width: 0;">
-          <!-- Organizations Tab -->
-          <div id="companiesView" class="tab-view">
-            <div id="companiesList" class="admin-grid">
-              <div style="color: var(--text-sec); text-align: center; padding: 4rem;">Synchronizing organizational data...</div>
+        <div class="admin-content">
+          <div id="tab-dashboard" class="tab-panel">
+            <div class="stat-grid" id="dashboardStats">
+              <div class="stat-card"><div class="stat-value" id="statOrgs">—</div><div class="stat-label">Organizations</div></div>
+              <div class="stat-card"><div class="stat-value" id="statUsers">—</div><div class="stat-label">Total Users</div></div>
+              <div class="stat-card"><div class="stat-value" id="statActiveChallenges">—</div><div class="stat-label">Active Challenges</div></div>
+              <div class="stat-card"><div class="stat-value" id="statAvgScore">—</div><div class="stat-label">Avg Score</div></div>
+              <div class="stat-card"><div class="stat-value" id="statCredits">—</div><div class="stat-label">Credits Remaining</div></div>
+            </div>
+            <div class="chart-grid">
+              <div class="chart-card full"><canvas id="overviewChart"></canvas></div>
             </div>
           </div>
 
-          <!-- Billing & Invoices Tab -->
-          <div id="billingView" class="tab-view" style="display: none;">
-            <div class="request-card" style="margin-bottom: 2rem; display: block;">
-              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; flex-wrap: wrap; gap: 1rem;">
-                <h3 style="margin: 0; color: #fff;">Invoice Catalog</h3>
-                <button onclick="openCreateInvoiceModal()" class="btn" style="padding: 10px 20px; font-size: 0.75rem; background: var(--green); color: #000; border: none; font-weight: 700; border-radius: 4px; font-family: var(--font-mono); cursor: pointer;">CREATE MANUAL INVOICE</button>
-              </div>
-              <div id="invoicesList" class="admin-grid">
-                <div style="color: var(--text-sec); text-align: center; padding: 4rem;">Synchronizing billing transactions...</div>
-              </div>
+          <div id="tab-organizations" class="tab-panel" style="display:none">
+            <div class="filter-bar">
+              <input type="text" id="orgSearch" placeholder="Search organizations..." oninput="renderCompanies()">
+              <select id="orgStatusFilter" onchange="renderCompanies()">
+                <option value="all">All Status</option>
+                <option value="active">Active</option>
+                <option value="pending">Pending</option>
+                <option value="inactive">Inactive</option>
+              </select>
             </div>
+            <div id="orgsList"></div>
           </div>
 
-          <!-- Users Tab -->
-          <div id="usersView" class="tab-view" style="display: none;">
-            <div id="usersList" class="admin-grid">
-              <div style="color: var(--text-sec); text-align: center; padding: 4rem;">Compiling global user audit...</div>
+          <div id="tab-users" class="tab-panel" style="display:none">
+            <div class="filter-bar">
+              <input type="text" id="userSearch" placeholder="Search users..." oninput="renderUsers()">
+              <select id="userRoleFilter" onchange="renderUsers()">
+                <option value="all">All Roles</option>
+                <option value="teamadmin">Team Admin</option>
+                <option value="member">Member</option>
+                <option value="superadmin">Superadmin</option>
+              </select>
             </div>
+            <div id="usersList"></div>
           </div>
 
-          <!-- Invitations Tab -->
-          <div id="invitationsView" class="tab-view" style="display: none;">
-            <div class="request-card" style="margin-bottom: 2rem; display: block;">
-              <h3 style="margin-bottom: 1.5rem;">Generate Access Link</h3>
-              <form id="inviteForm" style="display: grid; grid-template-columns: 1fr 1fr auto; gap: 1rem; align-items: flex-end;">
-                <div class="form-group" style="margin-bottom: 0;">
-                  <label class="form-label" style="font-size: 0.65rem;">COMPANY NAME</label>
-                  <input type="text" id="inv-company" class="form-input" placeholder="Acme Corp" required style="padding: 10px;">
-                </div>
-                <div class="form-group" style="margin-bottom: 0;">
-                  <label class="form-label" style="font-size: 0.65rem;">ADMIN EMAIL</label>
-                  <input type="email" id="inv-email" class="form-input" placeholder="admin@acme.com" required style="padding: 10px;">
-                </div>
-                <button type="submit" class="btn btn-primary" style="height: 42px; padding: 0 24px; font-size: 0.75rem;">GENERATE</button>
+          <div id="tab-invitations" class="tab-panel" style="display:none">
+            <div class="data-card">
+              <h3 style="color:#fff;font-size:0.9rem;margin:0 0 1rem;font-family:var(--font-mono);">Create Invitation</h3>
+              <form id="inviteForm" style="display:grid;grid-template-columns:1fr 1fr auto;gap:0.75rem;align-items:flex-end;">
+                <div><label class="form-label" style="display:block;font-size:0.6rem;color:var(--text-sec);font-family:var(--font-mono);text-transform:uppercase;margin-bottom:0.35rem;">Company Name</label>
+                <input type="text" id="inv-company" class="form-input" placeholder="Acme Corp" required></div>
+                <div><label class="form-label" style="display:block;font-size:0.6rem;color:var(--text-sec);font-family:var(--font-mono);text-transform:uppercase;margin-bottom:0.35rem;">Admin Email</label>
+                <input type="email" id="inv-email" class="form-input" placeholder="admin@acme.com" required></div>
+                <button type="submit" class="action-btn action-btn-primary" style="height:38px;padding:0 20px;border:none;">Generate</button>
               </form>
-              <div id="inviteResult" style="margin-top: 1.5rem; display: none; padding: 1rem; background: rgba(0,0,0,0.3); border-radius: 4px; border: 1px dashed rgba(255,255,255,0.1);">
-                <p style="font-size: 0.7rem; color: var(--text-sec); margin-bottom: 0.5rem; font-family: var(--font-mono);">UNIQUE_REGISTRATION_URL:</p>
-                <div style="display: flex; gap: 0.5rem;">
-                  <input type="text" id="inviteLink" readonly class="form-input" style="background: transparent; color: var(--argen-blue); font-family: var(--font-mono); font-size: 0.75rem;">
-                  <button onclick="copyInvite()" class="btn btn-dark" style="height: 42px; padding: 0 16px;">COPY</button>
+              <div id="inviteResult" style="display:none;" class="invite-link-display">
+                <p style="font-size:0.6rem;color:var(--text-sec);font-family:var(--font-mono);margin:0 0 0.5rem;">REGISTRATION LINK</p>
+                <div style="display:flex;gap:0.5rem;">
+                  <input type="text" id="inviteLink" readonly>
+                  <button onclick="copyInviteLink()" class="action-btn" style="flex-shrink:0;">Copy</button>
                 </div>
               </div>
             </div>
-            <div id="invitationsList" class="admin-grid"></div>
+            <div id="invitationsList"></div>
           </div>
 
-          <!-- System Monitor Tab -->
-          <div id="monitorView" class="tab-view" style="display: none;">
-            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 1rem; margin-bottom: 2rem;">
-              <div class="request-card" style="display: block; text-align: center; padding: 1.5rem 1rem;">
-                <p style="font-size: 0.65rem; color: var(--text-sec); font-family: var(--font-mono);">AGENT_STATUS</p>
-                <h2 id="activeAgents" style="font-size: 1.75rem; margin: 0.5rem 0;">5/5</h2>
-                <p style="font-size: 0.65rem; color: var(--green);">[ONLINE: ALL SYSTEMS]</p>
+          <div id="tab-monitor" class="tab-panel" style="display:none">
+            <div class="stat-grid">
+              <div class="stat-card"><div class="stat-value" id="monActiveAgents">—</div><div class="stat-label">AI Agents Online</div></div>
+              <div class="stat-card"><div class="stat-value" id="monApiQuality">—</div><div class="stat-label">Avg API Quality</div></div>
+              <div class="stat-card"><div class="stat-value" id="monCreditsSpent">$—</div><div class="stat-label">Credits Spent (24h)</div></div>
+              <div class="stat-card"><div class="stat-value" id="monCreditsLeft">$—</div><div class="stat-label">Credits Remaining</div></div>
+            </div>
+            <div class="chart-grid">
+              <div class="chart-card full"><canvas id="usageChart"></canvas></div>
+              <div class="chart-card"><canvas id="qualityChart"></canvas></div>
+              <div class="chart-card"><canvas id="agentPerfChart"></canvas></div>
+            </div>
+            <div class="chart-grid">
+              <div class="chart-card">
+                <p style="font-size:0.6rem;color:var(--text-sec);font-family:var(--font-mono);margin:0 0 0.75rem;">Agent Activity Log</p>
+                <div class="log-container" id="agentLogs">Loading...</div>
               </div>
-              <div class="request-card" style="display: block; text-align: center; padding: 1.5rem 1rem;">
-                <p style="font-size: 0.65rem; color: var(--text-sec); font-family: var(--font-mono);">API_QUALITY</p>
-                <h2 id="apiQualityVal" style="font-size: 1.75rem; margin: 0.5rem 0;">98.2%</h2>
-                <p style="font-size: 0.65rem; color: var(--text-sec);">AVG SCORE</p>
-              </div>
-              <div class="request-card" style="display: block; text-align: center; padding: 1.5rem 1rem;">
-                <p style="font-size: 0.65rem; color: var(--text-sec); font-family: var(--font-mono);">CREDITS_SPENT</p>
-                <h2 id="creditSpentVal" style="font-size: 1.75rem; margin: 0.5rem 0;">$0.00</h2>
-                <p style="font-size: 0.65rem; color: var(--text-sec);">LAST 24 HOURS</p>
-              </div>
-              <div class="request-card" style="display: block; text-align: center; padding: 1.5rem 1rem;">
-                <p style="font-size: 0.65rem; color: var(--text-sec); font-family: var(--font-mono);">CREDITS_LEFT</p>
-                <h2 id="creditLeftVal" style="font-size: 1.75rem; margin: 0.5rem 0;">$1000.00</h2>
-                <p style="font-size: 0.65rem; color: var(--text-sec);">PLATFORM BUDGET</p>
+              <div class="chart-card">
+                <p style="font-size:0.6rem;color:var(--text-sec);font-family:var(--font-mono);margin:0 0 0.75rem;">Token Distribution</p>
+                <canvas id="tokenChart"></canvas>
               </div>
             </div>
+          </div>
 
-            <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 1.5rem; margin-bottom: 2rem;">
-              <div class="request-card" style="display: block; min-height: 350px;">
-                <p class="section-sub" style="font-size: 0.65rem; margin-bottom: 1rem;">[VISUAL_ANALYTICS_ENGINE]</p>
-                <div style="height: 300px; width: 100%; position: relative;"><canvas id="usageChart"></canvas></div>
-              </div>
-              <div class="request-card" style="display: block; min-height: 350px;">
-                <p class="section-sub" style="font-size: 0.65rem; margin-bottom: 1rem;">[REAL_TIME_AGENT_LOGS]</p>
-                <div id="agent-logs" style="max-height: 280px; overflow-y: auto; font-family: var(--font-mono); font-size: 0.7rem;"></div>
-              </div>
+          <div id="tab-invoices" class="tab-panel" style="display:none">
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1rem;flex-wrap:wrap;gap:0.75rem;">
+              <h3 style="color:#fff;margin:0;font-size:1rem;">Invoice Records</h3>
+              <button onclick="openInvoiceModal()" class="action-btn action-btn-primary" style="border:none;">+ New Invoice</button>
             </div>
-
-            <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1.5rem;">
-              <div class="request-card" style="display: block; position: relative; height: 200px;"><canvas id="qualityChart"></canvas></div>
-              <div class="request-card" style="display: block; position: relative; height: 200px;"><canvas id="tokenChart"></canvas></div>
-              <div class="request-card" style="display: block; position: relative; height: 200px;"><canvas id="agentPerfChart"></canvas></div>
-            </div>
+            <div id="invoicesList"></div>
           </div>
         </div>
       </div>
@@ -237,184 +385,215 @@
   <script src="../js/api.js"></script>
   <script>
     let charts = {};
+    let companiesData = [];
+    let usersData = [];
+    let invitationsData = [];
+    let invoicesData = [];
 
-    function switchView(view) {
-      document.querySelectorAll('.tab-view').forEach(v => v.style.display = 'none');
-      document.querySelectorAll('.auth-tab').forEach(t => t.classList.remove('active'));
-      
-      const tabs = ['companies', 'users', 'invitations', 'monitor', 'billing'];
-      const tabIdx = tabs.indexOf(view);
-      if (tabIdx !== -1) {
-        document.querySelectorAll('.auth-tab')[tabIdx].classList.add('active');
-        document.getElementById(view + 'View').style.display = 'block';
-      }
+    // ── Tab Switching ──────────────────────────────────
+    document.querySelectorAll('.tab-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        document.querySelectorAll('.tab-panel').forEach(p => p.style.display = 'none');
+        const tab = btn.dataset.tab;
+        const panel = document.getElementById('tab-' + tab);
+        if (panel) panel.style.display = 'block';
+        if (tab === 'dashboard') fetchDashboard();
+        if (tab === 'organizations') fetchCompanies();
+        if (tab === 'users') fetchUsers();
+        if (tab === 'invitations') fetchInvitations();
+        if (tab === 'monitor') fetchMonitor();
+        if (tab === 'invoices') fetchInvoices();
+      });
+    });
 
-      if (view === 'companies') fetchCompanies();
-      if (view === 'users') fetchUsers();
-      if (view === 'invitations') fetchInvitations();
-      if (view === 'monitor') fetchMonitorData();
-      if (view === 'billing') fetchInvoices();
-    }
-
-    async function fetchMonitorData() {
+    // ── Dashboard ──────────────────────────────────────
+    async function fetchDashboard() {
       try {
         const stats = await argenApi.request('/admin/stats');
-        document.getElementById('activeAgents').textContent = `${stats.agents.activeAgents}/5`;
-        document.getElementById('apiQualityVal').textContent = stats.usage.avgQuality + '%';
-        document.getElementById('creditSpentVal').textContent = '$' + stats.usage.totalCost;
-        document.getElementById('creditLeftVal').textContent = '$' + stats.credits.remaining;
-        
-        initCharts(stats);
-        
-        const logs = await argenApi.request('/admin/agent-logs');
-        renderLogs(logs);
-      } catch (err) {
-        console.error('Monitor error:', err);
-      }
+        document.getElementById('statOrgs').textContent = stats.companies?.total ?? '—';
+        document.getElementById('statUsers').textContent = stats.users?.total ?? '—';
+        document.getElementById('statActiveChallenges').textContent = stats.challenges?.active ?? '—';
+        document.getElementById('statAvgScore').textContent = (stats.usage?.avgQuality ?? '—') + '%';
+        document.getElementById('statCredits').textContent = '$' + (stats.credits?.remaining ?? '—');
+
+        const ctx = document.getElementById('overviewChart').getContext('2d');
+        if (charts.overview) charts.overview.destroy();
+        const cd = stats.chartData || { labels: ['Mon','Tue','Wed','Thu','Fri','Sat','Sun'], calls: [] };
+        charts.overview = new Chart(ctx, {
+          type: 'line',
+          data: {
+            labels: cd.labels,
+            datasets: [
+              { label: 'API Calls', data: cd.calls, borderColor: '#06b6d4', tension: 0.3, fill: true, backgroundColor: 'rgba(6,182,212,0.08)' },
+              { label: 'Challenges Completed', data: cd.challengesCompleted || cd.calls.map(v => Math.round(v*0.7)), borderColor: '#22c55e', tension: 0.3, fill: true, backgroundColor: 'rgba(34,197,94,0.06)' }
+            ]
+          },
+          options: {
+            responsive: true, maintainAspectRatio: false,
+            plugins: { legend: { labels: { color: '#888', font: { size: 10, family: 'JetBrains Mono' } } } },
+            scales: { x: { grid: { color: 'rgba(255,255,255,0.03)' }, ticks: { color: '#666' } }, y: { grid: { color: 'rgba(255,255,255,0.03)' }, ticks: { color: '#666' } } }
+          }
+        });
+      } catch (e) { console.error('Dashboard error:', e); }
     }
 
-    function renderLogs(logs) {
-      const container = document.getElementById('agent-logs');
-      container.innerHTML = logs.map(log => `
-        <div style="padding: 0.5rem; border-bottom: 1px solid rgba(255,255,255,0.05); display: flex; justify-content: space-between;">
-          <span>
-            <span style="color: var(--text-sec);">${new Date(log.timestamp || log.createdAt).toLocaleTimeString()}</span>
-            <span style="color: var(--argen-blue); margin-left: 0.5rem;">[${log.agentName.toUpperCase()}]</span>
-          </span>
-          <span style="color: ${log.status === 'success' ? 'var(--green)' : '#ef4444'}">${log.tokensUsed} tokens</span>
-        </div>
-      `).join('') || '<div style="color: var(--text-sec); padding: 1rem;">No recent activity.</div>';
-    }
-
-    function initCharts(stats) {
-      const cData = stats.chartData || {
-        labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
-        calls: [120, 80, 450, 900, 1100, 850, 400],
-        quality: [92, 94, 91, 95, 93, 96, parseFloat(stats.usage.avgQuality || 95)],
-        tokens: [1200, 800, 1500, 2000, 500],
-        radar: [85, 92, 78, 95, 88]
-      };
-
-      // Usage Chart
-      const ctxU = document.getElementById('usageChart').getContext('2d');
-      if (charts.usage) charts.usage.destroy();
-      charts.usage = new Chart(ctxU, {
-        type: 'line',
-        data: {
-          labels: cData.labels,
-          datasets: [{
-            label: 'API Calls',
-            data: cData.calls,
-            borderColor: '#2b60e2',
-            tension: 0.4,
-            fill: true,
-            backgroundColor: 'rgba(43, 96, 226, 0.1)'
-          }]
-        },
-        options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { x: { grid: { color: 'rgba(255,255,255,0.05)' } }, y: { grid: { color: 'rgba(255,255,255,0.05)' } } } }
-      });
-
-      // Quality Chart
-      const ctxQ = document.getElementById('qualityChart').getContext('2d');
-      if (charts.quality) charts.quality.destroy();
-      charts.quality = new Chart(ctxQ, {
-        type: 'line',
-        data: {
-          labels: cData.labels,
-          datasets: [{
-            label: 'Avg Quality',
-            data: cData.quality,
-            borderColor: '#2b60e2',
-            tension: 0.4,
-            fill: true,
-            backgroundColor: 'rgba(43, 96, 226, 0.1)'
-          }]
-        },
-        options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { x: { display: false }, y: { display: false } } }
-      });
-
-      // Token Chart
-      const ctxT = document.getElementById('tokenChart').getContext('2d');
-      if (charts.tokens) charts.tokens.destroy();
-      charts.tokens = new Chart(ctxT, {
-        type: 'bar',
-        data: {
-          labels: ['Res', 'Cha', 'Sco', 'Rep', 'Coa'],
-          datasets: [{
-            label: 'Tokens',
-            data: cData.tokens,
-            backgroundColor: 'rgba(43, 96, 226, 0.5)',
-            borderRadius: 4
-          }]
-        },
-        options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { x: { display: false }, y: { display: false } } }
-      });
-
-      // Agent Performance Radar
-      const ctxA = document.getElementById('agentPerfChart').getContext('2d');
-      if (charts.agent) charts.agent.destroy();
-      charts.agent = new Chart(ctxA, {
-        type: 'radar',
-        data: {
-          labels: ['Speed', 'Accuracy', 'Cost', 'Soul', 'Reliability'],
-          datasets: [{
-            label: 'Current Status',
-            data: cData.radar,
-            borderColor: '#2b60e2',
-            backgroundColor: 'rgba(43, 96, 226, 0.1)'
-          }]
-        },
-        options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { r: { display: false } } }
-      });
-    }
-
+    // ── Organizations ──────────────────────────────────
     async function fetchCompanies() {
       try {
-        const data = await argenApi.request('/admin/companies');
-        document.getElementById('companiesList').innerHTML = data.map(co => `
-          <div class="request-card">
-            <div class="request-info">
-              <span class="status-badge status-${co.status}">${co.status}</span>
-              <h3 style="margin-top:0.5rem;">${co.name}</h3>
-              <p>${co.primaryContact.email}</p>
-            </div>
-            <div class="request-actions">
-              <button class="btn-approve" onclick="updateStatus('${co._id}', 'active')">MANAGE</button>
-            </div>
-          </div>
-        `).join('');
-      } catch (err) { console.error(err); }
+        companiesData = await argenApi.request('/admin/companies');
+        renderCompanies();
+      } catch (e) { console.error(e); }
     }
 
+    function renderCompanies() {
+      const search = (document.getElementById('orgSearch')?.value || '').toLowerCase();
+      const status = document.getElementById('orgStatusFilter')?.value || 'all';
+      const filtered = companiesData.filter(c =>
+        (status === 'all' || c.status === status) &&
+        (c.name?.toLowerCase().includes(search) || c.email?.toLowerCase().includes(search))
+      );
+      document.getElementById('orgsList').innerHTML = filtered.length
+        ? filtered.map(co => `
+          <div class="data-card">
+            <div class="data-card-header">
+              <div>
+                <span class="badge badge-${co.status}">${co.status}</span>
+                <h3 class="data-card-title">${co.name}</h3>
+                <p class="data-card-sub">${co.primaryContact?.email || co.email || '—'}</p>
+                ${co.inviteCode ? `<p class="data-card-sub" style="font-family:var(--font-mono);font-size:0.65rem;margin-top:0.25rem;color:var(--cyan-accent);">Code: ${co.inviteCode}</p>` : ''}
+              </div>
+              <div style="display:flex;gap:0.5rem;flex-wrap:wrap;">
+                ${co.status !== 'active' ? `<button class="action-btn action-btn-success" onclick="updateOrgStatus('${co._id || co.id}','active')">Approve</button>` : ''}
+                <button class="action-btn" onclick="generateOrgCode('${co._id || co.id}')">Generate Code</button>
+                <button class="action-btn" onclick="editOrg('${co._id || co.id}')">Edit</button>
+                <button class="action-btn action-btn-danger" onclick="deleteOrg('${co._id || co.id}')">Delete</button>
+              </div>
+            </div>
+          </div>`).join('')
+        : '<div class="empty-state">No organizations found</div>';
+    }
+
+    async function updateOrgStatus(id, status) {
+      try {
+        await argenApi.request(`/admin/companies/${id}/status`, { method: 'PATCH', body: JSON.stringify({ status }) });
+        fetchCompanies();
+      } catch (e) { alert(e.message); }
+    }
+
+    async function generateOrgCode(companyId) {
+      const customCode = prompt('Enter a custom team code (4-24 chars, letters/numbers), or leave blank for random:');
+      if (customCode === null) return;
+      const normalized = customCode.trim().toUpperCase().replace(/[^A-Z0-9]/g, '');
+      if (customCode.trim() && (normalized.length < 4 || normalized.length > 24)) {
+        alert('Code must be 4-24 letters/numbers.'); return;
+      }
+      try {
+        const data = await argenApi.generateTeamCode(companyId, normalized);
+        alert(`Team code: ${data.inviteCode}`);
+        fetchCompanies();
+      } catch (e) { alert(e.message); }
+    }
+
+    function editOrg(id) {
+      const org = companiesData.find(c => (c._id || c.id) === id);
+      if (!org) return;
+      document.getElementById('modal-title').textContent = 'Edit Organization';
+      document.getElementById('edit-name').value = org.name || '';
+      document.getElementById('edit-email').value = org.primaryContact?.email || org.email || '';
+      document.getElementById('edit-id').value = id;
+      document.getElementById('orgModal').classList.add('open');
+    }
+
+    function deleteOrg(id) {
+      if (!confirm('Permanently delete this organization and all associated data?')) return;
+      argenApi.request(`/admin/companies/${id}`, { method: 'DELETE' })
+        .then(() => fetchCompanies())
+        .catch(e => alert(e.message));
+    }
+
+    document.getElementById('orgEditForm')?.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const id = document.getElementById('edit-id').value;
+      try {
+        await argenApi.request(`/admin/companies/${id}`, {
+          method: 'PATCH',
+          body: JSON.stringify({
+            name: document.getElementById('edit-name').value,
+            primaryContact: { email: document.getElementById('edit-email').value }
+          })
+        });
+        document.getElementById('orgModal').classList.remove('open');
+        fetchCompanies();
+      } catch (e) { alert(e.message); }
+    });
+
+    // ── Users ──────────────────────────────────────────
     async function fetchUsers() {
       try {
-        const data = await argenApi.request('/admin/users');
-        document.getElementById('usersList').innerHTML = data.map(user => `
-          <div class="request-card">
-            <div class="request-info">
-              <h3 style="margin:0">${user.name}</h3>
-              <p>${user.email} • ${user.role}</p>
-            </div>
-          </div>
-        `).join('');
-      } catch (err) { console.error(err); }
+        usersData = await argenApi.request('/admin/users');
+        renderUsers();
+      } catch (e) { console.error(e); }
     }
 
+    function renderUsers() {
+      const search = (document.getElementById('userSearch')?.value || '').toLowerCase();
+      const role = document.getElementById('userRoleFilter')?.value || 'all';
+      const filtered = usersData.filter(u =>
+        (role === 'all' || u.role === role) &&
+        (u.name?.toLowerCase().includes(search) || u.email?.toLowerCase().includes(search))
+      );
+      document.getElementById('usersList').innerHTML = filtered.length
+        ? filtered.map(u => `
+          <div class="data-card">
+            <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:1rem;flex-wrap:wrap;">
+              <div>
+                <h3 class="data-card-title" style="font-size:0.9rem;">${u.name}</h3>
+                <p class="data-card-sub">${u.email} <span class="badge badge-${u.role === 'superadmin' ? 'active' : 'pending'}">${u.role}</span></p>
+                <p class="data-card-sub" style="font-size:0.7rem;margin-top:0.25rem;">
+                  ${u.department || '—'} · ${u.employeeId || 'No ID'} · ${u.phone || '—'}
+                </p>
+              </div>
+              ${u.profileStatus === 'pending' && u.companyId
+                ? `<button class="action-btn action-btn-success" onclick="approveUser('${u.companyId}','${u.id || u._id}')">Approve</button>`
+                : ''}
+            </div>
+          </div>`).join('')
+        : '<div class="empty-state">No users found</div>';
+    }
+
+    async function approveUser(companyId, userId) {
+      try {
+        await argenApi.approveAdmin(companyId, userId);
+        alert('User approved');
+        fetchUsers();
+      } catch (e) { alert(e.message); }
+    }
+
+    // ── Invitations ────────────────────────────────────
     async function fetchInvitations() {
       try {
-        const data = await argenApi.request('/admin/invitations');
-        document.getElementById('invitationsList').innerHTML = data.map(inv => `
-          <div class="request-card">
-            <div class="request-info">
-              <h3 style="margin:0">${inv.companyName}</h3>
-              <p>${inv.email} • ${inv.status}</p>
-            </div>
-          </div>
-        `).join('');
-      } catch (err) { console.error(err); }
+        invitationsData = await argenApi.request('/admin/invitations');
+        renderInvitations();
+      } catch (e) { console.error(e); }
     }
 
-    document.getElementById('inviteForm').addEventListener('submit', async (e) => {
+    function renderInvitations() {
+      document.getElementById('invitationsList').innerHTML = invitationsData.length
+        ? invitationsData.map(inv => `
+          <div class="data-card">
+            <div class="data-card-header">
+              <div>
+                <h3 class="data-card-title" style="font-size:0.9rem;">${inv.companyName}</h3>
+                <p class="data-card-sub">${inv.email} · <span class="badge badge-${inv.status === 'used' ? 'active' : 'pending'}">${inv.status}</span></p>
+              </div>
+            </div>
+          </div>`).join('')
+        : '<div class="empty-state">No invitations created yet</div>';
+    }
+
+    document.getElementById('inviteForm')?.addEventListener('submit', async (e) => {
       e.preventDefault();
       try {
         const res = await argenApi.request('/admin/invitations', {
@@ -427,224 +606,188 @@
         document.getElementById('inviteLink').value = res.link;
         document.getElementById('inviteResult').style.display = 'block';
         fetchInvitations();
-      } catch (err) { alert(err.message); }
+      } catch (e) { alert(e.message); }
     });
 
-    function copyInvite() {
+    function copyInviteLink() {
       const el = document.getElementById('inviteLink');
       el.select();
-      document.execCommand('copy');
+      navigator.clipboard?.writeText(el.value);
       alert('Copied!');
     }
 
-    async function updateStatus(id, status) {
+    // ── Monitor ────────────────────────────────────────
+    async function fetchMonitor() {
       try {
-        await argenApi.request(`/admin/companies/${id}/status`, {
-          method: 'PATCH',
-          body: JSON.stringify({ status })
-        });
-        fetchCompanies();
-      } catch (err) { alert(err.message); }
+        const stats = await argenApi.request('/admin/stats');
+        document.getElementById('monActiveAgents').textContent = (stats.agents?.activeAgents ?? '—') + '/5';
+        document.getElementById('monApiQuality').textContent = (stats.usage?.avgQuality ?? '—') + '%';
+        document.getElementById('monCreditsSpent').textContent = '$' + (stats.usage?.totalCost ?? '0.00');
+        document.getElementById('monCreditsLeft').textContent = '$' + (stats.credits?.remaining ?? '—');
+
+        const cd = stats.chartData || { labels: ['Mon','Tue','Wed','Thu','Fri','Sat','Sun'], calls: [120,80,450,900,1100,850,400], quality: [92,94,91,95,93,96,95], tokens: [1200,800,1500,2000,500], radar: [85,92,78,95,88] };
+
+        ['usageChart','qualityChart','tokenChart','agentPerfChart'].forEach(id => { if (charts[id]) { charts[id].destroy(); delete charts[id]; } });
+
+        charts.usageChart = new Chart(document.getElementById('usageChart').getContext('2d'), { type: 'line', data: { labels: cd.labels, datasets: [{ label: 'API Calls', data: cd.calls, borderColor: '#06b6d4', tension: 0.3, fill: true, backgroundColor: 'rgba(6,182,212,0.08)' }] }, options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { x: { grid: { color: 'rgba(255,255,255,0.03)' } }, y: { grid: { color: 'rgba(255,255,255,0.03)' } } } } });
+
+        charts.qualityChart = new Chart(document.getElementById('qualityChart').getContext('2d'), { type: 'line', data: { labels: cd.labels, datasets: [{ label: 'Quality Score', data: cd.quality, borderColor: '#22c55e', tension: 0.3, fill: true, backgroundColor: 'rgba(34,197,94,0.08)' }] }, options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { x: { display: false }, y: { display: false } } } });
+
+        charts.tokenChart = new Chart(document.getElementById('tokenChart').getContext('2d'), { type: 'bar', data: { labels: ['Researcher','Challenge','Scorer','Report','Coach'], datasets: [{ label: 'Tokens', data: cd.tokens, backgroundColor: 'rgba(6,182,212,0.5)', borderRadius: 4 }] }, options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { x: { grid: { display: false }, ticks: { color: '#666', font: { size: 8 } } }, y: { display: false } } } });
+
+        charts.agentPerfChart = new Chart(document.getElementById('agentPerfChart').getContext('2d'), { type: 'radar', data: { labels: ['Speed','Accuracy','Cost','Soul','Reliability'], datasets: [{ label: 'Performance', data: cd.radar, borderColor: '#06b6d4', backgroundColor: 'rgba(6,182,212,0.1)' }] }, options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { r: { grid: { color: 'rgba(255,255,255,0.05)' }, ticks: { display: false } } } } });
+
+        const logs = await argenApi.request('/admin/agent-logs');
+        document.getElementById('agentLogs').innerHTML = (logs || []).length
+          ? logs.slice(0, 20).map(l => `<div><span><span style="color:var(--text-sec)">${new Date(l.timestamp || l.createdAt).toLocaleTimeString()}</span> [${(l.agentName||'agent').toUpperCase()}]</span><span style="color:${l.status === 'success' ? '#22c55e' : '#ef4444'}">${l.tokensUsed || 0} tokens</span></div>`).join('')
+          : '<div style="text-align:center;padding:2rem;color:var(--text-sec)">No recent activity</div>';
+      } catch (e) { console.error('Monitor error:', e); }
     }
 
-    // ── Invoice Management Console Logic ─────────────────
+    // ── Invoices ───────────────────────────────────────
     async function fetchInvoices() {
       try {
-        const invoices = await argenApi.getInvoices();
-        const container = document.getElementById('invoicesList');
-        if (!invoices || invoices.length === 0) {
-          container.innerHTML = '<div style="color: var(--text-sec); text-align: center; padding: 4rem; font-family: var(--font-mono);">No invoice records found.</div>';
-          return;
-        }
-        container.innerHTML = invoices.map(inv => `
-          <div class="request-card">
-            <div class="request-info">
-              <span class="status-badge status-${inv.status ? inv.status.toLowerCase() : 'draft'}">${inv.status || 'Draft'}</span>
-              <h3 style="margin-top:0.5rem; font-family: var(--font-mono);">${inv.invoiceNumber}</h3>
-              <p>${inv.clientName} • $${parseFloat(inv.totalDue || inv.subtotal || 0).toLocaleString('en-US', { minimumFractionDigits: 2 })}</p>
-              <p style="font-size: 0.75rem; color: var(--text-sec); margin-top: 0.25rem;">PO: ${inv.poNumber} | Date: ${new Date(inv.date).toLocaleDateString()}</p>
+        invoicesData = await argenApi.getInvoices();
+        renderInvoices();
+      } catch (e) { console.error(e); }
+    }
+
+    function renderInvoices() {
+      const container = document.getElementById('invoicesList');
+      if (!invoicesData?.length) {
+        container.innerHTML = '<div class="empty-state">No invoice records found</div>';
+        return;
+      }
+      container.innerHTML = invoicesData.map(inv => `
+        <div class="data-card">
+          <div class="data-card-header">
+            <div>
+              <span class="badge badge-${(inv.status||'draft').toLowerCase()}">${inv.status || 'Draft'}</span>
+              <h3 class="data-card-title" style="font-family:var(--font-mono);font-size:0.85rem;">${inv.invoiceNumber || 'INV-—'}</h3>
+              <p class="data-card-sub">${inv.clientName || '—'} · $${parseFloat(inv.totalDue || inv.subtotal || 0).toLocaleString('en-US', { minimumFractionDigits: 2 })}</p>
+              <p class="data-card-sub" style="font-size:0.65rem;margin-top:0.25rem;">PO: ${inv.poNumber || '—'} | ${inv.date ? new Date(inv.date).toLocaleDateString() : '—'}</p>
             </div>
-            <div class="request-actions" style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
-              <a href="/invoice?id=${inv._id}" target="_blank" class="btn" style="padding: 8px 16px; font-size: 0.7rem; background: var(--green); color: #000; border: none; font-weight: 700; border-radius: 4px; font-family: var(--font-mono); text-decoration: none; display: inline-flex; align-items: center; justify-content: center;">VIEW / PRINT</a>
-              <button class="btn btn-dark" onclick="openEditInvoiceModal('${inv._id}')" style="padding: 8px 16px; font-size: 0.7rem; font-family: var(--font-mono);">EDIT</button>
-              <button class="btn btn-dark" onclick="deleteInvoiceRecord('${inv._id}')" style="padding: 8px 16px; font-size: 0.7rem; background: rgba(239, 68, 68, 0.1); border-color: rgba(239, 68, 68, 0.2); color: #ef4444; font-family: var(--font-mono);">DELETE</button>
+            <div style="display:flex;gap:0.5rem;flex-wrap:wrap;">
+              <a href="/invoice?id=${inv._id || inv.id}" target="_blank" class="action-btn action-btn-primary" style="text-decoration:none;border:none;">View</a>
+              <button class="action-btn" onclick="editInvoice('${inv._id || inv.id}')">Edit</button>
+              <button class="action-btn action-btn-danger" onclick="deleteInvoice('${inv._id || inv.id}')">Delete</button>
             </div>
           </div>
-        `).join('');
-      } catch (err) {
-        console.error('Fetch invoices error:', err);
-        document.getElementById('invoicesList').innerHTML = '<div style="color: var(--text-sec); text-align: center; padding: 4rem; font-family: var(--font-mono);">Error synchronizing invoices list.</div>';
-      }
+        </div>`).join('');
     }
 
-    function openCreateInvoiceModal() {
-      document.getElementById('modalTitle').textContent = 'Create Custom Invoice';
-      document.getElementById('editInvoiceId').value = '';
+    function openInvoiceModal() {
+      document.getElementById('modal-title-inv').textContent = 'New Invoice';
+      document.getElementById('invoice-id').value = '';
       document.getElementById('inv-clientName').value = '';
-      document.getElementById('inv-clientContact').value = '';
-      document.getElementById('inv-clientAddress').value = '';
-      document.getElementById('inv-productName').value = 'ArGen Enterprise SaaS Platform License';
+      document.getElementById('inv-clientEmail').value = '';
       document.getElementById('inv-poNumber').value = '12-34-56-7890';
-      document.getElementById('inv-usageTerms').value = 'Unlimited usage for verified domain members';
-      document.getElementById('inv-periodOfUse').value = 'Unlimited / Annual Subscription';
-      document.getElementById('itemDesc').value = 'ArGen Enterprise Annual Platform License (Seat Limit: 15)';
-      document.getElementById('itemAmount').value = '1200';
+      document.getElementById('inv-amount').value = '1200';
       document.getElementById('inv-status').value = 'Draft';
-      
-      document.getElementById('invoiceModal').style.display = 'flex';
+      document.getElementById('invoiceModal').classList.add('open');
     }
 
-    async function openEditInvoiceModal(id) {
+    async function editInvoice(id) {
       try {
         const inv = await argenApi.getPublicInvoice(id);
-        
-        document.getElementById('modalTitle').textContent = 'Edit Invoice details';
-        document.getElementById('editInvoiceId').value = id;
+        document.getElementById('modal-title').textContent = 'Edit Invoice';
+        document.getElementById('invoice-id').value = id;
         document.getElementById('inv-clientName').value = inv.clientName || '';
-        document.getElementById('inv-clientContact').value = inv.clientContact || '';
-        document.getElementById('inv-clientAddress').value = inv.clientAddress || '';
-        document.getElementById('inv-productName').value = inv.productName || 'ArGen Enterprise SaaS Platform License';
-        document.getElementById('inv-poNumber').value = inv.poNumber || '12-34-56-7890';
-        document.getElementById('inv-usageTerms').value = inv.usageTerms || 'Unlimited usage for verified domain members';
-        document.getElementById('inv-periodOfUse').value = inv.periodOfUse || 'Unlimited / Annual Subscription';
-        
-        if (inv.items && inv.items.length > 0) {
-          document.getElementById('itemDesc').value = inv.items[0].description;
-          document.getElementById('itemAmount').value = inv.items[0].amount;
-        } else {
-          document.getElementById('itemDesc').value = 'ArGen Enterprise Annual Platform License (Seat Limit: 15)';
-          document.getElementById('itemAmount').value = '1200';
-        }
-        
+        document.getElementById('inv-clientEmail').value = inv.clientContact || inv.clientEmail || '';
+        document.getElementById('inv-poNumber').value = inv.poNumber || '';
+        document.getElementById('inv-amount').value = inv.totalDue || inv.subtotal || inv.items?.[0]?.amount || '';
         document.getElementById('inv-status').value = inv.status || 'Draft';
-        document.getElementById('invoiceModal').style.display = 'flex';
-      } catch (err) {
-        alert('Could not fetch invoice details: ' + err.message);
-      }
+        document.getElementById('invoiceModal').classList.add('open');
+      } catch (e) { alert('Could not load invoice: ' + e.message); }
     }
 
-    function closeInvoiceModal() {
-      document.getElementById('invoiceModal').style.display = 'none';
-    }
-
-    async function deleteInvoiceRecord(id) {
-      if (!confirm('Are you absolutely sure you want to delete this invoice record permanently?')) return;
-      try {
-        await argenApi.deleteInvoice(id);
-        fetchInvoices();
-      } catch (err) {
-        alert('Failed to delete invoice: ' + err.message);
-      }
-    }
-
-    document.getElementById('invoiceForm').addEventListener('submit', async (e) => {
+    document.getElementById('invoiceForm')?.addEventListener('submit', async (e) => {
       e.preventDefault();
-      const id = document.getElementById('editInvoiceId').value;
-      const invoiceData = {
+      const id = document.getElementById('invoice-id').value;
+      const data = {
         clientName: document.getElementById('inv-clientName').value,
-        clientContact: document.getElementById('inv-clientContact').value,
-        clientAddress: document.getElementById('inv-clientAddress').value,
-        productName: document.getElementById('inv-productName').value,
+        clientContact: document.getElementById('inv-clientEmail').value,
         poNumber: document.getElementById('inv-poNumber').value,
-        usageTerms: document.getElementById('inv-usageTerms').value,
-        periodOfUse: document.getElementById('inv-periodOfUse').value,
-        items: [
-          {
-            description: document.getElementById('itemDesc').value,
-            amount: parseFloat(document.getElementById('itemAmount').value) || 0
-          }
-        ],
+        items: [{ description: 'ArGen Enterprise License', amount: parseFloat(document.getElementById('inv-amount').value) || 0 }],
         status: document.getElementById('inv-status').value
       };
-
       try {
-        if (id) {
-          await argenApi.updateInvoice(id, invoiceData);
-        } else {
-          await argenApi.createInvoice(invoiceData);
-        }
-        closeInvoiceModal();
+        if (id) await argenApi.updateInvoice(id, data);
+        else await argenApi.createInvoice(data);
+        document.getElementById('invoiceModal').classList.remove('open');
         fetchInvoices();
-      } catch (err) {
-        alert('Failed to save invoice details: ' + err.message);
-      }
+      } catch (e) { alert('Failed: ' + e.message); }
     });
 
-    window.onload = () => fetchCompanies();
+    function deleteInvoice(id) {
+      if (!confirm('Delete this invoice permanently?')) return;
+      argenApi.deleteInvoice(id).then(fetchInvoices).catch(e => alert(e.message));
+    }
+
+    // ── Load default tab ───────────────────────────────
+    window.onload = () => { fetchDashboard(); };
   </script>
 
-  <!-- Premium Invoice Modal Container -->
-  <div id="invoiceModal" style="display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.85); z-index: 10000; align-items: center; justify-content: center; backdrop-filter: blur(8px); padding: 1.5rem;">
-    <div class="request-card" style="width: 100%; max-width: 650px; display: block; max-height: 90vh; overflow-y: auto; border: 1px solid rgba(0, 255, 136, 0.2); box-shadow: 0 0 30px rgba(0, 255, 136, 0.05); text-align: left;">
-      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; border-bottom: 1px solid rgba(255,255,255,0.05); padding-bottom: 1rem;">
-        <h3 id="modalTitle" style="color: #fff; margin: 0; font-family: var(--font-mono); font-size: 1rem;">CREATE INVOICE</h3>
-        <button onclick="closeInvoiceModal()" style="background: transparent; border: none; color: var(--text-sec); cursor: pointer; font-size: 1.5rem; font-weight: bold; line-height: 1;">&times;</button>
-      </div>
-      <form id="invoiceForm">
-        <input type="hidden" id="editInvoiceId">
-        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1rem;">
-          <div class="form-group" style="margin-bottom: 0;">
-            <label class="form-label" style="font-size: 0.65rem;">CLIENT NAME *</label>
-            <input type="text" id="inv-clientName" class="form-input" required style="padding: 10px; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.1); color: #fff;">
-          </div>
-          <div class="form-group" style="margin-bottom: 0;">
-            <label class="form-label" style="font-size: 0.65rem;">CLIENT EMAIL *</label>
-            <input type="email" id="inv-clientContact" class="form-input" required style="padding: 10px; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.1); color: #fff;">
-          </div>
+  <!-- Edit Organization Modal -->
+  <div id="orgModal" class="modal-overlay" onclick="if(event.target===this)this.classList.remove('open')">
+    <div class="modal-content">
+      <h3 id="modal-title">Edit Organization</h3>
+      <form id="orgEditForm">
+        <div class="form-group">
+          <label class="form-label">Company Name</label>
+          <input type="text" id="edit-name" class="form-input" required>
         </div>
-        <div class="form-group" style="margin-bottom: 1rem;">
-          <label class="form-label" style="font-size: 0.65rem;">CLIENT ADDRESS</label>
-          <input type="text" id="inv-clientAddress" class="form-input" placeholder="Corporate Headquarters" style="padding: 10px; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.1); color: #fff;">
+        <div class="form-group">
+          <label class="form-label">Primary Contact Email</label>
+          <input type="email" id="edit-email" class="form-input" required>
         </div>
-        <div style="display: grid; grid-template-columns: 1.5fr 1fr; gap: 1rem; margin-bottom: 1rem;">
-          <div class="form-group" style="margin-bottom: 0;">
-            <label class="form-label" style="font-size: 0.65rem;">PRODUCT NAME</label>
-            <input type="text" id="inv-productName" class="form-input" value="ArGen Enterprise SaaS Platform License" style="padding: 10px; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.1); color: #fff;">
-          </div>
-          <div class="form-group" style="margin-bottom: 0;">
-            <label class="form-label" style="font-size: 0.65rem;">PO NUMBER</label>
-            <input type="text" id="inv-poNumber" class="form-input" value="12-34-56-7890" style="padding: 10px; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.1); color: #fff;">
-          </div>
+        <input type="hidden" id="edit-id">
+        <div class="modal-actions">
+          <button type="button" class="action-btn" onclick="document.getElementById('orgModal').classList.remove('open')">Cancel</button>
+          <button type="submit" class="action-btn action-btn-primary" style="border:none;">Save Changes</button>
         </div>
-        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1rem;">
-          <div class="form-group" style="margin-bottom: 0;">
-            <label class="form-label" style="font-size: 0.65rem;">USAGE TERMS</label>
-            <input type="text" id="inv-usageTerms" class="form-input" value="Unlimited usage for verified domain members" style="padding: 10px; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.1); color: #fff;">
-          </div>
-          <div class="form-group" style="margin-bottom: 0;">
-            <label class="form-label" style="font-size: 0.65rem;">PERIOD OF USE</label>
-            <input type="text" id="inv-periodOfUse" class="form-input" value="Unlimited / Annual Subscription" style="padding: 10px; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.1); color: #fff;">
-          </div>
-        </div>
-        
-        <div style="border-top: 1px solid rgba(255,255,255,0.05); padding-top: 1rem; margin-bottom: 1.5rem;">
-          <h4 style="font-family: var(--font-mono); font-size: 0.7rem; color: var(--green); margin-bottom: 0.75rem; text-transform: uppercase;">Line Items</h4>
-          <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 1rem;">
-            <div class="form-group" style="margin-bottom: 0;">
-              <label class="form-label" style="font-size: 0.6rem;">ITEM DESCRIPTION</label>
-              <input type="text" id="itemDesc" class="form-input" value="ArGen Enterprise Annual Platform License (Seat Limit: 15)" style="padding: 10px; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.1); color: #fff;">
-            </div>
-            <div class="form-group" style="margin-bottom: 0;">
-              <label class="form-label" style="font-size: 0.6rem;">AMOUNT (USD)</label>
-              <input type="number" id="itemAmount" class="form-input" value="1200" style="padding: 10px; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.1); color: #fff;">
-            </div>
-          </div>
-        </div>
+      </form>
+    </div>
+  </div>
 
-        <div style="display: grid; grid-template-columns: 1fr 1.2fr; gap: 1rem; margin-bottom: 0.5rem; border-top: 1px solid rgba(255,255,255,0.05); padding-top: 1rem;">
-          <div class="form-group" style="margin-bottom: 0;">
-            <label class="form-label" style="font-size: 0.65rem;">STATUS</label>
-            <select id="inv-status" class="form-input" style="padding: 10px; background: #000; border: 1px solid rgba(255,255,255,0.1); color: #fff; width: 100%; border-radius: 4px;">
-              <option value="Draft">Draft</option>
-              <option value="Sent">Sent</option>
-              <option value="Paid">Paid</option>
-              <option value="Overdue">Overdue</option>
-            </select>
+  <!-- Invoice Modal -->
+  <div id="invoiceModal" class="modal-overlay" onclick="if(event.target===this)this.classList.remove('open')">
+    <div class="modal-content">
+      <h3 id="modal-title-inv">Invoice Details</h3>
+      <form id="invoiceForm">
+        <input type="hidden" id="invoice-id">
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;">
+          <div class="form-group">
+            <label class="form-label">Client Name</label>
+            <input type="text" id="inv-clientName" class="form-input" required>
           </div>
-          <div style="display: flex; gap: 0.5rem; align-items: flex-end;">
-            <button type="button" class="btn btn-dark" onclick="closeInvoiceModal()" style="flex: 1; height: 42px; font-family: var(--font-mono); font-size: 0.75rem;">CANCEL</button>
-            <button type="submit" class="btn" style="flex: 1.5; height: 42px; background: var(--green); color: #000; font-family: var(--font-mono); font-weight: bold; border: none; border-radius: 4px; cursor: pointer;">SAVE INVOICE</button>
+          <div class="form-group">
+            <label class="form-label">Client Email</label>
+            <input type="email" id="inv-clientEmail" class="form-input" required>
           </div>
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;">
+          <div class="form-group">
+            <label class="form-label">PO Number</label>
+            <input type="text" id="inv-poNumber" class="form-input">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Amount (USD)</label>
+            <input type="number" id="inv-amount" class="form-input" step="0.01" required>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Status</label>
+          <select id="inv-status" class="form-input">
+            <option value="Draft">Draft</option>
+            <option value="Sent">Sent</option>
+            <option value="Paid">Paid</option>
+            <option value="Overdue">Overdue</option>
+          </select>
+        </div>
+        <div class="modal-actions">
+          <button type="button" class="action-btn" onclick="document.getElementById('invoiceModal').classList.remove('open')">Cancel</button>
+          <button type="submit" class="action-btn action-btn-primary" style="border:none;">Save Invoice</button>
         </div>
       </form>
     </div>

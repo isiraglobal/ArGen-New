@@ -1,11 +1,59 @@
 const express = require('express');
 const router = express.Router();
-const { db } = require('../utils/supabase');
+const { auth, db } = require('../utils/supabase');
 const { protect, authorize } = require('../middleware/auth');
 const crypto = require('crypto');
 const sendEmail = require('../utils/sendEmail');
 const { createEmailTemplate } = require('../utils/emailTemplate');
 const { researchCompany } = require('../utils/ai-agents');
+
+const createTeamCode = () => crypto.randomBytes(4).toString('hex').toUpperCase();
+const normalizeTeamCode = (value = '') => String(value).trim().toUpperCase().replace(/[^A-Z0-9]/g, '');
+const getClientBaseUrl = () => (process.env.CLIENT_URL || 'https://argen.isira.club').replace(/\/$/, '');
+
+async function isTeamCodeAvailable(inviteCode, companyId) {
+  if (global.MOCK_DB) return true;
+  const existing = await db.collection('companies')
+    .where('inviteCode', '==', inviteCode)
+    .limit(1)
+    .get();
+  return existing.empty || existing.docs.every(doc => doc.id === companyId);
+}
+
+async function createUniqueTeamCode(companyId) {
+  for (let attempt = 0; attempt < 20; attempt++) {
+    const inviteCode = createTeamCode();
+    if (await isTeamCodeAvailable(inviteCode, companyId)) {
+      return inviteCode;
+    }
+  }
+  throw new Error('Could not generate a unique team code. Please try again.');
+}
+
+async function approveCompanyAdmins(companyId, approverId) {
+  const adminsSnap = await db.collection('users')
+    .where('companyId', '==', companyId)
+    .where('role', '==', 'teamadmin')
+    .get();
+
+  for (const adminDoc of adminsSnap.docs) {
+    await adminDoc.ref.update({
+      profileStatus: 'approved',
+      isApproved: true,
+      approvedBy: approverId,
+      approvedAt: new Date()
+    });
+
+    if (!global.MOCK_DB && auth?.setCustomUserClaims) {
+      await auth.setCustomUserClaims(adminDoc.id, {
+        role: 'teamadmin',
+        companyId
+      }).catch(err => console.warn(`Could not sync claims for admin ${adminDoc.id}:`, err.message));
+    }
+  }
+
+  return adminsSnap.docs.length;
+}
 
 // @route   GET api/admin/stats
 // @desc    Get advanced global system statistics (Superadmin only)
@@ -243,11 +291,35 @@ router.get('/companies', protect, authorize('superadmin'), async (req, res) => {
   }
   
   try {
+    const limit = Math.min(parseInt(req.query.limit) || 50, 200);
+    const offset = parseInt(req.query.offset) || 0;
     const snapshot = await db.collection('companies').orderBy('createdAt', 'desc').get();
     const companies = [];
-    snapshot.forEach(doc => {
-      companies.push({ _id: doc.id, ...doc.data() });
-    });
+    const allDocs = snapshot.docs.slice(offset, offset + limit);
+    for (const doc of allDocs) {
+      const company = doc.data();
+      const usersSnap = await db.collection('users').where('companyId', '==', doc.id).get();
+      const users = usersSnap.docs.map(userDoc => ({ id: userDoc.id, ...userDoc.data() }));
+      const adminUsers = users
+        .filter(user => user.role === 'teamadmin')
+        .map(user => ({
+          id: user.id,
+          name: user.name,
+          email: user.email,
+          profileStatus: user.profileStatus || 'pending_admin',
+          isApproved: Boolean(user.isApproved)
+        }));
+
+      companies.push({
+        _id: doc.id,
+        ...company,
+        employeesCount: users.filter(user => user.role !== 'superadmin').length,
+        pendingProfiles: users.filter(user => !user.profileComplete || ['pending', 'pending_admin'].includes(user.profileStatus)).length,
+        adminUsers,
+        registrationUrl: company.inviteCode ? `${getClientBaseUrl()}/login?code=${company.inviteCode}` : ''
+      });
+    }
+    res.set('X-Total-Count', snapshot.size.toString());
     res.json(companies);
   } catch (err) {
     console.error('Companies List Error:', err);
@@ -279,6 +351,111 @@ router.get('/my-company', protect, async (req, res) => {
     res.json({ _id: doc.id, ...doc.data() });
   } catch (err) {
     console.error('My Company Error:', err);
+    res.status(500).json({ msg: 'Server error', error: err.message });
+  }
+});
+
+// @route   POST api/admin/companies/:id/team-code
+// @desc    Generate or rotate team invite/passcode for a company
+router.post('/companies/:id/team-code', protect, authorize('superadmin', 'teamadmin'), async (req, res) => {
+  const { adminUserId, customCode, inviteCode: requestedInviteCode, code } = req.body || {};
+  try {
+    if (req.user.role === 'teamadmin' && req.user.companyId !== req.params.id) {
+      return res.status(403).json({ msg: 'Forbidden' });
+    }
+    const companyRef = db.collection('companies').doc(req.params.id);
+    const companyDoc = await companyRef.get();
+    if (!companyDoc.exists) return res.status(404).json({ msg: 'Company not found' });
+
+    const normalizedCustomCode = normalizeTeamCode(customCode || requestedInviteCode || code);
+    if ((customCode || requestedInviteCode || code) && (normalizedCustomCode.length < 4 || normalizedCustomCode.length > 24)) {
+      return res.status(400).json({ msg: 'Custom team code must be 4 to 24 letters or numbers' });
+    }
+
+    let inviteCode;
+    let codeType = 'random';
+    if (normalizedCustomCode) {
+      const available = await isTeamCodeAvailable(normalizedCustomCode, req.params.id);
+      if (!available) {
+        return res.status(409).json({ msg: 'That team code is already taken. Please choose another.' });
+      }
+      inviteCode = normalizedCustomCode;
+      codeType = 'custom';
+    } else {
+      inviteCode = await createUniqueTeamCode(req.params.id);
+    }
+
+    const updates = { inviteCode, teamCodeUpdatedAt: new Date(), teamCodeUpdatedBy: req.user.id };
+
+    if (adminUserId && req.user.role === 'superadmin') {
+      const adminRef = db.collection('users').doc(adminUserId);
+      const adminDoc = await adminRef.get();
+      if (!adminDoc.exists) return res.status(404).json({ msg: 'Admin user not found' });
+      if (adminDoc.data().companyId !== req.params.id) {
+        return res.status(400).json({ msg: 'Admin user does not belong to this company' });
+      }
+      await adminRef.update({
+        role: 'teamadmin',
+        profileStatus: 'approved',
+        isApproved: true,
+        approvedBy: req.user.id,
+        approvedAt: new Date()
+      });
+      if (!global.MOCK_DB && auth?.setCustomUserClaims) {
+        await auth.setCustomUserClaims(adminUserId, {
+          role: 'teamadmin',
+          companyId: req.params.id
+        });
+      }
+      updates.status = 'active';
+      updates.approvedBy = req.user.id;
+      updates.approvedAt = new Date();
+    }
+
+    await companyRef.update(updates);
+
+    res.json({
+      companyId: req.params.id,
+      companyName: companyDoc.data().name,
+      inviteCode,
+      codeType,
+      registrationUrl: `${getClientBaseUrl()}/login?code=${inviteCode}`,
+      assignedAdminUserId: adminUserId || null
+    });
+  } catch (err) {
+    console.error('Team Code Error:', err);
+    res.status(500).json({ msg: 'Server error', error: err.message });
+  }
+});
+
+// @route   POST api/admin/companies/:id/approve-admin
+// @desc    Approve a pending teamadmin account for a company
+router.post('/companies/:id/approve-admin', protect, authorize('superadmin'), async (req, res) => {
+  const { userId } = req.body;
+  if (!userId) return res.status(400).json({ msg: 'userId required' });
+  try {
+    const userRef = db.collection('users').doc(userId);
+    const userDoc = await userRef.get();
+    if (!userDoc.exists) return res.status(404).json({ msg: 'User not found' });
+    if (userDoc.data().companyId !== req.params.id) {
+      return res.status(400).json({ msg: 'User does not belong to this company' });
+    }
+    await userRef.update({
+      role: 'teamadmin',
+      profileStatus: 'approved',
+      isApproved: true,
+      approvedBy: req.user.id,
+      approvedAt: new Date()
+    });
+    if (!global.MOCK_DB && auth?.setCustomUserClaims) {
+      await auth.setCustomUserClaims(userId, {
+        role: 'teamadmin',
+        companyId: req.params.id
+      });
+    }
+    await db.collection('companies').doc(req.params.id).update({ status: 'active' });
+    res.json({ msg: 'Admin approved', userId });
+  } catch (err) {
     res.status(500).json({ msg: 'Server error', error: err.message });
   }
 });
@@ -326,6 +503,40 @@ router.post('/invitations', protect, authorize('superadmin'), async (req, res) =
   }
 });
 
+// @route   GET api/admin/invitations
+// @desc    List registration invitations
+router.get('/invitations', protect, authorize('superadmin'), async (req, res) => {
+  if (global.MOCK_DB) {
+    return res.json([
+      {
+        _id: 'mock-invite-1',
+        email: 'admin@techflow.io',
+        companyName: 'TechFlow Inc',
+        status: 'sent',
+        used: false,
+        createdAt: new Date()
+      }
+    ]);
+  }
+
+  try {
+    const snapshot = await db.collection('invitations').orderBy('createdAt', 'desc').get();
+    const invitations = snapshot.docs.map(doc => {
+      const data = doc.data();
+      return {
+        _id: doc.id,
+        ...data,
+        status: data.used ? 'used' : 'sent',
+        link: `${getClientBaseUrl()}/registration?approval=true&team_id=${data.token}`
+      };
+    });
+    res.json(invitations);
+  } catch (err) {
+    console.error('Invitation List Error:', err);
+    res.status(500).json({ msg: 'Server error', error: err.message });
+  }
+});
+
 // @route   PATCH api/admin/companies/:id/status
 // @desc    Update company status
 router.patch('/companies/:id/status', protect, authorize('superadmin'), async (req, res) => {
@@ -342,6 +553,8 @@ router.patch('/companies/:id/status', protect, authorize('superadmin'), async (r
     if (status === 'active' && !company.approvedAt) {
       updates.approvedBy = req.user.id;
       updates.approvedAt = new Date();
+      updates.inviteCode = company.inviteCode || createTeamCode();
+      updates.adminsApproved = await approveCompanyAdmins(req.params.id, req.user.id);
       
       // Auto-generate invoice for active clients
       try {
@@ -424,13 +637,17 @@ router.get('/users', protect, authorize('superadmin'), async (req, res) => {
   }
   
   try {
+    const limit = Math.min(parseInt(req.query.limit) || 50, 200);
+    const offset = parseInt(req.query.offset) || 0;
     const snapshot = await db.collection('users').get();
-    const users = [];
+    const allUsers = [];
     snapshot.forEach(doc => {
       const data = doc.data();
-      delete data.password; // Safeguard
-      users.push({ _id: doc.id, ...data });
+      delete data.password;
+      allUsers.push({ _id: doc.id, ...data });
     });
+    const users = allUsers.slice(offset, offset + limit);
+    res.set('X-Total-Count', allUsers.length.toString());
     res.json(users);
   } catch (err) {
     console.error('Users List Error:', err);
@@ -691,6 +908,148 @@ router.delete('/invoices/:id', protect, authorize('teamadmin', 'superadmin'), as
     res.json({ msg: 'Invoice deleted successfully' });
   } catch (err) {
     console.error('Delete Invoice Error:', err);
+    res.status(500).json({ msg: 'Server error', error: err.message });
+  }
+});
+
+// @route   GET api/admin/companies/:id
+// @desc    Get a specific company by ID
+router.get('/companies/:id', protect, authorize('superadmin', 'teamadmin'), async (req, res) => {
+  if (global.MOCK_DB) {
+    return res.json({ _id: req.params.id, name: 'Mock Corp', industry: 'Technology', status: 'active', inviteCode: 'MOCK1234' });
+  }
+  try {
+    const doc = await db.collection('companies').doc(req.params.id).get();
+    if (!doc.exists) return res.status(404).json({ msg: 'Company not found' });
+    // TeamAdmins may only see their own company
+    if (req.user.role === 'teamadmin' && req.user.companyId !== req.params.id) {
+      return res.status(403).json({ msg: 'Access denied' });
+    }
+    res.json({ _id: doc.id, ...doc.data() });
+  } catch (err) {
+    console.error('Get Company Error:', err);
+    res.status(500).json({ msg: 'Server error', error: err.message });
+  }
+});
+
+// @route   GET api/admin/companies/:id/scores
+// @desc    Get per-member score analytics for a company
+router.get('/companies/:id/scores', protect, authorize('superadmin', 'teamadmin'), async (req, res) => {
+  if (global.MOCK_DB) {
+    return res.json([
+      { userId: 'mock-u1', name: 'Alex Chen', avgScore: 82.5, submissions: 5 },
+      { userId: 'mock-u2', name: 'Sarah Kim', avgScore: 79.2, submissions: 4 }
+    ]);
+  }
+  try {
+    const companyId = req.params.id;
+    if (req.user.role === 'teamadmin' && req.user.companyId !== companyId) {
+      return res.status(403).json({ msg: 'Access denied' });
+    }
+    const snapshot = await db.collection('responses').where('companyId', '==', companyId).get();
+
+    // Aggregate scores per user in-memory
+    const userScores = {};
+    snapshot.docs.forEach(doc => {
+      const data = doc.data();
+      if (!userScores[data.user]) {
+        userScores[data.user] = { userId: data.user, scores: [], submissions: 0 };
+      }
+      userScores[data.user].scores.push(data.scores?.total || 0);
+      userScores[data.user].submissions++;
+    });
+
+    // Enrich with user display names
+    const results = [];
+    for (const [userId, stats] of Object.entries(userScores)) {
+      const userDoc = await db.collection('users').doc(userId).get();
+      const name = userDoc.exists ? (userDoc.data().name || 'Unknown') : 'Unknown';
+      const avgScore = stats.scores.length > 0
+        ? stats.scores.reduce((a, b) => a + b, 0) / stats.scores.length
+        : 0;
+      results.push({ userId, name, avgScore: parseFloat(avgScore.toFixed(1)), submissions: stats.submissions });
+    }
+
+    res.json(results);
+  } catch (err) {
+    console.error('Company Scores Error:', err);
+    res.status(500).json({ msg: 'Server error', error: err.message });
+  }
+});
+
+// @route   PATCH api/admin/companies/:id
+// @desc    Update company details (name, industry, etc.)
+router.patch('/companies/:id', protect, authorize('superadmin'), async (req, res) => {
+  if (global.MOCK_DB) {
+    return res.json({ msg: 'Company updated (mock)' });
+  }
+  try {
+    const companyRef = db.collection('companies').doc(req.params.id);
+    const companyDoc = await companyRef.get();
+    if (!companyDoc.exists) return res.status(404).json({ msg: 'Company not found' });
+
+    const allowed = ['name', 'industry', 'size', 'country', 'domain', 'seatLimit', 'status'];
+    const updates = {};
+    for (const field of allowed) {
+      if (req.body[field] !== undefined) updates[field] = req.body[field];
+    }
+    if (Object.keys(updates).length === 0) {
+      return res.status(400).json({ msg: 'No valid fields to update' });
+    }
+    updates.updatedAt = new Date();
+
+    await companyRef.update(updates);
+    const updated = await companyRef.get();
+    res.json({ _id: updated.id, ...updated.data() });
+  } catch (err) {
+    console.error('Company Update Error:', err);
+    res.status(500).json({ msg: 'Server error', error: err.message });
+  }
+});
+
+// @route   DELETE api/admin/companies/:id
+// @desc    Delete a company and its associated users
+router.delete('/companies/:id', protect, authorize('superadmin'), async (req, res) => {
+  if (global.MOCK_DB) {
+    return res.json({ msg: 'Company deleted (mock)' });
+  }
+  try {
+    const companyRef = db.collection('companies').doc(req.params.id);
+    const companyDoc = await companyRef.get();
+    if (!companyDoc.exists) return res.status(404).json({ msg: 'Company not found' });
+
+    // Delete associated users
+    const usersSnap = await db.collection('users').where('companyId', '==', req.params.id).get();
+    await Promise.all(usersSnap.docs.map(doc => doc.ref.delete()));
+
+    // Delete associated responses
+    const respSnap = await db.collection('responses').where('companyId', '==', req.params.id).get();
+    await Promise.all(respSnap.docs.map(doc => doc.ref.delete()));
+
+    // Delete company itself
+    await companyRef.delete();
+    res.json({ msg: 'Company and associated data deleted successfully' });
+  } catch (err) {
+    console.error('Company Delete Error:', err);
+    res.status(500).json({ msg: 'Server error', error: err.message });
+  }
+});
+
+// @route   PATCH api/admin/companies/:id/approve
+// @desc    Approve (activate) a company — shorthand alias used by the frontend
+router.patch('/companies/:id/approve', protect, authorize('superadmin'), async (req, res) => {
+  if (global.MOCK_DB) {
+    return res.json({ msg: 'Company approved (mock)', company: { _id: req.params.id, status: 'active' } });
+  }
+  try {
+    const companyRef = db.collection('companies').doc(req.params.id);
+    const companyDoc = await companyRef.get();
+    if (!companyDoc.exists) return res.status(404).json({ msg: 'Company not found' });
+    await companyRef.update({ status: 'active', approvedBy: req.user.id, approvedAt: new Date() });
+    const updatedDoc = await companyRef.get();
+    res.json({ msg: 'Company approved successfully', company: { _id: updatedDoc.id, ...updatedDoc.data() } });
+  } catch (err) {
+    console.error('Company Approve Error:', err);
     res.status(500).json({ msg: 'Server error', error: err.message });
   }
 });

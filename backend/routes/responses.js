@@ -26,9 +26,12 @@ router.post('/submit', protect, isApproved, authorize('member', 'teamadmin', 'su
 
   try {
     // 1. Verify evaluation and challenge
-    const evaluationDoc = await db.collection('evaluations').doc(evaluationId).get();
-    if (!evaluationDoc.exists || evaluationDoc.data().companyId !== req.user.companyId) {
-      return res.status(404).json({ msg: 'Evaluation batch not found' });
+    // evaluationId is optional — challenges can be taken standalone from the dashboard
+    if (evaluationId) {
+      const evaluationDoc = await db.collection('evaluations').doc(evaluationId).get();
+      if (!evaluationDoc.exists || evaluationDoc.data().companyId !== req.user.companyId) {
+        return res.status(404).json({ msg: 'Evaluation batch not found' });
+      }
     }
 
     const challengeDoc = await db.collection('challenges').doc(challengeId).get();
@@ -68,13 +71,13 @@ router.post('/submit', protect, isApproved, authorize('member', 'teamadmin', 'su
     
     const responseData = {
       user: req.user.id,
-      companyId: req.user.companyId,
-      evaluationId,
+      companyId: req.user.companyId || null,
+      evaluationId: evaluationId || null,
       challenge: challengeId,
       responseText,
       workflowApproach: workflowApproach || '',
-      timeTaken: timeTaken || 0,
-      baselineTime: baselineTime || 0,
+      timeTaken: timeTaken || '',
+      baselineTime: baselineTime || '',
       scores: {
         clarity: aiResult.clarity,
         constraint_application: aiResult.constraint_application,
@@ -82,11 +85,12 @@ router.post('/submit', protect, isApproved, authorize('member', 'teamadmin', 'su
         iteration_quality: aiResult.iteration_quality,
         total: aiResult.total_score
       },
+      overallScore: aiResult.total_score || 0,
       justification: aiResult.justification,
       improvement: aiResult.improvement,
       flags: aiResult.flags || [],
       scoringStatus: aiResult.flags?.length > 0 ? 'Manual Review' : 'Scored',
-      modelUsed: 'gpt-4o',
+      modelUsed: aiResult.modelUsed || 'unknown',
       createdAt: new Date()
     };
 

@@ -303,21 +303,10 @@ a, button {
   z-index: 200;
   height: var(--nav-h);
   border-bottom: 1px solid var(--border-light);
+  background: rgba(0, 0, 0, 0.92);
+  backdrop-filter: blur(16px);
   transition: transform .5s var(--ease), background .3s;
-  transform: translateY(-100%);
-}
-
-.nav.scrolled {
   transform: translateY(0);
-  background: rgba(0, 0, 0, 0.92);
-  backdrop-filter: blur(16px);
-}
-
-/* Always-visible nav for authenticated/inner pages */
-.nav.nav-always-visible {
-  transform: translateY(0);
-  background: rgba(0, 0, 0, 0.92);
-  backdrop-filter: blur(16px);
 }
 
 .nav.hide-nav {
@@ -330,10 +319,13 @@ a, button {
   justify-content: space-between;
   height: 100%;
   padding: 0 clamp(1.2rem, 3vw, 2.5rem);
+  gap: 1.25rem;
+  min-width: 0;
 }
 .nav-logo {
   display: flex;
   align-items: center;
+  flex: 0 0 auto;
 }
 .logo-img {
   height: 48px;
@@ -361,6 +353,7 @@ a, button {
 .nav-links {
   display: flex;
   gap: 2rem;
+  min-width: 0;
 }
 
 .nav-link {
@@ -397,6 +390,7 @@ a, button {
   border-radius: 6px;
   border: 1px solid var(--white);
   transition: all .3s var(--ease);
+  white-space: nowrap;
 }
 
 .nav-cta:hover {
@@ -609,7 +603,8 @@ a, button {
   min-height: 100vh;
   display: flex;
   align-items: center;
-  padding-top: calc(var(--nav-h) + 4rem);
+  padding-top: calc(var(--nav-h) + 5rem);
+  padding-bottom: 4rem;
 }
 
 .hero-prompt {
@@ -627,10 +622,22 @@ a, button {
 
 .hero-h1 {
   font-family: var(--font-display);
-  font-size: clamp(2.5rem, 6.5vw, 4.5rem);
+  font-size: clamp(3rem, 8vw, 5.5rem);
   font-weight: 400;
-  line-height: 1.3;
+  line-height: 1.15;
   margin-bottom: 2rem;
+}
+
+.hero-h1-large {
+  font-size: clamp(4rem, 10vw, 7.2rem) !important;
+  line-height: 1.04 !important;
+  margin-bottom: 2.5rem !important;
+}
+
+.hero-sub-large {
+  font-size: clamp(1.15rem, 1.65vw, 1.55rem) !important;
+  max-width: 920px !important;
+  line-height: 1.7 !important;
 }
 
 .hero-sub {
@@ -1529,9 +1536,14 @@ a, button {
 }
 
 .footer-logo {
-  height: 80px;
+  display: inline-block;
+  height: auto;
   margin-bottom: 1.5rem;
-  display: block;
+  font-family: var(--font-display);
+  font-size: 1.8rem;
+  font-weight: 800;
+  letter-spacing: 0;
+  color: var(--white);
 }
 
 .footer-link {
@@ -1549,10 +1561,16 @@ a, button {
 .footer-bottom {
   display: flex;
   justify-content: space-between;
+  gap: 1rem;
+  flex-wrap: wrap;
   padding-top: 2rem;
   border-top: 1px solid var(--border-light);
   font-size: .75rem;
   color: var(--text-sec);
+}
+
+.legal-page .hero-h1 {
+  font-size: clamp(2.25rem, 8vw, 3.5rem) !important;
 }
 
 .footer-made {
@@ -1724,15 +1742,15 @@ a, button {
   }
   
   .hero-h1 {
-    font-size: clamp(1.8rem, 4.5vw, 2.6rem) !important;
-    margin-bottom: 0.75rem !important;
-    line-height: 1.2 !important;
+    font-size: clamp(2.6rem, 5.5vw, 4.6rem) !important;
+    margin-bottom: 1rem !important;
+    line-height: 1.08 !important;
   }
   
   .hero-sub {
     margin-bottom: 1rem !important;
-    font-size: 0.9rem !important;
-    line-height: 1.5 !important;
+    font-size: clamp(1rem, 1.3vw, 1.2rem) !important;
+    line-height: 1.55 !important;
   }
   
   .hero-cta {

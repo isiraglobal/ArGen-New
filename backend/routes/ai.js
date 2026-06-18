@@ -1,7 +1,30 @@
 const express = require('express');
 const router = express.Router();
+const { protect } = require('../middleware/auth');
 
-router.post('/ask', async (req, res) => {
+// @route   GET api/ai/health
+// @desc    Check AI provider availability and health
+// @access  Private
+router.get('/health', protect, async (req, res) => {
+  const providers = [
+    { name: 'NVIDIA NIM (Llama 3.3 70B)', key: process.env.META_LLAMA_3_3_70B_INSTRUCT_API_KEY || process.env.NVIDIA_API_KEY },
+    { name: 'OpenAI', key: process.env.AI_API_KEY || process.env.OPENAI_API_KEY },
+    { name: 'Anthropic Claude', key: process.env.ANTHROPIC_API_KEY },
+    { name: 'Google Gemini', key: process.env.GEMINI_API_KEY },
+  ];
+  const statuses = providers.map(p => ({
+    name: p.name,
+    configured: Boolean(p.key),
+    status: p.key ? 'available' : 'unconfigured'
+  }));
+  res.json({
+    status: statuses.some(p => p.configured) ? 'healthy' : 'degraded',
+    providers: statuses,
+    timestamp: new Date().toISOString()
+  });
+});
+
+router.post('/ask', protect, async (req, res) => {
     try {
         const { messages } = req.body;
         

@@ -171,7 +171,6 @@
 
   <!-- Load config and API clients -->
   <script src="../js/api.js"></script>
-  <script type="module" src="../js/supabase-config.js"></script>
   <script>
     window.si = window.si || function () { (window.siq = window.siq || []).push(arguments); };
   </script>
@@ -191,7 +190,7 @@
       <p style="font-size: 0.85rem; color: #888; margin-bottom: 1.5rem;">Validating secure connection credentials...</p>
 
       <div class="terminal" id="terminal">
-        <div class="terminal-line"><span class="prompt">></span>Initializing handshake with Supabase Auth...</div>
+        <div class="terminal-line"><span class="prompt">></span>Initializing secure authentication handshake...</div>
       </div>
 
       <div class="progress-bar-container">
@@ -231,86 +230,47 @@
     // Process token verification on load
     window.addEventListener('DOMContentLoaded', async () => {
       updateProgress(10);
-      
-      // Wait for Supabase SDK loading and window initialization (max 5 seconds)
-      let attempts = 0;
-      while (!window.supabaseAuthHelpers && attempts < 50) {
-        await new Promise(r => setTimeout(r, 100));
-        attempts++;
-      }
-
-      if (!window.supabaseAuthHelpers) {
-        showFailure('Supabase Client failed to load. Please verify API configurations.');
-        return;
-      }
-
-      logToTerminal('Supabase client loaded successfully.', 'success');
-      updateProgress(30);
 
       try {
-        logToTerminal('Retrieving authentication session details...');
-        const session = await window.supabaseAuthHelpers.getSession();
-        
-        if (!session) {
-          // If not loaded immediately, check if it registers in state listener shortly (implicit callback latency)
-          logToTerminal('No active session found in cache. Listening for auth callback...');
-          
-          let resolvedSession = null;
-          // Setup a 4 second timeout for callback parsing
-          const authPromise = new Promise((resolve) => {
-            const { data: { subscription } } = window.supabaseAuthHelpers.onAuthStateChange((event, newSession) => {
-              if (newSession) {
-                subscription.unsubscribe();
-                resolve(newSession);
-              }
-            });
-            setTimeout(() => {
-              subscription.unsubscribe();
-              resolve(null);
-            }, 4000);
-          });
+        // Extract access_token from URL hash fragment
+        const hash = window.location.hash.substring(1);
+        const params = new URLSearchParams(hash);
+        const accessToken = params.get('access_token');
 
-          resolvedSession = await authPromise;
-          
-          if (!resolvedSession) {
-            throw new Error('Authentication callback timeout. No session token was received.');
-          }
-          
-          logToTerminal('Parsed token payload from callback.', 'success');
-          verifySessionAndProceed(resolvedSession);
-        } else {
-          logToTerminal('Active session located successfully.', 'success');
-          verifySessionAndProceed(session);
+        if (!accessToken) {
+          throw new Error('No access token found in the URL. Authentication callback failed.');
         }
 
-      } catch (err) {
-        showFailure(err.message);
-      }
-    });
+        logToTerminal('Authentication token received from provider.', 'success');
+        updateProgress(40);
 
-    async function verifySessionAndProceed(session) {
-      updateProgress(60);
-      try {
-        const token = session.access_token;
+        // Store token locally
+        localStorage.setItem('argen_token', accessToken);
         logToTerminal('Establishing local session cache...');
-        
-        // Sync token in localStorage & cookies (supabase-config.js event handles this, but force it for safety)
-        localStorage.setItem('argen_token', token);
-        
+        updateProgress(60);
+
+        // Clear hash from URL
+        window.history.replaceState({}, document.title, window.location.pathname);
+
+        // Verify session by fetching user profile
         logToTerminal('Synchronizing profile data from ArGen database...');
-        
-        // Fetch user object from /api/auth/me
         const user = await window.argenApi.getMe();
-        
+
         logToTerminal(`Profile located. Authenticated as: ${user.name} (${user.role})`, 'success');
         updateProgress(90);
 
-        // Store user profile in local storage & cookies
         localStorage.setItem('user', JSON.stringify(user));
         window.argenApi.setCookie('user', JSON.stringify(user), 7);
-        window.argenApi.setCookie('argen_token', token, 7);
+        window.argenApi.setCookie('argen_token', accessToken, 7);
 
-        logToTerminal('Verification complete. Redirecting to terminal dashboard...', 'success');
+        if (!user.profileComplete) {
+          logToTerminal('Profile incomplete. Redirecting to onboarding...', 'success');
+          updateProgress(100);
+          setTimeout(() => { window.location.href = '/onboarding'; }, 800);
+          return;
+        }
+
+        logToTerminal('Verification complete. Redirecting to dashboard...', 'success');
         updateProgress(100);
 
         setTimeout(() => {
@@ -318,14 +278,15 @@
           if (role === 'superadmin') {
             window.location.href = '/admin-portal';
           } else {
-            window.location.href = '/teams'; // Direct to teams dashboard
+            if (user.companyId) sessionStorage.setItem('team_verified', 'true');
+            window.location.href = '/dashboard';
           }
         }, 1000);
 
       } catch (err) {
         showFailure(err.message || 'Failed to synchronize user data.');
       }
-    }
+    });
   </script>
 </body>
 

@@ -280,14 +280,8 @@
   /* ─────────────── NAV ─────────────── */
   function initNav() {
     const nav = document.getElementById('nav');
-    let lastY = 0;
     if (!nav) return;
-    window.addEventListener('scroll', () => {
-      const y = window.scrollY;
-      nav.classList.toggle('scrolled', y > 80);
-      nav.classList.toggle('hide-nav', y > lastY && y > 400);
-      lastY = y;
-    });
+    nav.classList.add('nav-always-visible');
   }
 
   /* ─────────────── AUTH UI ─────────────── */
@@ -303,7 +297,7 @@
       // User is logged in
       if (!document.getElementById('navDashboardLink')) {
         const dashLink = document.createElement('a');
-        dashLink.href = '/teams';
+        dashLink.href = '/dashboard';
         dashLink.className = 'nav-link';
         dashLink.id = 'navDashboardLink';
         dashLink.textContent = 'Dashboard';
@@ -311,13 +305,13 @@
       }
 
       if (navCta) {
-        navCta.textContent = 'Teams Panel →';
-        navCta.href = '/teams';
+        navCta.textContent = 'Dashboard →';
+        navCta.href = '/dashboard';
       }
 
       if (mobileMenu && !document.getElementById('mobileDashboardLink')) {
         const mDashLink = document.createElement('a');
-        mDashLink.href = '/teams';
+        mDashLink.href = '/dashboard';
         mDashLink.className = 'mm-link';
         mDashLink.id = 'mobileDashboardLink';
         mDashLink.textContent = '05 // Dashboard';
@@ -651,6 +645,46 @@ Always refer to the analysis as "ArGen Intelligence" or "Proprietary ArGen Analy
     closeBtn.addEventListener('click', () => {
       responsePanel.classList.remove('show');
     });
+  }
+
+  /* ─────────────── COOKIE CONSENT BANNER ─────────────── */
+  function initCookieConsent() {
+    if (localStorage.getItem('argen_cookie_consent') === 'accepted') return;
+
+    const banner = document.createElement('div');
+    banner.id = 'cookieBanner';
+    banner.style.cssText = `
+      position: fixed; bottom: 0; left: 0; right: 0; z-index: 99999;
+      background: rgba(10,10,10,0.98); backdrop-filter: blur(20px);
+      border-top: 1px solid rgba(255,255,255,0.06);
+      padding: 1rem 1.5rem; font-family: 'Inter', sans-serif; font-size: 0.8rem;
+      display: flex; align-items: center; justify-content: space-between; gap: 1rem;
+      flex-wrap: wrap; color: #ccc;
+    `;
+    banner.innerHTML = `
+      <span style="flex:1;min-width:200px;">We use essential cookies for authentication and security. 
+      <a href="/privacy" style="color:var(--accent,#00ff88);text-decoration:underline;">Learn more</a></span>
+      <div style="display:flex;gap:0.75rem;flex-shrink:0;">
+        <button id="cookieAccept" style="padding:8px 20px;border-radius:6px;border:1px solid rgba(255,255,255,0.1);background:transparent;color:#fff;cursor:pointer;font-size:0.75rem;">Accept</button>
+        <button id="cookieDismiss" style="padding:8px 20px;border-radius:6px;border:none;background:var(--accent,#00ff88);color:#000;cursor:pointer;font-weight:600;font-size:0.75rem;">Got it</button>
+      </div>
+    `;
+    document.body.appendChild(banner);
+
+    document.getElementById('cookieAccept').addEventListener('click', () => {
+      localStorage.setItem('argen_cookie_consent', 'accepted');
+      banner.remove();
+    });
+    document.getElementById('cookieDismiss').addEventListener('click', () => {
+      localStorage.setItem('argen_cookie_consent', 'accepted');
+      banner.remove();
+    });
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initCookieConsent);
+  } else {
+    initCookieConsent();
   }
 
 })();

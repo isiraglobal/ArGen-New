@@ -76,11 +76,10 @@ The `frontend/js/api.js` file auto-detects the environment:
 
 ## 🗄️ Database
 
-- **Provider:** MongoDB Atlas
-- **URI:** Stored in `.env` as `MONGO_URI`
-- **Connection:** `mongodb+srv://<username>:<password>@argen.bfcvejd.mongodb.net/?appName=ArGen` (configured securely in `.env`)
-- **Fallback:** If connection fails, `global.MOCK_DB = true` — all routes return hardcoded mock data so the app doesn't crash
-- **IP Whitelist:** Set to `0.0.0.0/0` (open) in MongoDB Atlas Network Access
+- **Provider:** Supabase (PostgreSQL)
+- **Auth:** Supabase Auth with JWT tokens
+- **Connection:** Configured via `SUPABASE_URL` and `SUPABASE_SERVICE_ROLE_KEY` in `.env`
+- **Fallback:** If Supabase connection fails, `global.MOCK_DB = true` — all routes return hardcoded mock data so the app doesn't crash
 
 ---
 
@@ -144,17 +143,22 @@ All agents use a primary provider chain prioritizing NVIDIA NIM models (Llama 3.
 
 ### Resolved
 - ✅ `api/index.js` had a literal `\n` instead of a real newline (caused `FUNCTION_INVOCATION_FAILED` on all Vercel API calls). Fixed.
-- ✅ Root `package.json` was missing `helmet`, `express-rate-limit`, `express-mongo-sanitize`, `@whop/sdk`. Fixed.
+- ✅ Root `package.json` was missing `helmet`, `express-rate-limit`, `@whop/sdk`. Fixed.
 - ✅ macOS EPERM port binding — resolved by removing Screen Time/content restrictions on user's machine
-- ✅ MongoDB Atlas SQL connection string (wrong format) — replaced with standard `mongodb+srv://` URI
 - ✅ Auth guard bypasses via clean URLs (no `.html` extension) — fixed in `auth-guard.js`
 - ✅ Scroll indicator obscuring UI clicks — fixed with `pointer-events: none` in `style.css`
 - ✅ Admin portal layout broken — refactored to CSS grid sidebar layout
 - ✅ Missing mockup images causing 404 — replaced with working remote images
+- ✅ **MongoDB removal:** Deleted all Mongoose models, scripts, deps. Backend now uses only Supabase (PostgreSQL).
+- ✅ **Supabase frontend cleanup:** Removed "Supabase" from all visible UI text across login, onboarding, forgot-password, reset-password, oauth, and index pages.
+- ✅ **Header visibility:** Nav is now always visible (`transform: translateY(0)` by default). Removed scroll-hide behavior.
+- ✅ **Admin portal redesign:** Clean layout with sidebar tabs (Dashboard, Organizations, Users, Invitations, Monitor, Invoices), search/filter bars, edit/delete capabilities, organized modals.
+- ✅ **PDF report:** Branded standalone PDF with exec summary, dimension scores (with progress bars), recommendations, activity summary — generated in an iframe from `dashboard.js`.
+- ✅ **Legal/industry-standard:** Cookie consent banner in `script.js`, terms acceptance checkbox in registration, robust privacy and terms pages, robots.txt, sitemap.xml, SEO meta tags.
 
 ### Pending / In Progress
 - ⚠️ **Server-side auth:** `auth-guard.js` is client-side only. Users can bypass by disabling JS. Migration to server-side middleware is the next priority.
-- ⚠️ **MOCK_DB mode on production:** If MongoDB fails to connect on Vercel cold starts, the app silently falls back to mock data. Verify live DB is connected by hitting `/api/health`.
+- ⚠️ **MOCK_DB mode on production:** If database fails to connect on Vercel cold starts, the app silently falls back to mock data. Verify live DB is connected by hitting `/api/health`.
 - ⚠️ **Whop payment flow:** Route is commented out in `server.js`. Not yet fully wired.
 - ⚠️ **Google OAuth:** Keys exist in `.env` but implementation is incomplete.
 

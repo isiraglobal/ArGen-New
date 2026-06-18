@@ -33,7 +33,7 @@ Throughout the development lifecycle, several critical pivots were made to enhan
     *   *Initial State:* AI scoring agents blindly evaluated all user input.
     *   *Final State:* The Scoring Agent prompt was hardened with strict heuristics to detect `TOO_SHORT`, `LOW_EFFORT`, `PROMPT_INJECTION`, `PLAGIARISM`, and `AI_DETECTED` content. Offending responses automatically score zero and are flagged in the database (`Manual Review` status). A dedicated `/api/admin/flagged` endpoint surfaces these anomalies directly to the TeamAdmin dashboard for auditing.
 5.  **OWASP Security Hardening Pivot:**
-    *   *Final State:* Added `helmet` for strict Content Security Policies (CSP), `express-mongo-sanitize` to block NoSQL injection vectors, and `express-rate-limit` to prevent brute-force API attacks and AI credit exhaustion.
+    *   *Final State:* Added `helmet` for strict Content Security Policies (CSP), and `express-rate-limit` to prevent brute-force API attacks and AI credit exhaustion.
 6.  **Strategic Pivot to Workflow Intelligence:**
     *   *Initial State:* Positioned as an HR/L&D cognitive evaluation tool focused on scores and leaderboards.
     *   *Final State:* Repositioned for VP/Ops leaders to focus on shipping velocity. Scores are now a discovery mechanism to find top performers. The end product is the extraction of replicable AI workflows that save 10+ hours/week, driving team-wide productivity rather than individual performance reviews.
@@ -57,11 +57,11 @@ Throughout the development lifecycle, several critical pivots were made to enhan
 ### Backend (Server-Side)
 *   **Runtime & Framework:** Node.js with Express.js.
 *   **Authentication:** JWT (JSON Web Tokens) for session management, Bcrypt for password hashing.
-*   **Security Middleware:** `helmet`, `express-mongo-sanitize`, `express-rate-limit`, plus custom `protect` and `authorize` middleware to strictly enforce Role-Based Access Control (RBAC).
+*   **Security Middleware:** `helmet`, `express-rate-limit`, plus custom `protect` and `authorize` middleware to strictly enforce Role-Based Access Control (RBAC).
 
 ### Database & Storage
-*   **Database:** **MongoDB** (Hosted on MongoDB Atlas).
-*   **ODM:** Mongoose. Defines strict schemas for Users, Companies, Responses, Challenges, Invitations, and SystemMetrics.
+*   **Database:** **Supabase** (PostgreSQL).
+*   **Client:** `@supabase/supabase-js` SDK with service role key for backend access.
 
 ### AI & External APIs (Safe Run Connections)
 *   **OpenAI API:** The core intelligence engine. Uses `gpt-4o` or `o1-mini` for the agent swarm. Connection secured via `OPENAI_API_KEY`.

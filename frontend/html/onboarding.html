@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Complete Your Profile - ArGen</title>
+  <link rel="icon" type="image/png" href="../images/ArGen Logo.png">
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700&family=JetBrains+Mono&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../css/style.css">
+  <style>
+    .onboard-page { min-height: 100dvh; display: flex; align-items: center; justify-content: center; padding: 2rem; background: #0a0a0a; }
+    .onboard-card { width: 100%; max-width: 760px; background: rgba(255,255,255,0.025); border: 1px solid rgba(0,255,136,0.16); border-radius: 8px; padding: clamp(1.5rem, 4vw, 2.5rem); }
+    .onboard-steps { display: flex; gap: 0.5rem; margin-bottom: 2rem; }
+    .onboard-step { flex: 1; height: 3px; border-radius: 2px; background: rgba(255,255,255,0.08); }
+    .onboard-step.done { background: #00ff88; }
+    .onboard-step.active { background: #2b60e2; }
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+    .onboard-note { border: 1px solid rgba(255,255,255,0.08); background: rgba(255,255,255,0.025); border-radius: 8px; padding: 1rem; color: var(--text-sec); font-size: 0.82rem; line-height: 1.6; margin-bottom: 1.5rem; }
+    @media (max-width: 600px) { .form-row { grid-template-columns: 1fr; } }
+  </style>
+</head>
+<body class="bg-black">
+  <div class="onboard-page">
+    <div class="onboard-card">
+      <img src="../images/ArGen Logo.png" alt="ArGen" style="height: 48px; margin-bottom: 1.5rem;">
+      <div class="onboard-steps">
+        <div class="onboard-step done"></div>
+        <div class="onboard-step active"></div>
+      </div>
+      <h1 style="font-size: clamp(1.75rem, 4vw, 2.35rem); color: #fff; margin-bottom: 0.5rem;">Complete Your Profile</h1>
+      <p style="color: var(--text-sec); font-size: 0.95rem; margin-bottom: 1.25rem;">Add your employee record so HR can approve, place, and manage your workspace access.</p>
+      <div class="onboard-note">Your email is locked from the secure login. HR will see your submitted identity, role, department code, employee ID, phone, manager, and location in the operations dashboard.</div>
+
+      <form id="profileForm">
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label">Full Name *</label>
+            <input type="text" id="name" class="form-input" required placeholder="Jane Smith">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Work Email</label>
+            <input type="email" id="email" class="form-input" readonly style="opacity: 0.7;">
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label">Phone *</label>
+            <input type="tel" id="phone" class="form-input" required placeholder="+1 555 0100">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Employee ID *</label>
+            <input type="text" id="employeeId" class="form-input" required placeholder="EMP-0042">
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label">Job Role / Title *</label>
+            <input type="text" id="jobRole" class="form-input" required placeholder="Product Manager">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Department *</label>
+            <input type="text" id="department" class="form-input" required placeholder="Engineering">
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Department Code / Unique Team ID *</label>
+          <input type="text" id="departmentId" class="form-input" required placeholder="DEPT-ENG-001">
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label">Manager / HR Owner</label>
+            <input type="text" id="manager" class="form-input" placeholder="Nina Shah">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Work Location</label>
+            <input type="text" id="workLocation" class="form-input" placeholder="Remote / New York">
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label">Employment Type</label>
+            <select id="employmentType" class="form-input">
+              <option value="Full-time">Full-time</option>
+              <option value="Part-time">Part-time</option>
+              <option value="Contract">Contract</option>
+              <option value="Intern">Intern</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Start Date</label>
+            <input type="date" id="startDate" class="form-input">
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Team Invite Code (from HR)</label>
+          <input type="text" id="inviteCode" class="form-input" placeholder="ABCD1234" style="text-transform: uppercase;">
+        </div>
+        <button type="submit" class="btn btn-accent" style="width: 100%; padding: 14px; margin-top: 0.5rem;">Submit Profile →</button>
+      </form>
+      <p id="formMsg" style="margin-top: 1rem; font-size: 0.8rem; display: none;"></p>
+    </div>
+  </div>
+  <script src="../js/api.js"></script>
+  <script src="../js/onboarding.js"></script>
+</body>
+</html>

@@ -1,21 +1,28 @@
 const { db } = require('./supabase');
 
+const FETCH_TIMEOUT = 30000; // 30 seconds per provider
+
+async function fetchWithTimeout(url, options, timeout = FETCH_TIMEOUT) {
+  const controller = new AbortController();
+  const id = setTimeout(() => controller.abort(), timeout);
+  try {
+    const response = await fetch(url, { ...options, signal: controller.signal });
+    return response;
+  } finally {
+    clearTimeout(id);
+  }
+}
+
 // AI Fallback Call logic
 async function callAnthropic(apiKey, systemPrompt, userPrompt, useJson, maxTokens) {
   const body = {
     model: 'claude-3-5-sonnet-20241022',
     max_tokens: maxTokens || 1500,
-    system: [
-      {
-        type: "text",
-        text: systemPrompt,
-        cache_control: { type: "ephemeral" }
-      }
-    ],
+    system: systemPrompt,
     messages: [{ role: 'user', content: userPrompt || "Please proceed." }]
   };
 
-  const response = await fetch('https://api.anthropic.com/v1/messages', {
+  const response = await fetchWithTimeout('https://api.anthropic.com/v1/messages', {
     method: 'POST',
     headers: {
       'x-api-key': apiKey,
@@ -37,7 +44,7 @@ async function callAnthropic(apiKey, systemPrompt, userPrompt, useJson, maxToken
 }
 
 async function callGemini(apiKey, systemPrompt, userPrompt, useJson, maxTokens) {
-  const model = "gemini-1.5-flash";
+  const model = "gemini-2.0-flash-lite";
   const url = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${apiKey}`;
   
   const body = {
@@ -47,7 +54,7 @@ async function callGemini(apiKey, systemPrompt, userPrompt, useJson, maxTokens) 
   };
   if (useJson) body.generationConfig.responseMimeType = "application/json";
 
-  const response = await fetch(url, {
+  const response = await fetchWithTimeout(url, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(body)
@@ -69,7 +76,7 @@ async function callOpenAI(apiKey, systemPrompt, userPrompt, useJson, maxTokens) 
   };
   if (useJson) body.response_format = { type: "json_object" };
 
-  const response = await fetch('https://api.openai.com/v1/chat/completions', {
+  const response = await fetchWithTimeout('https://api.openai.com/v1/chat/completions', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -95,7 +102,7 @@ async function callNvidia(apiKey, systemPrompt, userPrompt, useJson, maxTokens, 
   };
   if (useJson) body.response_format = { type: "json_object" };
 
-  const response = await fetch('https://integrate.api.nvidia.com/v1/chat/completions', {
+  const response = await fetchWithTimeout('https://integrate.api.nvidia.com/v1/chat/completions', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -136,30 +143,35 @@ async function fallbackAiCall(systemPrompt, userPrompt, useJson, maxTokens, mode
     try {
       const activeModel = provider.name === 'nvidia' ? (modelOverride || 'default') : 'default';
       console.log(`[AI Engine] Attempting request via ${provider.name.toUpperCase()} (model: ${activeModel})...`);
-      return await provider.fn(provider.key, systemPrompt, userPrompt, useJson, maxTokens, provider.name === 'nvidia' ? modelOverride : undefined);
+      const result = await provider.fn(provider.key, systemPrompt, userPrompt, useJson, maxTokens, provider.name === 'nvidia' ? modelOverride : undefined);
+      result.modelUsed = provider.name;
+      return result;
     } catch (err) {
       console.warn(`[AI Fallback] ${provider.name.toUpperCase()} failed: ${err.message}. Routing to next provider...`);
       lastError = err;
     }
   }
 
-  console.warn("--- [AI Fallback Warning]: All AI providers failed. Using robust mock engine fallback. ---");
+  console.warn("--- [AI Fallback Warning]: All AI providers failed. Using degraded mock engine fallback. ---");
   
   // Dynamic mock fallback based on prompts to ensure zero-intervention reliability
+  // NOTE: Mock scores are intentionally LOW and flagged to prevent data corruption
   let content = "";
   if (useJson) {
     if (systemPrompt.includes("Scoring Engine") || systemPrompt.includes("clarity")) {
       content = JSON.stringify({
-        clarity: Math.floor(Math.random() * 6) + 18, // 18-23
-        constraint_application: Math.floor(Math.random() * 6) + 18,
-        output_specificity: Math.floor(Math.random() * 6) + 18,
-        iteration_quality: Math.floor(Math.random() * 6) + 18,
-        justification: "Excellent work structure and clear logical reasoning. The workflow approach is solid, though time efficiency could be improved further by utilizing system prompts.",
-        improvement: "Include more direct data points and specific KPIs in the baseline to maximize specificity.",
+        clarity: Math.floor(Math.random() * 10) + 5, // 5-14 (degraded range)
+        constraint_application: Math.floor(Math.random() * 10) + 5,
+        output_specificity: Math.floor(Math.random() * 10) + 5,
+        iteration_quality: Math.floor(Math.random() * 10) + 5,
+        flags: ["MOCK_SCORE_AI_UNAVAILABLE"],
+        justification: "Mock fallback score — AI provider chain unavailable. Results reflect degraded scoring and should not be used for performance evaluation.",
+        improvement: "AI scoring unavailable. Please retry when providers are operational.",
         flags: []
       });
     } else if (systemPrompt.includes("Challenge Generator") || systemPrompt.includes("personalised business challenge")) {
       content = JSON.stringify({
+        mock: true,
         title: "Enterprise Procurement Automation",
         scenario: "You are tasked with evaluating a SaaS vendor's compliance documentation. They provided a 40-page PDF that must be matched against Q2 security guidelines.",
         task: "Design an automated screening prompt using an LLM that extracts compliance gaps, format constraints, and missing signatures.",
@@ -174,6 +186,7 @@ async function fallbackAiCall(systemPrompt, userPrompt, useJson, maxTokens, mode
     } else {
       // Research Company
       content = JSON.stringify({
+        mock: true,
         industry: "SaaS & AI Platforms",
         primary_ai_tools: ["Claude 3.5 Sonnet", "ChatGPT Enterprise", "Github Copilot"],
         language_tone: "Professional, operational, data-driven",
@@ -212,7 +225,7 @@ This week, the operations team demonstrated exceptional adaptation in AI workflo
     }
   }
 
-  return { content, tokens: 100 };
+  return { content, tokens: 100, modelUsed: 'mock' };
 }
 
 // Helper to record metrics
@@ -346,9 +359,20 @@ Return ONLY JSON:
     const userMsg = `CHALLENGE:\n${challenge.scenario} | ${challenge.task}\n\nRESPONSE:\n${responseText}`;
 
     try {
-        const { content, tokens } = await fallbackAiCall(prompt, userMsg, true, 800, 'meta/llama-3.3-70b-instruct');
-        const result = JSON.parse(content);
-        result.total_score = result.clarity + result.constraint_application + result.output_specificity + result.iteration_quality;
+        const { content, tokens, modelUsed } = await fallbackAiCall(prompt, userMsg, true, 800, 'meta/llama-3.3-70b-instruct');
+        const parsed = JSON.parse(content);
+        const clamp = (v) => Math.max(0, Math.min(25, Number(v) || 0));
+        const result = {
+          clarity: clamp(parsed.clarity),
+          constraint_application: clamp(parsed.constraint_application),
+          output_specificity: clamp(parsed.output_specificity),
+          iteration_quality: clamp(parsed.iteration_quality),
+          justification: parsed.justification || '',
+          improvement: parsed.improvement || '',
+          flags: Array.isArray(parsed.flags) ? parsed.flags : [],
+          modelUsed: modelUsed || 'unknown'
+        };
+        result.total_score = Math.min(100, result.clarity + result.constraint_application + result.output_specificity + result.iteration_quality);
         
         await recordMetric('api_call', 'Scoring Agent', result, tokens, 0, result.total_score);
         return result;

@@ -7,11 +7,6 @@ const sendEmail = require('../utils/sendEmail');
 const { createEmailTemplate } = require('../utils/emailTemplate');
 const { protect } = require('../middleware/auth');
 
-// Initialize Whop SDK
-const whop = new Whop({
-  apiKey: process.env.WHOP_API_KEY,
-});
-
 // POST /api/whop/checkout-url
 // Returns a dynamically generated Whop checkout URL
 router.post('/checkout-url', express.json(), async (req, res) => {
@@ -21,12 +16,22 @@ router.post('/checkout-url', express.json(), async (req, res) => {
     return res.status(400).json({ error: 'Missing required parameters' });
   }
 
+  // If Whop is not configured, return a demo link so the flow isn't broken
+  if (!process.env.WHOP_API_KEY || !process.env.NEXT_PUBLIC_WHOP_APP_ID) {
+    return res.json({
+      checkoutUrl: '#',
+      demo: true,
+      message: 'Whop payment is not yet configured. Email isiraglobal@gmail.com to complete purchase.'
+    });
+  }
+
   try {
+    const whop = new Whop({ apiKey: process.env.WHOP_API_KEY });
     const checkout = await whop.checkout_configurations.create({
       currency: "usd",
       plan: {
         initial_price: parseFloat(amount),
-        plan_type: planType, // "one_time" or "renewal"
+        plan_type: planType,
         company_id: process.env.NEXT_PUBLIC_WHOP_APP_ID,
       },
       metadata: {
@@ -130,7 +135,11 @@ async function handleMembershipValid(data) {
     await subDoc.ref.update({ status: 'active' });
     
     const companyId = subDoc.data().companyId;
-    await db.collection('companies').doc(companyId).update({ subscriptionStatus: 'active' });
+    await db.collection('companies').doc(companyId).update({
+      subscriptionStatus: 'active',
+      status: 'active',
+      paidAt: new Date().toISOString()
+    });
     return;
   }
 
@@ -142,6 +151,7 @@ async function handleMembershipValid(data) {
     seatLimit,
     subscriptionStatus: 'active',
     status: 'active',
+    paidAt: new Date().toISOString(),
     createdAt: new Date()
   };
   const compRef = await db.collection('companies').add(newCompany);
@@ -158,6 +168,20 @@ async function handleMembershipValid(data) {
     createdAt: new Date()
   };
   await db.collection('subscriptions').add(newSub);
+
+  // Create invoice record
+  const amount = data.checkout_configuration?.initial_price || data.plan?.initial_price || 0;
+  await db.collection('invoices').add({
+    companyId,
+    clientName: companyName,
+    productName: `ArGen ${plan} Plan`,
+    productDescription: `${seatLimit} seats — AI Workflow Intelligence Platform`,
+    subtotal: parseFloat(amount) || 0,
+    totalDue: parseFloat(amount) || 0,
+    status: 'Paid',
+    date: new Date().toISOString(),
+    createdAt: new Date()
+  });
 
   // Generate Invite Token
   const token = crypto.randomBytes(32).toString('hex');
@@ -211,7 +235,10 @@ async function handleMembershipInvalid(data) {
     await subDoc.ref.update({ status: 'cancelled' });
 
     const companyId = subDoc.data().companyId;
-    await db.collection('companies').doc(companyId).update({ subscriptionStatus: 'cancelled' });
+    await db.collection('companies').doc(companyId).update({
+      subscriptionStatus: 'cancelled',
+      status: 'suspended'
+    });
   }
 }
 

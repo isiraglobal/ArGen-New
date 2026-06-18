@@ -54,7 +54,7 @@
   <script defer src="/_vercel/speed-insights/script.js"></script>
 </head>
 <body>
-  <header id="nav" class="nav">
+  <header id="nav" class="nav nav-always-visible">
     <div class="nav-inner">
       <a href="/" class="nav-logo">
         <img src="../images/ArGen Logo.png" alt="ArGen" class="logo-img">
@@ -83,7 +83,7 @@
         <a href="/contact" class="mm-link">06 Contact</a>
       </div>
       <div class="mm-footer">
-        <a href="/evaluate" class="btn btn-primary btn-full">Get Started</a>
+        <a href="/login" class="btn btn-primary btn-full">Sign In</a>
       </div>
     </div>
   </div>
@@ -164,18 +164,19 @@
       <div class="footer-grid">
         <div class="footer-brand">
           <a href="/" class="footer-logo">ArGen</a>
-          <p class="footer-desc">The enterprise-grade standard for AI engineering evaluation and talent intelligence.</p>
+          <p class="footer-desc">AI usage intelligence for teams connecting OpenAI, Claude, Copilot, Gemini, and GitHub Copilot into one operational dashboard.</p>
         </div>
         <div class="footer-links">
-          <span class="footer-label">Product</span>
-          <a href="/evaluate" class="footer-link">Evaluate</a>
+          <span class="footer-label">Platform</span>
+          <a href="/" class="footer-link">AI Usage Intelligence</a>
           <a href="/pricing" class="footer-link">Pricing</a>
-          <a href="/challenges" class="footer-link">Challenges</a>
+          <a href="/registration" class="footer-link">Create Workspace</a>
         </div>
         <div class="footer-links">
-          <span class="footer-label">Connect</span>
+          <span class="footer-label">Company</span>
           <a href="/about" class="footer-link">About</a>
           <a href="/contact" class="footer-link">Contact</a>
+          <a href="/login" class="footer-link">Sign In</a>
         </div>
         <div class="footer-links">
           <span class="footer-label">Legal</span>
@@ -184,8 +185,8 @@
         </div>
       </div>
       <div class="footer-bottom">
-        <span>ArGen Intelligence Engine v3.1</span>
-        <span class="footer-made">Built with obsession<span class="blink">_</span></span>
+        <span>© 2026 ArGen. All rights reserved.</span>
+        <span class="footer-made">AI Workflow Intelligence</span>
       </div>
     </div>
   </footer>
@@ -215,46 +216,46 @@
         const scores = await window.argenApi.getTeamScores(teamId);
         
         // Update Header
-        document.getElementById('teamName').innerHTML = `\${team.name} <i class="soul-text">Analysis</i>`;
-        document.getElementById('aggregateScore').innerHTML = `\${scores.overall || 0}<span style="font-size: 1rem; color: var(--text-sec);">/100</span>`;
-        document.getElementById('percentileRank').textContent = scores.percentile ? \`Top \${100 - scores.percentile}%\` : 'Baseline';
+        document.getElementById('teamName').innerHTML = `${team.name} <i class="soul-text">Analysis</i>`;
+        document.getElementById('aggregateScore').innerHTML = `${scores.overall || 0}<span style="font-size: 1rem; color: var(--text-sec);">/100</span>`;
+        document.getElementById('percentileRank').textContent = scores.percentile ? `Top ${100 - scores.percentile}%` : 'Baseline';
         
         // Update Dimensions
         const dimensions = scores.dimensions || { clarity: 0, constraint: 0, specificity: 0 };
-        document.getElementById('clarityVal').textContent = \`\${dimensions.clarity}%\`;
-        document.getElementById('clarityBar').style.width = \`\${dimensions.clarity}%\`;
-        document.getElementById('constraintVal').textContent = \`\${dimensions.constraint}%\`;
-        document.getElementById('constraintBar').style.width = \`\${dimensions.constraint}%\`;
-        document.getElementById('specificityVal').textContent = \`\${dimensions.specificity}%\`;
-        document.getElementById('specificityBar').style.width = \`\${dimensions.specificity}%\`;
+        document.getElementById('clarityVal').textContent = `${dimensions.clarity}%`;
+        document.getElementById('clarityBar').style.width = `${dimensions.clarity}%`;
+        document.getElementById('constraintVal').textContent = `${dimensions.constraint}%`;
+        document.getElementById('constraintBar').style.width = `${dimensions.constraint}%`;
+        document.getElementById('specificityVal').textContent = `${dimensions.specificity}%`;
+        document.getElementById('specificityBar').style.width = `${dimensions.specificity}%`;
 
         // Update Insight
         if (scores.insight) {
           document.getElementById('aiInsight').innerHTML = scores.insight;
           document.getElementById('recommendedAction').textContent = scores.action || 'Continue standard AI literacy training.';
         } else {
-          document.getElementById('aiInsight').textContent = \`Team \${team.name} is currently establishing a performance baseline. Strongest alignment noted in \${team.industry} protocols.\`;
+          document.getElementById('aiInsight').textContent = `Team ${team.name} is currently establishing a performance baseline. Strongest alignment noted in ${team.industry} protocols.`;
         }
 
         // Render Members
         const memberGrid = document.getElementById('memberGrid');
         if (team.members && team.members.length > 0) {
-          memberGrid.innerHTML = team.members.map(member => \`
+          memberGrid.innerHTML = team.members.map(member => `
             <div class="card" style="background: rgba(255, 255, 255, 0.02); border: 1px solid rgba(255, 255, 255, 0.05); border-radius: 16px; padding: 2rem; box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.2); transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1); position: relative; overflow: hidden;" onmouseover="this.style.borderColor='rgba(43, 96, 226, 0.3)'; this.style.transform='translateY(-2px)'" onmouseout="this.style.borderColor='rgba(255, 255, 255, 0.05)'; this.style.transform='none'">
               <div style="position: absolute; top: 0; left: 0; right: 0; height: 1px; background: linear-gradient(90deg, transparent, rgba(43, 96, 226, 0.2), transparent);"></div>
               <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 1.5rem;">
-                <div style="width: 48px; height: 48px; background: rgba(43, 96, 226, 0.15); border: 1px solid var(--argen-blue); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-family: var(--font-mono); color: white; font-weight: 600;">\${member.name.charAt(0)}</div>
+                <div style="width: 48px; height: 48px; background: rgba(43, 96, 226, 0.15); border: 1px solid var(--argen-blue); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-family: var(--font-mono); color: white; font-weight: 600;">${member.name.charAt(0)}</div>
                 <div>
-                  <span style="display: block; color: var(--white); font-weight: 600;">\${member.name}</span>
-                  <span class="stat-label">\${member.role || 'Member'}</span>
+                  <span style="display: block; color: var(--white); font-weight: 600;">${member.name}</span>
+                  <span class="stat-label">${member.role || 'Member'}</span>
                 </div>
               </div>
               <div style="display: flex; justify-content: space-between; border-top: 1px solid rgba(255, 255, 255, 0.05); padding-top: 1rem;">
                 <span class="stat-label">SCORE</span>
-                <span style="font-family: var(--font-display); font-size: 1.5rem; color: var(--emerald-cta);">\${member.score || '--'}</span>
+                <span style="font-family: var(--font-display); font-size: 1.5rem; color: var(--emerald-cta);">${member.score || '--'}</span>
               </div>
             </div>
-          \`).join('');
+          `).join('');
         } else {
           memberGrid.innerHTML = '<p style="grid-column: 1/-1; text-align: center; color: var(--text-sec); font-family: var(--font-mono);">No members found for this team.</p>';
         }
