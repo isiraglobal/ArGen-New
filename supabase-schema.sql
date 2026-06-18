@@ -1,9 +1,9 @@
 -- ═══════════════════════════════════════════════════════════
 -- ArGen - Complete Supabase Schema
--- Run this in Supabase SQL Editor (https://supabase.com/dashboard/project/_/sql/new)
+-- Run this ENTIRE file in Supabase SQL Editor
 -- ═══════════════════════════════════════════════════════════
 
--- ── 1. Applications (team signup form) ───────────────────
+-- ── 1. Applications ──────────────────────────────────────
 CREATE TABLE IF NOT EXISTS applications (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   name TEXT NOT NULL,
@@ -24,7 +24,6 @@ CREATE TABLE IF NOT EXISTS users (
   email TEXT,
   name TEXT,
   role TEXT DEFAULT 'member',
-  company_id TEXT,
   avatar TEXT DEFAULT '',
   password TEXT,
   profile_complete BOOLEAN DEFAULT false,
@@ -52,12 +51,11 @@ CREATE TABLE IF NOT EXISTS companies (
   created_at TIMESTAMPTZ DEFAULT NOW()
 );
 
--- ── 4. Responses (challenge submissions) ─────────────────
+-- ── 4. Responses ─────────────────────────────────────────
 CREATE TABLE IF NOT EXISTS responses (
   id TEXT PRIMARY KEY,
   user_id TEXT,
   challenge_id TEXT,
-  company_id TEXT,
   evaluation_id TEXT,
   prompt_text TEXT DEFAULT '',
   model_output TEXT DEFAULT '',
@@ -71,12 +69,11 @@ CREATE TABLE IF NOT EXISTS responses (
   created_at TIMESTAMPTZ DEFAULT NOW()
 );
 
--- ── 5. Evaluations (batch evaluations) ──────────────────
+-- ── 5. Evaluations ───────────────────────────────────────
 CREATE TABLE IF NOT EXISTS evaluations (
   id TEXT PRIMARY KEY,
   title TEXT DEFAULT '',
   description TEXT DEFAULT '',
-  company_id TEXT,
   created_by TEXT,
   status TEXT DEFAULT 'active',
   challenge_count INTEGER DEFAULT 0,
@@ -93,7 +90,6 @@ CREATE TABLE IF NOT EXISTS challenges (
   text TEXT DEFAULT '',
   word_limit INTEGER DEFAULT 500,
   time_estimate INTEGER DEFAULT 15,
-  company_id TEXT,
   created_at TIMESTAMPTZ DEFAULT NOW()
 );
 
@@ -111,7 +107,6 @@ CREATE TABLE IF NOT EXISTS invitations (
 CREATE TABLE IF NOT EXISTS invoices (
   id TEXT PRIMARY KEY,
   invoice_number TEXT,
-  company_id TEXT,
   client_name TEXT,
   client_contact TEXT,
   client_address TEXT DEFAULT '',
@@ -133,7 +128,7 @@ CREATE TABLE IF NOT EXISTS contact_submissions (
   created_at TIMESTAMPTZ DEFAULT NOW()
 );
 
--- ── 10. System Metrics ──────────────────────────────────
+-- ── 10. System Metrics ───────────────────────────────────
 CREATE TABLE IF NOT EXISTS system_metrics (
   id TEXT PRIMARY KEY DEFAULT gen_random_uuid()::text,
   type TEXT DEFAULT '',
@@ -145,14 +140,33 @@ CREATE TABLE IF NOT EXISTS system_metrics (
   created_at TIMESTAMPTZ DEFAULT NOW()
 );
 
--- ── 11. OAuth States ────────────────────────────────────
+-- ── 11. OAuth States ─────────────────────────────────────
 CREATE TABLE IF NOT EXISTS oauth_states (
   id TEXT PRIMARY KEY DEFAULT gen_random_uuid()::text,
   nonce TEXT,
   provider TEXT,
-  company_id TEXT,
   created_at TIMESTAMPTZ DEFAULT NOW()
 );
+
+-- ═══════════════════════════════════════════════════════════
+-- 🔧 ADD ALL MISSING COLUMNS (for pre-existing tables)
+--     Runs safely — ADD COLUMN IF NOT EXISTS no-ops if column exists
+-- ═══════════════════════════════════════════════════════════
+ALTER TABLE users        ADD COLUMN IF NOT EXISTS company_id TEXT;
+ALTER TABLE responses    ADD COLUMN IF NOT EXISTS company_id TEXT;
+ALTER TABLE evaluations  ADD COLUMN IF NOT EXISTS company_id TEXT;
+ALTER TABLE challenges   ADD COLUMN IF NOT EXISTS company_id TEXT;
+ALTER TABLE invoices     ADD COLUMN IF NOT EXISTS company_id TEXT;
+ALTER TABLE oauth_states ADD COLUMN IF NOT EXISTS company_id TEXT;
+ALTER TABLE companies    ADD COLUMN IF NOT EXISTS invite_code TEXT;
+ALTER TABLE companies    ADD COLUMN IF NOT EXISTS status TEXT;
+ALTER TABLE responses    ADD COLUMN IF NOT EXISTS scoring_status TEXT;
+ALTER TABLE applications ADD COLUMN IF NOT EXISTS status TEXT;
+ALTER TABLE applications ADD COLUMN IF NOT EXISTS created_at TIMESTAMPTZ;
+ALTER TABLE responses    ADD COLUMN IF NOT EXISTS user_id TEXT;
+ALTER TABLE invitations  ADD COLUMN IF NOT EXISTS token TEXT;
+ALTER TABLE invitations  ADD COLUMN IF NOT EXISTS email TEXT;
+ALTER TABLE oauth_states ADD COLUMN IF NOT EXISTS nonce TEXT;
 
 -- ═══════════════════════════════════════════════════════════
 -- INDEXES
@@ -180,21 +194,9 @@ CREATE INDEX IF NOT EXISTS idx_oauth_nonce ON oauth_states(nonce);
 ALTER TABLE applications ENABLE ROW LEVEL SECURITY;
 ALTER TABLE contact_submissions ENABLE ROW LEVEL SECURITY;
 
--- Allow public inserts to applications and contact_submissions
 CREATE POLICY "Allow public insert applications" ON applications
   FOR INSERT WITH CHECK (true);
 CREATE POLICY "Allow public insert contact" ON contact_submissions
   FOR INSERT WITH CHECK (true);
-
--- Allow authenticated users to read their own data
 CREATE POLICY "Allow authenticated select applications" ON applications
   FOR SELECT USING (auth.role() = 'authenticated');
-
--- ═══════════════════════════════════════════════════════════
--- HELPER QUERIES
--- ═══════════════════════════════════════════════════════════
--- View all applications:  SELECT * FROM applications ORDER BY created_at DESC;
--- View pending companies:  SELECT * FROM companies WHERE status = 'pending';
--- View all users:          SELECT * FROM users ORDER BY created_at DESC;
--- View API usage stats:    SELECT agent_name, COUNT(*) as runs, SUM(tokens_used) as total_tokens FROM system_metrics GROUP BY agent_name;
--- Today's submissions:     SELECT COUNT(*) as today FROM responses WHERE created_at >= NOW() - INTERVAL '1 day';
