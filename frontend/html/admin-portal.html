@@ -275,14 +275,6 @@
     const ADMIN_PASSCODE = 'ADMIN2024';
     async function unlockAdminPortal() {
       const input = document.getElementById('passcodeInput').value.trim();
-      const valid = input === ADMIN_PASSCODE;
-      if (valid) {
-        sessionStorage.setItem('admin_portal_unlocked', 'true');
-        document.getElementById('passcodeOverlay').style.display = 'none';
-        document.getElementById('passcodeError').style.display = 'none';
-        document.getElementById('passcodeInput').value = '';
-        return;
-      }
       try {
         const res = await fetch('/api/admin/verify-passcode', {
           method: 'POST',
@@ -297,7 +289,15 @@
           document.getElementById('passcodeInput').value = '';
           return;
         }
-      } catch (e) {}
+      } catch (e) {
+        if (input === ADMIN_PASSCODE) {
+          sessionStorage.setItem('admin_portal_unlocked', 'true');
+          document.getElementById('passcodeOverlay').style.display = 'none';
+          document.getElementById('passcodeError').style.display = 'none';
+          document.getElementById('passcodeInput').value = '';
+          return;
+        }
+      }
       document.getElementById('passcodeError').style.display = 'block';
       document.getElementById('passcodeInput').value = '';
       document.getElementById('passcodeInput').focus();
@@ -336,6 +336,7 @@
           <button class="tab-btn" data-tab="invitations">Invitations</button>
           <button class="tab-btn" data-tab="monitor">Monitor</button>
           <button class="tab-btn" data-tab="invoices">Invoices</button>
+          <button class="tab-btn" data-tab="database">Database</button>
         </div>
 
         <div class="admin-content">
@@ -430,6 +431,23 @@
             </div>
             <div id="invoicesList"></div>
           </div>
+
+          <div id="tab-database" class="tab-panel" style="display:none">
+            <div class="filter-bar">
+              <select id="dbCollectionSelect" style="padding:8px 12px;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.08);border-radius:6px;color:#fff;font-size:0.75rem;font-family:var(--font-mono);">
+                <option value="users">Users</option>
+                <option value="companies">Companies</option>
+                <option value="applications">Applications</option>
+                <option value="responses">Responses</option>
+                <option value="evaluations">Evaluations</option>
+                <option value="invitations">Invitations</option>
+                <option value="invoices">Invoices</option>
+                <option value="contact_submissions">Contact Submissions</option>
+              </select>
+              <button onclick="fetchCollection()" class="action-btn">Refresh</button>
+            </div>
+            <div id="dbData"><div class="empty-state">Select a collection to view data</div></div>
+          </div>
         </div>
       </div>
     </div>
@@ -459,6 +477,7 @@
         if (tab === 'invitations') fetchInvitations();
         if (tab === 'monitor') fetchMonitor();
         if (tab === 'invoices') fetchInvoices();
+        if (tab === 'database') fetchCollection('users');
       });
     });
 
@@ -780,6 +799,43 @@
 
     // ── Load default tab ───────────────────────────────
     window.onload = () => { fetchDashboard(); };
+
+    // ── Database Browser ────────────────────────────────
+    let currentCollection = 'users';
+
+    async function fetchCollection(collection) {
+      currentCollection = collection || document.getElementById('dbCollectionSelect').value;
+      const container = document.getElementById('dbData');
+      container.innerHTML = 'Loading...';
+      try {
+        const data = await argenApi.request('/admin/data/' + currentCollection);
+        if (!data || !data.length) {
+          container.innerHTML = '<div class="empty-state">No records found</div>';
+          return;
+        }
+        const keys = Object.keys(data[0]).filter(k => k !== 'password');
+        let html = '<div style="overflow-x:auto;"><table style="width:100%;border-collapse:collapse;font-size:0.7rem;font-family:var(--font-mono);">';
+        html += '<thead><tr>' + keys.map(k => '<th style="text-align:left;padding:6px 8px;border-bottom:1px solid rgba(255,255,255,0.1);color:var(--text-sec);text-transform:uppercase;font-size:0.6rem;">' + k + '</th>').join('') + '</tr></thead>';
+        html += '<tbody>';
+        data.slice(0, 100).forEach(row => {
+          html += '<tr>' + keys.map(k => {
+            let val = row[k];
+            if (typeof val === 'object') val = JSON.stringify(val).substring(0, 80);
+            if (val === null || val === undefined) val = '—';
+            return '<td style="padding:6px 8px;border-bottom:1px solid rgba(255,255,255,0.03);color:#fff;max-width:200px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">' + String(val) + '</td>';
+          }).join('') + '</tr>';
+        });
+        html += '</tbody></table></div>';
+        if (data.length > 100) html += '<p style="font-size:0.65rem;color:var(--text-sec);margin-top:0.5rem;">Showing first 100 of ' + data.length + ' records</p>';
+        container.innerHTML = html;
+      } catch (e) {
+        container.innerHTML = '<div class="empty-state">Error loading data: ' + e.message + '</div>';
+      }
+    }
+
+    document.addEventListener('change', function(e) {
+      if (e.target.id === 'dbCollectionSelect') fetchCollection(e.target.value);
+    });
   </script>
 
   <!-- Edit Organization Modal -->

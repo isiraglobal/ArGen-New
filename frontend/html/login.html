@@ -442,11 +442,7 @@
  
         // Google Sign-In Submission
         document.getElementById('googleLoginBtn').addEventListener('click', async () => {
-          try {
-            showMessage('Google sign-in is not yet configured. Use email/password login.', 'error');
-          } catch (error) {
-            showMessage(error.message);
-          }
+          window.location.href = '/api/auth/google';
         });
 
        // Demo Mode Trigger

@@ -764,4 +764,103 @@ router.post('/complete-profile', protect, async (req, res) => {
   }
 });
 
+// ── Google OAuth Login ────────────────────────────────
+const jwt = require('jsonwebtoken');
+
+// Redirect to Google OAuth consent screen
+router.get('/google', (req, res) => {
+  const clientId = process.env.GOOGLE_CLIENT_ID;
+  if (!clientId) {
+    return res.status(501).json({ msg: 'Google OAuth not configured. Set GOOGLE_CLIENT_ID and GOOGLE_CLIENT_SECRET.' });
+  }
+  const redirectUri = process.env.GOOGLE_REDIRECT_URI || 'https://argen.isira.club/api/auth/google/callback';
+  const state = crypto.randomBytes(24).toString('hex');
+  const url = `https://accounts.google.com/o/oauth2/v2/auth?client_id=${clientId}&redirect_uri=${encodeURIComponent(redirectUri)}&response_type=code&scope=openid%20email%20profile&state=${state}`;
+  res.redirect(url);
+});
+
+// Google OAuth callback
+router.get('/google/callback', async (req, res) => {
+  const { code, state } = req.query;
+  if (!code) {
+    return res.redirect('/login?error=google_auth_failed');
+  }
+
+  try {
+    const clientId = process.env.GOOGLE_CLIENT_ID;
+    const clientSecret = process.env.GOOGLE_CLIENT_SECRET;
+    const redirectUri = process.env.GOOGLE_REDIRECT_URI || 'https://argen.isira.club/api/auth/google/callback';
+
+    // Exchange code for tokens
+    const tokenRes = await fetch('https://oauth2.googleapis.com/token', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+      body: new URLSearchParams({
+        code, client_id: clientId, client_secret: clientSecret,
+        redirect_uri: redirectUri, grant_type: 'authorization_code'
+      })
+    });
+    const tokens = await tokenRes.json();
+    if (!tokens.id_token) {
+      return res.redirect('/login?error=google_token_failed');
+    }
+
+    // Decode ID token to get user info
+    const payload = JSON.parse(Buffer.from(tokens.id_token.split('.')[1], 'base64url').toString());
+    const { sub: googleId, email, name, picture } = payload;
+
+    if (!email) {
+      return res.redirect('/login?error=google_no_email');
+    }
+
+    // Find or create user
+    let userDoc = await db.collection('users').where('email', '==', email).limit(1).get();
+    let user;
+
+    if (userDoc.empty) {
+      // Register new user via Supabase Auth
+      const autoPassword = crypto.randomBytes(16).toString('hex');
+      let supabaseUser;
+      try {
+        if (!global.MOCK_DB && supabase) {
+          const { data, error } = await supabase.auth.admin.createUser({
+            email, password: autoPassword, email_confirm: true,
+            user_metadata: { name, picture, googleId, provider: 'google' }
+          });
+          if (error) throw error;
+          supabaseUser = data.user;
+        }
+      } catch (e) {
+        console.warn('Supabase user creation skipped:', e.message);
+      }
+
+      const uid = supabaseUser?.id || googleId || crypto.randomBytes(16).toString('hex');
+      const newUser = {
+        email, name: name || email.split('@')[0],
+        role: 'member', googleId, avatar: picture || '',
+        profileComplete: false, createdAt: new Date()
+      };
+      await db.collection('users').doc(uid).set(newUser);
+      user = { id: uid, ...newUser };
+    } else {
+      const doc = userDoc.docs[0];
+      user = { id: doc.id, ...doc.data() };
+    }
+
+    // Issue JWT
+    const token = jwt.sign(
+      { id: user.id, email: user.email, role: user.role, companyId: user.companyId },
+      process.env.JWT_SECRET || 'fallback_jwt_secret',
+      { expiresIn: '7d' }
+    );
+
+    const redirectUrl = user.role === 'superadmin' ? '/admin-portal' :
+      user.profileComplete === false ? '/onboarding' : '/dashboard';
+    res.redirect(`/oauth?token=${token}&user=${encodeURIComponent(JSON.stringify(user))}&redirect=${redirectUrl}`);
+  } catch (err) {
+    console.error('Google OAuth error:', err);
+    res.redirect('/login?error=google_server_error');
+  }
+});
+
 module.exports = router;

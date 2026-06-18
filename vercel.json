@@ -32,6 +32,7 @@
     { "source": "/gdpr", "destination": "/frontend/html/gdpr.html" },
     { "source": "/dpa", "destination": "/frontend/html/dpa.html" },
     { "source": "/aup", "destination": "/frontend/html/aup.html" },
+    { "source": "/apply", "destination": "/frontend/html/apply.html" },
     { "source": "/(css|js|images)/(.*)", "destination": "/frontend/$1/$2" }
   ],
   "crons": [

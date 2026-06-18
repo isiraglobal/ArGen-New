@@ -77,6 +77,7 @@ app.use('/api/leaderboard', require('./routes/leaderboard'));
 app.use('/api/connect', require('./routes/connect'));
 app.use('/api/analytics', require('./routes/analytics'));
 app.use('/api/hr', require('./routes/hr'));
+app.use('/api/apply', require('./routes/apply'));
 
 // Contact form (public)
 app.post('/api/contact', contactRules, handleValidationErrors, async (req, res) => {
@@ -168,7 +169,7 @@ const publicPages = [
   'about', 'pricing', 'contact', 'login', 'oauth', 'forgot-password',
   'reset-password', 'privacy', 'terms', 'waitlist', 'registration',
   'invoice', 'evaluate', 'payment-success', 'payment-failed',
-  'cookie-policy', 'gdpr', 'dpa', 'aup'
+  'cookie-policy', 'gdpr', 'dpa', 'aup', 'apply'
 ];
 
 publicPages.forEach(page => {

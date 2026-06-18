@@ -191,7 +191,7 @@ router.get('/stats', protect, authorize('superadmin'), async (req, res) => {
 // @access  Public (rate-limited by nature)
 router.post('/verify-passcode', async (req, res) => {
   const { passcode } = req.body;
-  const valid = process.env.ADMIN_PORTAL_CODE || 'ADMIN2024';
+  const valid = process.env.ADMIN_ACCESS || process.env.ADMIN_PORTAL_CODE || 'ADMIN2024';
   if (passcode === valid) {
     return res.json({ valid: true });
   }
@@ -1062,6 +1062,28 @@ router.patch('/companies/:id/approve', protect, authorize('superadmin'), async (
     res.json({ msg: 'Company approved successfully', company: { _id: updatedDoc.id, ...updatedDoc.data() } });
   } catch (err) {
     console.error('Company Approve Error:', err);
+    res.status(500).json({ msg: 'Server error', error: err.message });
+  }
+});
+
+// @route   GET api/admin/data/:collection
+// @desc    Fetch collection data for admin database viewer
+// @access  Private (Superadmin)
+router.get('/data/:collection', protect, authorize('superadmin'), async (req, res) => {
+  const allowed = ['users', 'companies', 'applications', 'responses', 'evaluations', 'invitations', 'invoices', 'contact_submissions', 'system_metrics'];
+  const collection = req.params.collection;
+  if (!allowed.includes(collection)) {
+    return res.status(400).json({ msg: 'Invalid collection' });
+  }
+  if (global.MOCK_DB) {
+    return res.json([{ _id: 'mock-1', name: 'Mock Record', note: 'MOCK_DB mode — no real data' }]);
+  }
+  try {
+    const snapshot = await db.collection(collection).limit(200).get();
+    const data = snapshot.docs.map(doc => ({ _id: doc.id, ...doc.data() }));
+    res.json(data);
+  } catch (err) {
+    console.error('Data fetch error:', err);
     res.status(500).json({ msg: 'Server error', error: err.message });
   }
 });
