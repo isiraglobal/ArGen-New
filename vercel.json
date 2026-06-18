@@ -36,24 +36,8 @@
   ],
   "crons": [
     {
-      "path": "/api/scheduler/daily-nudges",
-      "schedule": "0 9 * * *"
-    },
-    {
-      "path": "/api/scheduler/weekly-reports",
-      "schedule": "0 9 * * 1"
-    },
-    {
-      "path": "/api/scheduler/streak-check",
-      "schedule": "0 0 * * *"
-    },
-    {
       "path": "/api/scheduler/daily",
       "schedule": "0 2 * * *"
-    },
-    {
-      "path": "/api/scheduler/sync-connections",
-      "schedule": "0 */6 * * *"
     }
   ]
 }
