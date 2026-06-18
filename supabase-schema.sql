@@ -1,195 +1,112 @@
 -- ═══════════════════════════════════════════════════════════
--- ArGen - Complete Supabase Schema
--- Run this ENTIRE file in Supabase SQL Editor
+-- ArGen - Supabase Schema
+-- Run this in Supabase SQL Editor to add missing tables/columns
 -- ═══════════════════════════════════════════════════════════
 
--- ── 1. Applications ──────────────────────────────────────
+-- ── Applications (team signup form - NEW table) ──────────
 CREATE TABLE IF NOT EXISTS applications (
-  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-  name TEXT NOT NULL,
-  email TEXT NOT NULL,
-  company TEXT NOT NULL,
-  title TEXT NOT NULL,
-  team_size TEXT DEFAULT '',
-  website TEXT DEFAULT '',
-  referral TEXT DEFAULT '',
-  message TEXT NOT NULL,
-  status TEXT DEFAULT 'new',
-  created_at TIMESTAMPTZ DEFAULT NOW()
+  id text NOT NULL DEFAULT (gen_random_uuid())::text,
+  name text NOT NULL,
+  email text NOT NULL,
+  company text NOT NULL,
+  title text NOT NULL,
+  teamSize text DEFAULT ''::text,
+  website text DEFAULT ''::text,
+  referral text DEFAULT ''::text,
+  message text NOT NULL,
+  status text DEFAULT 'new'::text,
+  createdAt timestamp with time zone DEFAULT now(),
+  CONSTRAINT applications_pkey PRIMARY KEY (id)
 );
 
--- ── 2. Users ─────────────────────────────────────────────
-CREATE TABLE IF NOT EXISTS users (
-  id TEXT PRIMARY KEY,
-  email TEXT,
-  name TEXT,
-  role TEXT DEFAULT 'member',
-  avatar TEXT DEFAULT '',
-  password TEXT,
-  profile_complete BOOLEAN DEFAULT false,
-  profile_status TEXT DEFAULT 'pending',
-  is_approved BOOLEAN DEFAULT false,
-  current_streak INTEGER DEFAULT 0,
-  department TEXT DEFAULT '',
-  employee_id TEXT DEFAULT '',
-  phone TEXT DEFAULT '',
-  created_at TIMESTAMPTZ DEFAULT NOW()
-);
-
--- ── 3. Companies ─────────────────────────────────────────
-CREATE TABLE IF NOT EXISTS companies (
-  id TEXT PRIMARY KEY,
-  name TEXT,
-  industry TEXT DEFAULT '',
-  size TEXT DEFAULT '',
-  country TEXT DEFAULT '',
-  domain TEXT DEFAULT '',
-  status TEXT DEFAULT 'pending',
-  invite_code TEXT,
-  seat_limit INTEGER DEFAULT 15,
-  primary_contact JSONB DEFAULT '{}',
-  created_at TIMESTAMPTZ DEFAULT NOW()
-);
-
--- ── 4. Responses ─────────────────────────────────────────
-CREATE TABLE IF NOT EXISTS responses (
-  id TEXT PRIMARY KEY,
-  user_id TEXT,
-  challenge_id TEXT,
-  evaluation_id TEXT,
-  prompt_text TEXT DEFAULT '',
-  model_output TEXT DEFAULT '',
-  scores JSONB DEFAULT '{}',
-  overall_score NUMERIC DEFAULT 0,
-  scoring_status TEXT DEFAULT 'Pending',
-  flags JSONB DEFAULT '[]',
-  justification TEXT DEFAULT '',
-  improvement TEXT DEFAULT '',
-  status TEXT DEFAULT 'Pending',
-  created_at TIMESTAMPTZ DEFAULT NOW()
-);
-
--- ── 5. Evaluations ───────────────────────────────────────
-CREATE TABLE IF NOT EXISTS evaluations (
-  id TEXT PRIMARY KEY,
-  title TEXT DEFAULT '',
-  description TEXT DEFAULT '',
-  created_by TEXT,
-  status TEXT DEFAULT 'active',
-  challenge_count INTEGER DEFAULT 0,
-  scoring_agent_version TEXT DEFAULT '',
-  created_at TIMESTAMPTZ DEFAULT NOW()
-);
-
--- ── 6. Challenges ────────────────────────────────────────
-CREATE TABLE IF NOT EXISTS challenges (
-  id TEXT PRIMARY KEY,
-  name TEXT DEFAULT '',
-  type TEXT DEFAULT '',
-  difficulty TEXT DEFAULT '',
-  text TEXT DEFAULT '',
-  word_limit INTEGER DEFAULT 500,
-  time_estimate INTEGER DEFAULT 15,
-  created_at TIMESTAMPTZ DEFAULT NOW()
-);
-
--- ── 7. Invitations ───────────────────────────────────────
-CREATE TABLE IF NOT EXISTS invitations (
-  id TEXT PRIMARY KEY,
-  email TEXT,
-  company_name TEXT,
-  token TEXT,
-  used BOOLEAN DEFAULT false,
-  created_at TIMESTAMPTZ DEFAULT NOW()
-);
-
--- ── 8. Invoices ──────────────────────────────────────────
-CREATE TABLE IF NOT EXISTS invoices (
-  id TEXT PRIMARY KEY,
-  invoice_number TEXT,
-  client_name TEXT,
-  client_contact TEXT,
-  client_address TEXT DEFAULT '',
-  items JSONB DEFAULT '[]',
-  subtotal NUMERIC DEFAULT 0,
-  total_due NUMERIC DEFAULT 0,
-  status TEXT DEFAULT 'Draft',
-  po_number TEXT DEFAULT '',
-  date TIMESTAMPTZ DEFAULT NOW()
-);
-
--- ── 9. Contact Submissions ───────────────────────────────
+-- ── Contact Submissions (NEW table) ──────────────────────
 CREATE TABLE IF NOT EXISTS contact_submissions (
-  id TEXT PRIMARY KEY DEFAULT gen_random_uuid()::text,
-  name TEXT,
-  email TEXT,
-  subject TEXT DEFAULT '',
-  message TEXT,
-  created_at TIMESTAMPTZ DEFAULT NOW()
+  id text NOT NULL DEFAULT (gen_random_uuid())::text,
+  name text,
+  email text,
+  subject text DEFAULT ''::text,
+  message text,
+  createdAt timestamp with time zone DEFAULT now(),
+  CONSTRAINT contact_submissions_pkey PRIMARY KEY (id)
 );
 
--- ── 10. System Metrics ───────────────────────────────────
-CREATE TABLE IF NOT EXISTS system_metrics (
-  id TEXT PRIMARY KEY DEFAULT gen_random_uuid()::text,
-  type TEXT DEFAULT '',
-  status TEXT DEFAULT '',
-  agent_name TEXT DEFAULT '',
-  tokens_used INTEGER DEFAULT 0,
-  cost NUMERIC DEFAULT 0,
-  quality_score NUMERIC DEFAULT 0,
-  created_at TIMESTAMPTZ DEFAULT NOW()
-);
-
--- ── 11. OAuth States ─────────────────────────────────────
+-- ── Oauth States (NEW table) ─────────────────────────────
 CREATE TABLE IF NOT EXISTS oauth_states (
-  id TEXT PRIMARY KEY DEFAULT gen_random_uuid()::text,
-  nonce TEXT,
-  provider TEXT,
-  created_at TIMESTAMPTZ DEFAULT NOW()
+  id text NOT NULL DEFAULT (gen_random_uuid())::text,
+  nonce text,
+  provider text,
+  createdAt timestamp with time zone DEFAULT now(),
+  CONSTRAINT oauth_states_pkey PRIMARY KEY (id)
 );
 
 -- ═══════════════════════════════════════════════════════════
--- 🔧 ADD ALL MISSING COLUMNS (for pre-existing tables)
---     Runs safely — ADD COLUMN IF NOT EXISTS no-ops if column exists
+-- 🔧 ADD MISSING COLUMNS — covers pre-existing tables
+--     and tables created by earlier schema versions
 -- ═══════════════════════════════════════════════════════════
-ALTER TABLE users        ADD COLUMN IF NOT EXISTS company_id TEXT;
-ALTER TABLE responses    ADD COLUMN IF NOT EXISTS company_id TEXT;
-ALTER TABLE evaluations  ADD COLUMN IF NOT EXISTS company_id TEXT;
-ALTER TABLE challenges   ADD COLUMN IF NOT EXISTS company_id TEXT;
-ALTER TABLE invoices     ADD COLUMN IF NOT EXISTS company_id TEXT;
-ALTER TABLE oauth_states ADD COLUMN IF NOT EXISTS company_id TEXT;
-ALTER TABLE companies    ADD COLUMN IF NOT EXISTS invite_code TEXT;
-ALTER TABLE companies    ADD COLUMN IF NOT EXISTS status TEXT;
-ALTER TABLE responses    ADD COLUMN IF NOT EXISTS scoring_status TEXT;
-ALTER TABLE applications ADD COLUMN IF NOT EXISTS status TEXT;
-ALTER TABLE applications ADD COLUMN IF NOT EXISTS created_at TIMESTAMPTZ;
-ALTER TABLE responses    ADD COLUMN IF NOT EXISTS user_id TEXT;
-ALTER TABLE invitations  ADD COLUMN IF NOT EXISTS token TEXT;
-ALTER TABLE invitations  ADD COLUMN IF NOT EXISTS email TEXT;
-ALTER TABLE oauth_states ADD COLUMN IF NOT EXISTS nonce TEXT;
+ALTER TABLE applications    ADD COLUMN IF NOT EXISTS "createdAt" timestamp with time zone DEFAULT now();
+ALTER TABLE applications    ADD COLUMN IF NOT EXISTS "status" text DEFAULT 'new'::text;
+ALTER TABLE applications    ADD COLUMN IF NOT EXISTS "teamSize" text DEFAULT ''::text;
+ALTER TABLE contact_submissions ADD COLUMN IF NOT EXISTS "createdAt" timestamp with time zone DEFAULT now();
+ALTER TABLE contact_submissions ADD COLUMN IF NOT EXISTS "subject" text DEFAULT ''::text;
+ALTER TABLE oauth_states    ADD COLUMN IF NOT EXISTS "createdAt" timestamp with time zone DEFAULT now();
+ALTER TABLE companies        ADD COLUMN IF NOT EXISTS "domain" text;
+ALTER TABLE companies        ADD COLUMN IF NOT EXISTS "seatLimit" integer DEFAULT 15;
+ALTER TABLE users            ADD COLUMN IF NOT EXISTS "avatar" text DEFAULT ''::text;
+ALTER TABLE users            ADD COLUMN IF NOT EXISTS "password" text;
+ALTER TABLE users            ADD COLUMN IF NOT EXISTS "profileComplete" boolean DEFAULT false;
+ALTER TABLE users            ADD COLUMN IF NOT EXISTS "profileStatus" text DEFAULT 'pending'::text;
+ALTER TABLE users            ADD COLUMN IF NOT EXISTS "isApproved" boolean DEFAULT false;
+ALTER TABLE users            ADD COLUMN IF NOT EXISTS "currentStreak" integer DEFAULT 0;
+ALTER TABLE users            ADD COLUMN IF NOT EXISTS "employeeId" text DEFAULT ''::text;
+ALTER TABLE users            ADD COLUMN IF NOT EXISTS "phone" text DEFAULT ''::text;
+ALTER TABLE users            ADD COLUMN IF NOT EXISTS "jobRole" text DEFAULT ''::text;
+ALTER TABLE responses        ADD COLUMN IF NOT EXISTS "companyId" text;
+ALTER TABLE responses        ADD COLUMN IF NOT EXISTS "promptText" text DEFAULT ''::text;
+ALTER TABLE responses        ADD COLUMN IF NOT EXISTS "modelOutput" text DEFAULT ''::text;
+ALTER TABLE responses        ADD COLUMN IF NOT EXISTS "scores" jsonb DEFAULT '{}'::jsonb;
+ALTER TABLE responses        ADD COLUMN IF NOT EXISTS "overallScore" numeric DEFAULT 0;
+ALTER TABLE responses        ADD COLUMN IF NOT EXISTS "scoringStatus" text DEFAULT 'Pending'::text;
+ALTER TABLE responses        ADD COLUMN IF NOT EXISTS "flags" jsonb DEFAULT '[]'::jsonb;
+ALTER TABLE responses        ADD COLUMN IF NOT EXISTS "justification" text DEFAULT ''::text;
+ALTER TABLE responses        ADD COLUMN IF NOT EXISTS "improvement" text DEFAULT ''::text;
+ALTER TABLE responses        ADD COLUMN IF NOT EXISTS "status" text DEFAULT 'Pending'::text;
+ALTER TABLE evaluations      ADD COLUMN IF NOT EXISTS "companyId" text;
+ALTER TABLE evaluations      ADD COLUMN IF NOT EXISTS "createdBy" text;
+ALTER TABLE evaluations      ADD COLUMN IF NOT EXISTS "challengeCount" integer DEFAULT 0;
+ALTER TABLE evaluations      ADD COLUMN IF NOT EXISTS "scoringAgentVersion" text DEFAULT ''::text;
+ALTER TABLE challenges       ADD COLUMN IF NOT EXISTS "companyId" text;
+ALTER TABLE challenges       ADD COLUMN IF NOT EXISTS "type" text DEFAULT ''::text;
+ALTER TABLE challenges       ADD COLUMN IF NOT EXISTS "difficulty" text DEFAULT ''::text;
+ALTER TABLE challenges       ADD COLUMN IF NOT EXISTS "text" text DEFAULT ''::text;
+ALTER TABLE challenges       ADD COLUMN IF NOT EXISTS "wordLimit" integer DEFAULT 500;
+ALTER TABLE challenges       ADD COLUMN IF NOT EXISTS "timeEstimate" integer DEFAULT 15;
+ALTER TABLE challenges       ADD COLUMN IF NOT EXISTS "evalId" text;
+ALTER TABLE invitations      ADD COLUMN IF NOT EXISTS "companyName" text;
+ALTER TABLE invoices         ADD COLUMN IF NOT EXISTS "companyId" text;
+ALTER TABLE invoices         ADD COLUMN IF NOT EXISTS "invoiceNumber" text;
+ALTER TABLE invoices         ADD COLUMN IF NOT EXISTS "clientName" text;
+ALTER TABLE invoices         ADD COLUMN IF NOT EXISTS "clientContact" text;
+ALTER TABLE invoices         ADD COLUMN IF NOT EXISTS "clientAddress" text DEFAULT ''::text;
+ALTER TABLE invoices         ADD COLUMN IF NOT EXISTS "items" jsonb DEFAULT '[]'::jsonb;
+ALTER TABLE invoices         ADD COLUMN IF NOT EXISTS "subtotal" numeric DEFAULT 0;
+ALTER TABLE invoices         ADD COLUMN IF NOT EXISTS "totalDue" numeric DEFAULT 0;
+ALTER TABLE invoices         ADD COLUMN IF NOT EXISTS "poNumber" text DEFAULT ''::text;
+ALTER TABLE invoices         ADD COLUMN IF NOT EXISTS "amount" numeric;
+ALTER TABLE system_metrics   ADD COLUMN IF NOT EXISTS "type" text DEFAULT ''::text;
+ALTER TABLE system_metrics   ADD COLUMN IF NOT EXISTS "agentName" text DEFAULT ''::text;
+ALTER TABLE system_metrics   ADD COLUMN IF NOT EXISTS "tokensUsed" integer DEFAULT 0;
+ALTER TABLE system_metrics   ADD COLUMN IF NOT EXISTS "cost" numeric DEFAULT 0;
+ALTER TABLE system_metrics   ADD COLUMN IF NOT EXISTS "qualityScore" numeric DEFAULT 0;
+ALTER TABLE system_metrics   ADD COLUMN IF NOT EXISTS "status" text DEFAULT ''::text;
 
 -- ═══════════════════════════════════════════════════════════
--- INDEXES
+-- INDEXES for new tables
 -- ═══════════════════════════════════════════════════════════
-CREATE INDEX IF NOT EXISTS idx_users_email ON users(email);
-CREATE INDEX IF NOT EXISTS idx_users_company ON users(company_id);
-CREATE INDEX IF NOT EXISTS idx_users_role ON users(role);
-CREATE INDEX IF NOT EXISTS idx_companies_status ON companies(status);
-CREATE INDEX IF NOT EXISTS idx_companies_invite ON companies(invite_code);
-CREATE INDEX IF NOT EXISTS idx_responses_user ON responses(user_id);
-CREATE INDEX IF NOT EXISTS idx_responses_company ON responses(company_id);
-CREATE INDEX IF NOT EXISTS idx_responses_status ON responses(scoring_status);
 CREATE INDEX IF NOT EXISTS idx_applications_status ON applications(status);
-CREATE INDEX IF NOT EXISTS idx_applications_created ON applications(created_at DESC);
-CREATE INDEX IF NOT EXISTS idx_invitations_token ON invitations(token);
-CREATE INDEX IF NOT EXISTS idx_invitations_email ON invitations(email);
-CREATE INDEX IF NOT EXISTS idx_invoices_company ON invoices(company_id);
-CREATE INDEX IF NOT EXISTS idx_metrics_type ON system_metrics(type);
-CREATE INDEX IF NOT EXISTS idx_metrics_created ON system_metrics(created_at DESC);
-CREATE INDEX IF NOT EXISTS idx_oauth_nonce ON oauth_states(nonce);
+CREATE INDEX IF NOT EXISTS idx_applications_created ON applications("createdAt" DESC);
 
 -- ═══════════════════════════════════════════════════════════
--- ROW LEVEL SECURITY
+-- ROW LEVEL SECURITY for new tables
 -- ═══════════════════════════════════════════════════════════
 ALTER TABLE applications ENABLE ROW LEVEL SECURITY;
 ALTER TABLE contact_submissions ENABLE ROW LEVEL SECURITY;
@@ -198,5 +115,3 @@ CREATE POLICY "Allow public insert applications" ON applications
   FOR INSERT WITH CHECK (true);
 CREATE POLICY "Allow public insert contact" ON contact_submissions
   FOR INSERT WITH CHECK (true);
-CREATE POLICY "Allow authenticated select applications" ON applications
-  FOR SELECT USING (auth.role() = 'authenticated');
