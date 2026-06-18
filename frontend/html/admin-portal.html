@@ -836,6 +836,18 @@
     document.addEventListener('change', function(e) {
       if (e.target.id === 'dbCollectionSelect') fetchCollection(e.target.value);
     });
+
+    // Auto-refresh database tab every 15 seconds
+    let dbRefreshTimer = null;
+    document.querySelectorAll('.tab-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        if (btn.dataset.tab === 'database') {
+          dbRefreshTimer = setInterval(() => { fetchCollection(); }, 15000);
+        } else {
+          if (dbRefreshTimer) { clearInterval(dbRefreshTimer); dbRefreshTimer = null; }
+        }
+      });
+    });
   </script>
 
   <!-- Edit Organization Modal -->
