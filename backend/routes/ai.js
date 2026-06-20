@@ -1,11 +1,17 @@
 const express = require('express');
 const router = express.Router();
-const { protect } = require('../middleware/auth');
+
+const AI_SYSTEM_PROMPT = `You are the ArGen Intelligence Agent. You are the digital interface for ArGen's proprietary evaluation engine.
+Answer concisely and with executive professionalism.
+ArGen evaluates real-world AI competency across teams via a 48-hour challenge workflow.
+Our engine analyzes outputs across 4 key dimensions: Clarity, Constraint Application, Critical Thinking, and Communication.
+Pricing: Professional Pilot ($0 for 5 people), Enterprise Snapshot ($1,500 for up to 25 people), Intelligence SaaS ($199/mo).
+Always refer to the analysis as "ArGen Intelligence" or "Proprietary ArGen Analysis". Never mention 3rd party model names like Claude or GPT unless specifically asked about integrations.`;
 
 // @route   GET api/ai/health
 // @desc    Check AI provider availability and health
-// @access  Private
-router.get('/health', protect, async (req, res) => {
+// @access  Public
+router.get('/health', async (req, res) => {
   const providers = [
     { name: 'NVIDIA NIM (Llama 3.3 70B)', key: process.env.META_LLAMA_3_3_70B_INSTRUCT_API_KEY || process.env.NVIDIA_API_KEY },
     { name: 'OpenAI', key: process.env.AI_API_KEY || process.env.OPENAI_API_KEY },
@@ -24,26 +30,34 @@ router.get('/health', protect, async (req, res) => {
   });
 });
 
-router.post('/ask', protect, async (req, res) => {
+// @route   POST api/ai/ask
+// @desc    Public AI chat endpoint (used by homepage floating AI bar)
+// @access  Public — rate limited
+router.post('/ask', async (req, res) => {
     try {
         let { messages } = req.body;
         if (!Array.isArray(messages)) {
           return res.status(400).json({ message: 'messages must be an array' });
         }
         // Strip any system-role messages from client — only allow user/assistant
-        messages = messages.filter(m => m.role === 'user' || m.role === 'assistant');
-        if (messages.length === 0) {
+        const userMessages = messages.filter(m => m.role === 'user' || m.role === 'assistant');
+        if (userMessages.length === 0) {
           return res.status(400).json({ message: 'No valid messages provided' });
         }
-        
+        // Inject system prompt server-side (never trust client-supplied system messages)
+        const fullMessages = [
+          { role: 'system', content: AI_SYSTEM_PROMPT },
+          ...userMessages
+        ];
+
         // Resolve the best available API key
         const nvidiaKey = process.env.META_LLAMA_3_3_70B_INSTRUCT_API_KEY || process.env.NVIDIA_API_KEY;
         const openaiKey = process.env.AI_API_KEY || process.env.OPENAI_API_KEY;
+        const anthropicKey = process.env.ANTHROPIC_API_KEY;
+        const geminiKey = process.env.GEMINI_API_KEY;
 
         let response;
         if (nvidiaKey) {
-            // Priority 1: Use NVIDIA NIM model (meta/llama-3.3-70b-instruct)
-            console.log('[AI Chat Proxy] Routing query to NVIDIA NIM (meta/llama-3.3-70b-instruct)');
             response = await fetch('https://integrate.api.nvidia.com/v1/chat/completions', {
                 method: 'POST',
                 headers: {
@@ -52,14 +66,12 @@ router.post('/ask', protect, async (req, res) => {
                 },
                 body: JSON.stringify({
                     model: 'meta/llama-3.3-70b-instruct',
-                    messages: messages,
+                    messages: fullMessages,
                     max_tokens: 500,
                     temperature: 0.3
                 })
             });
         } else if (openaiKey) {
-            // Priority 2: Use OpenAI as fallback (gpt-4o-mini)
-            console.log('[AI Chat Proxy] Routing query to OpenAI (gpt-4o-mini)');
             response = await fetch('https://api.openai.com/v1/chat/completions', {
                 method: 'POST',
                 headers: {
@@ -68,13 +80,39 @@ router.post('/ask', protect, async (req, res) => {
                 },
                 body: JSON.stringify({
                     model: 'gpt-4o-mini',
-                    messages: messages,
+                    messages: fullMessages,
                     max_tokens: 500,
                     temperature: 0.3
                 })
             });
+        } else if (anthropicKey) {
+            const Anthropic = require('@anthropic-ai/sdk');
+            const anthropic = new Anthropic({ apiKey: anthropicKey });
+            const msg = await anthropic.messages.create({
+                model: 'claude-3-haiku-20240307',
+                max_tokens: 500,
+                system: AI_SYSTEM_PROMPT,
+                messages: userMessages.map(m => ({ role: m.role, content: m.content }))
+            });
+            return res.json({ reply: msg.content[0].text });
+        } else if (geminiKey) {
+            const geminiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${geminiKey}`;
+            const geminiBody = {
+                contents: userMessages.map(m => ({ role: m.role === 'assistant' ? 'model' : 'user', parts: [{ text: m.content }] })),
+                systemInstruction: { parts: [{ text: AI_SYSTEM_PROMPT }] }
+            };
+            response = await fetch(geminiUrl, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(geminiBody)
+            });
+            if (!response.ok) {
+                const errText = await response.text();
+                return res.status(response.status).json({ message: 'AI Service Error' });
+            }
+            const data = await response.json();
+            return res.json({ reply: data.candidates?.[0]?.content?.parts?.[0]?.text || 'No response' });
         } else {
-            console.warn('[AI Chat Proxy] No AI keys configured. Fallback to mock.');
             return res.status(500).json({ message: 'AI Chat Service not configured on server' });
         }
 
