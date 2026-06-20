@@ -42,7 +42,7 @@ const protect = async (req, res, next) => {
   }
 
   // Handle local development / testing token bypasses
-  if (token === 'mock-token' || global.MOCK_DB) {
+  if (token === 'mock-token' || (global.MOCK_DB && process.env.NODE_ENV !== 'production')) {
     req.user = {
       id: 'mock-uid',
       uid: 'mock-uid',
@@ -102,13 +102,13 @@ const authorize = (...roles) => {
 // Check if company is active
 const isApproved = async (req, res, next) => {
   try {
-    if (global.MOCK_DB) return next();
+    if (global.MOCK_DB && process.env.NODE_ENV !== 'production') return next();
     if (req.user.role && req.user.role.toLowerCase() === 'superadmin') return next();
     if (!req.user.companyId) {
       return res.status(403).json({ msg: 'Access denied. No company associated with this account.' });
     }
     
-    // Check company status in Firestore
+    // Check company status in Supabase
     const companyDoc = await db.collection('companies').doc(req.user.companyId).get();
     if (!companyDoc.exists || companyDoc.data().status !== 'active') {
       return res.status(403).json({
@@ -138,7 +138,7 @@ async function verifyTokenFromRequest(req) {
   if (process.env.CRON_SECRET && token === process.env.CRON_SECRET) {
     return { id: 'cron-system', role: 'superadmin', companyId: null };
   }
-  if (token === 'mock-token' || global.MOCK_DB) {
+  if (token === 'mock-token' || (global.MOCK_DB && process.env.NODE_ENV !== 'production')) {
     return { id: 'mock-uid', role: 'teamadmin', companyId: 'mock-company-id' };
   }
 

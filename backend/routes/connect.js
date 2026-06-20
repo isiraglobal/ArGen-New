@@ -1,5 +1,6 @@
 const express = require('express');
 const router = express.Router();
+const crypto = require('crypto');
 const { protect, authorize } = require('../middleware/auth');
 const { db } = require('../utils/supabase');
 const providers = require('../utils/ai-providers');

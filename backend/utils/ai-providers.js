@@ -5,12 +5,13 @@
 const crypto = require('crypto');
 const { db } = require('./supabase');
 
-const ENCRYPTION_KEY = process.env.TOKEN_ENCRYPTION_KEY || process.env.JWT_SECRET;
+const ENCRYPTION_KEY = process.env.TOKEN_ENCRYPTION_KEY;
 const ALGORITHM = 'aes-256-cbc';
 
 function encrypt(text) {
   if (!text) return text;
-  const key = crypto.createHash('sha256').update(ENCRYPTION_KEY || 'argen-fallback-key').digest();
+  if (!ENCRYPTION_KEY) throw new Error('TOKEN_ENCRYPTION_KEY is not set');
+  const key = crypto.createHash('sha256').update(ENCRYPTION_KEY).digest();
   const iv = crypto.randomBytes(16);
   const cipher = crypto.createCipheriv(ALGORITHM, key, iv);
   let encrypted = cipher.update(text, 'utf8', 'hex');

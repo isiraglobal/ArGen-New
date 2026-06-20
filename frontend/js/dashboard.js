@@ -1,4 +1,4 @@
-const user = JSON.parse(localStorage.getItem('user'));
+const user = (() => { try { return JSON.parse(localStorage.getItem('user')); } catch { return null; } })();
 
 document.addEventListener('DOMContentLoaded', () => {
     if (!user) {

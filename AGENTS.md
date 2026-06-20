@@ -27,7 +27,7 @@ ArGen - New Look/
 │   │   └── dashboard.js, take-evaluation.js, etc.
 │   └── images/          # Brand assets (ArGen Logo.png, etc.)
 ├── backend/             # Node.js/Express API server
-│   ├── server.js        # Express app entry point + MongoDB connection
+│   ├── server.js        # Express app entry point + Supabase (PostgreSQL) connection
 │   ├── routes/          # All API route handlers
 │   │   ├── auth.js      # Login, register, JWT, password reset
 │   │   ├── admin.js     # TeamAdmin + Superadmin dashboard APIs
@@ -38,7 +38,6 @@ ArGen - New Look/
 │   │   ├── scheduler.js # Automated email/coaching scheduler
 │   │   ├── benchmark.js # Calibration & benchmarking
 │   │   └── leaderboard.js # Team rankings
-│   ├── models/          # Mongoose schemas (User, Company, Challenge, Response, Evaluation, etc.)
 │   ├── middleware/auth.js # JWT protect + role authorize middleware
 │   └── utils/
 │       ├── ai-agents.js # 5 AI agents: Research, Challenge Generator, Scorer, Report Writer, Coach
@@ -79,7 +78,7 @@ The `frontend/js/api.js` file auto-detects the environment:
 - **Provider:** Supabase (PostgreSQL)
 - **Auth:** Supabase Auth with JWT tokens
 - **Connection:** Configured via `SUPABASE_URL` and `SUPABASE_SERVICE_ROLE_KEY` in `.env`
-- **Fallback:** If Supabase connection fails, `global.MOCK_DB = true` — all routes return hardcoded mock data so the app doesn't crash
+- **Fallback:** If Supabase connection fails, `global.MOCK_DB = true` — all routes return hardcoded mock data (only for local dev; production blocks mock mode)
 
 ---
 
@@ -119,21 +118,32 @@ All agents use a primary provider chain prioritizing NVIDIA NIM models (Llama 3.
 
 | Key | Purpose |
 |-----|---------|
-| `SUPABASE_URL` | Supabase project URL |
-| `SUPABASE_ANON_KEY` | Supabase anonymous public API key |
-| `SUPABASE_SERVICE_ROLE_KEY` | Supabase service role private API key (DB access bypass) |
-| `JWT_SECRET` | JSON Web Token signing secret |
-| `ADMIN_EMAIL` / `ADMIN_PASSWORD` | Superadmin login bypass credentials |
-| `NVIDIA_API_KEY` | NVIDIA NIM global fallback API key |
-| `META_LLAMA_3_1_8B_INSTRUCT_API_KEY` | NVIDIA NIM API key for `meta/llama-3.1-8b-instruct` |
-| `META_LLAMA_3_3_70B_INSTRUCT_API_KEY` | NVIDIA NIM API key for `meta/llama-3.3-70b-instruct` |
-| `ANTHROPIC_API_KEY` | Claude API for AI agents (fallback) |
-| `GEMINI_API_KEY` | Gemini API for AI agents (fallback) |
-| `OPENAI_API_KEY` / `AI_API_KEY` | OpenAI for AI agents (fallback) |
-| `EMAIL_USER` / `EMAIL_PASS` | Gmail SMTP for automated emails |
-| `WHOP_API_KEY` | Whop payment platform integration |
-| `CRON_SECRET` | Secret for scheduler cron endpoints |
-| `GOOGLE_CLIENT_ID/SECRET` | Google OAuth (not yet fully implemented) |
+| Key | Purpose | Required |
+|-----|---------|----------|
+| `SUPABASE_URL` | Supabase project URL | ✅ |
+| `SUPABASE_SERVICE_ROLE_KEY` | Supabase service role private API key | ✅ |
+| `JWT_SECRET` | JSON Web Token signing secret | ✅ |
+| `TOKEN_ENCRYPTION_KEY` | Encryption key for OAuth tokens (ai_connections) | ✅ |
+| `ADMIN_EMAIL` / `ADMIN_PASSWORD` | Superadmin login bypass credentials | Optional |
+| `ADMIN_ACCESS` / `ADMIN_PORTAL_CODE` | Admin portal passcode | Optional |
+| `NVIDIA_API_KEY` | NVIDIA NIM global fallback API key | Optional |
+| `META_LLAMA_3_1_8B_INSTRUCT_API_KEY` | NVIDIA NIM API key for Llama 3.1 8B | Optional |
+| `META_LLAMA_3_3_70B_INSTRUCT_API_KEY` | NVIDIA NIM API key for Llama 3.3 70B | Optional |
+| `ANTHROPIC_API_KEY` | Claude API for AI agents (fallback) | Optional |
+| `GEMINI_API_KEY` | Gemini API for AI agents (fallback) | Optional |
+| `OPENAI_API_KEY` / `AI_API_KEY` | OpenAI for AI agents (fallback) | Optional |
+| `EMAIL_USER` / `EMAIL_PASS` | Gmail SMTP for automated emails | Optional |
+| `WHOP_API_KEY` | Whop payment platform API key | Optional |
+| `WHOP_WEBHOOK_SECRET` | Whop webhook signature verification | Optional |
+| `DISCORD_WEBHOOK_URL` | Discord webhook for application notifications | Optional |
+| `CRON_SECRET` | Secret for scheduler cron endpoints | Optional |
+| `GOOGLE_CLIENT_ID` / `GOOGLE_CLIENT_SECRET` / `GOOGLE_REDIRECT_URI` | Google OAuth for AI connections | Optional |
+| `MICROSOFT_CLIENT_ID` / `MICROSOFT_CLIENT_SECRET` / `MICROSOFT_REDIRECT_URI` | Microsoft OAuth for AI connections | Optional |
+| `GOOGLE_WORKSPACE_CLIENT_ID` / `GOOGLE_WORKSPACE_CLIENT_SECRET` / `GOOGLE_WORKSPACE_REDIRECT_URI` | Google Workspace admin integration | Optional |
+| `CLIENT_URL` | Frontend URL for redirects (default: argen.isira.club) | Optional |
+| `FROM_NAME` / `FROM_EMAIL` | Sender name/email for automated emails | Optional |
+| `NVIDIA_MODEL_NAME` | Custom NVIDIA NIM model name override | Optional |
+| `SUPABASE_ANON_KEY` | Supabase anonymous public API key (exposed to client) | Optional |
 
 **Note:** `.env` is gitignored. For Vercel production, set these same vars in the Vercel dashboard under Project → Settings → Environment Variables.
 
@@ -157,9 +167,6 @@ All agents use a primary provider chain prioritizing NVIDIA NIM models (Llama 3.
 - ✅ **Legal/industry-standard:** Cookie consent banner in `script.js`, terms acceptance checkbox in registration, robust privacy and terms pages, robots.txt, sitemap.xml, SEO meta tags.
 
 ### Pending / In Progress
-- ⚠️ **Server-side auth:** `auth-guard.js` is client-side only. Users can bypass by disabling JS. Migration to server-side middleware is the next priority.
-- ⚠️ **MOCK_DB mode on production:** If database fails to connect on Vercel cold starts, the app silently falls back to mock data. Verify live DB is connected by hitting `/api/health`.
-- ⚠️ **Whop payment flow:** Route is commented out in `server.js`. Not yet fully wired.
 - ⚠️ **Google OAuth:** Keys exist in `.env` but implementation is incomplete.
 
 ---
@@ -168,15 +175,19 @@ All agents use a primary provider chain prioritizing NVIDIA NIM models (Llama 3.
 
 | Route | HTML File | Auth Required | Role |
 |-------|-----------|---------------|------|
+| Route | HTML File | Auth Required | Role |
+|-------|-----------|---------------|------|
 | `/` | `index.html` | No | Public |
 | `/login` | `login.html` | No | Public |
 | `/registration` | `registration.html` | No | Public |
 | `/dashboard` | `dashboard.html` | Yes | member |
 | `/admin-portal` | `admin-portal.html` | Yes | teamadmin |
+| `/admin-access` | `admin-access.html` | No | Public |
 | `/take-evaluation` | `take-evaluation.html` | Yes | member |
 | `/evaluate` | `evaluate.html` | Yes | member |
 | `/challenges` | `challenges.html` | Yes | member |
 | `/teams` | `teams.html` | Yes | teamadmin |
+| `/team/:id` | `team-detail.html` | Yes | teamadmin |
 | `/pricing` | `pricing.html` | No | Public |
 | `/about` | `about.html` | No | Public |
 | `/contact` | `contact.html` | No | Public |
@@ -185,6 +196,17 @@ All agents use a primary provider chain prioritizing NVIDIA NIM models (Llama 3.
 | `/terms` | `terms.html` | No | Public |
 | `/forgot-password` | `forgot-password.html` | No | Public |
 | `/reset-password` | `reset-password.html` | No | Public |
+| `/apply` | `apply.html` | No | Public |
+| `/onboarding` | `onboarding.html` | Yes | member |
+| `/connect` | `connect.html` | Yes | teamadmin |
+| `/invoice` | `invoice.html` | No | Public |
+| `/oauth` | `oauth.html` | No | Public |
+| `/payment-success` | `payment-success.html` | No | Public |
+| `/payment-failed` | `payment-failed.html` | No | Public |
+| `/cookie-policy` | `cookie-policy.html` | No | Public |
+| `/gdpr` | `gdpr.html` | No | Public |
+| `/dpa` | `dpa.html` | No | Public |
+| `/aup` | `aup.html` | No | Public |
 
 ---
 

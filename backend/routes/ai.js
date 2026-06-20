@@ -26,7 +26,15 @@ router.get('/health', protect, async (req, res) => {
 
 router.post('/ask', protect, async (req, res) => {
     try {
-        const { messages } = req.body;
+        let { messages } = req.body;
+        if (!Array.isArray(messages)) {
+          return res.status(400).json({ message: 'messages must be an array' });
+        }
+        // Strip any system-role messages from client — only allow user/assistant
+        messages = messages.filter(m => m.role === 'user' || m.role === 'assistant');
+        if (messages.length === 0) {
+          return res.status(400).json({ message: 'No valid messages provided' });
+        }
         
         // Resolve the best available API key
         const nvidiaKey = process.env.META_LLAMA_3_3_70B_INSTRUCT_API_KEY || process.env.NVIDIA_API_KEY;

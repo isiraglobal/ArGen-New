@@ -5,20 +5,24 @@ const path = require('path');
 
 dotenv.config({ path: path.join(__dirname, '../.env') });
 
+// Validate required env vars at startup
+const REQUIRED_ENV = ['SUPABASE_URL', 'SUPABASE_SERVICE_ROLE_KEY', 'JWT_SECRET'];
+const missing = REQUIRED_ENV.filter(k => !process.env[k]);
+if (missing.length > 0) {
+  console.error(`FATAL: Missing required environment variables: ${missing.join(', ')}`);
+  if (process.env.NODE_ENV === 'production') process.exit(1);
+}
+
 const { contactRules, handleValidationErrors } = require('./middleware/validate');
 
 const app = express();
 
 // Security Middleware
-try {
-  const helmet = require('helmet');
-  app.use(helmet({
-    contentSecurityPolicy: false, // Disabled — frontend uses inline scripts and CDN assets
-    crossOriginEmbedderPolicy: false
-  }));
-} catch (e) {
-  console.warn('[server] helmet not installed, skipping security headers');
-}
+const helmet = require('helmet');
+app.use(helmet({
+  contentSecurityPolicy: false,
+  crossOriginEmbedderPolicy: false
+}));
 
 // CORS — only accept requests from the production domain and local dev
 const allowedOrigins = [
@@ -41,26 +45,18 @@ app.use(cors({
 }));
 
 // Rate Limiting — applied to all API routes
-try {
-  const rateLimit = require('express-rate-limit');
-  const limiter = rateLimit({
-    windowMs: 15 * 60 * 1000, // 15 minutes
-    max: 150,
-    standardHeaders: true,
-    legacyHeaders: false,
-    message: { msg: 'Too many requests. Please try again in 15 minutes.' }
-  });
-  app.use('/api', limiter);
-} catch (e) {
-  console.warn('[server] express-rate-limit not installed, skipping rate limiting');
-}
+const rateLimit = require('express-rate-limit');
+const limiter = rateLimit({
+  windowMs: 15 * 60 * 1000,
+  max: 150,
+  standardHeaders: true,
+  legacyHeaders: false,
+  message: { msg: 'Too many requests. Please try again in 15 minutes.' }
+});
+app.use('/api', limiter);
 
 // Whop Webhook — needs raw body so mount before express.json()
-try {
-  app.use('/api/whop', require('./routes/whop'));
-} catch (e) {
-  console.warn('[server] Whop route not available:', e.message);
-}
+app.use('/api/whop', require('./routes/whop'));
 
 app.use(express.json({ limit: '2mb' }));
 
@@ -111,7 +107,6 @@ app.get('/api/health', (req, res) => {
   res.json({
     status: 'online',
     timestamp: new Date(),
-    database: global.MOCK_DB ? 'mock' : 'supabase-postgres',
     version: '1.0.0'
   });
 });

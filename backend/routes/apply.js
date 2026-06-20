@@ -4,7 +4,7 @@ const { db } = require('../utils/supabase');
 const sendEmail = require('../utils/sendEmail');
 const { createEmailTemplate } = require('../utils/emailTemplate');
 
-const DISCORD_WEBHOOK = 'https://discord.com/api/webhooks/1517164522001924266/X2NcCrEnMY-56hytdBdRJUZW0duTwXsY6RtXtMcVp1rTtvuKZX9mMbeLJS1XQUfsBe1O';
+const DISCORD_WEBHOOK = process.env.DISCORD_WEBHOOK_URL || '';
 
 router.post('/', async (req, res) => {
   try {
@@ -28,32 +28,34 @@ router.post('/', async (req, res) => {
       await db.collection('applications').add(application);
     }
 
-    // Send Discord webhook
-    try {
-      const embed = {
-        embeds: [{
-          title: 'New ArGen Application',
-          color: 5814783,
-          fields: [
-            { name: 'Name', value: name, inline: true },
-            { name: 'Email', value: email, inline: true },
-            { name: 'Company', value: company, inline: true },
-            { name: 'Title', value: title, inline: true },
-            { name: 'Team Size', value: teamSize || 'Not specified', inline: true },
-            { name: 'Website', value: website || 'Not specified', inline: true },
-            { name: 'Referral', value: referral || 'Not specified', inline: false },
-            { name: 'Message', value: message.length > 500 ? message.substring(0, 500) + '...' : message, inline: false }
-          ],
-          timestamp: new Date().toISOString()
-        }]
-      };
-      await fetch(DISCORD_WEBHOOK, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(embed)
-      });
-    } catch (discordErr) {
-      console.error('Discord webhook error:', discordErr.message);
+    // Send Discord webhook (only if configured in env)
+    if (DISCORD_WEBHOOK) {
+      try {
+        const embed = {
+          embeds: [{
+            title: 'New ArGen Application',
+            color: 5814783,
+            fields: [
+              { name: 'Name', value: name, inline: true },
+              { name: 'Email', value: email, inline: true },
+              { name: 'Company', value: company, inline: true },
+              { name: 'Title', value: title, inline: true },
+              { name: 'Team Size', value: teamSize || 'Not specified', inline: true },
+              { name: 'Website', value: website || 'Not specified', inline: true },
+              { name: 'Referral', value: referral || 'Not specified', inline: false },
+              { name: 'Message', value: message.length > 500 ? message.substring(0, 500) + '...' : message, inline: false }
+            ],
+            timestamp: new Date().toISOString()
+          }]
+        };
+        await fetch(DISCORD_WEBHOOK, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(embed)
+        });
+      } catch (discordErr) {
+        console.error('Discord webhook error:', discordErr.message);
+      }
     }
 
     // Send thank you email

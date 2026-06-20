@@ -337,9 +337,11 @@
       setTimeout(() => toast.remove(), 5000);
     }
 
+    let timerInterval = null;
     function startTimer() {
       const timerEl = document.getElementById('timer');
-      setInterval(() => {
+      if (timerInterval) clearInterval(timerInterval);
+      timerInterval = setInterval(() => {
         timerSeconds++;
         const h = Math.floor(timerSeconds / 3600).toString().padStart(2, '0');
         const m = Math.floor((timerSeconds % 3600) / 60).toString().padStart(2, '0');
@@ -347,6 +349,10 @@
         timerEl.textContent = `${h}:${m}:${s}`;
       }, 1000);
     }
+    document.addEventListener('visibilitychange', () => {
+      if (document.hidden && timerInterval) clearInterval(timerInterval);
+      else if (!document.hidden) startTimer();
+    });
   </script>
 </body>
 

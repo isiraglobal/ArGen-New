@@ -191,7 +191,8 @@ router.get('/stats', protect, authorize('superadmin'), async (req, res) => {
 // @access  Public (rate-limited by nature)
 router.post('/verify-passcode', async (req, res) => {
   const { passcode } = req.body;
-  const valid = process.env.ADMIN_ACCESS || process.env.ADMIN_PORTAL_CODE || 'ADMIN2024';
+  const valid = process.env.ADMIN_ACCESS || process.env.ADMIN_PORTAL_CODE;
+  if (!valid) return res.status(500).json({ valid: false, msg: 'Admin passcode not configured on server' });
   if (passcode === valid) {
     return res.json({ valid: true });
   }

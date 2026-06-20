@@ -272,7 +272,6 @@
   </div>
 
   <script>
-    const ADMIN_PASSCODE = 'ADMIN2024';
     async function unlockAdminPortal() {
       const input = document.getElementById('passcodeInput').value.trim();
       try {
@@ -290,13 +289,7 @@
           return;
         }
       } catch (e) {
-        if (input === ADMIN_PASSCODE) {
-          sessionStorage.setItem('admin_portal_unlocked', 'true');
-          document.getElementById('passcodeOverlay').style.display = 'none';
-          document.getElementById('passcodeError').style.display = 'none';
-          document.getElementById('passcodeInput').value = '';
-          return;
-        }
+        // Server offline — cannot verify
       }
       document.getElementById('passcodeError').style.display = 'block';
       document.getElementById('passcodeInput').value = '';

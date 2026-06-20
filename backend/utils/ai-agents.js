@@ -356,7 +356,9 @@ Return ONLY JSON:
 }
 `;
 
-    const userMsg = `CHALLENGE:\n${challenge.scenario} | ${challenge.task}\n\nRESPONSE:\n${responseText}`;
+    // Sanitize user input: strip null bytes, truncate to 10k chars
+    const safeResponse = String(responseText || '').replace(/\0/g, '').slice(0, 10000);
+    const userMsg = `CHALLENGE:\n${challenge.scenario} | ${challenge.task}\n\n---BEGIN USER RESPONSE---\n${safeResponse}\n---END USER RESPONSE---`;
 
     try {
         const { content, tokens, modelUsed } = await fallbackAiCall(prompt, userMsg, true, 800, 'meta/llama-3.3-70b-instruct');

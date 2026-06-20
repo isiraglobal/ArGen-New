@@ -850,7 +850,7 @@ router.get('/google/callback', async (req, res) => {
     // Issue JWT
     const token = jwt.sign(
       { id: user.id, email: user.email, role: user.role, companyId: user.companyId },
-      process.env.JWT_SECRET || 'fallback_jwt_secret',
+      process.env.JWT_SECRET,
       { expiresIn: '7d' }
     );
 
