@@ -1,4 +1,4 @@
-const { auth, db } = require('../utils/supabase');
+const { auth, db } = require('../utils/firebase');
 
 // Helper to parse cookies from headers
 const parseCookies = (cookieHeader) => {
@@ -42,12 +42,12 @@ const protect = async (req, res, next) => {
   }
 
   // Handle local development / testing token bypasses
-  if (token === 'mock-token' || (global.MOCK_DB && process.env.NODE_ENV !== 'production')) {
+  if (process.env.NODE_ENV !== 'production' && (token === 'mock-token' || global.MOCK_DB)) {
     req.user = {
       id: 'mock-uid',
       uid: 'mock-uid',
       email: 'admin@argen.ai',
-      role: 'teamadmin',
+      role: 'superadmin',
       companyId: 'mock-company-id'
     };
     return next();
@@ -138,8 +138,8 @@ async function verifyTokenFromRequest(req) {
   if (process.env.CRON_SECRET && token === process.env.CRON_SECRET) {
     return { id: 'cron-system', role: 'superadmin', companyId: null };
   }
-  if (token === 'mock-token' || (global.MOCK_DB && process.env.NODE_ENV !== 'production')) {
-    return { id: 'mock-uid', role: 'teamadmin', companyId: 'mock-company-id' };
+  if (process.env.NODE_ENV !== 'production' && (token === 'mock-token' || global.MOCK_DB)) {
+    return { id: 'mock-uid', role: 'superadmin', companyId: 'mock-company-id' };
   }
 
   const decodedToken = await auth.verifyIdToken(token);

@@ -197,7 +197,7 @@
   <script>
     window.si = window.si || function () { (window.siq = window.siq || []).push(arguments); };
   </script>
-  <script defer src="/_vercel/speed-insights/script.js"></script>
+
 </head>
 
 <body class="bg-black">
@@ -610,6 +610,13 @@
   <script src="../js/api.js"></script>
   <script src="../js/dashboard.js"></script>
   <script src="../js/ops-dashboard.js"></script>
+
+  <!-- Loading overlay -->
+  <div id="loadingOverlay" style="display:none;position:fixed;inset:0;background:rgba(10,10,10,0.85);z-index:9999;align-items:center;justify-content:center;flex-direction:column;gap:1rem;">
+    <div style="width:40px;height:40px;border:3px solid rgba(255,255,255,0.1);border-top-color:#00ff88;border-radius:50%;animation:spin 0.8s linear infinite;"></div>
+    <div style="color:rgba(255,255,255,0.6);font-size:0.85rem;font-family:monospace;" id="loadingText">Loading...</div>
+  </div>
+  <style>@keyframes spin{to{transform:rotate(360deg)}}</style>
 </body>
 
 </html>

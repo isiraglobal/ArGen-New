@@ -8,11 +8,23 @@ dotenv.config({ path: path.join(__dirname, '../.env') });
 dotenv.config({ path: path.join(__dirname, '../.env.vercel') });
 
 // Validate required env vars at startup
-const REQUIRED_ENV = ['SUPABASE_URL', 'SUPABASE_SERVICE_ROLE_KEY', 'JWT_SECRET'];
+const REQUIRED_ENV = [
+  'JWT_SECRET',
+  'TOKEN_ENCRYPTION_KEY',
+  'FIREBASE_PROJECT_ID',
+  'FIREBASE_CLIENT_EMAIL',
+  'FIREBASE_PRIVATE_KEY',
+  'FIREBASE_WEB_API_KEY'
+];
+const optionalWarn = ['ADMIN_EMAIL', 'ADMIN_PASSWORD'];
 const missing = REQUIRED_ENV.filter(k => !process.env[k]);
 if (missing.length > 0) {
   console.error(`FATAL: Missing required environment variables: ${missing.join(', ')}`);
   if (process.env.NODE_ENV === 'production') process.exit(1);
+}
+const missingOptional = optionalWarn.filter(k => !process.env[k]);
+if (missingOptional.length > 0 && process.env.NODE_ENV === 'production') {
+  console.warn(`⚠️  Production warning: optional env vars not set: ${missingOptional.join(', ')} (admin login bypass won't work)`);
 }
 
 const { contactRules, handleValidationErrors } = require('./middleware/validate');
@@ -80,6 +92,9 @@ app.use('/api/connect', require('./routes/connect'));
 app.use('/api/analytics', require('./routes/analytics'));
 app.use('/api/hr', require('./routes/hr'));
 app.use('/api/apply', require('./routes/apply'));
+app.use('/api/capture', require('./routes/capture'));
+app.use('/api/keys', require('./routes/apikeys'));
+app.use('/api/warehouse', require('./routes/warehouse'));
 
 // Contact form (public)
 app.post('/api/contact', contactRules, handleValidationErrors, async (req, res) => {
@@ -99,7 +114,7 @@ app.post('/api/contact', contactRules, handleValidationErrors, async (req, res) 
   }
 });
 
-const { db } = require('./utils/supabase');
+const { db } = require('./utils/firebase');
 const { requirePageAuth } = require('./middleware/auth');
 
 const frontendDir = path.join(__dirname, '../frontend/html');
@@ -117,11 +132,15 @@ app.get('/api/health', (req, res) => {
   });
 });
 
-// Serve client-side Supabase public keys (anon key only — never the service role key)
+// Serve client-side Firebase config for frontend SDK init
 app.get('/api/config', (req, res) => {
   res.json({
-    supabaseUrl: process.env.SUPABASE_URL || '',
-    supabaseAnonKey: process.env.SUPABASE_ANON_KEY || ''
+    firebaseApiKey: process.env.FIREBASE_API_KEY || '',
+    firebaseAuthDomain: process.env.FIREBASE_AUTH_DOMAIN || '',
+    firebaseProjectId: process.env.FIREBASE_PROJECT_ID || '',
+    firebaseStorageBucket: process.env.FIREBASE_STORAGE_BUCKET || '',
+    firebaseMessagingSenderId: process.env.FIREBASE_MESSAGING_SENDER_ID || '',
+    firebaseAppId: process.env.FIREBASE_APP_ID || ''
   });
 });
 

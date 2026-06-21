@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const { protect, authorize, isApproved } = require('../middleware/auth');
-const { db } = require('../utils/supabase');
+const { db } = require('../utils/firebase');
 
 // GET /api/hr/employees — list all employees in company (HR / teamadmin)
 router.get('/employees', protect, isApproved, authorize('teamadmin', 'superadmin'), async (req, res) => {

@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const { db } = require('../utils/supabase');
+const { db } = require('../utils/firebase');
 const { generateChallenge } = require('../utils/ai-agents');
 const { protect, authorize, isApproved } = require('../middleware/auth');
 const sendEmail = require('../utils/sendEmail');

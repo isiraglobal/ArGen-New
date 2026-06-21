@@ -3,7 +3,7 @@
  * Supports OAuth (Microsoft, Google) and API key (OpenAI, Anthropic, GitHub).
  */
 const crypto = require('crypto');
-const { db } = require('./supabase');
+const { db } = require('./firebase');
 
 const ENCRYPTION_KEY = process.env.TOKEN_ENCRYPTION_KEY;
 const ALGORITHM = 'aes-256-cbc';

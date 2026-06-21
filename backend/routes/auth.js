@@ -2,18 +2,15 @@ const express = require('express');
 const router = express.Router();
 const crypto = require('crypto');
 const bcrypt = require('bcryptjs');
-const { auth, db, supabase } = require('../utils/supabase');
+const { auth, db } = require('../utils/firebase');
 const sendEmail = require('../utils/sendEmail');
 const { createEmailTemplate } = require('../utils/emailTemplate');
 const { protect } = require('../middleware/auth');
 const { registerRules, loginRules, handleValidationErrors } = require('../middleware/validate');
 
-// Helper to authenticate user using Supabase Auth
-const signInWithSupabase = async (email, password) => {
-  if (!supabase) throw new Error('Supabase not initialized');
-  const { data, error } = await supabase.auth.signInWithPassword({ email, password });
-  if (error) throw new Error(error.message);
-  return data; // { user, session }
+// Helper to authenticate user using Firebase Auth
+const signInWithFirebase = async (email, password) => {
+  return auth.signInWithPassword(email, password);
 };
 
 // @route   GET api/auth/invitation/:token
@@ -178,11 +175,11 @@ router.post('/login', loginRules, handleValidationErrors, async (req, res) => {
   const { email, password } = req.body;
 
   try {
-    const adminEmail = process.env.ADMIN_EMAIL || 'admin@argen';
-    const adminPass = process.env.ADMIN_PASSWORD || 'argen@admin';
+    const adminEmail = process.env.ADMIN_EMAIL || (process.env.NODE_ENV !== 'production' ? 'admin@argen' : undefined);
+    const adminPass = process.env.ADMIN_PASSWORD || (process.env.NODE_ENV !== 'production' ? 'argen@admin' : undefined);
 
-    // 1. Admin/Test User Bypasses
-    if ((email === 'test@argen' && password === adminPass) || (email === adminEmail && password === adminPass)) {
+    // 1. Admin/Test User Bypass (only if credentials configured)
+    if (adminEmail && adminPass && ((email === 'test@argen' && password === adminPass) || (email === adminEmail && password === adminPass))) {
       const isSuperadmin = email === adminEmail;
       const mockUser = {
         uid: 'mock-uid',
@@ -205,15 +202,15 @@ router.post('/login', loginRules, handleValidationErrors, async (req, res) => {
     }
 
     // 2. Perform Supabase Auth Sign-in
-    let supabaseSession;
+    let fbSession;
     try {
-      supabaseSession = await signInWithSupabase(email, password);
+      fbSession = await signInWithFirebase(email, password);
     } catch (authErr) {
       return res.status(400).json({ msg: 'Invalid Credentials' });
     }
 
-    const uid = supabaseSession.user.id;
-    const token = supabaseSession.session.access_token;
+    const uid = fbSession.user.id;
+    const token = fbSession.session.access_token;
 
     // 3. Fetch User profile details from Supabase DB
     const userDoc = await db.collection('users').doc(uid).get();
@@ -321,7 +318,6 @@ router.get('/me', protect, async (req, res) => {
         await db.collection('users').doc(req.user.id).set(existingData);
         
         userDoc = await db.collection('users').doc(req.user.id).get();
-        console.log(`Linked profile for email ${req.user.email} with new Supabase UID ${req.user.id}`);
       } else {
         // Auto-create a default profile for new Google OAuth sign-ups
         const defaultName = req.user.email ? req.user.email.split('@')[0] : 'User';
@@ -341,7 +337,6 @@ router.get('/me', protect, async (req, res) => {
         };
         await db.collection('users').doc(req.user.id).set(userData);
         userDoc = await db.collection('users').doc(req.user.id).get();
-        console.log(`Created new default profile for Google login: ${req.user.email}`);
       }
     }
     
@@ -453,10 +448,10 @@ router.post('/join-team', async (req, res) => {
     });
 
     // 4. Authenticate newly registered user to return session details
-    const supabaseSession = await signInWithSupabase(email, password);
+    const fbSession = await signInWithFirebase(email, password);
 
     res.json({
-      token: supabaseSession.session.access_token,
+      token: fbSession.session.access_token,
       user: {
         id: userRecord.uid,
         name,
@@ -516,18 +511,14 @@ router.post('/forgot-password', async (req, res) => {
         resetUrl = await auth.generatePasswordResetLink(emailLower, {
           url: `${req.protocol}://${req.get('host')}/reset-password`
         });
-      } catch (supabaseErr) {
-        console.log(`[Forgot Password] Supabase generateLink failed: ${supabaseErr.message}`);
-        
-        // If the user is not found in Supabase Auth but exists in our users collection,
-        // we create the user in Supabase Auth and link their profile!
-        if (userProfile && (supabaseErr.message.includes('User not found') || supabaseErr.message.includes('user_not_found') || supabaseErr.status === 404 || supabaseErr.message.includes('not found'))) {
-          console.log(`[Forgot Password] User exists in database but not in Supabase Auth. Auto-linking...`);
-          
+      } catch (fbErr) {
+        // If the user is not found in Firebase Auth but exists in our users collection,
+        // we create the user in Firebase Auth and link their profile!
+        if (userProfile && (fbErr.message.includes('User not found') || fbErr.message.includes('user_not_found') || fbErr.status === 404 || fbErr.message.includes('not found') || fbErr.code === 'auth/user-not-found')) {
           // Generate a secure random password for initial creation
           const tempPassword = crypto.randomBytes(16).toString('hex') + 'A1!';
           
-          // Create the user in Supabase Auth
+          // Create the user in Firebase Auth
           const userRecord = await auth.createUser({
             email: emailLower,
             password: tempPassword,
@@ -543,7 +534,7 @@ router.post('/forgot-password', async (req, res) => {
             companyId: userProfile.companyId || null
           });
           
-          // Link the database profile by rewriting it with the new Supabase UID
+          // Link the database profile by rewriting it with the new Firebase UID
           // Delete old profile doc if its ID is different from the new Supabase UID
           if (userDocId !== newUid) {
             await db.collection('users').doc(userDocId).delete();
@@ -556,15 +547,13 @@ router.post('/forgot-password', async (req, res) => {
             await db.collection('users').doc(newUid).set(updatedProfile);
           }
           
-          console.log(`[Forgot Password] Successfully linked DB profile to new Supabase Auth user ${newUid}`);
-          
           // Retry generating the reset link
           resetUrl = await auth.generatePasswordResetLink(emailLower, {
             url: `${req.protocol}://${req.get('host')}/reset-password`
           });
         } else {
           // Re-throw if it's a different error
-          throw supabaseErr;
+          throw fbErr;
         }
       }
     }
@@ -818,23 +807,23 @@ router.get('/google/callback', async (req, res) => {
     let user;
 
     if (userDoc.empty) {
-      // Register new user via Supabase Auth
+      // Register new user via Firebase Auth
       const autoPassword = crypto.randomBytes(16).toString('hex');
-      let supabaseUser;
+      let fbUser;
+
       try {
-        if (!global.MOCK_DB && supabase) {
-          const { data, error } = await supabase.auth.admin.createUser({
+        if (!global.MOCK_DB) {
+          const result = await auth.createUser({
             email, password: autoPassword, email_confirm: true,
             user_metadata: { name, picture, googleId, provider: 'google' }
           });
-          if (error) throw error;
-          supabaseUser = data.user;
+          fbUser = result;
         }
       } catch (e) {
-        console.warn('Supabase user creation skipped:', e.message);
+        // User may already exist in Firebase Auth
       }
 
-      const uid = supabaseUser?.id || googleId || crypto.randomBytes(16).toString('hex');
+      const uid = fbUser?.uid || googleId || crypto.randomBytes(16).toString('hex');
       const newUser = {
         email, name: name || email.split('@')[0],
         role: 'member', googleId, avatar: picture || '',

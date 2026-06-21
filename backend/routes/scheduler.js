@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const { protect, authorize } = require('../middleware/auth');
-const { db } = require('../utils/supabase');
+const { db } = require('../utils/firebase');
 const { generateWeeklyReport, generateCoachingNudge } = require('../utils/ai-agents');
 const sendEmail = require('../utils/sendEmail');
 const { createEmailTemplate } = require('../utils/emailTemplate');
@@ -91,7 +91,7 @@ const handleWeeklyReports = async (req, res) => {
         .filter(e => e.eventTimestamp && new Date(e.eventTimestamp) >= startOfWeek);
 
       if (scores.length < 5 && usageEvents.length < 5) {
-        console.log(`Skipping report for ${comp.name} (low participation and no usage data)`);
+        // Skipping report for this company (low participation)
         return { company: comp.name, status: 'skipped' };
       }
 
@@ -137,7 +137,7 @@ const handleWeeklyReports = async (req, res) => {
 // Trigger all daily agentic tasks
 const handleDailyCycle = async (req, res) => {
   try {
-    console.log('Starting daily AI agentic cycle...');
+    // Starting daily AI agentic cycle
     const { syncAllConnections } = require('../utils/ai-providers');
     const syncResult = await syncAllConnections().catch(err => {
       console.error('Daily cycle sync error:', err.message);

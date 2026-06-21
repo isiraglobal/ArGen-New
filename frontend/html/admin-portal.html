@@ -250,7 +250,7 @@
   <script>
     window.si = window.si || function () { (window.siq = window.siq || []).push(arguments); };
   </script>
-  <script defer src="/_vercel/speed-insights/script.js"></script>
+
 </head>
 <body class="bg-black">
 
@@ -274,30 +274,48 @@
   <script>
     async function unlockAdminPortal() {
       const input = document.getElementById('passcodeInput').value.trim();
+      const errorEl = document.getElementById('passcodeError');
       try {
         const res = await fetch('/api/admin/verify-passcode', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ passcode: input })
         });
+        if (res.status === 500) {
+          errorEl.textContent = 'Passcode not configured on server';
+          errorEl.style.display = 'block';
+          return;
+        }
         const data = await res.json();
         if (data.valid) {
           sessionStorage.setItem('admin_portal_unlocked', 'true');
           document.getElementById('passcodeOverlay').style.display = 'none';
-          document.getElementById('passcodeError').style.display = 'none';
+          errorEl.style.display = 'none';
           document.getElementById('passcodeInput').value = '';
           return;
         }
       } catch (e) {
-        // Server offline — cannot verify
+        errorEl.textContent = 'Server unreachable — check connection';
+        errorEl.style.display = 'block';
+        return;
       }
-      document.getElementById('passcodeError').style.display = 'block';
+      errorEl.textContent = 'Invalid passcode';
+      errorEl.style.display = 'block';
       document.getElementById('passcodeInput').value = '';
       document.getElementById('passcodeInput').focus();
     }
-    if (sessionStorage.getItem('admin_portal_unlocked') === 'true') {
-      document.getElementById('passcodeOverlay').style.display = 'none';
-    }
+    // Auto-unlock if user already authenticated as superadmin (logged in via admin-access)
+    (function() {
+      try {
+        const stored = JSON.parse(localStorage.getItem('admin_user') || '{}');
+        if (stored && stored.role === 'superadmin') {
+          sessionStorage.setItem('admin_portal_unlocked', 'true');
+        }
+      } catch(e) {}
+      if (sessionStorage.getItem('admin_portal_unlocked') === 'true') {
+        document.getElementById('passcodeOverlay').style.display = 'none';
+      }
+    })();
   </script>
 
   <header class="nav nav-always-visible">
@@ -815,14 +833,14 @@
             let val = row[k];
             if (typeof val === 'object') val = JSON.stringify(val).substring(0, 80);
             if (val === null || val === undefined) val = '—';
-            return '<td style="padding:6px 8px;border-bottom:1px solid rgba(255,255,255,0.03);color:#fff;max-width:200px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">' + String(val) + '</td>';
+            return '<td style="padding:6px 8px;border-bottom:1px solid rgba(255,255,255,0.03);color:#fff;max-width:200px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">' + escapeHtml(String(val)) + '</td>';
           }).join('') + '</tr>';
         });
         html += '</tbody></table></div>';
         if (data.length > 100) html += '<p style="font-size:0.65rem;color:var(--text-sec);margin-top:0.5rem;">Showing first 100 of ' + data.length + ' records</p>';
         container.innerHTML = html;
       } catch (e) {
-        container.innerHTML = '<div class="empty-state">Error loading data: ' + e.message + '</div>';
+        container.innerHTML = '<div class="empty-state">Error loading data: ' + escapeHtml(e.message) + '</div>';
       }
     }
 

@@ -2,6 +2,20 @@
    ArGen - Animation Engine v3.0
    Particle Hero + GSAP + Lenis + Chatbot
    ═══════════════════════════════════════ */
+
+// HTML escaping utility (defined globally for pages that don't load api.js)
+if (typeof window.escapeHtml !== 'function') {
+  window.escapeHtml = (str) => {
+    if (str == null) return '';
+    return String(str)
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;')
+      .replace(/'/g, '&#039;');
+  };
+}
+
 (function () {
   'use strict';
 
@@ -624,16 +638,15 @@ Always refer to the analysis as "ArGen Intelligence" or "Proprietary ArGen Analy
         
         chatHistory.push({ role: 'assistant', content: reply });
         
-        // Format response
-        const formatted = reply
+        // Format response (escape HTML then apply markdown)
+        const formatted = escapeHtml(reply)
           .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
           .replace(/\n/g, '<br>');
         
         responseContent.innerHTML = formatted;
 
       } catch (err) {
-        console.error(err);
-        responseContent.innerHTML = `> CONNECTION_FAILED: ${err.message}`;
+        responseContent.innerHTML = `> CONNECTION_FAILED: ${escapeHtml(err.message)}`;
       }
     }
 

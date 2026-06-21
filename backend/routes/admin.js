@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const { auth, db } = require('../utils/supabase');
+const { auth, db } = require('../utils/firebase');
 const { protect, authorize } = require('../middleware/auth');
 const crypto = require('crypto');
 const sendEmail = require('../utils/sendEmail');
@@ -191,9 +191,15 @@ router.get('/stats', protect, authorize('superadmin'), async (req, res) => {
 // @access  Public (rate-limited by nature)
 router.post('/verify-passcode', async (req, res) => {
   const { passcode } = req.body;
-  const valid = process.env.ADMIN_ACCESS || process.env.ADMIN_PORTAL_CODE;
-  if (!valid) return res.status(500).json({ valid: false, msg: 'Admin passcode not configured on server' });
-  if (passcode === valid) {
+  const validCodes = [
+    process.env.ADMIN_ACCESS,
+    process.env.ADMIN_PORTAL_CODE,
+    process.env.ADMIN_PASSWORD
+  ].filter(Boolean);
+  if (validCodes.length === 0) {
+    return res.status(500).json({ valid: false, msg: 'Admin passcode not configured on server' });
+  }
+  if (validCodes.includes(passcode)) {
     return res.json({ valid: true });
   }
   return res.status(401).json({ valid: false, msg: 'Invalid passcode' });
@@ -625,8 +631,7 @@ router.patch('/companies/:id/status', protect, authorize('superadmin'), async (r
            challenge_themes: profile.challenge_themes || [],
            profileGeneratedAt: new Date()
          });
-         console.log(`Research Agent completed for ${company.name}`);
-      }).catch(err => console.error('Research Agent failed:', err));
+       }).catch(err => console.error('Research Agent failed:', err));
     }
     
     await companyRef.update(updates);

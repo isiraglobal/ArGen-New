@@ -1,5 +1,20 @@
 const user = (() => { try { return JSON.parse(localStorage.getItem('user')); } catch { return null; } })();
 
+// Null-safe DOM shorthand
+function $(id) { return document.getElementById(id); }
+
+// Loading overlay helpers
+function showLoading(text) {
+  const overlay = document.getElementById('loadingOverlay');
+  if (overlay) { overlay.style.display = 'flex'; overlay.style.alignItems = 'center'; }
+  const txt = document.getElementById('loadingText');
+  if (txt) txt.textContent = text || 'Loading...';
+}
+function hideLoading() {
+  const overlay = document.getElementById('loadingOverlay');
+  if (overlay) overlay.style.display = 'none';
+}
+
 document.addEventListener('DOMContentLoaded', () => {
     if (!user) {
         window.location.href = '/login';
@@ -11,17 +26,23 @@ document.addEventListener('DOMContentLoaded', () => {
         return;
     }
 
-    document.getElementById('profileName').textContent = user.name.toUpperCase();
-    document.getElementById('profileRole').textContent = `ID_${user.role.toUpperCase()}`;
-    document.getElementById('welcomeText').innerHTML = `Welcome back, <i class="soul-text">${user.name.split(' ')[0]}</i>`;
+    const nameEl = document.getElementById('profileName');
+    if (nameEl) nameEl.textContent = user.name.toUpperCase();
+    const roleEl = document.getElementById('profileRole');
+    if (roleEl) roleEl.textContent = `ID_${user.role.toUpperCase()}`;
+    const welcomeEl = $('welcomeText');
+    if (welcomeEl) welcomeEl.innerHTML = `Welcome back, <i class="soul-text">${escapeHtml(user.name.split(' ')[0])}</i>`;
 
     const role = user.role.toLowerCase();
     if (role === 'teamadmin' || role === 'superadmin') {
-        document.getElementById('opsShell').style.display = 'grid';
-        document.getElementById('adminSection').style.display = 'none';
+        const opsShell = $('opsShell');
+        if (opsShell) opsShell.style.display = 'grid';
+        const adminSection = $('adminSection');
+        if (adminSection) adminSection.style.display = 'none';
         initAdminDashboard();
     } else {
-        document.getElementById('memberSection').style.display = 'block';
+        const memberSection = $('memberSection');
+        if (memberSection) memberSection.style.display = 'block';
         initMemberDashboard();
     }
 });
@@ -56,7 +77,7 @@ async function loadAIIntelligence() {
             renderAITrendChart(summary.byDay);
         }
     } catch (err) {
-        console.error('AI Intelligence load error:', err);
+        if (typeof showToast === 'function') showToast('Failed to load AI analytics', 'error');
     }
 }
 
@@ -106,6 +127,7 @@ function renderAITrendChart(byDay) {
 }
 
 async function initAdminDashboard() {
+    showLoading('Loading workspace...');
     try {
         const company = await argenApi.getMyCompany();
         if (company) {
@@ -116,8 +138,10 @@ async function initAdminDashboard() {
             if (opsOrgName) opsOrgName.textContent = company.name || 'Workspace';
             if (inviteCodeDisplay) inviteCodeDisplay.textContent = company.inviteCode || '—';
         }
+        hideLoading();
     } catch (err) {
-        console.error('Admin Dashboard Error:', err);
+        hideLoading();
+        if (typeof showToast === 'function') showToast('Failed to load workspace data', 'error');
     }
 }
 
@@ -171,8 +195,10 @@ function distributeOpsPanels() {
 }
 
 function renderAdminStats(leaderboard, stats) {
-    document.getElementById('teamAvgScore').textContent = stats.avgScore.toFixed(1);
-    document.getElementById('activeEmployees').textContent = leaderboard.length;
+    const avgEl = $('teamAvgScore');
+    if (avgEl) avgEl.textContent = stats.avgScore.toFixed(1);
+    const empEl = $('activeEmployees');
+    if (empEl) empEl.textContent = leaderboard.length;
     
     // Populate PDF report hidden elements
     const overallEl = document.getElementById('overallScore');
@@ -183,13 +209,16 @@ function renderAdminStats(leaderboard, stats) {
     // Panel 6: Completion Rate logic
     // Assuming 50 expected submissions per week for now, or just calculate based on leaderboard
     const completionRate = stats.totalSubmissions > 0 ? Math.min(100, (stats.totalSubmissions / (leaderboard.length * 5) * 100)).toFixed(0) : 0;
-    document.getElementById('completionRate').textContent = `${completionRate}%`;
+    const compEl = $('completionRate');
+    if (compEl) compEl.textContent = `${completionRate}%`;
     
     // Trend arrow logic
     const trend = stats.avgScore > 7.5 ? 4.2 : -1.5; 
-    const trendEl = document.getElementById('scoreTrend');
-    trendEl.innerHTML = `${trend > 0 ? '↑' : '↓'} ${Math.abs(trend)}% vs last week`;
-    trendEl.style.color = trend > 0 ? '#44ff44' : '#ff4444';
+    const trendEl = $('scoreTrend');
+    if (trendEl) {
+        trendEl.innerHTML = `${trend > 0 ? '↑' : '↓'} ${Math.abs(trend)}% vs last week`;
+        trendEl.style.color = trend > 0 ? '#44ff44' : '#ff4444';
+    }
 }
 
 function renderCharts(stats) {
@@ -296,34 +325,45 @@ async function initMemberDashboard() {
     try {
         const company = await argenApi.getMyCompany();
         if (company) {
-            document.getElementById('orgName').textContent = company.name.toUpperCase();
+            const orgEl = $('orgName');
+            if (orgEl) orgEl.textContent = company.name.toUpperCase();
         }
 
         // Streak
         const me = await argenApi.getMe();
-        document.getElementById('currentStreakVal').textContent = me.currentStreak || 0;
-        document.getElementById('memberStreakLarge').textContent = me.currentStreak || 0;
-        document.getElementById('longestStreakVal').textContent = me.longestStreak || 0;
-        document.getElementById('streakBadge').style.display = 'flex';
+        const cv = $('currentStreakVal');
+        if (cv) cv.textContent = me.currentStreak || 0;
+        const ml = $('memberStreakLarge');
+        if (ml) ml.textContent = me.currentStreak || 0;
+        const lv = $('longestStreakVal');
+        if (lv) lv.textContent = me.longestStreak || 0;
+        const sbEl = $('streakBadge');
+        if (sbEl) sbEl.style.display = 'flex';
         
         // Populate PDF report hidden elements
-        const streakEl = document.getElementById('currentStreak');
+        const streakEl = $('currentStreak');
         if (streakEl) streakEl.textContent = me.currentStreak || 0;
 
         // Challenge
         const challenges = await argenApi.getActiveChallenges();
         if (challenges && challenges.length > 0) {
             const c = challenges[0];
-            document.getElementById('challengeTitle').textContent = c.title || c.name;
+            const ctEl = $('challengeTitle');
+            if (ctEl) ctEl.textContent = c.title || c.name;
             const scenarioText = c.scenario || c.text || c.description || '';
-            document.getElementById('challengeScenario').textContent = scenarioText.substring(0, 150) + '...';
-            document.getElementById('startChallengeBtn').onclick = () => {
+            const csEl = $('challengeScenario');
+            if (csEl) csEl.textContent = scenarioText.substring(0, 150) + '...';
+            const sbBtn = $('startChallengeBtn');
+            if (sbBtn) sbBtn.onclick = () => {
                 window.location.href = `/take-evaluation?challengeId=${c._id}`;
             };
         } else {
-            document.getElementById('challengeTitle').textContent = 'ALL CAUGHT UP';
-            document.getElementById('challengeScenario').textContent = 'The AI is currently researching new scenarios. Check back tomorrow.';
-            document.getElementById('startChallengeBtn').style.display = 'none';
+            const ctEl = $('challengeTitle');
+            if (ctEl) ctEl.textContent = 'ALL CAUGHT UP';
+            const csEl = $('challengeScenario');
+            if (csEl) csEl.textContent = 'The AI is currently researching new scenarios. Check back tomorrow.';
+            const sbBtn = $('startChallengeBtn');
+            if (sbBtn) sbBtn.style.display = 'none';
         }
 
         // Leaderboard
@@ -351,7 +391,8 @@ async function initMemberDashboard() {
 }
 
 function renderAdminLeaderboard(leaderboard) {
-    const container = document.getElementById('adminLeaderboard');
+    const container = $('adminLeaderboard');
+    if (!container) return;
     if (!leaderboard || !leaderboard.length) {
         container.innerHTML = '<p class="batch-meta">Waiting for team activity...</p>';
         return;
@@ -372,7 +413,8 @@ function renderAdminLeaderboard(leaderboard) {
 }
 
 function renderMemberLeaderboard(leaderboard) {
-    const container = document.getElementById('memberLeaderboard');
+    const container = $('memberLeaderboard');
+    if (!container) return;
     const myId = user.id;
 
     container.innerHTML = leaderboard.slice(0, 5).map((u, i) => {
@@ -391,7 +433,8 @@ function renderMemberLeaderboard(leaderboard) {
 }
 
 function renderHistory(history) {
-    const container = document.getElementById('historyList');
+    const container = $('historyList');
+    if (!container) return;
     if (!history || !history.length) {
         container.innerHTML = '<p class="batch-meta">Your performance history will appear here.</p>';
         return;
@@ -432,26 +475,29 @@ function renderHistory(history) {
 
 async function checkFlaggedSubmissions() {
     try {
-        const panel = document.getElementById('flaggedPanel');
-        const list = document.getElementById('flaggedList');
+        const panel = $('flaggedPanel');
+        const list = $('flaggedList');
         
+        if (!panel || !list) return;
+
         const flagged = await argenApi.getFlaggedSubmissions();
 
         if (flagged && flagged.length > 0) {
             panel.style.display = 'block';
             list.innerHTML = flagged.map(f => `
                 <div style="font-size: 0.75rem; padding: 0.5rem; border-bottom: 1px solid rgba(255,68,68,0.1);">
-                    <strong>${f.userName}</strong>: <span style="color: #ff4444">${f.flags.join(', ')}</span>
+                    <strong>${escapeHtml(f.userName)}</strong>: <span style="color: #ff4444">${escapeHtml(f.flags.join(', '))}</span>
                 </div>
             `).join('');
         }
     } catch (err) {
-        console.error('Failed to load flagged submissions', err);
+        // Failed to load flagged submissions
     }
 }
 
 async function triggerAICycle() {
-    const btn = document.getElementById('aiTriggerBtn');
+    const btn = $('aiTriggerBtn');
+    if (!btn) return;
     const originalText = btn.textContent;
     btn.disabled = true;
     btn.textContent = 'EXECUTING AGENTIC LOOP...';
@@ -469,14 +515,17 @@ async function triggerAICycle() {
 }
 
 function copyInviteCode() {
-    const code = document.getElementById('inviteCodeDisplay').textContent;
+    const el = $('inviteCodeDisplay');
+    if (!el) return;
+    const code = el.textContent;
     navigator.clipboard.writeText(code).then(() => {
         alert('Team Passcode copied: ' + code);
     });
 }
 
 function generatePDFReport() {
-    const btn = document.getElementById('pdfBtn');
+    const btn = $('pdfBtn');
+    if (!btn) return;
     const originalText = btn.textContent;
     btn.disabled = true;
     btn.textContent = 'GENERATING PDF...';

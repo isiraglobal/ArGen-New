@@ -1,5 +1,15 @@
 const express = require('express');
 const router = express.Router();
+const rateLimit = require('express-rate-limit');
+
+// Strict rate limiter for public AI endpoint (20 requests per 15 min per IP)
+const aiLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000,
+  max: 20,
+  standardHeaders: true,
+  legacyHeaders: false,
+  message: { message: 'Too many AI requests. Please wait before asking again.' }
+});
 
 const AI_SYSTEM_PROMPT = `You are the ArGen Intelligence Agent. You are the digital interface for ArGen's proprietary evaluation engine.
 Answer concisely and with executive professionalism.
@@ -32,8 +42,8 @@ router.get('/health', async (req, res) => {
 
 // @route   POST api/ai/ask
 // @desc    Public AI chat endpoint (used by homepage floating AI bar)
-// @access  Public — rate limited
-router.post('/ask', async (req, res) => {
+// @access  Public — rate limited (20 req/15min)
+router.post('/ask', aiLimiter, async (req, res) => {
     try {
         let { messages } = req.body;
         if (!Array.isArray(messages)) {

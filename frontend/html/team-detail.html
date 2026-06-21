@@ -50,7 +50,7 @@
   <script>
     window.si = window.si || function () { (window.siq = window.siq || []).push(arguments); };
   </script>
-  <script defer src="/_vercel/speed-insights/script.js"></script>
+
 </head>
 <body>
   <header id="nav" class="nav nav-always-visible">
@@ -218,7 +218,7 @@
         const scores = await window.argenApi.getTeamScores(teamId);
         
         // Update Header
-        document.getElementById('teamName').innerHTML = `${team.name} <i class="soul-text">Analysis</i>`;
+        document.getElementById('teamName').innerHTML = `${escapeHtml(team.name)} <i class="soul-text">Analysis</i>`;
         document.getElementById('aggregateScore').innerHTML = `${scores.overall || 0}<span style="font-size: 1rem; color: var(--text-sec);">/100</span>`;
         document.getElementById('percentileRank').textContent = scores.percentile ? `Top ${100 - scores.percentile}%` : 'Baseline';
         

@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const { protect } = require('../middleware/auth');
-const { db } = require('../utils/supabase');
+const { db } = require('../utils/firebase');
 
 // GET /api/analytics/summary — company-wide AI usage summary (30 days)
 router.get('/summary', protect, async (req, res) => {

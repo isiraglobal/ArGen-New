@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const crypto = require('crypto');
 const { Whop } = require('@whop/sdk');
-const { db } = require('../utils/supabase');
+const { db } = require('../utils/firebase');
 const sendEmail = require('../utils/sendEmail');
 const { createEmailTemplate } = require('../utils/emailTemplate');
 const { protect } = require('../middleware/auth');
@@ -83,7 +83,7 @@ router.post('/webhook', express.raw({type: 'application/json'}), async (req, res
         await handleMembershipInvalid(event.data);
         break;
       default:
-        console.log(`Unhandled event action ${event.action}`);
+        // Unhandled whop event action
     }
 
     res.json({received: true});
@@ -220,7 +220,7 @@ async function handleMembershipValid(data) {
     html
   });
 
-  console.log(`Auto-onboarded company: ${companyName} with ${seatLimit} seats`);
+  // Auto-onboarded company
 }
 
 async function handleMembershipInvalid(data) {

@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const { db } = require('../utils/supabase');
+const { db } = require('../utils/firebase');
 const { protect } = require('../middleware/auth');
 const { body, validationResult } = require('express-validator');
 

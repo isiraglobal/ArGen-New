@@ -31,3 +31,4 @@ dist/
 build/
 .vercel
 *.log
+argen0-firebase*.json

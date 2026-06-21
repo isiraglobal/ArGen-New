@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const { protect, isApproved } = require('../middleware/auth');
-const { db } = require('../utils/supabase');
+const { db } = require('../utils/firebase');
 
 // @route   GET api/leaderboard
 // @desc    Get weekly leaderboard for the user's company

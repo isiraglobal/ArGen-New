@@ -1,4 +1,4 @@
-const { db } = require('./supabase');
+const { db } = require('./firebase');
 
 const FETCH_TIMEOUT = 30000; // 30 seconds per provider
 

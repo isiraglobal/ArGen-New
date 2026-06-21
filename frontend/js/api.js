@@ -3,6 +3,17 @@
  * Handles all communication with the Node.js backend
  */
 
+// Shared HTML escaping utility — prevents XSS in all frontend innerHTML assignments
+window.escapeHtml = (str) => {
+  if (str == null) return '';
+  return String(str)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#039;');
+};
+
 // Centralized Neo-Brutalist Toast Notification System
 window.showToast = (message, type = 'info') => {
     let container = document.querySelector('.toast-container');
@@ -27,7 +38,7 @@ window.showToast = (message, type = 'info') => {
     toast.innerHTML = `
         <div style="display:flex; align-items:center; gap:0.25rem;">
             ${icon}
-            <span>${message}</span>
+            <span>${escapeHtml(message)}</span>
         </div>
         <button class="toast-close">✕</button>
     `;

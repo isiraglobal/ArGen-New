@@ -1,0 +1,65 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // Companies — only superadmins and the company's own teamadmins
+    match /companies/{companyId} {
+      allow read: if request.auth != null &&
+        (request.auth.token.role == 'superadmin' ||
+         request.auth.token.companyId == companyId);
+      allow write: if request.auth != null &&
+        (request.auth.token.role == 'superadmin' ||
+         (request.auth.token.role == 'teamadmin' && request.auth.token.companyId == companyId));
+    }
+
+    // Users — read own, admins read their company
+    match /users/{userId} {
+      allow read: if request.auth != null &&
+        (request.auth.uid == userId ||
+         request.auth.token.role == 'superadmin' ||
+         request.auth.token.companyId == resource.data.companyId);
+      allow write: if request.auth != null &&
+        (request.auth.uid == userId ||
+         request.auth.token.role == 'superadmin');
+    }
+
+    // AI usage events — write-only via API key for extensions, read for company
+    match /ai_usage_events/{eventId} {
+      allow read: if request.auth != null &&
+        (request.auth.token.role == 'superadmin' ||
+         request.auth.token.companyId == resource.data.companyId);
+      allow create: if request.auth != null;
+      allow update, delete: if false;
+    }
+
+    // AI usage daily — aggregated, read-only
+    match /ai_usage_daily/{id} {
+      allow read: if request.auth != null &&
+        (request.auth.token.role == 'superadmin' ||
+         request.auth.token.companyId == resource.data.companyId);
+      allow write: if false;
+    }
+
+    // API keys — only teamadmins and superadmins
+    match /api_keys/{keyId} {
+      allow read, write: if request.auth != null &&
+        (request.auth.token.role == 'superadmin' ||
+         (request.auth.token.role == 'teamadmin' && request.auth.token.companyId == resource.data.companyId));
+    }
+
+    // Workflow sessions — company access
+    match /workflow_sessions/{sessionId} {
+      allow read: if request.auth != null &&
+        (request.auth.token.role == 'superadmin' ||
+         request.auth.token.companyId == resource.data.companyId);
+      allow write: if request.auth != null &&
+        (request.auth.token.role == 'superadmin' ||
+         (request.auth.token.role == 'teamadmin' && request.auth.token.companyId == resource.data.companyId));
+    }
+
+    // Everything else — authenticated access
+    match /{document=**} {
+      allow read, write: if request.auth != null;
+    }
+  }
+}

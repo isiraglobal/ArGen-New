@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const { db } = require('../utils/supabase');
+const { db } = require('../utils/firebase');
 const { scoreResponse } = require('../utils/ai-agents');
 const { protect, isApproved, authorize } = require('../middleware/auth');
 
@@ -62,7 +62,7 @@ router.post('/submit', protect, isApproved, authorize('member', 'teamadmin', 'su
       if (process.env.NODE_ENV === 'production') {
         return res.status(400).json({ msg: 'You have already submitted a response for this challenge today.' });
       } else {
-        console.log("Development Bypass: Allowing duplicate challenge submission for testing.");
+        // Development: allowing duplicate challenge submission for testing
       }
     }
 
