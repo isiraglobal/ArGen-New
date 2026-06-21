@@ -58,7 +58,11 @@ const limiter = rateLimit({
 app.use('/api', limiter);
 
 // Whop Webhook — needs raw body so mount before express.json()
-app.use('/api/whop', require('./routes/whop'));
+try {
+  app.use('/api/whop', require('./routes/whop'));
+} catch (e) {
+  console.warn('[server] Whop route not available:', e.message);
+}
 
 app.use(express.json({ limit: '2mb' }));
 

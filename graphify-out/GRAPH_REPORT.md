@@ -1,16 +1,16 @@
 # Graph Report - ArGen - New Look  (2026-06-21)
 
 ## Corpus Check
-- 63 files · ~147,263 words
+- 63 files · ~147,218 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 595 nodes · 729 edges · 47 communities (34 shown, 13 thin omitted)
+- 595 nodes · 735 edges · 46 communities (33 shown, 13 thin omitted)
 - Extraction: 100% EXTRACTED · 0% INFERRED · 0% AMBIGUOUS · INFERRED: 3 edges (avg confidence: 0.8)
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `e9bf0a1d`
+- Built from commit: `7c936b2f`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -47,7 +47,6 @@
 - [[_COMMUNITY_Community 32|Community 32]]
 - [[_COMMUNITY_Community 33|Community 33]]
 - [[_COMMUNITY_Community 34|Community 34]]
-- [[_COMMUNITY_Community 35|Community 35]]
 - [[_COMMUNITY_Community 36|Community 36]]
 - [[_COMMUNITY_Community 37|Community 37]]
 - [[_COMMUNITY_Community 38|Community 38]]
@@ -62,8 +61,8 @@
 
 ## God Nodes (most connected - your core abstractions)
 1. `protect()` - 14 edges
-2. `dependencies` - 13 edges
-3. `ArGen Platform — Project Context for AI Agents` - 13 edges
+2. `ArGen Platform — Project Context for AI Agents` - 13 edges
+3. `dependencies` - 12 edges
 4. `dependencies` - 12 edges
 5. `ArGen Environment Variables` - 11 edges
 6. `initAll()` - 10 edges
@@ -84,7 +83,7 @@
 - `handleSyncConnections()` --calls--> `syncAllConnections()`  [INFERRED]
   backend/routes/scheduler.js → backend/utils/ai-providers.js
 
-## Communities (47 total, 13 thin omitted)
+## Communities (46 total, 13 thin omitted)
 
 ### Community 0 - "Community 0"
 Cohesion: 0.14
@@ -123,8 +122,8 @@ Cohesion: 0.04
 Nodes (44): adminRef, adminUsers, agentTokens, allDocs, allowed, allUsers, { auth, db }, calculatedSubtotal (+36 more)
 
 ### Community 10 - "Community 10"
-Cohesion: 0.1
-Nodes (19): dependencies, @anthropic-ai/sdk, bcryptjs, cors, dotenv, express, express-rate-limit, express-validator (+11 more)
+Cohesion: 0.11
+Nodes (18): dependencies, bcryptjs, cors, dotenv, express, express-rate-limit, express-validator, helmet (+10 more)
 
 ### Community 11 - "Community 11"
 Cohesion: 0.16
@@ -163,7 +162,7 @@ Cohesion: 0.5
 Nodes (3): dotenv, mongoose, path
 
 ### Community 22 - "Community 22"
-Cohesion: 0.22
+Cohesion: 0.33
 Nodes (8): Anthropic, express, fullMessages, geminiBody, providers, router, statuses, userMessages
 
 ### Community 27 - "Community 27"
@@ -190,13 +189,9 @@ Nodes (6): admin, fs, path, queryStub, serviceAccount, serviceAccountPath
 Cohesion: 0.4
 Nodes (4): app, auth, firebaseConfig, googleProvider
 
-### Community 35 - "Community 35"
-Cohesion: 0.09
-Nodes (18): bcrypt, mongoose, UserSchema, day, { db }, express, finalLeaderboard, now (+10 more)
-
 ### Community 42 - "Community 42"
-Cohesion: 0.17
-Nodes (9): bcrypt, Company, dotenv, jwt, mongoose, path, User, CompanySchema (+1 more)
+Cohesion: 0.05
+Nodes (31): bcrypt, Company, dotenv, jwt, mongoose, path, User, CompanySchema (+23 more)
 
 ### Community 43 - "Community 43"
 Cohesion: 0.42
@@ -204,14 +199,14 @@ Nodes (8): allProviders, apiKeyProviders, connect(), disconnect(), loadConnectio
 
 ### Community 44 - "Community 44"
 Cohesion: 0.05
-Nodes (48): { auth, db }, authorize(), isApproved(), parseCookies(), protect(), requirePageAuth(), verifyTokenFromRequest(), express (+40 more)
+Nodes (44): { auth, db }, authorize(), isApproved(), parseCookies(), protect(), requirePageAuth(), verifyTokenFromRequest(), express (+36 more)
 
 ### Community 46 - "Community 46"
 Cohesion: 0.5
 Nodes (4): createTeamCode(), createUniqueTeamCode(), isTeamCodeAvailable(), limit
 
 ## Knowledge Gaps
-- **407 isolated node(s):** `express`, `cors`, `dotenv`, `path`, `REQUIRED_ENV` (+402 more)
+- **399 isolated node(s):** `name`, `version`, `private`, `start`, `dev` (+394 more)
   These have ≤1 connection - possible missing edges or undocumented components.
 - **13 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
 
@@ -220,12 +215,12 @@ _Questions this graph is uniquely positioned to answer:_
 
 - **Why does `requirePageAuth()` connect `Community 44` to `Community 13`?**
   _High betweenness centrality (0.039) - this node is a cross-community bridge._
-- **Why does `protect()` connect `Community 44` to `Community 35`, `Community 4`, `Community 5`, `Community 8`, `Community 9`, `Community 27`, `Community 30`?**
+- **Why does `protect()` connect `Community 44` to `Community 4`, `Community 5`, `Community 8`, `Community 9`, `Community 42`, `Community 27`, `Community 30`?**
   _High betweenness centrality (0.031) - this node is a cross-community bridge._
-- **Why does `createEmailTemplate()` connect `Community 4` to `Community 8`, `Community 9`, `Community 44`, `Community 5`?**
+- **Why does `createEmailTemplate()` connect `Community 4` to `Community 8`, `Community 9`, `Community 42`, `Community 5`?**
   _High betweenness centrality (0.026) - this node is a cross-community bridge._
-- **What connects `express`, `cors`, `dotenv` to the rest of the system?**
-  _407 weakly-connected nodes found - possible documentation gaps or missing edges._
+- **What connects `name`, `version`, `private` to the rest of the system?**
+  _399 weakly-connected nodes found - possible documentation gaps or missing edges._
 - **Should `Community 0` be split into smaller, more focused modules?**
   _Cohesion score 0.14 - nodes in this community are weakly interconnected._
 - **Should `Community 2` be split into smaller, more focused modules?**
