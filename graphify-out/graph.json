@@ -6,16 +6,16 @@
     {
       "label": "ai.js",
       "file_type": "code",
-      "source_file": "backend/routes/ai.js",
+      "source_file": "ai.js",
       "source_location": "L1",
-      "id": "backend_routes_ai_js",
+      "id": "ai_js",
       "community": 22,
       "norm_label": "ai.js"
     },
     {
       "label": "express",
       "file_type": "code",
-      "source_file": "backend/routes/ai.js",
+      "source_file": "ai.js",
       "source_location": "L1",
       "id": "routes_ai_express",
       "community": 22,
@@ -24,7 +24,7 @@
     {
       "label": "router",
       "file_type": "code",
-      "source_file": "backend/routes/ai.js",
+      "source_file": "ai.js",
       "source_location": "L2",
       "id": "routes_ai_router",
       "community": 22,
@@ -33,7 +33,7 @@
     {
       "label": "providers",
       "file_type": "code",
-      "source_file": "backend/routes/ai.js",
+      "source_file": "ai.js",
       "source_location": "L15",
       "id": "routes_ai_providers",
       "community": 22,
@@ -42,7 +42,7 @@
     {
       "label": "statuses",
       "file_type": "code",
-      "source_file": "backend/routes/ai.js",
+      "source_file": "ai.js",
       "source_location": "L21",
       "id": "routes_ai_statuses",
       "community": 22,
@@ -51,7 +51,7 @@
     {
       "label": "userMessages",
       "file_type": "code",
-      "source_file": "backend/routes/ai.js",
+      "source_file": "ai.js",
       "source_location": "L43",
       "id": "routes_ai_usermessages",
       "community": 22,
@@ -60,7 +60,7 @@
     {
       "label": "fullMessages",
       "file_type": "code",
-      "source_file": "backend/routes/ai.js",
+      "source_file": "ai.js",
       "source_location": "L48",
       "id": "routes_ai_fullmessages",
       "community": 22,
@@ -69,7 +69,7 @@
     {
       "label": "Anthropic",
       "file_type": "code",
-      "source_file": "backend/routes/ai.js",
+      "source_file": "ai.js",
       "source_location": "L89",
       "id": "routes_ai_anthropic",
       "community": 22,
@@ -78,7 +78,7 @@
     {
       "label": "geminiBody",
       "file_type": "code",
-      "source_file": "backend/routes/ai.js",
+      "source_file": "ai.js",
       "source_location": "L100",
       "id": "routes_ai_geminibody",
       "community": 22,
@@ -89,180 +89,180 @@
       "file_type": "code",
       "source_file": "package.json",
       "source_location": "L1",
-      "id": "package_json",
       "community": 10,
-      "norm_label": "package.json"
+      "norm_label": "package.json",
+      "id": "package_json"
     },
     {
       "label": "name",
       "file_type": "code",
       "source_file": "package.json",
       "source_location": "L2",
-      "id": "argen_new_look_package_name",
       "community": 10,
-      "norm_label": "name"
+      "norm_label": "name",
+      "id": "argen_new_look_package_name"
     },
     {
       "label": "version",
       "file_type": "code",
       "source_file": "package.json",
       "source_location": "L3",
-      "id": "argen_new_look_package_version",
       "community": 10,
-      "norm_label": "version"
+      "norm_label": "version",
+      "id": "argen_new_look_package_version"
     },
     {
       "label": "private",
       "file_type": "code",
       "source_file": "package.json",
       "source_location": "L4",
-      "id": "argen_new_look_package_private",
       "community": 10,
-      "norm_label": "private"
+      "norm_label": "private",
+      "id": "argen_new_look_package_private"
     },
     {
       "label": "scripts",
       "file_type": "code",
       "source_file": "package.json",
       "source_location": "L5",
-      "id": "argen_new_look_package_scripts",
       "community": 10,
-      "norm_label": "scripts"
+      "norm_label": "scripts",
+      "id": "argen_new_look_package_scripts"
     },
     {
       "label": "start",
       "file_type": "code",
       "source_file": "package.json",
       "source_location": "L6",
-      "id": "argen_new_look_package_scripts_start",
       "community": 10,
-      "norm_label": "start"
+      "norm_label": "start",
+      "id": "argen_new_look_package_scripts_start"
     },
     {
       "label": "dev",
       "file_type": "code",
       "source_file": "package.json",
       "source_location": "L7",
-      "id": "argen_new_look_package_scripts_dev",
       "community": 10,
-      "norm_label": "dev"
+      "norm_label": "dev",
+      "id": "argen_new_look_package_scripts_dev"
     },
     {
       "label": "dependencies",
       "file_type": "code",
       "source_file": "package.json",
       "source_location": "L9",
-      "id": "argen_new_look_package_dependencies",
       "community": 10,
-      "norm_label": "dependencies"
+      "norm_label": "dependencies",
+      "id": "argen_new_look_package_dependencies"
     },
     {
       "label": "@anthropic-ai/sdk",
       "file_type": "code",
       "source_file": "package.json",
       "source_location": "L10",
-      "id": "argen_new_look_package_dependencies_anthropic_ai_sdk",
       "community": 10,
-      "norm_label": "@anthropic-ai/sdk"
+      "norm_label": "@anthropic-ai/sdk",
+      "id": "argen_new_look_package_dependencies_anthropic_ai_sdk"
     },
     {
       "label": "@supabase/supabase-js",
       "file_type": "code",
       "source_file": "package.json",
       "source_location": "L11",
-      "id": "argen_new_look_package_dependencies_supabase_supabase_js",
       "community": 10,
-      "norm_label": "@supabase/supabase-js"
+      "norm_label": "@supabase/supabase-js",
+      "id": "argen_new_look_package_dependencies_supabase_supabase_js"
     },
     {
       "label": "@whop/sdk",
       "file_type": "code",
       "source_file": "package.json",
       "source_location": "L12",
-      "id": "argen_new_look_package_dependencies_whop_sdk",
       "community": 10,
-      "norm_label": "@whop/sdk"
+      "norm_label": "@whop/sdk",
+      "id": "argen_new_look_package_dependencies_whop_sdk"
     },
     {
       "label": "bcryptjs",
       "file_type": "code",
       "source_file": "package.json",
       "source_location": "L13",
-      "id": "argen_new_look_package_dependencies_bcryptjs",
       "community": 10,
-      "norm_label": "bcryptjs"
+      "norm_label": "bcryptjs",
+      "id": "argen_new_look_package_dependencies_bcryptjs"
     },
     {
       "label": "cors",
       "file_type": "code",
       "source_file": "package.json",
       "source_location": "L14",
-      "id": "argen_new_look_package_dependencies_cors",
       "community": 10,
-      "norm_label": "cors"
+      "norm_label": "cors",
+      "id": "argen_new_look_package_dependencies_cors"
     },
     {
       "label": "dotenv",
       "file_type": "code",
       "source_file": "package.json",
       "source_location": "L15",
-      "id": "argen_new_look_package_dependencies_dotenv",
       "community": 10,
-      "norm_label": "dotenv"
+      "norm_label": "dotenv",
+      "id": "argen_new_look_package_dependencies_dotenv"
     },
     {
       "label": "express",
       "file_type": "code",
       "source_file": "package.json",
       "source_location": "L16",
-      "id": "argen_new_look_package_dependencies_express",
       "community": 10,
-      "norm_label": "express"
+      "norm_label": "express",
+      "id": "argen_new_look_package_dependencies_express"
     },
     {
       "label": "express-rate-limit",
       "file_type": "code",
       "source_file": "package.json",
       "source_location": "L17",
-      "id": "argen_new_look_package_dependencies_express_rate_limit",
       "community": 10,
-      "norm_label": "express-rate-limit"
+      "norm_label": "express-rate-limit",
+      "id": "argen_new_look_package_dependencies_express_rate_limit"
     },
     {
       "label": "express-validator",
       "file_type": "code",
       "source_file": "package.json",
       "source_location": "L18",
-      "id": "argen_new_look_package_dependencies_express_validator",
       "community": 10,
-      "norm_label": "express-validator"
+      "norm_label": "express-validator",
+      "id": "argen_new_look_package_dependencies_express_validator"
     },
     {
       "label": "helmet",
       "file_type": "code",
       "source_file": "package.json",
       "source_location": "L19",
-      "id": "argen_new_look_package_dependencies_helmet",
       "community": 10,
-      "norm_label": "helmet"
+      "norm_label": "helmet",
+      "id": "argen_new_look_package_dependencies_helmet"
     },
     {
       "label": "jsonwebtoken",
       "file_type": "code",
       "source_file": "package.json",
       "source_location": "L20",
-      "id": "argen_new_look_package_dependencies_jsonwebtoken",
       "community": 10,
-      "norm_label": "jsonwebtoken"
+      "norm_label": "jsonwebtoken",
+      "id": "argen_new_look_package_dependencies_jsonwebtoken"
     },
     {
       "label": "nodemailer",
       "file_type": "code",
       "source_file": "package.json",
       "source_location": "L21",
-      "id": "argen_new_look_package_dependencies_nodemailer",
       "community": 10,
-      "norm_label": "nodemailer"
+      "norm_label": "nodemailer",
+      "id": "argen_new_look_package_dependencies_nodemailer"
     },
     {
       "label": "AGENTS.md",
@@ -485,7 +485,7 @@
       "file_type": "code",
       "source_file": "backend/middleware/auth.js",
       "source_location": "L103",
-      "community": 48,
+      "community": 45,
       "norm_label": "isapproved()",
       "id": "middleware_auth_isapproved"
     },
@@ -2654,7 +2654,7 @@
       "file_type": "code",
       "source_file": "backend/routes/evaluations.js",
       "source_location": "L1",
-      "community": 41,
+      "community": 7,
       "norm_label": "evaluations.js",
       "id": "backend_routes_evaluations_js"
     },
@@ -2663,7 +2663,7 @@
       "file_type": "code",
       "source_file": "backend/routes/evaluations.js",
       "source_location": "L1",
-      "community": 41,
+      "community": 7,
       "norm_label": "express",
       "id": "routes_evaluations_express"
     },
@@ -2672,7 +2672,7 @@
       "file_type": "code",
       "source_file": "backend/routes/evaluations.js",
       "source_location": "L2",
-      "community": 41,
+      "community": 7,
       "norm_label": "router",
       "id": "routes_evaluations_router"
     },
@@ -2681,7 +2681,7 @@
       "file_type": "code",
       "source_file": "backend/routes/evaluations.js",
       "source_location": "L3",
-      "community": 41,
+      "community": 7,
       "norm_label": "{ db }",
       "id": "routes_evaluations_db"
     },
@@ -2690,7 +2690,7 @@
       "file_type": "code",
       "source_file": "backend/routes/evaluations.js",
       "source_location": "L4",
-      "community": 41,
+      "community": 7,
       "norm_label": "{ generatechallenge }",
       "id": "routes_evaluations_generatechallenge"
     },
@@ -2699,7 +2699,7 @@
       "file_type": "code",
       "source_file": "backend/routes/evaluations.js",
       "source_location": "L5",
-      "community": 41,
+      "community": 7,
       "norm_label": "{ protect, authorize, isapproved }",
       "id": "routes_evaluations_protect_authorize_isapproved"
     },
@@ -2708,7 +2708,7 @@
       "file_type": "code",
       "source_file": "backend/routes/evaluations.js",
       "source_location": "L6",
-      "community": 41,
+      "community": 7,
       "norm_label": "sendemail",
       "id": "routes_evaluations_sendemail"
     },
@@ -2717,7 +2717,7 @@
       "file_type": "code",
       "source_file": "backend/routes/evaluations.js",
       "source_location": "L7",
-      "community": 41,
+      "community": 7,
       "norm_label": "{ createemailtemplate }",
       "id": "routes_evaluations_createemailtemplate"
     },
@@ -2726,7 +2726,7 @@
       "file_type": "code",
       "source_file": "backend/routes/evaluations.js",
       "source_location": "L27",
-      "community": 41,
+      "community": 7,
       "norm_label": "company",
       "id": "routes_evaluations_company"
     },
@@ -2735,7 +2735,7 @@
       "file_type": "code",
       "source_file": "backend/routes/evaluations.js",
       "source_location": "L34",
-      "community": 41,
+      "community": 7,
       "norm_label": "users",
       "id": "routes_evaluations_users"
     },
@@ -2744,7 +2744,7 @@
       "file_type": "code",
       "source_file": "backend/routes/evaluations.js",
       "source_location": "L43",
-      "community": 41,
+      "community": 7,
       "norm_label": "evaluationdata",
       "id": "routes_evaluations_evaluationdata"
     },
@@ -2753,7 +2753,7 @@
       "file_type": "code",
       "source_file": "backend/routes/evaluations.js",
       "source_location": "L55",
-      "community": 41,
+      "community": 7,
       "norm_label": "challengepromises",
       "id": "routes_evaluations_challengepromises"
     },
@@ -2762,7 +2762,7 @@
       "file_type": "code",
       "source_file": "backend/routes/evaluations.js",
       "source_location": "L106",
-      "community": 41,
+      "community": 7,
       "norm_label": "challengeids",
       "id": "routes_evaluations_challengeids"
     },
@@ -2771,7 +2771,7 @@
       "file_type": "code",
       "source_file": "backend/routes/evaluations.js",
       "source_location": "L164",
-      "community": 41,
+      "community": 7,
       "norm_label": "evaluations",
       "id": "routes_evaluations_evaluations"
     },
@@ -2780,7 +2780,7 @@
       "file_type": "code",
       "source_file": "backend/routes/evaluations.js",
       "source_location": "L166",
-      "community": 41,
+      "community": 7,
       "norm_label": "data",
       "id": "routes_evaluations_data"
     },
@@ -2789,7 +2789,7 @@
       "file_type": "code",
       "source_file": "backend/routes/evaluations.js",
       "source_location": "L169",
-      "community": 41,
+      "community": 7,
       "norm_label": "populatedchallenges",
       "id": "routes_evaluations_populatedchallenges"
     },
@@ -4004,7 +4004,7 @@
       "file_type": "code",
       "source_file": "backend/routes/challenges.js",
       "source_location": "L1",
-      "community": 27,
+      "community": 35,
       "norm_label": "challenges.js",
       "id": "backend_routes_challenges_js"
     },
@@ -4013,7 +4013,7 @@
       "file_type": "code",
       "source_file": "backend/routes/challenges.js",
       "source_location": "L1",
-      "community": 27,
+      "community": 35,
       "norm_label": "express",
       "id": "routes_challenges_express"
     },
@@ -4022,7 +4022,7 @@
       "file_type": "code",
       "source_file": "backend/routes/challenges.js",
       "source_location": "L2",
-      "community": 27,
+      "community": 35,
       "norm_label": "router",
       "id": "routes_challenges_router"
     },
@@ -4031,7 +4031,7 @@
       "file_type": "code",
       "source_file": "backend/routes/challenges.js",
       "source_location": "L3",
-      "community": 27,
+      "community": 35,
       "norm_label": "{ db }",
       "id": "routes_challenges_db"
     },
@@ -4040,7 +4040,7 @@
       "file_type": "code",
       "source_file": "backend/routes/challenges.js",
       "source_location": "L4",
-      "community": 27,
+      "community": 35,
       "norm_label": "{ protect }",
       "id": "routes_challenges_protect"
     },
@@ -4049,7 +4049,7 @@
       "file_type": "code",
       "source_file": "backend/routes/challenges.js",
       "source_location": "L37",
-      "community": 27,
+      "community": 35,
       "norm_label": "challengesref",
       "id": "routes_challenges_challengesref"
     },
@@ -4058,7 +4058,7 @@
       "file_type": "code",
       "source_file": "backend/routes/challenges.js",
       "source_location": "L43",
-      "community": 27,
+      "community": 35,
       "norm_label": "challenges",
       "id": "routes_challenges_challenges"
     },
@@ -4067,7 +4067,7 @@
       "file_type": "code",
       "source_file": "backend/routes/challenges.js",
       "source_location": "L127",
-      "community": 27,
+      "community": 35,
       "norm_label": "responsedata",
       "id": "routes_challenges_responsedata"
     },
@@ -4913,7 +4913,7 @@
       "file_type": "code",
       "source_file": "backend/models/Response.js",
       "source_location": "L1",
-      "community": 27,
+      "community": 35,
       "norm_label": "response.js",
       "id": "backend_models_response_js"
     },
@@ -4922,7 +4922,7 @@
       "file_type": "code",
       "source_file": "backend/models/Response.js",
       "source_location": "L1",
-      "community": 27,
+      "community": 35,
       "norm_label": "mongoose",
       "id": "models_response_mongoose"
     },
@@ -4931,7 +4931,7 @@
       "file_type": "code",
       "source_file": "backend/models/Response.js",
       "source_location": "L3",
-      "community": 27,
+      "community": 35,
       "norm_label": "responseschema",
       "id": "models_response_responseschema"
     },
@@ -5093,7 +5093,7 @@
       "file_type": "code",
       "source_file": "backend/models/Challenge.js",
       "source_location": "L1",
-      "community": 27,
+      "community": 7,
       "norm_label": "challenge.js",
       "id": "backend_models_challenge_js"
     },
@@ -5102,7 +5102,7 @@
       "file_type": "code",
       "source_file": "backend/models/Challenge.js",
       "source_location": "L1",
-      "community": 27,
+      "community": 7,
       "norm_label": "mongoose",
       "id": "models_challenge_mongoose"
     },
@@ -5111,7 +5111,7 @@
       "file_type": "code",
       "source_file": "backend/models/Challenge.js",
       "source_location": "L3",
-      "community": 27,
+      "community": 7,
       "norm_label": "challengeschema",
       "id": "models_challenge_challengeschema"
     },
@@ -5363,104 +5363,82 @@
     {
       "relation": "contains",
       "confidence": "EXTRACTED",
-      "source_file": "backend/routes/ai.js",
+      "source_file": "ai.js",
       "source_location": "L1",
       "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "backend_routes_ai_js",
-      "target": "routes_ai_express"
+      "source": "ai_js",
+      "target": "routes_ai_express",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
       "confidence": "EXTRACTED",
-      "source_file": "backend/routes/ai.js",
+      "source_file": "ai.js",
       "source_location": "L2",
       "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "backend_routes_ai_js",
-      "target": "routes_ai_router"
+      "source": "ai_js",
+      "target": "routes_ai_router",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
       "confidence": "EXTRACTED",
-      "source_file": "backend/routes/ai.js",
-      "source_location": "L9",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "backend_routes_ai_js",
-      "target": "routes_ai_providers"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "backend/routes/ai.js",
+      "source_file": "ai.js",
       "source_location": "L15",
       "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "backend_routes_ai_js",
-      "target": "routes_ai_statuses"
+      "source": "ai_js",
+      "target": "routes_ai_providers",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
       "confidence": "EXTRACTED",
-      "source_file": "backend/routes/ai.js",
+      "source_file": "ai.js",
+      "source_location": "L21",
+      "weight": 1.0,
+      "source": "ai_js",
+      "target": "routes_ai_statuses",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "ai.js",
       "source_location": "L43",
       "weight": 1.0,
-      "source": "backend_routes_ai_js",
+      "source": "ai_js",
       "target": "routes_ai_usermessages",
       "confidence_score": 1.0
     },
     {
       "relation": "contains",
       "confidence": "EXTRACTED",
-      "source_file": "backend/routes/ai.js",
+      "source_file": "ai.js",
       "source_location": "L48",
       "weight": 1.0,
-      "source": "backend_routes_ai_js",
+      "source": "ai_js",
       "target": "routes_ai_fullmessages",
       "confidence_score": 1.0
     },
     {
       "relation": "contains",
       "confidence": "EXTRACTED",
-      "source_file": "backend/routes/ai.js",
+      "source_file": "ai.js",
       "source_location": "L90",
       "weight": 1.0,
-      "source": "backend_routes_ai_js",
+      "source": "ai_js",
       "target": "routes_ai_anthropic",
       "confidence_score": 1.0
     },
     {
       "relation": "contains",
       "confidence": "EXTRACTED",
-      "source_file": "backend/routes/ai.js",
+      "source_file": "ai.js",
       "source_location": "L100",
       "weight": 1.0,
-      "source": "backend_routes_ai_js",
+      "source": "ai_js",
       "target": "routes_ai_geminibody",
       "confidence_score": 1.0
-    },
-    {
-      "relation": "imports_from",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "backend/routes/ai.js",
-      "source_location": "L3",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "backend_routes_ai_js",
-      "target": "backend_middleware_auth_js"
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "backend/routes/ai.js",
-      "source_location": "L3",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "backend_routes_ai_js",
-      "target": "middleware_auth_protect"
     },
     {
       "relation": "contains",
@@ -5538,9 +5516,9 @@
       "source_file": "package.json",
       "source_location": "L10",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "argen_new_look_package_dependencies",
-      "target": "argen_new_look_package_dependencies_anthropic_ai_sdk",
-      "confidence_score": 1.0
+      "target": "argen_new_look_package_dependencies_anthropic_ai_sdk"
     },
     {
       "relation": "contains",
@@ -12905,5 +12883,5 @@
     }
   ],
   "hyperedges": [],
-  "built_at_commit": "ce294f5385c12d40e107fa2727f39cba5ae40a4a"
+  "built_at_commit": "b86702c0ee198b7349adf9d10ed7f6219b54ee31"
 }
