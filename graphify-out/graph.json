@@ -4,942 +4,6 @@
   "graph": {},
   "nodes": [
     {
-      "label": "AGENTS.md",
-      "file_type": "document",
-      "source_file": "AGENTS.md",
-      "source_location": "L1",
-      "id": "agents_md",
-      "community": 12,
-      "norm_label": "agents.md"
-    },
-    {
-      "label": "ArGen Platform \u2014 Project Context for AI Agents",
-      "file_type": "document",
-      "source_file": "AGENTS.md",
-      "source_location": "L1",
-      "id": "argen_new_look_agents_argen_platform_project_context_for_ai_agents",
-      "community": 12,
-      "norm_label": "argen platform \u2014 project context for ai agents"
-    },
-    {
-      "label": "\ud83c\udfaf What Is ArGen?",
-      "file_type": "document",
-      "source_file": "AGENTS.md",
-      "source_location": "L7",
-      "id": "argen_new_look_agents_what_is_argen",
-      "community": 12,
-      "norm_label": "\ud83c\udfaf what is argen?"
-    },
-    {
-      "label": "\ud83c\udfd7\ufe0f Architecture Overview",
-      "file_type": "document",
-      "source_file": "AGENTS.md",
-      "source_location": "L17",
-      "id": "argen_new_look_agents_architecture_overview",
-      "community": 12,
-      "norm_label": "\ud83c\udfd7\ufe0f architecture overview"
-    },
-    {
-      "label": "code:block1 (ArGen - New Look/)",
-      "file_type": "document",
-      "source_file": "AGENTS.md",
-      "source_location": "L19",
-      "id": "argen_new_look_agents_codeblock_1",
-      "community": 12,
-      "norm_label": "code:block1 (argen - new look/)"
-    },
-    {
-      "label": "\ud83e\udde0 User Roles",
-      "file_type": "document",
-      "source_file": "AGENTS.md",
-      "source_location": "L54",
-      "id": "argen_new_look_agents_user_roles",
-      "community": 12,
-      "norm_label": "\ud83e\udde0 user roles"
-    },
-    {
-      "label": "\ud83d\udd0c API Base URL Resolution",
-      "file_type": "document",
-      "source_file": "AGENTS.md",
-      "source_location": "L68",
-      "id": "argen_new_look_agents_api_base_url_resolution",
-      "community": 12,
-      "norm_label": "\ud83d\udd0c api base url resolution"
-    },
-    {
-      "label": "\ud83d\uddc4\ufe0f Database",
-      "file_type": "document",
-      "source_file": "AGENTS.md",
-      "source_location": "L76",
-      "id": "argen_new_look_agents_database",
-      "community": 12,
-      "norm_label": "\ud83d\uddc4\ufe0f database"
-    },
-    {
-      "label": "\ud83e\udd16 5 AI Agents (backend/utils/ai-agents.js)",
-      "file_type": "document",
-      "source_file": "AGENTS.md",
-      "source_location": "L85",
-      "id": "argen_new_look_agents_5_ai_agents_backend_utils_ai_agents_js",
-      "community": 12,
-      "norm_label": "\ud83e\udd16 5 ai agents (backend/utils/ai-agents.js)"
-    },
-    {
-      "label": "\ud83c\udfa8 Design System",
-      "file_type": "document",
-      "source_file": "AGENTS.md",
-      "source_location": "L97",
-      "id": "argen_new_look_agents_design_system",
-      "community": 12,
-      "norm_label": "\ud83c\udfa8 design system"
-    },
-    {
-      "label": "\ud83d\ude80 Deployment",
-      "file_type": "document",
-      "source_file": "AGENTS.md",
-      "source_location": "L107",
-      "id": "argen_new_look_agents_deployment",
-      "community": 12,
-      "norm_label": "\ud83d\ude80 deployment"
-    },
-    {
-      "label": "\u2699\ufe0f Environment Variables (.env)",
-      "file_type": "document",
-      "source_file": "AGENTS.md",
-      "source_location": "L117",
-      "id": "argen_new_look_agents_environment_variables_env",
-      "community": 12,
-      "norm_label": "\u2699\ufe0f environment variables (.env)"
-    },
-    {
-      "label": "\ud83d\udc1b Known Issues & History",
-      "file_type": "document",
-      "source_file": "AGENTS.md",
-      "source_location": "L152",
-      "id": "argen_new_look_agents_known_issues_history",
-      "community": 12,
-      "norm_label": "\ud83d\udc1b known issues & history"
-    },
-    {
-      "label": "Resolved",
-      "file_type": "document",
-      "source_file": "AGENTS.md",
-      "source_location": "L154",
-      "id": "argen_new_look_agents_resolved",
-      "community": 12,
-      "norm_label": "resolved"
-    },
-    {
-      "label": "Pending / In Progress",
-      "file_type": "document",
-      "source_file": "AGENTS.md",
-      "source_location": "L169",
-      "id": "argen_new_look_agents_pending_in_progress",
-      "community": 12,
-      "norm_label": "pending / in progress"
-    },
-    {
-      "label": "\ud83d\udccb Page Inventory",
-      "file_type": "document",
-      "source_file": "AGENTS.md",
-      "source_location": "L174",
-      "id": "argen_new_look_agents_page_inventory",
-      "community": 12,
-      "norm_label": "\ud83d\udccb page inventory"
-    },
-    {
-      "label": "\ud83d\udd04 graphify Knowledge Graph",
-      "file_type": "document",
-      "source_file": "AGENTS.md",
-      "source_location": "L213",
-      "id": "argen_new_look_agents_graphify_knowledge_graph",
-      "community": 12,
-      "norm_label": "\ud83d\udd04 graphify knowledge graph"
-    },
-    {
-      "label": "code:block2 (/graphify query \"how does scoring work\")",
-      "file_type": "document",
-      "source_file": "AGENTS.md",
-      "source_location": "L216",
-      "id": "argen_new_look_agents_codeblock_2",
-      "community": 12,
-      "norm_label": "code:block2 (/graphify query \"how does scoring work\")"
-    },
-    {
-      "label": "code:bash (GEMINI_API_KEY=<YOUR_GEMINI_API_KEY> graphify extract . --ba)",
-      "file_type": "document",
-      "source_file": "AGENTS.md",
-      "source_location": "L223",
-      "id": "argen_new_look_agents_codeblock_3",
-      "community": 12,
-      "norm_label": "code:bash (gemini_api_key=<your_gemini_api_key> graphify extract . --ba)"
-    },
-    {
-      "label": "auth.js",
-      "file_type": "code",
-      "source_file": "backend/middleware/auth.js",
-      "source_location": "L1",
-      "id": "backend_middleware_auth_js",
-      "community": 45,
-      "norm_label": "auth.js"
-    },
-    {
-      "label": "{ auth, db }",
-      "file_type": "code",
-      "source_file": "backend/middleware/auth.js",
-      "source_location": "L1",
-      "id": "middleware_auth_auth_db",
-      "community": 45,
-      "norm_label": "{ auth, db }"
-    },
-    {
-      "label": "parseCookies()",
-      "file_type": "code",
-      "source_file": "backend/middleware/auth.js",
-      "source_location": "L4",
-      "id": "middleware_auth_parsecookies",
-      "community": 45,
-      "norm_label": "parsecookies()"
-    },
-    {
-      "label": "protect()",
-      "file_type": "code",
-      "source_file": "backend/middleware/auth.js",
-      "source_location": "L14",
-      "id": "middleware_auth_protect",
-      "community": 45,
-      "norm_label": "protect()"
-    },
-    {
-      "label": "authorize()",
-      "file_type": "code",
-      "source_file": "backend/middleware/auth.js",
-      "source_location": "L90",
-      "id": "middleware_auth_authorize",
-      "community": 45,
-      "norm_label": "authorize()"
-    },
-    {
-      "label": "isApproved()",
-      "file_type": "code",
-      "source_file": "backend/middleware/auth.js",
-      "source_location": "L103",
-      "id": "middleware_auth_isapproved",
-      "community": 48,
-      "norm_label": "isapproved()"
-    },
-    {
-      "label": "verifyTokenFromRequest()",
-      "file_type": "code",
-      "source_file": "backend/middleware/auth.js",
-      "source_location": "L125",
-      "id": "middleware_auth_verifytokenfromrequest",
-      "community": 45,
-      "norm_label": "verifytokenfromrequest()"
-    },
-    {
-      "label": "requirePageAuth()",
-      "file_type": "code",
-      "source_file": "backend/middleware/auth.js",
-      "source_location": "L167",
-      "id": "middleware_auth_requirepageauth",
-      "community": 45,
-      "norm_label": "requirepageauth()"
-    },
-    {
-      "label": "package.json",
-      "file_type": "code",
-      "source_file": "backend/package.json",
-      "source_location": "L1",
-      "id": "backend_package_json",
-      "community": 3,
-      "norm_label": "package.json"
-    },
-    {
-      "label": "name",
-      "file_type": "code",
-      "source_file": "backend/package.json",
-      "source_location": "L2",
-      "id": "backend_package_name",
-      "community": 3,
-      "norm_label": "name"
-    },
-    {
-      "label": "version",
-      "file_type": "code",
-      "source_file": "backend/package.json",
-      "source_location": "L3",
-      "id": "backend_package_version",
-      "community": 3,
-      "norm_label": "version"
-    },
-    {
-      "label": "description",
-      "file_type": "code",
-      "source_file": "backend/package.json",
-      "source_location": "L4",
-      "id": "backend_package_description",
-      "community": 3,
-      "norm_label": "description"
-    },
-    {
-      "label": "main",
-      "file_type": "code",
-      "source_file": "backend/package.json",
-      "source_location": "L5",
-      "id": "backend_package_main",
-      "community": 3,
-      "norm_label": "main"
-    },
-    {
-      "label": "scripts",
-      "file_type": "code",
-      "source_file": "backend/package.json",
-      "source_location": "L6",
-      "id": "backend_package_scripts",
-      "community": 3,
-      "norm_label": "scripts"
-    },
-    {
-      "label": "start",
-      "file_type": "code",
-      "source_file": "backend/package.json",
-      "source_location": "L7",
-      "id": "backend_package_scripts_start",
-      "community": 3,
-      "norm_label": "start"
-    },
-    {
-      "label": "dev",
-      "file_type": "code",
-      "source_file": "backend/package.json",
-      "source_location": "L8",
-      "id": "backend_package_scripts_dev",
-      "community": 3,
-      "norm_label": "dev"
-    },
-    {
-      "label": "dependencies",
-      "file_type": "code",
-      "source_file": "backend/package.json",
-      "source_location": "L10",
-      "id": "backend_package_dependencies",
-      "community": 3,
-      "norm_label": "dependencies"
-    },
-    {
-      "label": "@supabase/supabase-js",
-      "file_type": "code",
-      "source_file": "backend/package.json",
-      "source_location": "L11",
-      "id": "backend_package_dependencies_supabase_supabase_js",
-      "community": 3,
-      "norm_label": "@supabase/supabase-js"
-    },
-    {
-      "label": "@whop/sdk",
-      "file_type": "code",
-      "source_file": "backend/package.json",
-      "source_location": "L12",
-      "id": "backend_package_dependencies_whop_sdk",
-      "community": 3,
-      "norm_label": "@whop/sdk"
-    },
-    {
-      "label": "bcryptjs",
-      "file_type": "code",
-      "source_file": "backend/package.json",
-      "source_location": "L13",
-      "id": "backend_package_dependencies_bcryptjs",
-      "community": 3,
-      "norm_label": "bcryptjs"
-    },
-    {
-      "label": "cors",
-      "file_type": "code",
-      "source_file": "backend/package.json",
-      "source_location": "L14",
-      "id": "backend_package_dependencies_cors",
-      "community": 3,
-      "norm_label": "cors"
-    },
-    {
-      "label": "dotenv",
-      "file_type": "code",
-      "source_file": "backend/package.json",
-      "source_location": "L15",
-      "id": "backend_package_dependencies_dotenv",
-      "community": 3,
-      "norm_label": "dotenv"
-    },
-    {
-      "label": "express",
-      "file_type": "code",
-      "source_file": "backend/package.json",
-      "source_location": "L16",
-      "id": "backend_package_dependencies_express",
-      "community": 3,
-      "norm_label": "express"
-    },
-    {
-      "label": "express-rate-limit",
-      "file_type": "code",
-      "source_file": "backend/package.json",
-      "source_location": "L17",
-      "id": "backend_package_dependencies_express_rate_limit",
-      "community": 3,
-      "norm_label": "express-rate-limit"
-    },
-    {
-      "label": "express-validator",
-      "file_type": "code",
-      "source_file": "backend/package.json",
-      "source_location": "L18",
-      "id": "backend_package_dependencies_express_validator",
-      "community": 3,
-      "norm_label": "express-validator"
-    },
-    {
-      "label": "helmet",
-      "file_type": "code",
-      "source_file": "backend/package.json",
-      "source_location": "L20",
-      "id": "backend_package_dependencies_helmet",
-      "community": 3,
-      "norm_label": "helmet"
-    },
-    {
-      "label": "jsonwebtoken",
-      "file_type": "code",
-      "source_file": "backend/package.json",
-      "source_location": "L21",
-      "id": "backend_package_dependencies_jsonwebtoken",
-      "community": 3,
-      "norm_label": "jsonwebtoken"
-    },
-    {
-      "label": "nodemailer",
-      "file_type": "code",
-      "source_file": "backend/package.json",
-      "source_location": "L22",
-      "id": "backend_package_dependencies_nodemailer",
-      "community": 3,
-      "norm_label": "nodemailer"
-    },
-    {
-      "label": "devDependencies",
-      "file_type": "code",
-      "source_file": "backend/package.json",
-      "source_location": "L24",
-      "id": "backend_package_devdependencies",
-      "community": 3,
-      "norm_label": "devdependencies"
-    },
-    {
-      "label": "nodemon",
-      "file_type": "code",
-      "source_file": "backend/package.json",
-      "source_location": "L25",
-      "id": "backend_package_devdependencies_nodemon",
-      "community": 3,
-      "norm_label": "nodemon"
-    },
-    {
-      "label": "keywords",
-      "file_type": "code",
-      "source_file": "backend/package.json",
-      "source_location": "L27",
-      "id": "backend_package_keywords",
-      "community": 3,
-      "norm_label": "keywords"
-    },
-    {
-      "label": "author",
-      "file_type": "code",
-      "source_file": "backend/package.json",
-      "source_location": "L28",
-      "id": "backend_package_author",
-      "community": 3,
-      "norm_label": "author"
-    },
-    {
-      "label": "license",
-      "file_type": "code",
-      "source_file": "backend/package.json",
-      "source_location": "L29",
-      "id": "backend_package_license",
-      "community": 3,
-      "norm_label": "license"
-    },
-    {
-      "label": "admin.js",
-      "file_type": "code",
-      "source_file": "backend/routes/admin.js",
-      "source_location": "L1",
-      "id": "backend_routes_admin_js",
-      "community": 9,
-      "norm_label": "admin.js"
-    },
-    {
-      "label": "express",
-      "file_type": "code",
-      "source_file": "backend/routes/admin.js",
-      "source_location": "L1",
-      "id": "routes_admin_express",
-      "community": 9,
-      "norm_label": "express"
-    },
-    {
-      "label": "router",
-      "file_type": "code",
-      "source_file": "backend/routes/admin.js",
-      "source_location": "L2",
-      "id": "routes_admin_router",
-      "community": 9,
-      "norm_label": "router"
-    },
-    {
-      "label": "{ auth, db }",
-      "file_type": "code",
-      "source_file": "backend/routes/admin.js",
-      "source_location": "L3",
-      "id": "routes_admin_auth_db",
-      "community": 9,
-      "norm_label": "{ auth, db }"
-    },
-    {
-      "label": "{ protect, authorize }",
-      "file_type": "code",
-      "source_file": "backend/routes/admin.js",
-      "source_location": "L4",
-      "id": "routes_admin_protect_authorize",
-      "community": 9,
-      "norm_label": "{ protect, authorize }"
-    },
-    {
-      "label": "crypto",
-      "file_type": "code",
-      "source_file": "backend/routes/admin.js",
-      "source_location": "L5",
-      "id": "routes_admin_crypto",
-      "community": 9,
-      "norm_label": "crypto"
-    },
-    {
-      "label": "sendEmail",
-      "file_type": "code",
-      "source_file": "backend/routes/admin.js",
-      "source_location": "L6",
-      "id": "routes_admin_sendemail",
-      "community": 9,
-      "norm_label": "sendemail"
-    },
-    {
-      "label": "{ createEmailTemplate }",
-      "file_type": "code",
-      "source_file": "backend/routes/admin.js",
-      "source_location": "L7",
-      "id": "routes_admin_createemailtemplate",
-      "community": 9,
-      "norm_label": "{ createemailtemplate }"
-    },
-    {
-      "label": "{ researchCompany }",
-      "file_type": "code",
-      "source_file": "backend/routes/admin.js",
-      "source_location": "L8",
-      "id": "routes_admin_researchcompany",
-      "community": 9,
-      "norm_label": "{ researchcompany }"
-    },
-    {
-      "label": "createTeamCode()",
-      "file_type": "code",
-      "source_file": "backend/routes/admin.js",
-      "source_location": "L10",
-      "id": "routes_admin_createteamcode",
-      "community": 46,
-      "norm_label": "createteamcode()"
-    },
-    {
-      "label": "normalizeTeamCode()",
-      "file_type": "code",
-      "source_file": "backend/routes/admin.js",
-      "source_location": "L11",
-      "id": "routes_admin_normalizeteamcode",
-      "community": 9,
-      "norm_label": "normalizeteamcode()"
-    },
-    {
-      "label": "getClientBaseUrl()",
-      "file_type": "code",
-      "source_file": "backend/routes/admin.js",
-      "source_location": "L12",
-      "id": "routes_admin_getclientbaseurl",
-      "community": 9,
-      "norm_label": "getclientbaseurl()"
-    },
-    {
-      "label": "isTeamCodeAvailable()",
-      "file_type": "code",
-      "source_file": "backend/routes/admin.js",
-      "source_location": "L14",
-      "id": "routes_admin_isteamcodeavailable",
-      "community": 46,
-      "norm_label": "isteamcodeavailable()"
-    },
-    {
-      "label": "createUniqueTeamCode()",
-      "file_type": "code",
-      "source_file": "backend/routes/admin.js",
-      "source_location": "L23",
-      "id": "routes_admin_createuniqueteamcode",
-      "community": 46,
-      "norm_label": "createuniqueteamcode()"
-    },
-    {
-      "label": "approveCompanyAdmins()",
-      "file_type": "code",
-      "source_file": "backend/routes/admin.js",
-      "source_location": "L33",
-      "id": "routes_admin_approvecompanyadmins",
-      "community": 9,
-      "norm_label": "approvecompanyadmins()"
-    },
-    {
-      "label": "metricsRef",
-      "file_type": "code",
-      "source_file": "backend/routes/admin.js",
-      "source_location": "L77",
-      "id": "routes_admin_metricsref",
-      "community": 9,
-      "norm_label": "metricsref"
-    },
-    {
-      "label": "sevenDaysAgo",
-      "file_type": "code",
-      "source_file": "backend/routes/admin.js",
-      "source_location": "L80",
-      "id": "routes_admin_sevendaysago",
-      "community": 9,
-      "norm_label": "sevendaysago"
-    },
-    {
-      "label": "dailyCalls",
-      "file_type": "code",
-      "source_file": "backend/routes/admin.js",
-      "source_location": "L97",
-      "id": "routes_admin_dailycalls",
-      "community": 9,
-      "norm_label": "dailycalls"
-    },
-    {
-      "label": "dailyQuality",
-      "file_type": "code",
-      "source_file": "backend/routes/admin.js",
-      "source_location": "L98",
-      "id": "routes_admin_dailyquality",
-      "community": 9,
-      "norm_label": "dailyquality"
-    },
-    {
-      "label": "agentTokens",
-      "file_type": "code",
-      "source_file": "backend/routes/admin.js",
-      "source_location": "L99",
-      "id": "routes_admin_agenttokens",
-      "community": 9,
-      "norm_label": "agenttokens"
-    },
-    {
-      "label": "d",
-      "file_type": "code",
-      "source_file": "backend/routes/admin.js",
-      "source_location": "L108",
-      "id": "routes_admin_d",
-      "community": 9,
-      "norm_label": "d"
-    },
-    {
-      "label": "dateString",
-      "file_type": "code",
-      "source_file": "backend/routes/admin.js",
-      "source_location": "L110",
-      "id": "routes_admin_datestring",
-      "community": 9,
-      "norm_label": "datestring"
-    },
-    {
-      "label": "data",
-      "file_type": "code",
-      "source_file": "backend/routes/admin.js",
-      "source_location": "L117",
-      "id": "routes_admin_data",
-      "community": 9,
-      "norm_label": "data"
-    },
-    {
-      "label": "chartData",
-      "file_type": "code",
-      "source_file": "backend/routes/admin.js",
-      "source_location": "L146",
-      "id": "routes_admin_chartdata",
-      "community": 9,
-      "norm_label": "chartdata"
-    },
-    {
-      "label": "r",
-      "file_type": "code",
-      "source_file": "backend/routes/admin.js",
-      "source_location": "L239",
-      "id": "routes_admin_r",
-      "community": 9,
-      "norm_label": "r"
-    },
-    {
-      "label": "logs",
-      "file_type": "code",
-      "source_file": "backend/routes/admin.js",
-      "source_location": "L284",
-      "id": "routes_admin_logs",
-      "community": 9,
-      "norm_label": "logs"
-    },
-    {
-      "label": "limit",
-      "file_type": "code",
-      "source_file": "backend/routes/admin.js",
-      "source_location": "L307",
-      "id": "routes_admin_limit",
-      "community": 46,
-      "norm_label": "limit"
-    },
-    {
-      "label": "companies",
-      "file_type": "code",
-      "source_file": "backend/routes/admin.js",
-      "source_location": "L310",
-      "id": "routes_admin_companies",
-      "community": 9,
-      "norm_label": "companies"
-    },
-    {
-      "label": "allDocs",
-      "file_type": "code",
-      "source_file": "backend/routes/admin.js",
-      "source_location": "L311",
-      "id": "routes_admin_alldocs",
-      "community": 9,
-      "norm_label": "alldocs"
-    },
-    {
-      "label": "company",
-      "file_type": "code",
-      "source_file": "backend/routes/admin.js",
-      "source_location": "L313",
-      "id": "routes_admin_company",
-      "community": 9,
-      "norm_label": "company"
-    },
-    {
-      "label": "users",
-      "file_type": "code",
-      "source_file": "backend/routes/admin.js",
-      "source_location": "L315",
-      "id": "routes_admin_users",
-      "community": 9,
-      "norm_label": "users"
-    },
-    {
-      "label": "adminUsers",
-      "file_type": "code",
-      "source_file": "backend/routes/admin.js",
-      "source_location": "L316",
-      "id": "routes_admin_adminusers",
-      "community": 9,
-      "norm_label": "adminusers"
-    },
-    {
-      "label": "companyRef",
-      "file_type": "code",
-      "source_file": "backend/routes/admin.js",
-      "source_location": "L379",
-      "id": "routes_admin_companyref",
-      "community": 9,
-      "norm_label": "companyref"
-    },
-    {
-      "label": "normalizedCustomCode",
-      "file_type": "code",
-      "source_file": "backend/routes/admin.js",
-      "source_location": "L383",
-      "id": "routes_admin_normalizedcustomcode",
-      "community": 9,
-      "norm_label": "normalizedcustomcode"
-    },
-    {
-      "label": "updates",
-      "file_type": "code",
-      "source_file": "backend/routes/admin.js",
-      "source_location": "L401",
-      "id": "routes_admin_updates",
-      "community": 9,
-      "norm_label": "updates"
-    },
-    {
-      "label": "adminRef",
-      "file_type": "code",
-      "source_file": "backend/routes/admin.js",
-      "source_location": "L404",
-      "id": "routes_admin_adminref",
-      "community": 9,
-      "norm_label": "adminref"
-    },
-    {
-      "label": "userRef",
-      "file_type": "code",
-      "source_file": "backend/routes/admin.js",
-      "source_location": "L450",
-      "id": "routes_admin_userref",
-      "community": 9,
-      "norm_label": "userref"
-    },
-    {
-      "label": "token",
-      "file_type": "code",
-      "source_file": "backend/routes/admin.js",
-      "source_location": "L482",
-      "id": "routes_admin_token",
-      "community": 9,
-      "norm_label": "token"
-    },
-    {
-      "label": "invitationData",
-      "file_type": "code",
-      "source_file": "backend/routes/admin.js",
-      "source_location": "L483",
-      "id": "routes_admin_invitationdata",
-      "community": 9,
-      "norm_label": "invitationdata"
-    },
-    {
-      "label": "html",
-      "file_type": "code",
-      "source_file": "backend/routes/admin.js",
-      "source_location": "L494",
-      "id": "routes_admin_html",
-      "community": 9,
-      "norm_label": "html"
-    },
-    {
-      "label": "invitations",
-      "file_type": "code",
-      "source_file": "backend/routes/admin.js",
-      "source_location": "L537",
-      "id": "routes_admin_invitations",
-      "community": 9,
-      "norm_label": "invitations"
-    },
-    {
-      "label": "invoiceData",
-      "file_type": "code",
-      "source_file": "backend/routes/admin.js",
-      "source_location": "L578",
-      "id": "routes_admin_invoicedata",
-      "community": 9,
-      "norm_label": "invoicedata"
-    },
-    {
-      "label": "allUsers",
-      "file_type": "code",
-      "source_file": "backend/routes/admin.js",
-      "source_location": "L656",
-      "id": "routes_admin_allusers",
-      "community": 9,
-      "norm_label": "allusers"
-    },
-    {
-      "label": "formatted",
-      "file_type": "code",
-      "source_file": "backend/routes/admin.js",
-      "source_location": "L684",
-      "id": "routes_admin_formatted",
-      "community": 9,
-      "norm_label": "formatted"
-    },
-    {
-      "label": "invoicesRef",
-      "file_type": "code",
-      "source_file": "backend/routes/admin.js",
-      "source_location": "L776",
-      "id": "routes_admin_invoicesref",
-      "community": 9,
-      "norm_label": "invoicesref"
-    },
-    {
-      "label": "invoices",
-      "file_type": "code",
-      "source_file": "backend/routes/admin.js",
-      "source_location": "L785",
-      "id": "routes_admin_invoices",
-      "community": 9,
-      "norm_label": "invoices"
-    },
-    {
-      "label": "calculatedSubtotal",
-      "file_type": "code",
-      "source_file": "backend/routes/admin.js",
-      "source_location": "L828",
-      "id": "routes_admin_calculatedsubtotal",
-      "community": 9,
-      "norm_label": "calculatedsubtotal"
-    },
-    {
-      "label": "invoiceRef",
-      "file_type": "code",
-      "source_file": "backend/routes/admin.js",
-      "source_location": "L873",
-      "id": "routes_admin_invoiceref",
-      "community": 9,
-      "norm_label": "invoiceref"
-    },
-    {
-      "label": "invoice",
-      "file_type": "code",
-      "source_file": "backend/routes/admin.js",
-      "source_location": "L876",
-      "id": "routes_admin_invoice",
-      "community": 9,
-      "norm_label": "invoice"
-    },
-    {
-      "label": "userScores",
-      "file_type": "code",
-      "source_file": "backend/routes/admin.js",
-      "source_location": "L965",
-      "id": "routes_admin_userscores",
-      "community": 9,
-      "norm_label": "userscores"
-    },
-    {
-      "label": "results",
-      "file_type": "code",
-      "source_file": "backend/routes/admin.js",
-      "source_location": "L976",
-      "id": "routes_admin_results",
-      "community": 9,
-      "norm_label": "results"
-    },
-    {
-      "label": "allowed",
-      "file_type": "code",
-      "source_file": "backend/routes/admin.js",
-      "source_location": "L1004",
-      "id": "routes_admin_allowed",
-      "community": 9,
-      "norm_label": "allowed"
-    },
-    {
       "label": "ai.js",
       "file_type": "code",
       "source_file": "backend/routes/ai.js",
@@ -967,19 +31,10 @@
       "norm_label": "router"
     },
     {
-      "label": "{ protect }",
-      "file_type": "code",
-      "source_file": "backend/routes/ai.js",
-      "source_location": "L3",
-      "id": "routes_ai_protect",
-      "community": 22,
-      "norm_label": "{ protect }"
-    },
-    {
       "label": "providers",
       "file_type": "code",
       "source_file": "backend/routes/ai.js",
-      "source_location": "L9",
+      "source_location": "L15",
       "id": "routes_ai_providers",
       "community": 22,
       "norm_label": "providers"
@@ -988,1189 +43,46 @@
       "label": "statuses",
       "file_type": "code",
       "source_file": "backend/routes/ai.js",
-      "source_location": "L15",
+      "source_location": "L21",
       "id": "routes_ai_statuses",
       "community": 22,
       "norm_label": "statuses"
     },
     {
-      "label": "apply.js",
+      "label": "userMessages",
       "file_type": "code",
-      "source_file": "backend/routes/apply.js",
-      "source_location": "L1",
-      "id": "backend_routes_apply_js",
-      "community": 8,
-      "norm_label": "apply.js"
+      "source_file": "backend/routes/ai.js",
+      "source_location": "L43",
+      "id": "routes_ai_usermessages",
+      "community": 22,
+      "norm_label": "usermessages"
     },
     {
-      "label": "express",
+      "label": "fullMessages",
       "file_type": "code",
-      "source_file": "backend/routes/apply.js",
-      "source_location": "L1",
-      "id": "routes_apply_express",
-      "community": 8,
-      "norm_label": "express"
-    },
-    {
-      "label": "router",
-      "file_type": "code",
-      "source_file": "backend/routes/apply.js",
-      "source_location": "L2",
-      "id": "routes_apply_router",
-      "community": 8,
-      "norm_label": "router"
-    },
-    {
-      "label": "{ db }",
-      "file_type": "code",
-      "source_file": "backend/routes/apply.js",
-      "source_location": "L3",
-      "id": "routes_apply_db",
-      "community": 8,
-      "norm_label": "{ db }"
-    },
-    {
-      "label": "sendEmail",
-      "file_type": "code",
-      "source_file": "backend/routes/apply.js",
-      "source_location": "L4",
-      "id": "routes_apply_sendemail",
-      "community": 8,
-      "norm_label": "sendemail"
-    },
-    {
-      "label": "{ createEmailTemplate }",
-      "file_type": "code",
-      "source_file": "backend/routes/apply.js",
-      "source_location": "L5",
-      "id": "routes_apply_createemailtemplate",
-      "community": 8,
-      "norm_label": "{ createemailtemplate }"
-    },
-    {
-      "label": "application",
-      "file_type": "code",
-      "source_file": "backend/routes/apply.js",
-      "source_location": "L17",
-      "id": "routes_apply_application",
-      "community": 8,
-      "norm_label": "application"
-    },
-    {
-      "label": "embed",
-      "file_type": "code",
-      "source_file": "backend/routes/apply.js",
-      "source_location": "L34",
-      "id": "routes_apply_embed",
-      "community": 8,
-      "norm_label": "embed"
-    },
-    {
-      "label": "html",
-      "file_type": "code",
-      "source_file": "backend/routes/apply.js",
-      "source_location": "L63",
-      "id": "routes_apply_html",
-      "community": 8,
-      "norm_label": "html"
-    },
-    {
-      "label": "auth.js",
-      "file_type": "code",
-      "source_file": "backend/routes/auth.js",
-      "source_location": "L1",
-      "id": "backend_routes_auth_js",
-      "community": 5,
-      "norm_label": "auth.js"
-    },
-    {
-      "label": "express",
-      "file_type": "code",
-      "source_file": "backend/routes/auth.js",
-      "source_location": "L1",
-      "id": "routes_auth_express",
-      "community": 5,
-      "norm_label": "express"
-    },
-    {
-      "label": "router",
-      "file_type": "code",
-      "source_file": "backend/routes/auth.js",
-      "source_location": "L2",
-      "id": "routes_auth_router",
-      "community": 5,
-      "norm_label": "router"
-    },
-    {
-      "label": "crypto",
-      "file_type": "code",
-      "source_file": "backend/routes/auth.js",
-      "source_location": "L3",
-      "id": "routes_auth_crypto",
-      "community": 5,
-      "norm_label": "crypto"
-    },
-    {
-      "label": "bcrypt",
-      "file_type": "code",
-      "source_file": "backend/routes/auth.js",
-      "source_location": "L4",
-      "id": "routes_auth_bcrypt",
-      "community": 5,
-      "norm_label": "bcrypt"
-    },
-    {
-      "label": "{ auth, db, supabase }",
-      "file_type": "code",
-      "source_file": "backend/routes/auth.js",
-      "source_location": "L5",
-      "id": "routes_auth_auth_db_supabase",
-      "community": 5,
-      "norm_label": "{ auth, db, supabase }"
-    },
-    {
-      "label": "sendEmail",
-      "file_type": "code",
-      "source_file": "backend/routes/auth.js",
-      "source_location": "L6",
-      "id": "routes_auth_sendemail",
-      "community": 5,
-      "norm_label": "sendemail"
-    },
-    {
-      "label": "{ createEmailTemplate }",
-      "file_type": "code",
-      "source_file": "backend/routes/auth.js",
-      "source_location": "L7",
-      "id": "routes_auth_createemailtemplate",
-      "community": 5,
-      "norm_label": "{ createemailtemplate }"
-    },
-    {
-      "label": "{ protect }",
-      "file_type": "code",
-      "source_file": "backend/routes/auth.js",
-      "source_location": "L8",
-      "id": "routes_auth_protect",
-      "community": 5,
-      "norm_label": "{ protect }"
-    },
-    {
-      "label": "{ registerRules, loginRules, handleValidationErrors }",
-      "file_type": "code",
-      "source_file": "backend/routes/auth.js",
-      "source_location": "L9",
-      "id": "routes_auth_registerrules_loginrules_handlevalidationerrors",
-      "community": 5,
-      "norm_label": "{ registerrules, loginrules, handlevalidationerrors }"
-    },
-    {
-      "label": "signInWithSupabase()",
-      "file_type": "code",
-      "source_file": "backend/routes/auth.js",
-      "source_location": "L12",
-      "id": "routes_auth_signinwithsupabase",
-      "community": 5,
-      "norm_label": "signinwithsupabase()"
-    },
-    {
-      "label": "invitationsRef",
-      "file_type": "code",
-      "source_file": "backend/routes/auth.js",
-      "source_location": "L33",
-      "id": "routes_auth_invitationsref",
-      "community": 5,
-      "norm_label": "invitationsref"
-    },
-    {
-      "label": "inviteCode",
-      "file_type": "code",
-      "source_file": "backend/routes/auth.js",
-      "source_location": "L93",
-      "id": "routes_auth_invitecode",
-      "community": 5,
-      "norm_label": "invitecode"
-    },
-    {
-      "label": "companyData",
-      "file_type": "code",
-      "source_file": "backend/routes/auth.js",
-      "source_location": "L96",
-      "id": "routes_auth_companydata",
-      "community": 5,
-      "norm_label": "companydata"
-    },
-    {
-      "label": "isInvitedAdmin",
-      "file_type": "code",
-      "source_file": "backend/routes/auth.js",
-      "source_location": "L127",
-      "id": "routes_auth_isinvitedadmin",
-      "community": 5,
-      "norm_label": "isinvitedadmin"
-    },
-    {
-      "label": "userData",
-      "file_type": "code",
-      "source_file": "backend/routes/auth.js",
-      "source_location": "L128",
-      "id": "routes_auth_userdata",
-      "community": 5,
-      "norm_label": "userdata"
-    },
-    {
-      "label": "mockUser",
-      "file_type": "code",
-      "source_file": "backend/routes/auth.js",
-      "source_location": "L187",
-      "id": "routes_auth_mockuser",
-      "community": 5,
-      "norm_label": "mockuser"
-    },
-    {
-      "label": "user",
-      "file_type": "code",
-      "source_file": "backend/routes/auth.js",
-      "source_location": "L224",
-      "id": "routes_auth_user",
-      "community": 5,
-      "norm_label": "user"
-    },
-    {
-      "label": "existingData",
-      "file_type": "code",
-      "source_file": "backend/routes/auth.js",
-      "source_location": "L317",
-      "id": "routes_auth_existingdata",
-      "community": 5,
-      "norm_label": "existingdata"
-    },
-    {
-      "label": "company",
-      "file_type": "code",
-      "source_file": "backend/routes/auth.js",
-      "source_location": "L404",
-      "id": "routes_auth_company",
-      "community": 5,
-      "norm_label": "company"
-    },
-    {
-      "label": "emailLower",
-      "file_type": "code",
-      "source_file": "backend/routes/auth.js",
-      "source_location": "L488",
-      "id": "routes_auth_emaillower",
-      "community": 5,
-      "norm_label": "emaillower"
-    },
-    {
-      "label": "token",
-      "file_type": "code",
-      "source_file": "backend/routes/auth.js",
-      "source_location": "L491",
-      "id": "routes_auth_token",
-      "community": 5,
-      "norm_label": "token"
-    },
-    {
-      "label": "updatedProfile",
-      "file_type": "code",
-      "source_file": "backend/routes/auth.js",
-      "source_location": "L551",
-      "id": "routes_auth_updatedprofile",
-      "community": 5,
-      "norm_label": "updatedprofile"
-    },
-    {
-      "label": "html",
-      "file_type": "code",
-      "source_file": "backend/routes/auth.js",
-      "source_location": "L572",
-      "id": "routes_auth_html",
-      "community": 5,
-      "norm_label": "html"
-    },
-    {
-      "label": "hasCompany",
-      "file_type": "code",
-      "source_file": "backend/routes/auth.js",
-      "source_location": "L698",
-      "id": "routes_auth_hascompany",
-      "community": 5,
-      "norm_label": "hascompany"
-    },
-    {
-      "label": "updates",
-      "file_type": "code",
-      "source_file": "backend/routes/auth.js",
-      "source_location": "L708",
-      "id": "routes_auth_updates",
-      "community": 5,
-      "norm_label": "updates"
-    },
-    {
-      "label": "jwt",
-      "file_type": "code",
-      "source_file": "backend/routes/auth.js",
-      "source_location": "L768",
-      "id": "routes_auth_jwt",
-      "community": 5,
-      "norm_label": "jwt"
-    },
-    {
-      "label": "state",
-      "file_type": "code",
-      "source_file": "backend/routes/auth.js",
-      "source_location": "L777",
-      "id": "routes_auth_state",
-      "community": 5,
-      "norm_label": "state"
-    },
-    {
-      "label": "payload",
-      "file_type": "code",
-      "source_file": "backend/routes/auth.js",
-      "source_location": "L809",
-      "id": "routes_auth_payload",
-      "community": 5,
-      "norm_label": "payload"
-    },
-    {
-      "label": "autoPassword",
-      "file_type": "code",
-      "source_file": "backend/routes/auth.js",
-      "source_location": "L822",
-      "id": "routes_auth_autopassword",
-      "community": 5,
-      "norm_label": "autopassword"
-    },
-    {
-      "label": "newUser",
-      "file_type": "code",
-      "source_file": "backend/routes/auth.js",
-      "source_location": "L838",
-      "id": "routes_auth_newuser",
-      "community": 5,
-      "norm_label": "newuser"
-    },
-    {
-      "label": "connect.js",
-      "file_type": "code",
-      "source_file": "backend/routes/connect.js",
-      "source_location": "L1",
-      "id": "backend_routes_connect_js",
-      "community": 44,
-      "norm_label": "connect.js"
-    },
-    {
-      "label": "express",
-      "file_type": "code",
-      "source_file": "backend/routes/connect.js",
-      "source_location": "L1",
-      "id": "routes_connect_express",
-      "community": 44,
-      "norm_label": "express"
-    },
-    {
-      "label": "router",
-      "file_type": "code",
-      "source_file": "backend/routes/connect.js",
-      "source_location": "L2",
-      "id": "routes_connect_router",
-      "community": 44,
-      "norm_label": "router"
-    },
-    {
-      "label": "crypto",
-      "file_type": "code",
-      "source_file": "backend/routes/connect.js",
-      "source_location": "L3",
-      "id": "routes_connect_crypto",
-      "community": 44,
-      "norm_label": "crypto"
-    },
-    {
-      "label": "{ protect, authorize }",
-      "file_type": "code",
-      "source_file": "backend/routes/connect.js",
-      "source_location": "L4",
-      "id": "routes_connect_protect_authorize",
-      "community": 44,
-      "norm_label": "{ protect, authorize }"
-    },
-    {
-      "label": "{ db }",
-      "file_type": "code",
-      "source_file": "backend/routes/connect.js",
-      "source_location": "L5",
-      "id": "routes_connect_db",
-      "community": 44,
-      "norm_label": "{ db }"
-    },
-    {
-      "label": "providers",
-      "file_type": "code",
-      "source_file": "backend/routes/connect.js",
-      "source_location": "L6",
-      "id": "routes_connect_providers",
-      "community": 44,
-      "norm_label": "providers"
-    },
-    {
-      "label": "data",
-      "file_type": "code",
-      "source_file": "backend/routes/connect.js",
-      "source_location": "L20",
-      "id": "routes_connect_data",
-      "community": 44,
-      "norm_label": "data"
-    },
-    {
-      "label": "stateNonce",
-      "file_type": "code",
-      "source_file": "backend/routes/connect.js",
-      "source_location": "L40",
-      "id": "routes_connect_statenonce",
-      "community": 44,
-      "norm_label": "statenonce"
-    },
-    {
-      "label": "authUrl",
-      "file_type": "code",
-      "source_file": "backend/routes/connect.js",
-      "source_location": "L49",
-      "id": "routes_connect_authurl",
-      "community": 44,
-      "norm_label": "authurl"
-    },
-    {
-      "label": "stateData",
-      "file_type": "code",
-      "source_file": "backend/routes/connect.js",
-      "source_location": "L71",
-      "id": "routes_connect_statedata",
-      "community": 44,
-      "norm_label": "statedata"
-    },
-    {
-      "label": "row",
-      "file_type": "code",
-      "source_file": "backend/routes/connect.js",
-      "source_location": "L152",
-      "id": "routes_connect_row",
-      "community": 44,
-      "norm_label": "row"
-    },
-    {
-      "label": "accessToken",
-      "file_type": "code",
-      "source_file": "backend/routes/connect.js",
-      "source_location": "L153",
-      "id": "routes_connect_accesstoken",
-      "community": 44,
-      "norm_label": "accesstoken"
-    },
-    {
-      "label": "server.js",
-      "file_type": "code",
-      "source_file": "backend/server.js",
-      "source_location": "L1",
-      "id": "backend_server_js",
-      "community": 13,
-      "norm_label": "server.js"
-    },
-    {
-      "label": "express",
-      "file_type": "code",
-      "source_file": "backend/server.js",
-      "source_location": "L1",
-      "id": "backend_server_express",
-      "community": 13,
-      "norm_label": "express"
-    },
-    {
-      "label": "cors",
-      "file_type": "code",
-      "source_file": "backend/server.js",
-      "source_location": "L2",
-      "id": "backend_server_cors",
-      "community": 13,
-      "norm_label": "cors"
-    },
-    {
-      "label": "dotenv",
-      "file_type": "code",
-      "source_file": "backend/server.js",
-      "source_location": "L3",
-      "id": "backend_server_dotenv",
-      "community": 13,
-      "norm_label": "dotenv"
-    },
-    {
-      "label": "path",
-      "file_type": "code",
-      "source_file": "backend/server.js",
-      "source_location": "L4",
-      "id": "backend_server_path",
-      "community": 13,
-      "norm_label": "path"
-    },
-    {
-      "label": "REQUIRED_ENV",
-      "file_type": "code",
-      "source_file": "backend/server.js",
-      "source_location": "L9",
-      "id": "backend_server_required_env",
-      "community": 13,
-      "norm_label": "required_env"
-    },
-    {
-      "label": "missing",
-      "file_type": "code",
-      "source_file": "backend/server.js",
-      "source_location": "L10",
-      "id": "backend_server_missing",
-      "community": 13,
-      "norm_label": "missing"
-    },
-    {
-      "label": "{ contactRules, handleValidationErrors }",
-      "file_type": "code",
-      "source_file": "backend/server.js",
-      "source_location": "L16",
-      "id": "backend_server_contactrules_handlevalidationerrors",
-      "community": 13,
-      "norm_label": "{ contactrules, handlevalidationerrors }"
-    },
-    {
-      "label": "app",
-      "file_type": "code",
-      "source_file": "backend/server.js",
-      "source_location": "L18",
-      "id": "backend_server_app",
-      "community": 13,
-      "norm_label": "app"
-    },
-    {
-      "label": "helmet",
-      "file_type": "code",
-      "source_file": "backend/server.js",
-      "source_location": "L21",
-      "id": "backend_server_helmet",
-      "community": 13,
-      "norm_label": "helmet"
-    },
-    {
-      "label": "allowedOrigins",
-      "file_type": "code",
-      "source_file": "backend/server.js",
-      "source_location": "L28",
-      "id": "backend_server_allowedorigins",
-      "community": 13,
-      "norm_label": "allowedorigins"
-    },
-    {
-      "label": "rateLimit",
-      "file_type": "code",
-      "source_file": "backend/server.js",
+      "source_file": "backend/routes/ai.js",
       "source_location": "L48",
-      "id": "backend_server_ratelimit",
-      "community": 13,
-      "norm_label": "ratelimit"
+      "id": "routes_ai_fullmessages",
+      "community": 22,
+      "norm_label": "fullmessages"
     },
     {
-      "label": "limiter",
+      "label": "Anthropic",
       "file_type": "code",
-      "source_file": "backend/server.js",
-      "source_location": "L49",
-      "id": "backend_server_limiter",
-      "community": 13,
-      "norm_label": "limiter"
+      "source_file": "backend/routes/ai.js",
+      "source_location": "L89",
+      "id": "routes_ai_anthropic",
+      "community": 22,
+      "norm_label": "anthropic"
     },
     {
-      "label": "{ db }",
+      "label": "geminiBody",
       "file_type": "code",
-      "source_file": "backend/server.js",
-      "source_location": "L96",
-      "id": "backend_server_db",
-      "community": 13,
-      "norm_label": "{ db }"
-    },
-    {
-      "label": "{ requirePageAuth }",
-      "file_type": "code",
-      "source_file": "backend/server.js",
-      "source_location": "L97",
-      "id": "backend_server_requirepageauth",
-      "community": 13,
-      "norm_label": "{ requirepageauth }"
-    },
-    {
-      "label": "frontendDir",
-      "file_type": "code",
-      "source_file": "backend/server.js",
-      "source_location": "L99",
-      "id": "backend_server_frontenddir",
-      "community": 13,
-      "norm_label": "frontenddir"
-    },
-    {
-      "label": "memberPages",
-      "file_type": "code",
-      "source_file": "backend/server.js",
+      "source_file": "backend/routes/ai.js",
       "source_location": "L100",
-      "id": "backend_server_memberpages",
-      "community": 13,
-      "norm_label": "memberpages"
-    },
-    {
-      "label": "teamadminPages",
-      "file_type": "code",
-      "source_file": "backend/server.js",
-      "source_location": "L101",
-      "id": "backend_server_teamadminpages",
-      "community": 13,
-      "norm_label": "teamadminpages"
-    },
-    {
-      "label": "onboardingPages",
-      "file_type": "code",
-      "source_file": "backend/server.js",
-      "source_location": "L102",
-      "id": "backend_server_onboardingpages",
-      "community": 13,
-      "norm_label": "onboardingpages"
-    },
-    {
-      "label": "superadminPages",
-      "file_type": "code",
-      "source_file": "backend/server.js",
-      "source_location": "L103",
-      "id": "backend_server_superadminpages",
-      "community": 13,
-      "norm_label": "superadminpages"
-    },
-    {
-      "label": "publicPages",
-      "file_type": "code",
-      "source_file": "backend/server.js",
-      "source_location": "L163",
-      "id": "backend_server_publicpages",
-      "community": 13,
-      "norm_label": "publicpages"
-    },
-    {
-      "label": "ai-agents.js",
-      "file_type": "code",
-      "source_file": "backend/utils/ai-agents.js",
-      "source_location": "L1",
-      "id": "backend_utils_ai_agents_js",
-      "community": 7,
-      "norm_label": "ai-agents.js"
-    },
-    {
-      "label": "{ db }",
-      "file_type": "code",
-      "source_file": "backend/utils/ai-agents.js",
-      "source_location": "L1",
-      "id": "utils_ai_agents_db",
-      "community": 7,
-      "norm_label": "{ db }"
-    },
-    {
-      "label": "fetchWithTimeout()",
-      "file_type": "code",
-      "source_file": "backend/utils/ai-agents.js",
-      "source_location": "L5",
-      "id": "utils_ai_agents_fetchwithtimeout",
-      "community": 7,
-      "norm_label": "fetchwithtimeout()"
-    },
-    {
-      "label": "callAnthropic()",
-      "file_type": "code",
-      "source_file": "backend/utils/ai-agents.js",
-      "source_location": "L17",
-      "id": "utils_ai_agents_callanthropic",
-      "community": 7,
-      "norm_label": "callanthropic()"
-    },
-    {
-      "label": "callGemini()",
-      "file_type": "code",
-      "source_file": "backend/utils/ai-agents.js",
-      "source_location": "L46",
-      "id": "utils_ai_agents_callgemini",
-      "community": 7,
-      "norm_label": "callgemini()"
-    },
-    {
-      "label": "callOpenAI()",
-      "file_type": "code",
-      "source_file": "backend/utils/ai-agents.js",
-      "source_location": "L68",
-      "id": "utils_ai_agents_callopenai",
-      "community": 7,
-      "norm_label": "callopenai()"
-    },
-    {
-      "label": "callNvidia()",
-      "file_type": "code",
-      "source_file": "backend/utils/ai-agents.js",
-      "source_location": "L93",
-      "id": "utils_ai_agents_callnvidia",
-      "community": 7,
-      "norm_label": "callnvidia()"
-    },
-    {
-      "label": "getApiKeyForModel()",
-      "file_type": "code",
-      "source_file": "backend/utils/ai-agents.js",
-      "source_location": "L119",
-      "id": "utils_ai_agents_getapikeyformodel",
-      "community": 7,
-      "norm_label": "getapikeyformodel()"
-    },
-    {
-      "label": "fallbackAiCall()",
-      "file_type": "code",
-      "source_file": "backend/utils/ai-agents.js",
-      "source_location": "L127",
-      "id": "utils_ai_agents_fallbackaicall",
-      "community": 7,
-      "norm_label": "fallbackaicall()"
-    },
-    {
-      "label": "recordMetric()",
-      "file_type": "code",
-      "source_file": "backend/utils/ai-agents.js",
-      "source_location": "L232",
-      "id": "utils_ai_agents_recordmetric",
-      "community": 7,
-      "norm_label": "recordmetric()"
-    },
-    {
-      "label": "researchCompany()",
-      "file_type": "code",
-      "source_file": "backend/utils/ai-agents.js",
-      "source_location": "L253",
-      "id": "utils_ai_agents_researchcompany",
-      "community": 7,
-      "norm_label": "researchcompany()"
-    },
-    {
-      "label": "generateChallenge()",
-      "file_type": "code",
-      "source_file": "backend/utils/ai-agents.js",
-      "source_location": "L287",
-      "id": "utils_ai_agents_generatechallenge",
-      "community": 7,
-      "norm_label": "generatechallenge()"
-    },
-    {
-      "label": "scoreResponse()",
-      "file_type": "code",
-      "source_file": "backend/utils/ai-agents.js",
-      "source_location": "L330",
-      "id": "utils_ai_agents_scoreresponse",
-      "community": 7,
-      "norm_label": "scoreresponse()"
-    },
-    {
-      "label": "generateWeeklyReport()",
-      "file_type": "code",
-      "source_file": "backend/utils/ai-agents.js",
-      "source_location": "L390",
-      "id": "utils_ai_agents_generateweeklyreport",
-      "community": 7,
-      "norm_label": "generateweeklyreport()"
-    },
-    {
-      "label": "generateCoachingNudge()",
-      "file_type": "code",
-      "source_file": "backend/utils/ai-agents.js",
-      "source_location": "L416",
-      "id": "utils_ai_agents_generatecoachingnudge",
-      "community": 7,
-      "norm_label": "generatecoachingnudge()"
-    },
-    {
-      "label": "ai-providers.js",
-      "file_type": "code",
-      "source_file": "backend/utils/ai-providers.js",
-      "source_location": "L1",
-      "id": "backend_utils_ai_providers_js",
-      "community": 0,
-      "norm_label": "ai-providers.js"
-    },
-    {
-      "label": "crypto",
-      "file_type": "code",
-      "source_file": "backend/utils/ai-providers.js",
-      "source_location": "L5",
-      "id": "utils_ai_providers_crypto",
-      "community": 0,
-      "norm_label": "crypto"
-    },
-    {
-      "label": "{ db }",
-      "file_type": "code",
-      "source_file": "backend/utils/ai-providers.js",
-      "source_location": "L6",
-      "id": "utils_ai_providers_db",
-      "community": 0,
-      "norm_label": "{ db }"
-    },
-    {
-      "label": "encrypt()",
-      "file_type": "code",
-      "source_file": "backend/utils/ai-providers.js",
-      "source_location": "L11",
-      "id": "utils_ai_providers_encrypt",
-      "community": 0,
-      "norm_label": "encrypt()"
-    },
-    {
-      "label": "decrypt()",
-      "file_type": "code",
-      "source_file": "backend/utils/ai-providers.js",
-      "source_location": "L22",
-      "id": "utils_ai_providers_decrypt",
-      "community": 0,
-      "norm_label": "decrypt()"
-    },
-    {
-      "label": "OAUTH_CONFIGS",
-      "file_type": "code",
-      "source_file": "backend/utils/ai-providers.js",
-      "source_location": "L34",
-      "id": "utils_ai_providers_oauth_configs",
-      "community": 0,
-      "norm_label": "oauth_configs"
-    },
-    {
-      "label": "API_KEY_PROVIDERS",
-      "file_type": "code",
-      "source_file": "backend/utils/ai-providers.js",
-      "source_location": "L60",
-      "id": "utils_ai_providers_api_key_providers",
-      "community": 0,
-      "norm_label": "api_key_providers"
-    },
-    {
-      "label": "httpGet()",
-      "file_type": "code",
-      "source_file": "backend/utils/ai-providers.js",
-      "source_location": "L62",
-      "id": "utils_ai_providers_httpget",
-      "community": 0,
-      "norm_label": "httpget()"
-    },
-    {
-      "label": "httpPost()",
-      "file_type": "code",
-      "source_file": "backend/utils/ai-providers.js",
-      "source_location": "L72",
-      "id": "utils_ai_providers_httppost",
-      "community": 0,
-      "norm_label": "httppost()"
-    },
-    {
-      "label": "getOAuthUrl()",
-      "file_type": "code",
-      "source_file": "backend/utils/ai-providers.js",
-      "source_location": "L86",
-      "id": "utils_ai_providers_getoauthurl",
-      "community": 0,
-      "norm_label": "getoauthurl()"
-    },
-    {
-      "label": "exchangeCode()",
-      "file_type": "code",
-      "source_file": "backend/utils/ai-providers.js",
-      "source_location": "L101",
-      "id": "utils_ai_providers_exchangecode",
-      "community": 0,
-      "norm_label": "exchangecode()"
-    },
-    {
-      "label": "validateApiKey()",
-      "file_type": "code",
-      "source_file": "backend/utils/ai-providers.js",
-      "source_location": "L113",
-      "id": "utils_ai_providers_validateapikey",
-      "community": 0,
-      "norm_label": "validateapikey()"
-    },
-    {
-      "label": "getOrgId()",
-      "file_type": "code",
-      "source_file": "backend/utils/ai-providers.js",
-      "source_location": "L152",
-      "id": "utils_ai_providers_getorgid",
-      "community": 0,
-      "norm_label": "getorgid()"
-    },
-    {
-      "label": "markConnectionError()",
-      "file_type": "code",
-      "source_file": "backend/utils/ai-providers.js",
-      "source_location": "L172",
-      "id": "utils_ai_providers_markconnectionerror",
-      "community": 0,
-      "norm_label": "markconnectionerror()"
-    },
-    {
-      "label": "syncOpenAI()",
-      "file_type": "code",
-      "source_file": "backend/utils/ai-providers.js",
-      "source_location": "L189",
-      "id": "utils_ai_providers_syncopenai",
-      "community": 0,
-      "norm_label": "syncopenai()"
-    },
-    {
-      "label": "syncAnthropic()",
-      "file_type": "code",
-      "source_file": "backend/utils/ai-providers.js",
-      "source_location": "L213",
-      "id": "utils_ai_providers_syncanthropic",
-      "community": 0,
-      "norm_label": "syncanthropic()"
-    },
-    {
-      "label": "syncMicrosoft()",
-      "file_type": "code",
-      "source_file": "backend/utils/ai-providers.js",
-      "source_location": "L221",
-      "id": "utils_ai_providers_syncmicrosoft",
-      "community": 0,
-      "norm_label": "syncmicrosoft()"
-    },
-    {
-      "label": "syncGoogle()",
-      "file_type": "code",
-      "source_file": "backend/utils/ai-providers.js",
-      "source_location": "L258",
-      "id": "utils_ai_providers_syncgoogle",
-      "community": 0,
-      "norm_label": "syncgoogle()"
-    },
-    {
-      "label": "syncGitHub()",
-      "file_type": "code",
-      "source_file": "backend/utils/ai-providers.js",
-      "source_location": "L281",
-      "id": "utils_ai_providers_syncgithub",
-      "community": 0,
-      "norm_label": "syncgithub()"
-    },
-    {
-      "label": "updateDailyAggregates()",
-      "file_type": "code",
-      "source_file": "backend/utils/ai-providers.js",
-      "source_location": "L320",
-      "id": "utils_ai_providers_updatedailyaggregates",
-      "community": 0,
-      "norm_label": "updatedailyaggregates()"
-    },
-    {
-      "label": "syncUsage()",
-      "file_type": "code",
-      "source_file": "backend/utils/ai-providers.js",
-      "source_location": "L369",
-      "id": "utils_ai_providers_syncusage",
-      "community": 0,
-      "norm_label": "syncusage()"
-    },
-    {
-      "label": "syncAllConnections()",
-      "file_type": "code",
-      "source_file": "backend/utils/ai-providers.js",
-      "source_location": "L408",
-      "id": "utils_ai_providers_syncallconnections",
-      "community": 0,
-      "norm_label": "syncallconnections()"
-    },
-    {
-      "label": "dashboard.js",
-      "file_type": "code",
-      "source_file": "frontend/js/dashboard.js",
-      "source_location": "L1",
-      "id": "frontend_js_dashboard_js",
-      "community": 11,
-      "norm_label": "dashboard.js"
-    },
-    {
-      "label": "user",
-      "file_type": "code",
-      "source_file": "frontend/js/dashboard.js",
-      "source_location": "L1",
-      "id": "js_dashboard_user",
-      "community": 11,
-      "norm_label": "user"
-    },
-    {
-      "label": "role",
-      "file_type": "code",
-      "source_file": "frontend/js/dashboard.js",
-      "source_location": "L18",
-      "id": "js_dashboard_role",
-      "community": 11,
-      "norm_label": "role"
-    },
-    {
-      "label": "loadAIIntelligence()",
-      "file_type": "code",
-      "source_file": "frontend/js/dashboard.js",
-      "source_location": "L29",
-      "id": "js_dashboard_loadaiintelligence",
-      "community": 11,
-      "norm_label": "loadaiintelligence()"
-    },
-    {
-      "label": "renderProviderChart()",
-      "file_type": "code",
-      "source_file": "frontend/js/dashboard.js",
-      "source_location": "L63",
-      "id": "js_dashboard_renderproviderchart",
-      "community": 11,
-      "norm_label": "renderproviderchart()"
-    },
-    {
-      "label": "renderAITrendChart()",
-      "file_type": "code",
-      "source_file": "frontend/js/dashboard.js",
-      "source_location": "L81",
-      "id": "js_dashboard_renderaitrendchart",
-      "community": 11,
-      "norm_label": "renderaitrendchart()"
-    },
-    {
-      "label": "initAdminDashboard()",
-      "file_type": "code",
-      "source_file": "frontend/js/dashboard.js",
-      "source_location": "L108",
-      "id": "js_dashboard_initadmindashboard",
-      "community": 11,
-      "norm_label": "initadmindashboard()"
-    },
-    {
-      "label": "distributeOpsPanels()",
-      "file_type": "code",
-      "source_file": "frontend/js/dashboard.js",
-      "source_location": "L124",
-      "id": "js_dashboard_distributeopspanels",
-      "community": 11,
-      "norm_label": "distributeopspanels()"
-    },
-    {
-      "label": "renderAdminStats()",
-      "file_type": "code",
-      "source_file": "frontend/js/dashboard.js",
-      "source_location": "L173",
-      "id": "js_dashboard_renderadminstats",
-      "community": 11,
-      "norm_label": "renderadminstats()"
-    },
-    {
-      "label": "renderCharts()",
-      "file_type": "code",
-      "source_file": "frontend/js/dashboard.js",
-      "source_location": "L195",
-      "id": "js_dashboard_rendercharts",
-      "community": 11,
-      "norm_label": "rendercharts()"
-    },
-    {
-      "label": "renderHeatmap()",
-      "file_type": "code",
-      "source_file": "frontend/js/dashboard.js",
-      "source_location": "L269",
-      "id": "js_dashboard_renderheatmap",
-      "community": 11,
-      "norm_label": "renderheatmap()"
-    },
-    {
-      "label": "initMemberDashboard()",
-      "file_type": "code",
-      "source_file": "frontend/js/dashboard.js",
-      "source_location": "L295",
-      "id": "js_dashboard_initmemberdashboard",
-      "community": 11,
-      "norm_label": "initmemberdashboard()"
-    },
-    {
-      "label": "renderAdminLeaderboard()",
-      "file_type": "code",
-      "source_file": "frontend/js/dashboard.js",
-      "source_location": "L353",
-      "id": "js_dashboard_renderadminleaderboard",
-      "community": 11,
-      "norm_label": "renderadminleaderboard()"
-    },
-    {
-      "label": "renderMemberLeaderboard()",
-      "file_type": "code",
-      "source_file": "frontend/js/dashboard.js",
-      "source_location": "L374",
-      "id": "js_dashboard_rendermemberleaderboard",
-      "community": 11,
-      "norm_label": "rendermemberleaderboard()"
-    },
-    {
-      "label": "renderHistory()",
-      "file_type": "code",
-      "source_file": "frontend/js/dashboard.js",
-      "source_location": "L393",
-      "id": "js_dashboard_renderhistory",
-      "community": 11,
-      "norm_label": "renderhistory()"
-    },
-    {
-      "label": "checkFlaggedSubmissions()",
-      "file_type": "code",
-      "source_file": "frontend/js/dashboard.js",
-      "source_location": "L433",
-      "id": "js_dashboard_checkflaggedsubmissions",
-      "community": 11,
-      "norm_label": "checkflaggedsubmissions()"
-    },
-    {
-      "label": "triggerAICycle()",
-      "file_type": "code",
-      "source_file": "frontend/js/dashboard.js",
-      "source_location": "L453",
-      "id": "js_dashboard_triggeraicycle",
-      "community": 11,
-      "norm_label": "triggeraicycle()"
-    },
-    {
-      "label": "copyInviteCode()",
-      "file_type": "code",
-      "source_file": "frontend/js/dashboard.js",
-      "source_location": "L471",
-      "id": "js_dashboard_copyinvitecode",
-      "community": 11,
-      "norm_label": "copyinvitecode()"
-    },
-    {
-      "label": "generatePDFReport()",
-      "file_type": "code",
-      "source_file": "frontend/js/dashboard.js",
-      "source_location": "L478",
-      "id": "js_dashboard_generatepdfreport",
-      "community": 11,
-      "norm_label": "generatepdfreport()"
-    },
-    {
-      "label": "loadDashboardInvoices()",
-      "file_type": "code",
-      "source_file": "frontend/js/dashboard.js",
-      "source_location": "L748",
-      "id": "js_dashboard_loaddashboardinvoices",
-      "community": 11,
-      "norm_label": "loaddashboardinvoices()"
+      "id": "routes_ai_geminibody",
+      "community": 22,
+      "norm_label": "geminibody"
     },
     {
       "label": "package.json",
@@ -2245,10 +157,19 @@
       "norm_label": "dependencies"
     },
     {
-      "label": "@supabase/supabase-js",
+      "label": "@anthropic-ai/sdk",
       "file_type": "code",
       "source_file": "package.json",
       "source_location": "L10",
+      "id": "argen_new_look_package_dependencies_anthropic_ai_sdk",
+      "community": 10,
+      "norm_label": "@anthropic-ai/sdk"
+    },
+    {
+      "label": "@supabase/supabase-js",
+      "file_type": "code",
+      "source_file": "package.json",
+      "source_location": "L11",
       "id": "argen_new_look_package_dependencies_supabase_supabase_js",
       "community": 10,
       "norm_label": "@supabase/supabase-js"
@@ -2257,7 +178,7 @@
       "label": "@whop/sdk",
       "file_type": "code",
       "source_file": "package.json",
-      "source_location": "L11",
+      "source_location": "L12",
       "id": "argen_new_look_package_dependencies_whop_sdk",
       "community": 10,
       "norm_label": "@whop/sdk"
@@ -2266,7 +187,7 @@
       "label": "bcryptjs",
       "file_type": "code",
       "source_file": "package.json",
-      "source_location": "L12",
+      "source_location": "L13",
       "id": "argen_new_look_package_dependencies_bcryptjs",
       "community": 10,
       "norm_label": "bcryptjs"
@@ -2275,7 +196,7 @@
       "label": "cors",
       "file_type": "code",
       "source_file": "package.json",
-      "source_location": "L13",
+      "source_location": "L14",
       "id": "argen_new_look_package_dependencies_cors",
       "community": 10,
       "norm_label": "cors"
@@ -2284,7 +205,7 @@
       "label": "dotenv",
       "file_type": "code",
       "source_file": "package.json",
-      "source_location": "L14",
+      "source_location": "L15",
       "id": "argen_new_look_package_dependencies_dotenv",
       "community": 10,
       "norm_label": "dotenv"
@@ -2293,7 +214,7 @@
       "label": "express",
       "file_type": "code",
       "source_file": "package.json",
-      "source_location": "L15",
+      "source_location": "L16",
       "id": "argen_new_look_package_dependencies_express",
       "community": 10,
       "norm_label": "express"
@@ -2302,7 +223,7 @@
       "label": "express-rate-limit",
       "file_type": "code",
       "source_file": "package.json",
-      "source_location": "L16",
+      "source_location": "L17",
       "id": "argen_new_look_package_dependencies_express_rate_limit",
       "community": 10,
       "norm_label": "express-rate-limit"
@@ -2311,7 +232,7 @@
       "label": "express-validator",
       "file_type": "code",
       "source_file": "package.json",
-      "source_location": "L17",
+      "source_location": "L18",
       "id": "argen_new_look_package_dependencies_express_validator",
       "community": 10,
       "norm_label": "express-validator"
@@ -2320,7 +241,7 @@
       "label": "helmet",
       "file_type": "code",
       "source_file": "package.json",
-      "source_location": "L18",
+      "source_location": "L19",
       "id": "argen_new_look_package_dependencies_helmet",
       "community": 10,
       "norm_label": "helmet"
@@ -2329,7 +250,7 @@
       "label": "jsonwebtoken",
       "file_type": "code",
       "source_file": "package.json",
-      "source_location": "L19",
+      "source_location": "L20",
       "id": "argen_new_look_package_dependencies_jsonwebtoken",
       "community": 10,
       "norm_label": "jsonwebtoken"
@@ -2338,64 +259,2179 @@
       "label": "nodemailer",
       "file_type": "code",
       "source_file": "package.json",
-      "source_location": "L20",
+      "source_location": "L21",
       "id": "argen_new_look_package_dependencies_nodemailer",
       "community": 10,
       "norm_label": "nodemailer"
+    },
+    {
+      "label": "AGENTS.md",
+      "file_type": "document",
+      "source_file": "AGENTS.md",
+      "source_location": "L1",
+      "community": 12,
+      "norm_label": "agents.md",
+      "id": "agents_md"
+    },
+    {
+      "label": "ArGen Platform \u2014 Project Context for AI Agents",
+      "file_type": "document",
+      "source_file": "AGENTS.md",
+      "source_location": "L1",
+      "community": 12,
+      "norm_label": "argen platform \u2014 project context for ai agents",
+      "id": "argen_new_look_agents_argen_platform_project_context_for_ai_agents"
+    },
+    {
+      "label": "\ud83c\udfaf What Is ArGen?",
+      "file_type": "document",
+      "source_file": "AGENTS.md",
+      "source_location": "L7",
+      "community": 12,
+      "norm_label": "\ud83c\udfaf what is argen?",
+      "id": "argen_new_look_agents_what_is_argen"
+    },
+    {
+      "label": "\ud83c\udfd7\ufe0f Architecture Overview",
+      "file_type": "document",
+      "source_file": "AGENTS.md",
+      "source_location": "L17",
+      "community": 12,
+      "norm_label": "\ud83c\udfd7\ufe0f architecture overview",
+      "id": "argen_new_look_agents_architecture_overview"
+    },
+    {
+      "label": "code:block1 (ArGen - New Look/)",
+      "file_type": "document",
+      "source_file": "AGENTS.md",
+      "source_location": "L19",
+      "community": 12,
+      "norm_label": "code:block1 (argen - new look/)",
+      "id": "argen_new_look_agents_codeblock_1"
+    },
+    {
+      "label": "\ud83e\udde0 User Roles",
+      "file_type": "document",
+      "source_file": "AGENTS.md",
+      "source_location": "L54",
+      "community": 12,
+      "norm_label": "\ud83e\udde0 user roles",
+      "id": "argen_new_look_agents_user_roles"
+    },
+    {
+      "label": "\ud83d\udd0c API Base URL Resolution",
+      "file_type": "document",
+      "source_file": "AGENTS.md",
+      "source_location": "L68",
+      "community": 12,
+      "norm_label": "\ud83d\udd0c api base url resolution",
+      "id": "argen_new_look_agents_api_base_url_resolution"
+    },
+    {
+      "label": "\ud83d\uddc4\ufe0f Database",
+      "file_type": "document",
+      "source_file": "AGENTS.md",
+      "source_location": "L76",
+      "community": 12,
+      "norm_label": "\ud83d\uddc4\ufe0f database",
+      "id": "argen_new_look_agents_database"
+    },
+    {
+      "label": "\ud83e\udd16 5 AI Agents (backend/utils/ai-agents.js)",
+      "file_type": "document",
+      "source_file": "AGENTS.md",
+      "source_location": "L85",
+      "community": 12,
+      "norm_label": "\ud83e\udd16 5 ai agents (backend/utils/ai-agents.js)",
+      "id": "argen_new_look_agents_5_ai_agents_backend_utils_ai_agents_js"
+    },
+    {
+      "label": "\ud83c\udfa8 Design System",
+      "file_type": "document",
+      "source_file": "AGENTS.md",
+      "source_location": "L97",
+      "community": 12,
+      "norm_label": "\ud83c\udfa8 design system",
+      "id": "argen_new_look_agents_design_system"
+    },
+    {
+      "label": "\ud83d\ude80 Deployment",
+      "file_type": "document",
+      "source_file": "AGENTS.md",
+      "source_location": "L107",
+      "community": 12,
+      "norm_label": "\ud83d\ude80 deployment",
+      "id": "argen_new_look_agents_deployment"
+    },
+    {
+      "label": "\u2699\ufe0f Environment Variables (.env)",
+      "file_type": "document",
+      "source_file": "AGENTS.md",
+      "source_location": "L117",
+      "community": 12,
+      "norm_label": "\u2699\ufe0f environment variables (.env)",
+      "id": "argen_new_look_agents_environment_variables_env"
+    },
+    {
+      "label": "\ud83d\udc1b Known Issues & History",
+      "file_type": "document",
+      "source_file": "AGENTS.md",
+      "source_location": "L152",
+      "community": 12,
+      "norm_label": "\ud83d\udc1b known issues & history",
+      "id": "argen_new_look_agents_known_issues_history"
+    },
+    {
+      "label": "Resolved",
+      "file_type": "document",
+      "source_file": "AGENTS.md",
+      "source_location": "L154",
+      "community": 12,
+      "norm_label": "resolved",
+      "id": "argen_new_look_agents_resolved"
+    },
+    {
+      "label": "Pending / In Progress",
+      "file_type": "document",
+      "source_file": "AGENTS.md",
+      "source_location": "L169",
+      "community": 12,
+      "norm_label": "pending / in progress",
+      "id": "argen_new_look_agents_pending_in_progress"
+    },
+    {
+      "label": "\ud83d\udccb Page Inventory",
+      "file_type": "document",
+      "source_file": "AGENTS.md",
+      "source_location": "L174",
+      "community": 12,
+      "norm_label": "\ud83d\udccb page inventory",
+      "id": "argen_new_look_agents_page_inventory"
+    },
+    {
+      "label": "\ud83d\udd04 graphify Knowledge Graph",
+      "file_type": "document",
+      "source_file": "AGENTS.md",
+      "source_location": "L213",
+      "community": 12,
+      "norm_label": "\ud83d\udd04 graphify knowledge graph",
+      "id": "argen_new_look_agents_graphify_knowledge_graph"
+    },
+    {
+      "label": "code:block2 (/graphify query \"how does scoring work\")",
+      "file_type": "document",
+      "source_file": "AGENTS.md",
+      "source_location": "L216",
+      "community": 12,
+      "norm_label": "code:block2 (/graphify query \"how does scoring work\")",
+      "id": "argen_new_look_agents_codeblock_2"
+    },
+    {
+      "label": "code:bash (GEMINI_API_KEY=<YOUR_GEMINI_API_KEY> graphify extract . --ba)",
+      "file_type": "document",
+      "source_file": "AGENTS.md",
+      "source_location": "L223",
+      "community": 12,
+      "norm_label": "code:bash (gemini_api_key=<your_gemini_api_key> graphify extract . --ba)",
+      "id": "argen_new_look_agents_codeblock_3"
+    },
+    {
+      "label": "auth.js",
+      "file_type": "code",
+      "source_file": "backend/middleware/auth.js",
+      "source_location": "L1",
+      "community": 45,
+      "norm_label": "auth.js",
+      "id": "backend_middleware_auth_js"
+    },
+    {
+      "label": "{ auth, db }",
+      "file_type": "code",
+      "source_file": "backend/middleware/auth.js",
+      "source_location": "L1",
+      "community": 45,
+      "norm_label": "{ auth, db }",
+      "id": "middleware_auth_auth_db"
+    },
+    {
+      "label": "parseCookies()",
+      "file_type": "code",
+      "source_file": "backend/middleware/auth.js",
+      "source_location": "L4",
+      "community": 45,
+      "norm_label": "parsecookies()",
+      "id": "middleware_auth_parsecookies"
+    },
+    {
+      "label": "protect()",
+      "file_type": "code",
+      "source_file": "backend/middleware/auth.js",
+      "source_location": "L14",
+      "community": 45,
+      "norm_label": "protect()",
+      "id": "middleware_auth_protect"
+    },
+    {
+      "label": "authorize()",
+      "file_type": "code",
+      "source_file": "backend/middleware/auth.js",
+      "source_location": "L90",
+      "community": 45,
+      "norm_label": "authorize()",
+      "id": "middleware_auth_authorize"
+    },
+    {
+      "label": "isApproved()",
+      "file_type": "code",
+      "source_file": "backend/middleware/auth.js",
+      "source_location": "L103",
+      "community": 48,
+      "norm_label": "isapproved()",
+      "id": "middleware_auth_isapproved"
+    },
+    {
+      "label": "verifyTokenFromRequest()",
+      "file_type": "code",
+      "source_file": "backend/middleware/auth.js",
+      "source_location": "L125",
+      "community": 45,
+      "norm_label": "verifytokenfromrequest()",
+      "id": "middleware_auth_verifytokenfromrequest"
+    },
+    {
+      "label": "requirePageAuth()",
+      "file_type": "code",
+      "source_file": "backend/middleware/auth.js",
+      "source_location": "L167",
+      "community": 45,
+      "norm_label": "requirepageauth()",
+      "id": "middleware_auth_requirepageauth"
+    },
+    {
+      "label": "package.json",
+      "file_type": "code",
+      "source_file": "backend/package.json",
+      "source_location": "L1",
+      "community": 3,
+      "norm_label": "package.json",
+      "id": "backend_package_json"
+    },
+    {
+      "label": "name",
+      "file_type": "code",
+      "source_file": "backend/package.json",
+      "source_location": "L2",
+      "community": 3,
+      "norm_label": "name",
+      "id": "backend_package_name"
+    },
+    {
+      "label": "version",
+      "file_type": "code",
+      "source_file": "backend/package.json",
+      "source_location": "L3",
+      "community": 3,
+      "norm_label": "version",
+      "id": "backend_package_version"
+    },
+    {
+      "label": "description",
+      "file_type": "code",
+      "source_file": "backend/package.json",
+      "source_location": "L4",
+      "community": 3,
+      "norm_label": "description",
+      "id": "backend_package_description"
+    },
+    {
+      "label": "main",
+      "file_type": "code",
+      "source_file": "backend/package.json",
+      "source_location": "L5",
+      "community": 3,
+      "norm_label": "main",
+      "id": "backend_package_main"
+    },
+    {
+      "label": "scripts",
+      "file_type": "code",
+      "source_file": "backend/package.json",
+      "source_location": "L6",
+      "community": 3,
+      "norm_label": "scripts",
+      "id": "backend_package_scripts"
+    },
+    {
+      "label": "start",
+      "file_type": "code",
+      "source_file": "backend/package.json",
+      "source_location": "L7",
+      "community": 3,
+      "norm_label": "start",
+      "id": "backend_package_scripts_start"
+    },
+    {
+      "label": "dev",
+      "file_type": "code",
+      "source_file": "backend/package.json",
+      "source_location": "L8",
+      "community": 3,
+      "norm_label": "dev",
+      "id": "backend_package_scripts_dev"
+    },
+    {
+      "label": "dependencies",
+      "file_type": "code",
+      "source_file": "backend/package.json",
+      "source_location": "L10",
+      "community": 3,
+      "norm_label": "dependencies",
+      "id": "backend_package_dependencies"
+    },
+    {
+      "label": "@supabase/supabase-js",
+      "file_type": "code",
+      "source_file": "backend/package.json",
+      "source_location": "L11",
+      "community": 3,
+      "norm_label": "@supabase/supabase-js",
+      "id": "backend_package_dependencies_supabase_supabase_js"
+    },
+    {
+      "label": "@whop/sdk",
+      "file_type": "code",
+      "source_file": "backend/package.json",
+      "source_location": "L12",
+      "community": 3,
+      "norm_label": "@whop/sdk",
+      "id": "backend_package_dependencies_whop_sdk"
+    },
+    {
+      "label": "bcryptjs",
+      "file_type": "code",
+      "source_file": "backend/package.json",
+      "source_location": "L13",
+      "community": 3,
+      "norm_label": "bcryptjs",
+      "id": "backend_package_dependencies_bcryptjs"
+    },
+    {
+      "label": "cors",
+      "file_type": "code",
+      "source_file": "backend/package.json",
+      "source_location": "L14",
+      "community": 3,
+      "norm_label": "cors",
+      "id": "backend_package_dependencies_cors"
+    },
+    {
+      "label": "dotenv",
+      "file_type": "code",
+      "source_file": "backend/package.json",
+      "source_location": "L15",
+      "community": 3,
+      "norm_label": "dotenv",
+      "id": "backend_package_dependencies_dotenv"
+    },
+    {
+      "label": "express",
+      "file_type": "code",
+      "source_file": "backend/package.json",
+      "source_location": "L16",
+      "community": 3,
+      "norm_label": "express",
+      "id": "backend_package_dependencies_express"
+    },
+    {
+      "label": "express-rate-limit",
+      "file_type": "code",
+      "source_file": "backend/package.json",
+      "source_location": "L17",
+      "community": 3,
+      "norm_label": "express-rate-limit",
+      "id": "backend_package_dependencies_express_rate_limit"
+    },
+    {
+      "label": "express-validator",
+      "file_type": "code",
+      "source_file": "backend/package.json",
+      "source_location": "L18",
+      "community": 3,
+      "norm_label": "express-validator",
+      "id": "backend_package_dependencies_express_validator"
+    },
+    {
+      "label": "helmet",
+      "file_type": "code",
+      "source_file": "backend/package.json",
+      "source_location": "L20",
+      "community": 3,
+      "norm_label": "helmet",
+      "id": "backend_package_dependencies_helmet"
+    },
+    {
+      "label": "jsonwebtoken",
+      "file_type": "code",
+      "source_file": "backend/package.json",
+      "source_location": "L21",
+      "community": 3,
+      "norm_label": "jsonwebtoken",
+      "id": "backend_package_dependencies_jsonwebtoken"
+    },
+    {
+      "label": "nodemailer",
+      "file_type": "code",
+      "source_file": "backend/package.json",
+      "source_location": "L22",
+      "community": 3,
+      "norm_label": "nodemailer",
+      "id": "backend_package_dependencies_nodemailer"
+    },
+    {
+      "label": "devDependencies",
+      "file_type": "code",
+      "source_file": "backend/package.json",
+      "source_location": "L24",
+      "community": 3,
+      "norm_label": "devdependencies",
+      "id": "backend_package_devdependencies"
+    },
+    {
+      "label": "nodemon",
+      "file_type": "code",
+      "source_file": "backend/package.json",
+      "source_location": "L25",
+      "community": 3,
+      "norm_label": "nodemon",
+      "id": "backend_package_devdependencies_nodemon"
+    },
+    {
+      "label": "keywords",
+      "file_type": "code",
+      "source_file": "backend/package.json",
+      "source_location": "L27",
+      "community": 3,
+      "norm_label": "keywords",
+      "id": "backend_package_keywords"
+    },
+    {
+      "label": "author",
+      "file_type": "code",
+      "source_file": "backend/package.json",
+      "source_location": "L28",
+      "community": 3,
+      "norm_label": "author",
+      "id": "backend_package_author"
+    },
+    {
+      "label": "license",
+      "file_type": "code",
+      "source_file": "backend/package.json",
+      "source_location": "L29",
+      "community": 3,
+      "norm_label": "license",
+      "id": "backend_package_license"
+    },
+    {
+      "label": "admin.js",
+      "file_type": "code",
+      "source_file": "backend/routes/admin.js",
+      "source_location": "L1",
+      "community": 9,
+      "norm_label": "admin.js",
+      "id": "backend_routes_admin_js"
+    },
+    {
+      "label": "express",
+      "file_type": "code",
+      "source_file": "backend/routes/admin.js",
+      "source_location": "L1",
+      "community": 9,
+      "norm_label": "express",
+      "id": "routes_admin_express"
+    },
+    {
+      "label": "router",
+      "file_type": "code",
+      "source_file": "backend/routes/admin.js",
+      "source_location": "L2",
+      "community": 9,
+      "norm_label": "router",
+      "id": "routes_admin_router"
+    },
+    {
+      "label": "{ auth, db }",
+      "file_type": "code",
+      "source_file": "backend/routes/admin.js",
+      "source_location": "L3",
+      "community": 9,
+      "norm_label": "{ auth, db }",
+      "id": "routes_admin_auth_db"
+    },
+    {
+      "label": "{ protect, authorize }",
+      "file_type": "code",
+      "source_file": "backend/routes/admin.js",
+      "source_location": "L4",
+      "community": 9,
+      "norm_label": "{ protect, authorize }",
+      "id": "routes_admin_protect_authorize"
+    },
+    {
+      "label": "crypto",
+      "file_type": "code",
+      "source_file": "backend/routes/admin.js",
+      "source_location": "L5",
+      "community": 9,
+      "norm_label": "crypto",
+      "id": "routes_admin_crypto"
+    },
+    {
+      "label": "sendEmail",
+      "file_type": "code",
+      "source_file": "backend/routes/admin.js",
+      "source_location": "L6",
+      "community": 9,
+      "norm_label": "sendemail",
+      "id": "routes_admin_sendemail"
+    },
+    {
+      "label": "{ createEmailTemplate }",
+      "file_type": "code",
+      "source_file": "backend/routes/admin.js",
+      "source_location": "L7",
+      "community": 9,
+      "norm_label": "{ createemailtemplate }",
+      "id": "routes_admin_createemailtemplate"
+    },
+    {
+      "label": "{ researchCompany }",
+      "file_type": "code",
+      "source_file": "backend/routes/admin.js",
+      "source_location": "L8",
+      "community": 9,
+      "norm_label": "{ researchcompany }",
+      "id": "routes_admin_researchcompany"
+    },
+    {
+      "label": "createTeamCode()",
+      "file_type": "code",
+      "source_file": "backend/routes/admin.js",
+      "source_location": "L10",
+      "community": 46,
+      "norm_label": "createteamcode()",
+      "id": "routes_admin_createteamcode"
+    },
+    {
+      "label": "normalizeTeamCode()",
+      "file_type": "code",
+      "source_file": "backend/routes/admin.js",
+      "source_location": "L11",
+      "community": 9,
+      "norm_label": "normalizeteamcode()",
+      "id": "routes_admin_normalizeteamcode"
+    },
+    {
+      "label": "getClientBaseUrl()",
+      "file_type": "code",
+      "source_file": "backend/routes/admin.js",
+      "source_location": "L12",
+      "community": 9,
+      "norm_label": "getclientbaseurl()",
+      "id": "routes_admin_getclientbaseurl"
+    },
+    {
+      "label": "isTeamCodeAvailable()",
+      "file_type": "code",
+      "source_file": "backend/routes/admin.js",
+      "source_location": "L14",
+      "community": 46,
+      "norm_label": "isteamcodeavailable()",
+      "id": "routes_admin_isteamcodeavailable"
+    },
+    {
+      "label": "createUniqueTeamCode()",
+      "file_type": "code",
+      "source_file": "backend/routes/admin.js",
+      "source_location": "L23",
+      "community": 46,
+      "norm_label": "createuniqueteamcode()",
+      "id": "routes_admin_createuniqueteamcode"
+    },
+    {
+      "label": "approveCompanyAdmins()",
+      "file_type": "code",
+      "source_file": "backend/routes/admin.js",
+      "source_location": "L33",
+      "community": 9,
+      "norm_label": "approvecompanyadmins()",
+      "id": "routes_admin_approvecompanyadmins"
+    },
+    {
+      "label": "metricsRef",
+      "file_type": "code",
+      "source_file": "backend/routes/admin.js",
+      "source_location": "L77",
+      "community": 9,
+      "norm_label": "metricsref",
+      "id": "routes_admin_metricsref"
+    },
+    {
+      "label": "sevenDaysAgo",
+      "file_type": "code",
+      "source_file": "backend/routes/admin.js",
+      "source_location": "L80",
+      "community": 9,
+      "norm_label": "sevendaysago",
+      "id": "routes_admin_sevendaysago"
+    },
+    {
+      "label": "dailyCalls",
+      "file_type": "code",
+      "source_file": "backend/routes/admin.js",
+      "source_location": "L97",
+      "community": 9,
+      "norm_label": "dailycalls",
+      "id": "routes_admin_dailycalls"
+    },
+    {
+      "label": "dailyQuality",
+      "file_type": "code",
+      "source_file": "backend/routes/admin.js",
+      "source_location": "L98",
+      "community": 9,
+      "norm_label": "dailyquality",
+      "id": "routes_admin_dailyquality"
+    },
+    {
+      "label": "agentTokens",
+      "file_type": "code",
+      "source_file": "backend/routes/admin.js",
+      "source_location": "L99",
+      "community": 9,
+      "norm_label": "agenttokens",
+      "id": "routes_admin_agenttokens"
+    },
+    {
+      "label": "d",
+      "file_type": "code",
+      "source_file": "backend/routes/admin.js",
+      "source_location": "L108",
+      "community": 9,
+      "norm_label": "d",
+      "id": "routes_admin_d"
+    },
+    {
+      "label": "dateString",
+      "file_type": "code",
+      "source_file": "backend/routes/admin.js",
+      "source_location": "L110",
+      "community": 9,
+      "norm_label": "datestring",
+      "id": "routes_admin_datestring"
+    },
+    {
+      "label": "data",
+      "file_type": "code",
+      "source_file": "backend/routes/admin.js",
+      "source_location": "L117",
+      "community": 9,
+      "norm_label": "data",
+      "id": "routes_admin_data"
+    },
+    {
+      "label": "chartData",
+      "file_type": "code",
+      "source_file": "backend/routes/admin.js",
+      "source_location": "L146",
+      "community": 9,
+      "norm_label": "chartdata",
+      "id": "routes_admin_chartdata"
+    },
+    {
+      "label": "r",
+      "file_type": "code",
+      "source_file": "backend/routes/admin.js",
+      "source_location": "L239",
+      "community": 9,
+      "norm_label": "r",
+      "id": "routes_admin_r"
+    },
+    {
+      "label": "logs",
+      "file_type": "code",
+      "source_file": "backend/routes/admin.js",
+      "source_location": "L284",
+      "community": 9,
+      "norm_label": "logs",
+      "id": "routes_admin_logs"
+    },
+    {
+      "label": "limit",
+      "file_type": "code",
+      "source_file": "backend/routes/admin.js",
+      "source_location": "L307",
+      "community": 46,
+      "norm_label": "limit",
+      "id": "routes_admin_limit"
+    },
+    {
+      "label": "companies",
+      "file_type": "code",
+      "source_file": "backend/routes/admin.js",
+      "source_location": "L310",
+      "community": 9,
+      "norm_label": "companies",
+      "id": "routes_admin_companies"
+    },
+    {
+      "label": "allDocs",
+      "file_type": "code",
+      "source_file": "backend/routes/admin.js",
+      "source_location": "L311",
+      "community": 9,
+      "norm_label": "alldocs",
+      "id": "routes_admin_alldocs"
+    },
+    {
+      "label": "company",
+      "file_type": "code",
+      "source_file": "backend/routes/admin.js",
+      "source_location": "L313",
+      "community": 9,
+      "norm_label": "company",
+      "id": "routes_admin_company"
+    },
+    {
+      "label": "users",
+      "file_type": "code",
+      "source_file": "backend/routes/admin.js",
+      "source_location": "L315",
+      "community": 9,
+      "norm_label": "users",
+      "id": "routes_admin_users"
+    },
+    {
+      "label": "adminUsers",
+      "file_type": "code",
+      "source_file": "backend/routes/admin.js",
+      "source_location": "L316",
+      "community": 9,
+      "norm_label": "adminusers",
+      "id": "routes_admin_adminusers"
+    },
+    {
+      "label": "companyRef",
+      "file_type": "code",
+      "source_file": "backend/routes/admin.js",
+      "source_location": "L379",
+      "community": 9,
+      "norm_label": "companyref",
+      "id": "routes_admin_companyref"
+    },
+    {
+      "label": "normalizedCustomCode",
+      "file_type": "code",
+      "source_file": "backend/routes/admin.js",
+      "source_location": "L383",
+      "community": 9,
+      "norm_label": "normalizedcustomcode",
+      "id": "routes_admin_normalizedcustomcode"
+    },
+    {
+      "label": "updates",
+      "file_type": "code",
+      "source_file": "backend/routes/admin.js",
+      "source_location": "L401",
+      "community": 9,
+      "norm_label": "updates",
+      "id": "routes_admin_updates"
+    },
+    {
+      "label": "adminRef",
+      "file_type": "code",
+      "source_file": "backend/routes/admin.js",
+      "source_location": "L404",
+      "community": 9,
+      "norm_label": "adminref",
+      "id": "routes_admin_adminref"
+    },
+    {
+      "label": "userRef",
+      "file_type": "code",
+      "source_file": "backend/routes/admin.js",
+      "source_location": "L450",
+      "community": 9,
+      "norm_label": "userref",
+      "id": "routes_admin_userref"
+    },
+    {
+      "label": "token",
+      "file_type": "code",
+      "source_file": "backend/routes/admin.js",
+      "source_location": "L482",
+      "community": 9,
+      "norm_label": "token",
+      "id": "routes_admin_token"
+    },
+    {
+      "label": "invitationData",
+      "file_type": "code",
+      "source_file": "backend/routes/admin.js",
+      "source_location": "L483",
+      "community": 9,
+      "norm_label": "invitationdata",
+      "id": "routes_admin_invitationdata"
+    },
+    {
+      "label": "html",
+      "file_type": "code",
+      "source_file": "backend/routes/admin.js",
+      "source_location": "L494",
+      "community": 9,
+      "norm_label": "html",
+      "id": "routes_admin_html"
+    },
+    {
+      "label": "invitations",
+      "file_type": "code",
+      "source_file": "backend/routes/admin.js",
+      "source_location": "L537",
+      "community": 9,
+      "norm_label": "invitations",
+      "id": "routes_admin_invitations"
+    },
+    {
+      "label": "invoiceData",
+      "file_type": "code",
+      "source_file": "backend/routes/admin.js",
+      "source_location": "L578",
+      "community": 9,
+      "norm_label": "invoicedata",
+      "id": "routes_admin_invoicedata"
+    },
+    {
+      "label": "allUsers",
+      "file_type": "code",
+      "source_file": "backend/routes/admin.js",
+      "source_location": "L656",
+      "community": 9,
+      "norm_label": "allusers",
+      "id": "routes_admin_allusers"
+    },
+    {
+      "label": "formatted",
+      "file_type": "code",
+      "source_file": "backend/routes/admin.js",
+      "source_location": "L684",
+      "community": 9,
+      "norm_label": "formatted",
+      "id": "routes_admin_formatted"
+    },
+    {
+      "label": "invoicesRef",
+      "file_type": "code",
+      "source_file": "backend/routes/admin.js",
+      "source_location": "L776",
+      "community": 9,
+      "norm_label": "invoicesref",
+      "id": "routes_admin_invoicesref"
+    },
+    {
+      "label": "invoices",
+      "file_type": "code",
+      "source_file": "backend/routes/admin.js",
+      "source_location": "L785",
+      "community": 9,
+      "norm_label": "invoices",
+      "id": "routes_admin_invoices"
+    },
+    {
+      "label": "calculatedSubtotal",
+      "file_type": "code",
+      "source_file": "backend/routes/admin.js",
+      "source_location": "L828",
+      "community": 9,
+      "norm_label": "calculatedsubtotal",
+      "id": "routes_admin_calculatedsubtotal"
+    },
+    {
+      "label": "invoiceRef",
+      "file_type": "code",
+      "source_file": "backend/routes/admin.js",
+      "source_location": "L873",
+      "community": 9,
+      "norm_label": "invoiceref",
+      "id": "routes_admin_invoiceref"
+    },
+    {
+      "label": "invoice",
+      "file_type": "code",
+      "source_file": "backend/routes/admin.js",
+      "source_location": "L876",
+      "community": 9,
+      "norm_label": "invoice",
+      "id": "routes_admin_invoice"
+    },
+    {
+      "label": "userScores",
+      "file_type": "code",
+      "source_file": "backend/routes/admin.js",
+      "source_location": "L965",
+      "community": 9,
+      "norm_label": "userscores",
+      "id": "routes_admin_userscores"
+    },
+    {
+      "label": "results",
+      "file_type": "code",
+      "source_file": "backend/routes/admin.js",
+      "source_location": "L976",
+      "community": 9,
+      "norm_label": "results",
+      "id": "routes_admin_results"
+    },
+    {
+      "label": "allowed",
+      "file_type": "code",
+      "source_file": "backend/routes/admin.js",
+      "source_location": "L1004",
+      "community": 9,
+      "norm_label": "allowed",
+      "id": "routes_admin_allowed"
+    },
+    {
+      "label": "apply.js",
+      "file_type": "code",
+      "source_file": "backend/routes/apply.js",
+      "source_location": "L1",
+      "community": 4,
+      "norm_label": "apply.js",
+      "id": "backend_routes_apply_js"
+    },
+    {
+      "label": "express",
+      "file_type": "code",
+      "source_file": "backend/routes/apply.js",
+      "source_location": "L1",
+      "community": 4,
+      "norm_label": "express",
+      "id": "routes_apply_express"
+    },
+    {
+      "label": "router",
+      "file_type": "code",
+      "source_file": "backend/routes/apply.js",
+      "source_location": "L2",
+      "community": 4,
+      "norm_label": "router",
+      "id": "routes_apply_router"
+    },
+    {
+      "label": "{ db }",
+      "file_type": "code",
+      "source_file": "backend/routes/apply.js",
+      "source_location": "L3",
+      "community": 4,
+      "norm_label": "{ db }",
+      "id": "routes_apply_db"
+    },
+    {
+      "label": "sendEmail",
+      "file_type": "code",
+      "source_file": "backend/routes/apply.js",
+      "source_location": "L4",
+      "community": 4,
+      "norm_label": "sendemail",
+      "id": "routes_apply_sendemail"
+    },
+    {
+      "label": "{ createEmailTemplate }",
+      "file_type": "code",
+      "source_file": "backend/routes/apply.js",
+      "source_location": "L5",
+      "community": 4,
+      "norm_label": "{ createemailtemplate }",
+      "id": "routes_apply_createemailtemplate"
+    },
+    {
+      "label": "application",
+      "file_type": "code",
+      "source_file": "backend/routes/apply.js",
+      "source_location": "L17",
+      "community": 4,
+      "norm_label": "application",
+      "id": "routes_apply_application"
+    },
+    {
+      "label": "embed",
+      "file_type": "code",
+      "source_file": "backend/routes/apply.js",
+      "source_location": "L34",
+      "community": 4,
+      "norm_label": "embed",
+      "id": "routes_apply_embed"
+    },
+    {
+      "label": "html",
+      "file_type": "code",
+      "source_file": "backend/routes/apply.js",
+      "source_location": "L63",
+      "community": 4,
+      "norm_label": "html",
+      "id": "routes_apply_html"
+    },
+    {
+      "label": "auth.js",
+      "file_type": "code",
+      "source_file": "backend/routes/auth.js",
+      "source_location": "L1",
+      "community": 5,
+      "norm_label": "auth.js",
+      "id": "backend_routes_auth_js"
+    },
+    {
+      "label": "express",
+      "file_type": "code",
+      "source_file": "backend/routes/auth.js",
+      "source_location": "L1",
+      "community": 5,
+      "norm_label": "express",
+      "id": "routes_auth_express"
+    },
+    {
+      "label": "router",
+      "file_type": "code",
+      "source_file": "backend/routes/auth.js",
+      "source_location": "L2",
+      "community": 5,
+      "norm_label": "router",
+      "id": "routes_auth_router"
+    },
+    {
+      "label": "crypto",
+      "file_type": "code",
+      "source_file": "backend/routes/auth.js",
+      "source_location": "L3",
+      "community": 5,
+      "norm_label": "crypto",
+      "id": "routes_auth_crypto"
+    },
+    {
+      "label": "bcrypt",
+      "file_type": "code",
+      "source_file": "backend/routes/auth.js",
+      "source_location": "L4",
+      "community": 5,
+      "norm_label": "bcrypt",
+      "id": "routes_auth_bcrypt"
+    },
+    {
+      "label": "{ auth, db, supabase }",
+      "file_type": "code",
+      "source_file": "backend/routes/auth.js",
+      "source_location": "L5",
+      "community": 5,
+      "norm_label": "{ auth, db, supabase }",
+      "id": "routes_auth_auth_db_supabase"
+    },
+    {
+      "label": "sendEmail",
+      "file_type": "code",
+      "source_file": "backend/routes/auth.js",
+      "source_location": "L6",
+      "community": 5,
+      "norm_label": "sendemail",
+      "id": "routes_auth_sendemail"
+    },
+    {
+      "label": "{ createEmailTemplate }",
+      "file_type": "code",
+      "source_file": "backend/routes/auth.js",
+      "source_location": "L7",
+      "community": 5,
+      "norm_label": "{ createemailtemplate }",
+      "id": "routes_auth_createemailtemplate"
+    },
+    {
+      "label": "{ protect }",
+      "file_type": "code",
+      "source_file": "backend/routes/auth.js",
+      "source_location": "L8",
+      "community": 5,
+      "norm_label": "{ protect }",
+      "id": "routes_auth_protect"
+    },
+    {
+      "label": "{ registerRules, loginRules, handleValidationErrors }",
+      "file_type": "code",
+      "source_file": "backend/routes/auth.js",
+      "source_location": "L9",
+      "community": 5,
+      "norm_label": "{ registerrules, loginrules, handlevalidationerrors }",
+      "id": "routes_auth_registerrules_loginrules_handlevalidationerrors"
+    },
+    {
+      "label": "signInWithSupabase()",
+      "file_type": "code",
+      "source_file": "backend/routes/auth.js",
+      "source_location": "L12",
+      "community": 5,
+      "norm_label": "signinwithsupabase()",
+      "id": "routes_auth_signinwithsupabase"
+    },
+    {
+      "label": "invitationsRef",
+      "file_type": "code",
+      "source_file": "backend/routes/auth.js",
+      "source_location": "L33",
+      "community": 5,
+      "norm_label": "invitationsref",
+      "id": "routes_auth_invitationsref"
+    },
+    {
+      "label": "inviteCode",
+      "file_type": "code",
+      "source_file": "backend/routes/auth.js",
+      "source_location": "L93",
+      "community": 5,
+      "norm_label": "invitecode",
+      "id": "routes_auth_invitecode"
+    },
+    {
+      "label": "companyData",
+      "file_type": "code",
+      "source_file": "backend/routes/auth.js",
+      "source_location": "L96",
+      "community": 5,
+      "norm_label": "companydata",
+      "id": "routes_auth_companydata"
+    },
+    {
+      "label": "isInvitedAdmin",
+      "file_type": "code",
+      "source_file": "backend/routes/auth.js",
+      "source_location": "L127",
+      "community": 5,
+      "norm_label": "isinvitedadmin",
+      "id": "routes_auth_isinvitedadmin"
+    },
+    {
+      "label": "userData",
+      "file_type": "code",
+      "source_file": "backend/routes/auth.js",
+      "source_location": "L128",
+      "community": 5,
+      "norm_label": "userdata",
+      "id": "routes_auth_userdata"
+    },
+    {
+      "label": "mockUser",
+      "file_type": "code",
+      "source_file": "backend/routes/auth.js",
+      "source_location": "L187",
+      "community": 5,
+      "norm_label": "mockuser",
+      "id": "routes_auth_mockuser"
+    },
+    {
+      "label": "user",
+      "file_type": "code",
+      "source_file": "backend/routes/auth.js",
+      "source_location": "L224",
+      "community": 5,
+      "norm_label": "user",
+      "id": "routes_auth_user"
+    },
+    {
+      "label": "existingData",
+      "file_type": "code",
+      "source_file": "backend/routes/auth.js",
+      "source_location": "L317",
+      "community": 5,
+      "norm_label": "existingdata",
+      "id": "routes_auth_existingdata"
+    },
+    {
+      "label": "company",
+      "file_type": "code",
+      "source_file": "backend/routes/auth.js",
+      "source_location": "L404",
+      "community": 5,
+      "norm_label": "company",
+      "id": "routes_auth_company"
+    },
+    {
+      "label": "emailLower",
+      "file_type": "code",
+      "source_file": "backend/routes/auth.js",
+      "source_location": "L488",
+      "community": 5,
+      "norm_label": "emaillower",
+      "id": "routes_auth_emaillower"
+    },
+    {
+      "label": "token",
+      "file_type": "code",
+      "source_file": "backend/routes/auth.js",
+      "source_location": "L491",
+      "community": 5,
+      "norm_label": "token",
+      "id": "routes_auth_token"
+    },
+    {
+      "label": "updatedProfile",
+      "file_type": "code",
+      "source_file": "backend/routes/auth.js",
+      "source_location": "L551",
+      "community": 5,
+      "norm_label": "updatedprofile",
+      "id": "routes_auth_updatedprofile"
+    },
+    {
+      "label": "html",
+      "file_type": "code",
+      "source_file": "backend/routes/auth.js",
+      "source_location": "L572",
+      "community": 5,
+      "norm_label": "html",
+      "id": "routes_auth_html"
+    },
+    {
+      "label": "hasCompany",
+      "file_type": "code",
+      "source_file": "backend/routes/auth.js",
+      "source_location": "L698",
+      "community": 5,
+      "norm_label": "hascompany",
+      "id": "routes_auth_hascompany"
+    },
+    {
+      "label": "updates",
+      "file_type": "code",
+      "source_file": "backend/routes/auth.js",
+      "source_location": "L708",
+      "community": 5,
+      "norm_label": "updates",
+      "id": "routes_auth_updates"
+    },
+    {
+      "label": "jwt",
+      "file_type": "code",
+      "source_file": "backend/routes/auth.js",
+      "source_location": "L768",
+      "community": 5,
+      "norm_label": "jwt",
+      "id": "routes_auth_jwt"
+    },
+    {
+      "label": "state",
+      "file_type": "code",
+      "source_file": "backend/routes/auth.js",
+      "source_location": "L777",
+      "community": 5,
+      "norm_label": "state",
+      "id": "routes_auth_state"
+    },
+    {
+      "label": "payload",
+      "file_type": "code",
+      "source_file": "backend/routes/auth.js",
+      "source_location": "L809",
+      "community": 5,
+      "norm_label": "payload",
+      "id": "routes_auth_payload"
+    },
+    {
+      "label": "autoPassword",
+      "file_type": "code",
+      "source_file": "backend/routes/auth.js",
+      "source_location": "L822",
+      "community": 5,
+      "norm_label": "autopassword",
+      "id": "routes_auth_autopassword"
+    },
+    {
+      "label": "newUser",
+      "file_type": "code",
+      "source_file": "backend/routes/auth.js",
+      "source_location": "L838",
+      "community": 5,
+      "norm_label": "newuser",
+      "id": "routes_auth_newuser"
+    },
+    {
+      "label": "connect.js",
+      "file_type": "code",
+      "source_file": "backend/routes/connect.js",
+      "source_location": "L1",
+      "community": 44,
+      "norm_label": "connect.js",
+      "id": "backend_routes_connect_js"
+    },
+    {
+      "label": "express",
+      "file_type": "code",
+      "source_file": "backend/routes/connect.js",
+      "source_location": "L1",
+      "community": 44,
+      "norm_label": "express",
+      "id": "routes_connect_express"
+    },
+    {
+      "label": "router",
+      "file_type": "code",
+      "source_file": "backend/routes/connect.js",
+      "source_location": "L2",
+      "community": 44,
+      "norm_label": "router",
+      "id": "routes_connect_router"
+    },
+    {
+      "label": "crypto",
+      "file_type": "code",
+      "source_file": "backend/routes/connect.js",
+      "source_location": "L3",
+      "community": 44,
+      "norm_label": "crypto",
+      "id": "routes_connect_crypto"
+    },
+    {
+      "label": "{ protect, authorize }",
+      "file_type": "code",
+      "source_file": "backend/routes/connect.js",
+      "source_location": "L4",
+      "community": 44,
+      "norm_label": "{ protect, authorize }",
+      "id": "routes_connect_protect_authorize"
+    },
+    {
+      "label": "{ db }",
+      "file_type": "code",
+      "source_file": "backend/routes/connect.js",
+      "source_location": "L5",
+      "community": 44,
+      "norm_label": "{ db }",
+      "id": "routes_connect_db"
+    },
+    {
+      "label": "providers",
+      "file_type": "code",
+      "source_file": "backend/routes/connect.js",
+      "source_location": "L6",
+      "community": 44,
+      "norm_label": "providers",
+      "id": "routes_connect_providers"
+    },
+    {
+      "label": "data",
+      "file_type": "code",
+      "source_file": "backend/routes/connect.js",
+      "source_location": "L20",
+      "community": 44,
+      "norm_label": "data",
+      "id": "routes_connect_data"
+    },
+    {
+      "label": "stateNonce",
+      "file_type": "code",
+      "source_file": "backend/routes/connect.js",
+      "source_location": "L40",
+      "community": 44,
+      "norm_label": "statenonce",
+      "id": "routes_connect_statenonce"
+    },
+    {
+      "label": "authUrl",
+      "file_type": "code",
+      "source_file": "backend/routes/connect.js",
+      "source_location": "L49",
+      "community": 44,
+      "norm_label": "authurl",
+      "id": "routes_connect_authurl"
+    },
+    {
+      "label": "stateData",
+      "file_type": "code",
+      "source_file": "backend/routes/connect.js",
+      "source_location": "L71",
+      "community": 44,
+      "norm_label": "statedata",
+      "id": "routes_connect_statedata"
+    },
+    {
+      "label": "row",
+      "file_type": "code",
+      "source_file": "backend/routes/connect.js",
+      "source_location": "L152",
+      "community": 44,
+      "norm_label": "row",
+      "id": "routes_connect_row"
+    },
+    {
+      "label": "accessToken",
+      "file_type": "code",
+      "source_file": "backend/routes/connect.js",
+      "source_location": "L153",
+      "community": 44,
+      "norm_label": "accesstoken",
+      "id": "routes_connect_accesstoken"
+    },
+    {
+      "label": "server.js",
+      "file_type": "code",
+      "source_file": "backend/server.js",
+      "source_location": "L1",
+      "community": 13,
+      "norm_label": "server.js",
+      "id": "backend_server_js"
+    },
+    {
+      "label": "express",
+      "file_type": "code",
+      "source_file": "backend/server.js",
+      "source_location": "L1",
+      "community": 13,
+      "norm_label": "express",
+      "id": "backend_server_express"
+    },
+    {
+      "label": "cors",
+      "file_type": "code",
+      "source_file": "backend/server.js",
+      "source_location": "L2",
+      "community": 13,
+      "norm_label": "cors",
+      "id": "backend_server_cors"
+    },
+    {
+      "label": "dotenv",
+      "file_type": "code",
+      "source_file": "backend/server.js",
+      "source_location": "L3",
+      "community": 13,
+      "norm_label": "dotenv",
+      "id": "backend_server_dotenv"
+    },
+    {
+      "label": "path",
+      "file_type": "code",
+      "source_file": "backend/server.js",
+      "source_location": "L4",
+      "community": 13,
+      "norm_label": "path",
+      "id": "backend_server_path"
+    },
+    {
+      "label": "REQUIRED_ENV",
+      "file_type": "code",
+      "source_file": "backend/server.js",
+      "source_location": "L9",
+      "community": 13,
+      "norm_label": "required_env",
+      "id": "backend_server_required_env"
+    },
+    {
+      "label": "missing",
+      "file_type": "code",
+      "source_file": "backend/server.js",
+      "source_location": "L10",
+      "community": 13,
+      "norm_label": "missing",
+      "id": "backend_server_missing"
+    },
+    {
+      "label": "{ contactRules, handleValidationErrors }",
+      "file_type": "code",
+      "source_file": "backend/server.js",
+      "source_location": "L16",
+      "community": 13,
+      "norm_label": "{ contactrules, handlevalidationerrors }",
+      "id": "backend_server_contactrules_handlevalidationerrors"
+    },
+    {
+      "label": "app",
+      "file_type": "code",
+      "source_file": "backend/server.js",
+      "source_location": "L18",
+      "community": 13,
+      "norm_label": "app",
+      "id": "backend_server_app"
+    },
+    {
+      "label": "helmet",
+      "file_type": "code",
+      "source_file": "backend/server.js",
+      "source_location": "L21",
+      "community": 13,
+      "norm_label": "helmet",
+      "id": "backend_server_helmet"
+    },
+    {
+      "label": "allowedOrigins",
+      "file_type": "code",
+      "source_file": "backend/server.js",
+      "source_location": "L28",
+      "community": 13,
+      "norm_label": "allowedorigins",
+      "id": "backend_server_allowedorigins"
+    },
+    {
+      "label": "rateLimit",
+      "file_type": "code",
+      "source_file": "backend/server.js",
+      "source_location": "L48",
+      "community": 13,
+      "norm_label": "ratelimit",
+      "id": "backend_server_ratelimit"
+    },
+    {
+      "label": "limiter",
+      "file_type": "code",
+      "source_file": "backend/server.js",
+      "source_location": "L49",
+      "community": 13,
+      "norm_label": "limiter",
+      "id": "backend_server_limiter"
+    },
+    {
+      "label": "{ db }",
+      "file_type": "code",
+      "source_file": "backend/server.js",
+      "source_location": "L96",
+      "community": 13,
+      "norm_label": "{ db }",
+      "id": "backend_server_db"
+    },
+    {
+      "label": "{ requirePageAuth }",
+      "file_type": "code",
+      "source_file": "backend/server.js",
+      "source_location": "L97",
+      "community": 13,
+      "norm_label": "{ requirepageauth }",
+      "id": "backend_server_requirepageauth"
+    },
+    {
+      "label": "frontendDir",
+      "file_type": "code",
+      "source_file": "backend/server.js",
+      "source_location": "L99",
+      "community": 13,
+      "norm_label": "frontenddir",
+      "id": "backend_server_frontenddir"
+    },
+    {
+      "label": "memberPages",
+      "file_type": "code",
+      "source_file": "backend/server.js",
+      "source_location": "L100",
+      "community": 13,
+      "norm_label": "memberpages",
+      "id": "backend_server_memberpages"
+    },
+    {
+      "label": "teamadminPages",
+      "file_type": "code",
+      "source_file": "backend/server.js",
+      "source_location": "L101",
+      "community": 13,
+      "norm_label": "teamadminpages",
+      "id": "backend_server_teamadminpages"
+    },
+    {
+      "label": "onboardingPages",
+      "file_type": "code",
+      "source_file": "backend/server.js",
+      "source_location": "L102",
+      "community": 13,
+      "norm_label": "onboardingpages",
+      "id": "backend_server_onboardingpages"
+    },
+    {
+      "label": "superadminPages",
+      "file_type": "code",
+      "source_file": "backend/server.js",
+      "source_location": "L103",
+      "community": 13,
+      "norm_label": "superadminpages",
+      "id": "backend_server_superadminpages"
+    },
+    {
+      "label": "publicPages",
+      "file_type": "code",
+      "source_file": "backend/server.js",
+      "source_location": "L163",
+      "community": 13,
+      "norm_label": "publicpages",
+      "id": "backend_server_publicpages"
+    },
+    {
+      "label": "ai-agents.js",
+      "file_type": "code",
+      "source_file": "backend/utils/ai-agents.js",
+      "source_location": "L1",
+      "community": 7,
+      "norm_label": "ai-agents.js",
+      "id": "backend_utils_ai_agents_js"
+    },
+    {
+      "label": "{ db }",
+      "file_type": "code",
+      "source_file": "backend/utils/ai-agents.js",
+      "source_location": "L1",
+      "community": 7,
+      "norm_label": "{ db }",
+      "id": "utils_ai_agents_db"
+    },
+    {
+      "label": "fetchWithTimeout()",
+      "file_type": "code",
+      "source_file": "backend/utils/ai-agents.js",
+      "source_location": "L5",
+      "community": 7,
+      "norm_label": "fetchwithtimeout()",
+      "id": "utils_ai_agents_fetchwithtimeout"
+    },
+    {
+      "label": "callAnthropic()",
+      "file_type": "code",
+      "source_file": "backend/utils/ai-agents.js",
+      "source_location": "L17",
+      "community": 7,
+      "norm_label": "callanthropic()",
+      "id": "utils_ai_agents_callanthropic"
+    },
+    {
+      "label": "callGemini()",
+      "file_type": "code",
+      "source_file": "backend/utils/ai-agents.js",
+      "source_location": "L46",
+      "community": 7,
+      "norm_label": "callgemini()",
+      "id": "utils_ai_agents_callgemini"
+    },
+    {
+      "label": "callOpenAI()",
+      "file_type": "code",
+      "source_file": "backend/utils/ai-agents.js",
+      "source_location": "L68",
+      "community": 7,
+      "norm_label": "callopenai()",
+      "id": "utils_ai_agents_callopenai"
+    },
+    {
+      "label": "callNvidia()",
+      "file_type": "code",
+      "source_file": "backend/utils/ai-agents.js",
+      "source_location": "L93",
+      "community": 7,
+      "norm_label": "callnvidia()",
+      "id": "utils_ai_agents_callnvidia"
+    },
+    {
+      "label": "getApiKeyForModel()",
+      "file_type": "code",
+      "source_file": "backend/utils/ai-agents.js",
+      "source_location": "L119",
+      "community": 7,
+      "norm_label": "getapikeyformodel()",
+      "id": "utils_ai_agents_getapikeyformodel"
+    },
+    {
+      "label": "fallbackAiCall()",
+      "file_type": "code",
+      "source_file": "backend/utils/ai-agents.js",
+      "source_location": "L127",
+      "community": 7,
+      "norm_label": "fallbackaicall()",
+      "id": "utils_ai_agents_fallbackaicall"
+    },
+    {
+      "label": "recordMetric()",
+      "file_type": "code",
+      "source_file": "backend/utils/ai-agents.js",
+      "source_location": "L232",
+      "community": 7,
+      "norm_label": "recordmetric()",
+      "id": "utils_ai_agents_recordmetric"
+    },
+    {
+      "label": "researchCompany()",
+      "file_type": "code",
+      "source_file": "backend/utils/ai-agents.js",
+      "source_location": "L253",
+      "community": 7,
+      "norm_label": "researchcompany()",
+      "id": "utils_ai_agents_researchcompany"
+    },
+    {
+      "label": "generateChallenge()",
+      "file_type": "code",
+      "source_file": "backend/utils/ai-agents.js",
+      "source_location": "L287",
+      "community": 7,
+      "norm_label": "generatechallenge()",
+      "id": "utils_ai_agents_generatechallenge"
+    },
+    {
+      "label": "scoreResponse()",
+      "file_type": "code",
+      "source_file": "backend/utils/ai-agents.js",
+      "source_location": "L330",
+      "community": 7,
+      "norm_label": "scoreresponse()",
+      "id": "utils_ai_agents_scoreresponse"
+    },
+    {
+      "label": "generateWeeklyReport()",
+      "file_type": "code",
+      "source_file": "backend/utils/ai-agents.js",
+      "source_location": "L390",
+      "community": 7,
+      "norm_label": "generateweeklyreport()",
+      "id": "utils_ai_agents_generateweeklyreport"
+    },
+    {
+      "label": "generateCoachingNudge()",
+      "file_type": "code",
+      "source_file": "backend/utils/ai-agents.js",
+      "source_location": "L416",
+      "community": 7,
+      "norm_label": "generatecoachingnudge()",
+      "id": "utils_ai_agents_generatecoachingnudge"
+    },
+    {
+      "label": "ai-providers.js",
+      "file_type": "code",
+      "source_file": "backend/utils/ai-providers.js",
+      "source_location": "L1",
+      "community": 0,
+      "norm_label": "ai-providers.js",
+      "id": "backend_utils_ai_providers_js"
+    },
+    {
+      "label": "crypto",
+      "file_type": "code",
+      "source_file": "backend/utils/ai-providers.js",
+      "source_location": "L5",
+      "community": 0,
+      "norm_label": "crypto",
+      "id": "utils_ai_providers_crypto"
+    },
+    {
+      "label": "{ db }",
+      "file_type": "code",
+      "source_file": "backend/utils/ai-providers.js",
+      "source_location": "L6",
+      "community": 0,
+      "norm_label": "{ db }",
+      "id": "utils_ai_providers_db"
+    },
+    {
+      "label": "encrypt()",
+      "file_type": "code",
+      "source_file": "backend/utils/ai-providers.js",
+      "source_location": "L11",
+      "community": 0,
+      "norm_label": "encrypt()",
+      "id": "utils_ai_providers_encrypt"
+    },
+    {
+      "label": "decrypt()",
+      "file_type": "code",
+      "source_file": "backend/utils/ai-providers.js",
+      "source_location": "L22",
+      "community": 0,
+      "norm_label": "decrypt()",
+      "id": "utils_ai_providers_decrypt"
+    },
+    {
+      "label": "OAUTH_CONFIGS",
+      "file_type": "code",
+      "source_file": "backend/utils/ai-providers.js",
+      "source_location": "L34",
+      "community": 0,
+      "norm_label": "oauth_configs",
+      "id": "utils_ai_providers_oauth_configs"
+    },
+    {
+      "label": "API_KEY_PROVIDERS",
+      "file_type": "code",
+      "source_file": "backend/utils/ai-providers.js",
+      "source_location": "L60",
+      "community": 0,
+      "norm_label": "api_key_providers",
+      "id": "utils_ai_providers_api_key_providers"
+    },
+    {
+      "label": "httpGet()",
+      "file_type": "code",
+      "source_file": "backend/utils/ai-providers.js",
+      "source_location": "L62",
+      "community": 0,
+      "norm_label": "httpget()",
+      "id": "utils_ai_providers_httpget"
+    },
+    {
+      "label": "httpPost()",
+      "file_type": "code",
+      "source_file": "backend/utils/ai-providers.js",
+      "source_location": "L72",
+      "community": 0,
+      "norm_label": "httppost()",
+      "id": "utils_ai_providers_httppost"
+    },
+    {
+      "label": "getOAuthUrl()",
+      "file_type": "code",
+      "source_file": "backend/utils/ai-providers.js",
+      "source_location": "L86",
+      "community": 0,
+      "norm_label": "getoauthurl()",
+      "id": "utils_ai_providers_getoauthurl"
+    },
+    {
+      "label": "exchangeCode()",
+      "file_type": "code",
+      "source_file": "backend/utils/ai-providers.js",
+      "source_location": "L101",
+      "community": 0,
+      "norm_label": "exchangecode()",
+      "id": "utils_ai_providers_exchangecode"
+    },
+    {
+      "label": "validateApiKey()",
+      "file_type": "code",
+      "source_file": "backend/utils/ai-providers.js",
+      "source_location": "L113",
+      "community": 0,
+      "norm_label": "validateapikey()",
+      "id": "utils_ai_providers_validateapikey"
+    },
+    {
+      "label": "getOrgId()",
+      "file_type": "code",
+      "source_file": "backend/utils/ai-providers.js",
+      "source_location": "L152",
+      "community": 0,
+      "norm_label": "getorgid()",
+      "id": "utils_ai_providers_getorgid"
+    },
+    {
+      "label": "markConnectionError()",
+      "file_type": "code",
+      "source_file": "backend/utils/ai-providers.js",
+      "source_location": "L172",
+      "community": 0,
+      "norm_label": "markconnectionerror()",
+      "id": "utils_ai_providers_markconnectionerror"
+    },
+    {
+      "label": "syncOpenAI()",
+      "file_type": "code",
+      "source_file": "backend/utils/ai-providers.js",
+      "source_location": "L189",
+      "community": 0,
+      "norm_label": "syncopenai()",
+      "id": "utils_ai_providers_syncopenai"
+    },
+    {
+      "label": "syncAnthropic()",
+      "file_type": "code",
+      "source_file": "backend/utils/ai-providers.js",
+      "source_location": "L213",
+      "community": 0,
+      "norm_label": "syncanthropic()",
+      "id": "utils_ai_providers_syncanthropic"
+    },
+    {
+      "label": "syncMicrosoft()",
+      "file_type": "code",
+      "source_file": "backend/utils/ai-providers.js",
+      "source_location": "L221",
+      "community": 0,
+      "norm_label": "syncmicrosoft()",
+      "id": "utils_ai_providers_syncmicrosoft"
+    },
+    {
+      "label": "syncGoogle()",
+      "file_type": "code",
+      "source_file": "backend/utils/ai-providers.js",
+      "source_location": "L258",
+      "community": 0,
+      "norm_label": "syncgoogle()",
+      "id": "utils_ai_providers_syncgoogle"
+    },
+    {
+      "label": "syncGitHub()",
+      "file_type": "code",
+      "source_file": "backend/utils/ai-providers.js",
+      "source_location": "L281",
+      "community": 0,
+      "norm_label": "syncgithub()",
+      "id": "utils_ai_providers_syncgithub"
+    },
+    {
+      "label": "updateDailyAggregates()",
+      "file_type": "code",
+      "source_file": "backend/utils/ai-providers.js",
+      "source_location": "L320",
+      "community": 0,
+      "norm_label": "updatedailyaggregates()",
+      "id": "utils_ai_providers_updatedailyaggregates"
+    },
+    {
+      "label": "syncUsage()",
+      "file_type": "code",
+      "source_file": "backend/utils/ai-providers.js",
+      "source_location": "L369",
+      "community": 0,
+      "norm_label": "syncusage()",
+      "id": "utils_ai_providers_syncusage"
+    },
+    {
+      "label": "syncAllConnections()",
+      "file_type": "code",
+      "source_file": "backend/utils/ai-providers.js",
+      "source_location": "L408",
+      "community": 0,
+      "norm_label": "syncallconnections()",
+      "id": "utils_ai_providers_syncallconnections"
+    },
+    {
+      "label": "dashboard.js",
+      "file_type": "code",
+      "source_file": "frontend/js/dashboard.js",
+      "source_location": "L1",
+      "community": 11,
+      "norm_label": "dashboard.js",
+      "id": "frontend_js_dashboard_js"
+    },
+    {
+      "label": "user",
+      "file_type": "code",
+      "source_file": "frontend/js/dashboard.js",
+      "source_location": "L1",
+      "community": 11,
+      "norm_label": "user",
+      "id": "js_dashboard_user"
+    },
+    {
+      "label": "role",
+      "file_type": "code",
+      "source_file": "frontend/js/dashboard.js",
+      "source_location": "L18",
+      "community": 11,
+      "norm_label": "role",
+      "id": "js_dashboard_role"
+    },
+    {
+      "label": "loadAIIntelligence()",
+      "file_type": "code",
+      "source_file": "frontend/js/dashboard.js",
+      "source_location": "L29",
+      "community": 11,
+      "norm_label": "loadaiintelligence()",
+      "id": "js_dashboard_loadaiintelligence"
+    },
+    {
+      "label": "renderProviderChart()",
+      "file_type": "code",
+      "source_file": "frontend/js/dashboard.js",
+      "source_location": "L63",
+      "community": 11,
+      "norm_label": "renderproviderchart()",
+      "id": "js_dashboard_renderproviderchart"
+    },
+    {
+      "label": "renderAITrendChart()",
+      "file_type": "code",
+      "source_file": "frontend/js/dashboard.js",
+      "source_location": "L81",
+      "community": 11,
+      "norm_label": "renderaitrendchart()",
+      "id": "js_dashboard_renderaitrendchart"
+    },
+    {
+      "label": "initAdminDashboard()",
+      "file_type": "code",
+      "source_file": "frontend/js/dashboard.js",
+      "source_location": "L108",
+      "community": 11,
+      "norm_label": "initadmindashboard()",
+      "id": "js_dashboard_initadmindashboard"
+    },
+    {
+      "label": "distributeOpsPanels()",
+      "file_type": "code",
+      "source_file": "frontend/js/dashboard.js",
+      "source_location": "L124",
+      "community": 11,
+      "norm_label": "distributeopspanels()",
+      "id": "js_dashboard_distributeopspanels"
+    },
+    {
+      "label": "renderAdminStats()",
+      "file_type": "code",
+      "source_file": "frontend/js/dashboard.js",
+      "source_location": "L173",
+      "community": 11,
+      "norm_label": "renderadminstats()",
+      "id": "js_dashboard_renderadminstats"
+    },
+    {
+      "label": "renderCharts()",
+      "file_type": "code",
+      "source_file": "frontend/js/dashboard.js",
+      "source_location": "L195",
+      "community": 11,
+      "norm_label": "rendercharts()",
+      "id": "js_dashboard_rendercharts"
+    },
+    {
+      "label": "renderHeatmap()",
+      "file_type": "code",
+      "source_file": "frontend/js/dashboard.js",
+      "source_location": "L269",
+      "community": 11,
+      "norm_label": "renderheatmap()",
+      "id": "js_dashboard_renderheatmap"
+    },
+    {
+      "label": "initMemberDashboard()",
+      "file_type": "code",
+      "source_file": "frontend/js/dashboard.js",
+      "source_location": "L295",
+      "community": 11,
+      "norm_label": "initmemberdashboard()",
+      "id": "js_dashboard_initmemberdashboard"
+    },
+    {
+      "label": "renderAdminLeaderboard()",
+      "file_type": "code",
+      "source_file": "frontend/js/dashboard.js",
+      "source_location": "L353",
+      "community": 11,
+      "norm_label": "renderadminleaderboard()",
+      "id": "js_dashboard_renderadminleaderboard"
+    },
+    {
+      "label": "renderMemberLeaderboard()",
+      "file_type": "code",
+      "source_file": "frontend/js/dashboard.js",
+      "source_location": "L374",
+      "community": 11,
+      "norm_label": "rendermemberleaderboard()",
+      "id": "js_dashboard_rendermemberleaderboard"
+    },
+    {
+      "label": "renderHistory()",
+      "file_type": "code",
+      "source_file": "frontend/js/dashboard.js",
+      "source_location": "L393",
+      "community": 11,
+      "norm_label": "renderhistory()",
+      "id": "js_dashboard_renderhistory"
+    },
+    {
+      "label": "checkFlaggedSubmissions()",
+      "file_type": "code",
+      "source_file": "frontend/js/dashboard.js",
+      "source_location": "L433",
+      "community": 11,
+      "norm_label": "checkflaggedsubmissions()",
+      "id": "js_dashboard_checkflaggedsubmissions"
+    },
+    {
+      "label": "triggerAICycle()",
+      "file_type": "code",
+      "source_file": "frontend/js/dashboard.js",
+      "source_location": "L453",
+      "community": 11,
+      "norm_label": "triggeraicycle()",
+      "id": "js_dashboard_triggeraicycle"
+    },
+    {
+      "label": "copyInviteCode()",
+      "file_type": "code",
+      "source_file": "frontend/js/dashboard.js",
+      "source_location": "L471",
+      "community": 11,
+      "norm_label": "copyinvitecode()",
+      "id": "js_dashboard_copyinvitecode"
+    },
+    {
+      "label": "generatePDFReport()",
+      "file_type": "code",
+      "source_file": "frontend/js/dashboard.js",
+      "source_location": "L478",
+      "community": 11,
+      "norm_label": "generatepdfreport()",
+      "id": "js_dashboard_generatepdfreport"
+    },
+    {
+      "label": "loadDashboardInvoices()",
+      "file_type": "code",
+      "source_file": "frontend/js/dashboard.js",
+      "source_location": "L748",
+      "community": 11,
+      "norm_label": "loaddashboardinvoices()",
+      "id": "js_dashboard_loaddashboardinvoices"
     },
     {
       "label": "vercel.json",
       "file_type": "code",
       "source_file": "vercel.json",
       "source_location": "L1",
-      "id": "vercel_json",
       "community": 16,
-      "norm_label": "vercel.json"
+      "norm_label": "vercel.json",
+      "id": "vercel_json"
     },
     {
       "label": "version",
       "file_type": "code",
       "source_file": "vercel.json",
       "source_location": "L2",
-      "id": "argen_new_look_vercel_version",
       "community": 16,
-      "norm_label": "version"
+      "norm_label": "version",
+      "id": "argen_new_look_vercel_version"
     },
     {
       "label": "name",
       "file_type": "code",
       "source_file": "vercel.json",
       "source_location": "L3",
-      "id": "argen_new_look_vercel_name",
       "community": 16,
-      "norm_label": "name"
+      "norm_label": "name",
+      "id": "argen_new_look_vercel_name"
     },
     {
       "label": "headers",
       "file_type": "code",
       "source_file": "vercel.json",
       "source_location": "L4",
-      "id": "argen_new_look_vercel_headers",
       "community": 16,
-      "norm_label": "headers"
+      "norm_label": "headers",
+      "id": "argen_new_look_vercel_headers"
     },
     {
       "label": "rewrites",
       "file_type": "code",
       "source_file": "vercel.json",
       "source_location": "L21",
-      "id": "argen_new_look_vercel_rewrites",
       "community": 16,
-      "norm_label": "rewrites"
+      "norm_label": "rewrites",
+      "id": "argen_new_look_vercel_rewrites"
     },
     {
       "label": "crons",
       "file_type": "code",
       "source_file": "vercel.json",
       "source_location": "L55",
-      "id": "argen_new_look_vercel_crons",
       "community": 16,
-      "norm_label": "crons"
+      "norm_label": "crons",
+      "id": "argen_new_look_vercel_crons"
     },
     {
       "label": "ENV.md",
@@ -2915,7 +2951,7 @@
       "file_type": "code",
       "source_file": "backend/routes/responses.js",
       "source_location": "L41",
-      "community": 27,
+      "community": 7,
       "norm_label": "challenge",
       "id": "routes_responses_challenge"
     },
@@ -5327,6 +5363,298 @@
     {
       "relation": "contains",
       "confidence": "EXTRACTED",
+      "source_file": "backend/routes/ai.js",
+      "source_location": "L1",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "backend_routes_ai_js",
+      "target": "routes_ai_express"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/routes/ai.js",
+      "source_location": "L2",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "backend_routes_ai_js",
+      "target": "routes_ai_router"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/routes/ai.js",
+      "source_location": "L9",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "backend_routes_ai_js",
+      "target": "routes_ai_providers"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/routes/ai.js",
+      "source_location": "L15",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "backend_routes_ai_js",
+      "target": "routes_ai_statuses"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/routes/ai.js",
+      "source_location": "L43",
+      "weight": 1.0,
+      "source": "backend_routes_ai_js",
+      "target": "routes_ai_usermessages",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/routes/ai.js",
+      "source_location": "L48",
+      "weight": 1.0,
+      "source": "backend_routes_ai_js",
+      "target": "routes_ai_fullmessages",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/routes/ai.js",
+      "source_location": "L90",
+      "weight": 1.0,
+      "source": "backend_routes_ai_js",
+      "target": "routes_ai_anthropic",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/routes/ai.js",
+      "source_location": "L100",
+      "weight": 1.0,
+      "source": "backend_routes_ai_js",
+      "target": "routes_ai_geminibody",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/routes/ai.js",
+      "source_location": "L3",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "backend_routes_ai_js",
+      "target": "backend_middleware_auth_js"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/routes/ai.js",
+      "source_location": "L3",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "backend_routes_ai_js",
+      "target": "middleware_auth_protect"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "package.json",
+      "source_location": "L2",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "package_json",
+      "target": "argen_new_look_package_name"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "package.json",
+      "source_location": "L3",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "package_json",
+      "target": "argen_new_look_package_version"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "package.json",
+      "source_location": "L4",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "package_json",
+      "target": "argen_new_look_package_private"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "package.json",
+      "source_location": "L5",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "package_json",
+      "target": "argen_new_look_package_scripts"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "package.json",
+      "source_location": "L5",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "package_json",
+      "target": "argen_new_look_package_dependencies"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "package.json",
+      "source_location": "L6",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "argen_new_look_package_scripts",
+      "target": "argen_new_look_package_scripts_start"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "package.json",
+      "source_location": "L7",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "argen_new_look_package_scripts",
+      "target": "argen_new_look_package_scripts_dev"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "package.json",
+      "source_location": "L10",
+      "weight": 1.0,
+      "source": "argen_new_look_package_dependencies",
+      "target": "argen_new_look_package_dependencies_anthropic_ai_sdk",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "package.json",
+      "source_location": "L6",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "argen_new_look_package_dependencies",
+      "target": "argen_new_look_package_dependencies_supabase_supabase_js"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "package.json",
+      "source_location": "L16",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "argen_new_look_package_dependencies",
+      "target": "argen_new_look_package_dependencies_whop_sdk"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "package.json",
+      "source_location": "L6",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "argen_new_look_package_dependencies",
+      "target": "argen_new_look_package_dependencies_bcryptjs"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "package.json",
+      "source_location": "L7",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "argen_new_look_package_dependencies",
+      "target": "argen_new_look_package_dependencies_cors"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "package.json",
+      "source_location": "L8",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "argen_new_look_package_dependencies",
+      "target": "argen_new_look_package_dependencies_dotenv"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "package.json",
+      "source_location": "L9",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "argen_new_look_package_dependencies",
+      "target": "argen_new_look_package_dependencies_express"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "package.json",
+      "source_location": "L11",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "argen_new_look_package_dependencies",
+      "target": "argen_new_look_package_dependencies_express_rate_limit"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "package.json",
+      "source_location": "L17",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "argen_new_look_package_dependencies",
+      "target": "argen_new_look_package_dependencies_express_validator"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "package.json",
+      "source_location": "L12",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "argen_new_look_package_dependencies",
+      "target": "argen_new_look_package_dependencies_helmet"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "package.json",
+      "source_location": "L13",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "argen_new_look_package_dependencies",
+      "target": "argen_new_look_package_dependencies_jsonwebtoken"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "package.json",
+      "source_location": "L15",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "argen_new_look_package_dependencies",
+      "target": "argen_new_look_package_dependencies_nodemailer"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
       "source_file": "AGENTS.md",
       "source_location": "L1",
       "weight": 1.0,
@@ -5589,17 +5917,6 @@
       "relation": "imports_from",
       "context": "import",
       "confidence": "EXTRACTED",
-      "source_file": "backend/routes/ai.js",
-      "source_location": "L3",
-      "weight": 1.0,
-      "source": "backend_routes_ai_js",
-      "target": "backend_middleware_auth_js",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "imports_from",
-      "context": "import",
-      "confidence": "EXTRACTED",
       "source_file": "backend/routes/auth.js",
       "source_location": "L282",
       "weight": 1.0,
@@ -5782,17 +6099,6 @@
       "confidence_score": 1.0,
       "source": "backend_routes_admin_js",
       "target": "middleware_auth_protect"
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "backend/routes/ai.js",
-      "source_location": "L3",
-      "weight": 1.0,
-      "source": "backend_routes_ai_js",
-      "target": "middleware_auth_protect",
-      "confidence_score": 1.0
     },
     {
       "relation": "imports",
@@ -6243,9 +6549,9 @@
       "source_file": "backend/package.json",
       "source_location": "L18",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "backend_package_dependencies",
-      "target": "backend_package_dependencies_express_validator",
-      "confidence_score": 1.0
+      "target": "backend_package_dependencies_express_validator"
     },
     {
       "relation": "contains",
@@ -6954,56 +7260,6 @@
     {
       "relation": "contains",
       "confidence": "EXTRACTED",
-      "source_file": "backend/routes/ai.js",
-      "source_location": "L1",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "backend_routes_ai_js",
-      "target": "routes_ai_express"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "backend/routes/ai.js",
-      "source_location": "L2",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "backend_routes_ai_js",
-      "target": "routes_ai_router"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "backend/routes/ai.js",
-      "source_location": "L3",
-      "weight": 1.0,
-      "source": "backend_routes_ai_js",
-      "target": "routes_ai_protect",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "backend/routes/ai.js",
-      "source_location": "L9",
-      "weight": 1.0,
-      "source": "backend_routes_ai_js",
-      "target": "routes_ai_providers",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "backend/routes/ai.js",
-      "source_location": "L15",
-      "weight": 1.0,
-      "source": "backend_routes_ai_js",
-      "target": "routes_ai_statuses",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
       "source_file": "backend/routes/apply.js",
       "source_location": "L1",
       "weight": 1.0,
@@ -7495,9 +7751,9 @@
       "source_file": "backend/routes/connect.js",
       "source_location": "L3",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "backend_routes_connect_js",
-      "target": "routes_connect_crypto",
-      "confidence_score": 1.0
+      "target": "routes_connect_crypto"
     },
     {
       "relation": "contains",
@@ -7556,9 +7812,9 @@
       "source_file": "backend/routes/connect.js",
       "source_location": "L40",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "backend_routes_connect_js",
-      "target": "routes_connect_statenonce",
-      "confidence_score": 1.0
+      "target": "routes_connect_statenonce"
     },
     {
       "relation": "contains",
@@ -7576,9 +7832,9 @@
       "source_file": "backend/routes/connect.js",
       "source_location": "L71",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "backend_routes_connect_js",
-      "target": "routes_connect_statedata",
-      "confidence_score": 1.0
+      "target": "routes_connect_statedata"
     },
     {
       "relation": "contains",
@@ -7586,9 +7842,9 @@
       "source_file": "backend/routes/connect.js",
       "source_location": "L152",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "backend_routes_connect_js",
-      "target": "routes_connect_row",
-      "confidence_score": 1.0
+      "target": "routes_connect_row"
     },
     {
       "relation": "contains",
@@ -7657,9 +7913,9 @@
       "source_file": "backend/server.js",
       "source_location": "L9",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "backend_server_js",
-      "target": "backend_server_required_env",
-      "confidence_score": 1.0
+      "target": "backend_server_required_env"
     },
     {
       "relation": "contains",
@@ -7667,9 +7923,9 @@
       "source_file": "backend/server.js",
       "source_location": "L10",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "backend_server_js",
-      "target": "backend_server_missing",
-      "confidence_score": 1.0
+      "target": "backend_server_missing"
     },
     {
       "relation": "contains",
@@ -7849,9 +8105,9 @@
       "source_file": "backend/utils/ai-agents.js",
       "source_location": "L5",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "backend_utils_ai_agents_js",
-      "target": "utils_ai_agents_fetchwithtimeout",
-      "confidence_score": 1.0
+      "target": "utils_ai_agents_fetchwithtimeout"
     },
     {
       "relation": "contains",
@@ -8046,9 +8302,9 @@
       "source_file": "backend/utils/ai-agents.js",
       "source_location": "L25",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "utils_ai_agents_callanthropic",
-      "target": "utils_ai_agents_fetchwithtimeout",
-      "confidence_score": 1.0
+      "target": "utils_ai_agents_fetchwithtimeout"
     },
     {
       "relation": "calls",
@@ -8057,9 +8313,9 @@
       "source_file": "backend/utils/ai-agents.js",
       "source_location": "L57",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "utils_ai_agents_callgemini",
-      "target": "utils_ai_agents_fetchwithtimeout",
-      "confidence_score": 1.0
+      "target": "utils_ai_agents_fetchwithtimeout"
     },
     {
       "relation": "calls",
@@ -8068,9 +8324,9 @@
       "source_file": "backend/utils/ai-agents.js",
       "source_location": "L79",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "utils_ai_agents_callopenai",
-      "target": "utils_ai_agents_fetchwithtimeout",
-      "confidence_score": 1.0
+      "target": "utils_ai_agents_fetchwithtimeout"
     },
     {
       "relation": "calls",
@@ -8079,9 +8335,9 @@
       "source_file": "backend/utils/ai-agents.js",
       "source_location": "L105",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "utils_ai_agents_callnvidia",
-      "target": "utils_ai_agents_fetchwithtimeout",
-      "confidence_score": 1.0
+      "target": "utils_ai_agents_fetchwithtimeout"
     },
     {
       "relation": "calls",
@@ -8342,9 +8598,9 @@
       "source_file": "backend/utils/ai-providers.js",
       "source_location": "L5",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "backend_utils_ai_providers_js",
-      "target": "utils_ai_providers_crypto",
-      "confidence_score": 1.0
+      "target": "utils_ai_providers_crypto"
     },
     {
       "relation": "contains",
@@ -8362,9 +8618,9 @@
       "source_file": "backend/utils/ai-providers.js",
       "source_location": "L11",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "backend_utils_ai_providers_js",
-      "target": "utils_ai_providers_encrypt",
-      "confidence_score": 1.0
+      "target": "utils_ai_providers_encrypt"
     },
     {
       "relation": "contains",
@@ -8372,9 +8628,9 @@
       "source_file": "backend/utils/ai-providers.js",
       "source_location": "L22",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "backend_utils_ai_providers_js",
-      "target": "utils_ai_providers_decrypt",
-      "confidence_score": 1.0
+      "target": "utils_ai_providers_decrypt"
     },
     {
       "relation": "contains",
@@ -8564,9 +8820,9 @@
       "source_file": "backend/utils/ai-providers.js",
       "source_location": "L418",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "utils_ai_providers_syncallconnections",
-      "target": "utils_ai_providers_decrypt",
-      "confidence_score": 1.0
+      "target": "utils_ai_providers_decrypt"
     },
     {
       "relation": "calls",
@@ -9091,186 +9347,6 @@
     {
       "relation": "contains",
       "confidence": "EXTRACTED",
-      "source_file": "package.json",
-      "source_location": "L2",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "package_json",
-      "target": "argen_new_look_package_name"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "package.json",
-      "source_location": "L3",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "package_json",
-      "target": "argen_new_look_package_version"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "package.json",
-      "source_location": "L4",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "package_json",
-      "target": "argen_new_look_package_private"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "package.json",
-      "source_location": "L5",
-      "weight": 1.0,
-      "source": "package_json",
-      "target": "argen_new_look_package_scripts",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "package.json",
-      "source_location": "L5",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "package_json",
-      "target": "argen_new_look_package_dependencies"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "package.json",
-      "source_location": "L6",
-      "weight": 1.0,
-      "source": "argen_new_look_package_scripts",
-      "target": "argen_new_look_package_scripts_start",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "package.json",
-      "source_location": "L7",
-      "weight": 1.0,
-      "source": "argen_new_look_package_scripts",
-      "target": "argen_new_look_package_scripts_dev",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "package.json",
-      "source_location": "L6",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "argen_new_look_package_dependencies",
-      "target": "argen_new_look_package_dependencies_supabase_supabase_js"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "package.json",
-      "source_location": "L16",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "argen_new_look_package_dependencies",
-      "target": "argen_new_look_package_dependencies_whop_sdk"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "package.json",
-      "source_location": "L6",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "argen_new_look_package_dependencies",
-      "target": "argen_new_look_package_dependencies_bcryptjs"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "package.json",
-      "source_location": "L7",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "argen_new_look_package_dependencies",
-      "target": "argen_new_look_package_dependencies_cors"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "package.json",
-      "source_location": "L8",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "argen_new_look_package_dependencies",
-      "target": "argen_new_look_package_dependencies_dotenv"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "package.json",
-      "source_location": "L9",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "argen_new_look_package_dependencies",
-      "target": "argen_new_look_package_dependencies_express"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "package.json",
-      "source_location": "L11",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "argen_new_look_package_dependencies",
-      "target": "argen_new_look_package_dependencies_express_rate_limit"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "package.json",
-      "source_location": "L17",
-      "weight": 1.0,
-      "source": "argen_new_look_package_dependencies",
-      "target": "argen_new_look_package_dependencies_express_validator",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "package.json",
-      "source_location": "L12",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "argen_new_look_package_dependencies",
-      "target": "argen_new_look_package_dependencies_helmet"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "package.json",
-      "source_location": "L13",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "argen_new_look_package_dependencies",
-      "target": "argen_new_look_package_dependencies_jsonwebtoken"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "package.json",
-      "source_location": "L15",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "argen_new_look_package_dependencies",
-      "target": "argen_new_look_package_dependencies_nodemailer"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
       "source_file": "vercel.json",
       "source_location": "L2",
       "weight": 1.0,
@@ -9294,9 +9370,9 @@
       "source_file": "vercel.json",
       "source_location": "L4",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "vercel_json",
-      "target": "argen_new_look_vercel_headers",
-      "confidence_score": 1.0
+      "target": "argen_new_look_vercel_headers"
     },
     {
       "relation": "contains",
@@ -12829,5 +12905,5 @@
     }
   ],
   "hyperedges": [],
-  "built_at_commit": "484386bf6548f53574211859767918cf7234997c"
+  "built_at_commit": "ce294f5385c12d40e107fa2727f39cba5ae40a4a"
 }

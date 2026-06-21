@@ -113,7 +113,8 @@ router.post('/ask', async (req, res) => {
             const data = await response.json();
             return res.json({ reply: data.candidates?.[0]?.content?.parts?.[0]?.text || 'No response' });
         } else {
-            return res.status(500).json({ message: 'AI Chat Service not configured on server' });
+            // No AI keys configured — return a helpful fallback response
+            return res.json({ reply: `I'm the ArGen Intelligence Agent. I'm currently in offline mode — no AI providers are configured on this server. To enable AI responses, add one of the following environment variables in Vercel: NVIDIA_API_KEY, OPENAI_API_KEY, ANTHROPIC_API_KEY, or GEMINI_API_KEY.\n\nMeanwhile, explore ArGen's features using the navigation above, or visit our pricing page at /pricing to learn more.` });
         }
 
         if (!response.ok) {
