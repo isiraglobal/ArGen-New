@@ -85,16 +85,6 @@ router.post('/ask', async (req, res) => {
                     temperature: 0.3
                 })
             });
-        } else if (anthropicKey) {
-            const Anthropic = require('@anthropic-ai/sdk');
-            const anthropic = new Anthropic({ apiKey: anthropicKey });
-            const msg = await anthropic.messages.create({
-                model: 'claude-3-haiku-20240307',
-                max_tokens: 500,
-                system: AI_SYSTEM_PROMPT,
-                messages: userMessages.map(m => ({ role: m.role, content: m.content }))
-            });
-            return res.json({ reply: msg.content[0].text });
         } else if (geminiKey) {
             const geminiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${geminiKey}`;
             const geminiBody = {

@@ -1,16 +1,16 @@
 # Graph Report - ArGen - New Look  (2026-06-21)
 
 ## Corpus Check
-- 62 files · ~147,154 words
+- 63 files · ~147,263 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 595 nodes · 732 edges · 47 communities (35 shown, 12 thin omitted)
+- 595 nodes · 729 edges · 47 communities (34 shown, 13 thin omitted)
 - Extraction: 100% EXTRACTED · 0% INFERRED · 0% AMBIGUOUS · INFERRED: 3 edges (avg confidence: 0.8)
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `b86702c0`
+- Built from commit: `e9bf0a1d`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -23,6 +23,7 @@
 - [[_COMMUNITY_Community 5|Community 5]]
 - [[_COMMUNITY_Community 6|Community 6]]
 - [[_COMMUNITY_Community 7|Community 7]]
+- [[_COMMUNITY_Community 8|Community 8]]
 - [[_COMMUNITY_Community 9|Community 9]]
 - [[_COMMUNITY_Community 10|Community 10]]
 - [[_COMMUNITY_Community 11|Community 11]]
@@ -52,13 +53,12 @@
 - [[_COMMUNITY_Community 38|Community 38]]
 - [[_COMMUNITY_Community 39|Community 39]]
 - [[_COMMUNITY_Community 40|Community 40]]
+- [[_COMMUNITY_Community 41|Community 41]]
 - [[_COMMUNITY_Community 42|Community 42]]
 - [[_COMMUNITY_Community 43|Community 43]]
 - [[_COMMUNITY_Community 44|Community 44]]
-- [[_COMMUNITY_Community 45|Community 45]]
 - [[_COMMUNITY_Community 46|Community 46]]
 - [[_COMMUNITY_Community 47|Community 47]]
-- [[_COMMUNITY_Community 48|Community 48]]
 
 ## God Nodes (most connected - your core abstractions)
 1. `protect()` - 14 edges
@@ -84,7 +84,7 @@
 - `handleSyncConnections()` --calls--> `syncAllConnections()`  [INFERRED]
   backend/routes/scheduler.js → backend/utils/ai-providers.js
 
-## Communities (47 total, 12 thin omitted)
+## Communities (47 total, 13 thin omitted)
 
 ### Community 0 - "Community 0"
 Cohesion: 0.14
@@ -99,20 +99,24 @@ Cohesion: 0.08
 Nodes (24): author, dependencies, bcryptjs, cors, dotenv, express, express-rate-limit, express-validator (+16 more)
 
 ### Community 4 - "Community 4"
-Cohesion: 0.05
-Nodes (36): dotenv, path, CompanySchema, mongoose, application, { createEmailTemplate }, { db }, embed (+28 more)
+Cohesion: 0.09
+Nodes (20): application, { createEmailTemplate }, { db }, embed, express, html, router, sendEmail (+12 more)
 
 ### Community 5 - "Community 5"
 Cohesion: 0.06
-Nodes (31): InvitationSchema, mongoose, { auth, db, supabase }, autoPassword, bcrypt, company, companyData, { createEmailTemplate } (+23 more)
+Nodes (29): { auth, db, supabase }, autoPassword, bcrypt, company, companyData, { createEmailTemplate }, crypto, emailLower (+21 more)
 
 ### Community 6 - "Community 6"
 Cohesion: 0.09
 Nodes (21): fileStructure, backend, docs, frontend, css, html, images, js (+13 more)
 
 ### Community 7 - "Community 7"
-Cohesion: 0.08
-Nodes (37): { db }, runTest(), { scoreResponse, generateWeeklyReport, generateCoachingNudge }, ChallengeSchema, mongoose, challengeIds, challengePromises, company (+29 more)
+Cohesion: 0.18
+Nodes (20): { db }, runTest(), { scoreResponse, generateWeeklyReport, generateCoachingNudge }, challenge, callAnthropic(), callGemini(), callNvidia(), callOpenAI() (+12 more)
+
+### Community 8 - "Community 8"
+Cohesion: 0.1
+Nodes (16): dotenv, path, InvitationSchema, mongoose, { createEmailTemplate }, crypto, { db }, expectedSignature (+8 more)
 
 ### Community 9 - "Community 9"
 Cohesion: 0.04
@@ -131,8 +135,8 @@ Cohesion: 0.11
 Nodes (18): 🤖 5 AI Agents (backend/utils/ai-agents.js), 🔌 API Base URL Resolution, 🏗️ Architecture Overview, ArGen Platform — Project Context for AI Agents, code:block1 (ArGen - New Look/), code:block2 (/graphify query "how does scoring work"), code:bash (GEMINI_API_KEY=<YOUR_GEMINI_API_KEY> graphify extract . --ba), 🗄️ Database (+10 more)
 
 ### Community 13 - "Community 13"
-Cohesion: 0.09
-Nodes (21): app, allowedOrigins, app, { contactRules, handleValidationErrors }, cors, { db }, dotenv, express (+13 more)
+Cohesion: 0.1
+Nodes (20): allowedOrigins, app, { contactRules, handleValidationErrors }, cors, { db }, dotenv, express, frontendDir (+12 more)
 
 ### Community 14 - "Community 14"
 Cohesion: 0.14
@@ -163,8 +167,8 @@ Cohesion: 0.22
 Nodes (8): Anthropic, express, fullMessages, geminiBody, providers, router, statuses, userMessages
 
 ### Community 27 - "Community 27"
-Cohesion: 0.12
-Nodes (15): data, { db }, dims, express, longestStreak, minIndex, { protect, isApproved, authorize }, responseData (+7 more)
+Cohesion: 0.07
+Nodes (26): ChallengeSchema, mongoose, mongoose, ResponseSchema, challenges, challengesRef, { db }, express (+18 more)
 
 ### Community 28 - "Community 28"
 Cohesion: 0.4
@@ -188,47 +192,39 @@ Nodes (4): app, auth, firebaseConfig, googleProvider
 
 ### Community 35 - "Community 35"
 Cohesion: 0.09
-Nodes (20): mongoose, ResponseSchema, challenges, challengesRef, { db }, express, { protect }, responseData (+12 more)
+Nodes (18): bcrypt, mongoose, UserSchema, day, { db }, express, finalLeaderboard, now (+10 more)
 
 ### Community 42 - "Community 42"
-Cohesion: 0.11
-Nodes (14): bcrypt, Company, dotenv, jwt, mongoose, path, User, bcrypt (+6 more)
+Cohesion: 0.17
+Nodes (9): bcrypt, Company, dotenv, jwt, mongoose, path, User, CompanySchema (+1 more)
 
 ### Community 43 - "Community 43"
 Cohesion: 0.42
 Nodes (8): allProviders, apiKeyProviders, connect(), disconnect(), loadConnections(), oauthProviders, showAlert(), syncProvider()
 
 ### Community 44 - "Community 44"
-Cohesion: 0.15
-Nodes (12): accessToken, authUrl, crypto, data, { db }, express, { protect, authorize }, providers (+4 more)
-
-### Community 45 - "Community 45"
-Cohesion: 0.21
-Nodes (11): { auth, db }, authorize(), isApproved(), parseCookies(), protect(), requirePageAuth(), verifyTokenFromRequest(), express (+3 more)
+Cohesion: 0.05
+Nodes (48): { auth, db }, authorize(), isApproved(), parseCookies(), protect(), requirePageAuth(), verifyTokenFromRequest(), express (+40 more)
 
 ### Community 46 - "Community 46"
 Cohesion: 0.5
 Nodes (4): createTeamCode(), createUniqueTeamCode(), isTeamCodeAvailable(), limit
 
-### Community 48 - "Community 48"
-Cohesion: 0.18
-Nodes (10): allowed, data, { db }, departments, departmentsMap, employees, express, { protect, authorize, isApproved } (+2 more)
-
 ## Knowledge Gaps
-- **407 isolated node(s):** `express`, `router`, `providers`, `statuses`, `userMessages` (+402 more)
+- **407 isolated node(s):** `express`, `cors`, `dotenv`, `path`, `REQUIRED_ENV` (+402 more)
   These have ≤1 connection - possible missing edges or undocumented components.
-- **12 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
+- **13 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
 
 ## Suggested Questions
 _Questions this graph is uniquely positioned to answer:_
 
-- **Why does `protect()` connect `Community 45` to `Community 35`, `Community 4`, `Community 5`, `Community 7`, `Community 9`, `Community 44`, `Community 48`, `Community 27`, `Community 30`?**
+- **Why does `requirePageAuth()` connect `Community 44` to `Community 13`?**
+  _High betweenness centrality (0.039) - this node is a cross-community bridge._
+- **Why does `protect()` connect `Community 44` to `Community 35`, `Community 4`, `Community 5`, `Community 8`, `Community 9`, `Community 27`, `Community 30`?**
   _High betweenness centrality (0.031) - this node is a cross-community bridge._
-- **Why does `createEmailTemplate()` connect `Community 4` to `Community 9`, `Community 5`, `Community 7`?**
+- **Why does `createEmailTemplate()` connect `Community 4` to `Community 8`, `Community 9`, `Community 44`, `Community 5`?**
   _High betweenness centrality (0.026) - this node is a cross-community bridge._
-- **Why does `sendEmail()` connect `Community 4` to `Community 9`, `Community 5`?**
-  _High betweenness centrality (0.013) - this node is a cross-community bridge._
-- **What connects `express`, `router`, `providers` to the rest of the system?**
+- **What connects `express`, `cors`, `dotenv` to the rest of the system?**
   _407 weakly-connected nodes found - possible documentation gaps or missing edges._
 - **Should `Community 0` be split into smaller, more focused modules?**
   _Cohesion score 0.14 - nodes in this community are weakly interconnected._

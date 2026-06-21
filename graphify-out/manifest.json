@@ -29,6 +29,11 @@
     "ast_hash": "0d19218bc5797ea3ec5d6ddd969dc1e8",
     "semantic_hash": ""
   },
+  "/Users/lakshitsinghvi/Documents/ArGen - New Look/.vercel/project.json": {
+    "mtime": 1782058576.2144284,
+    "ast_hash": "50b5fc8341babd4e10048794fe19055f",
+    "semantic_hash": ""
+  },
   "/Users/lakshitsinghvi/Documents/ArGen - New Look/frontend/js/onboarding.js": {
     "mtime": 1781610133.9357557,
     "ast_hash": "83fe056a75a4f7ae2b20c6c4e06c833e",
@@ -65,8 +70,8 @@
     "semantic_hash": ""
   },
   "/Users/lakshitsinghvi/Documents/ArGen - New Look/backend/server.js": {
-    "mtime": 1781980711.0257,
-    "ast_hash": "92d428c191cf8011aa4914814c0b3ee7",
+    "mtime": 1782058609.6636338,
+    "ast_hash": "4410f9b3e2d63dc05ae1967dee5b1ac2",
     "semantic_hash": ""
   },
   "/Users/lakshitsinghvi/Documents/ArGen - New Look/backend/package.json": {
@@ -252,6 +257,11 @@
   "/Users/lakshitsinghvi/Documents/ArGen - New Look/argen-legal.html": {
     "mtime": 1781270789.82429,
     "ast_hash": "ba6ceab96f48726baa9332c059a0f4a7",
+    "semantic_hash": ""
+  },
+  "/Users/lakshitsinghvi/Documents/ArGen - New Look/.vercel/README.txt": {
+    "mtime": 1782058576.2150068,
+    "ast_hash": "2b13c79d37d6ed82a3255b83b6815034",
     "semantic_hash": ""
   },
   "/Users/lakshitsinghvi/Documents/ArGen - New Look/frontend/html/evaluate.html": {
