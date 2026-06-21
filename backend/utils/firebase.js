@@ -15,7 +15,18 @@ const FIREBASE_AUTH_BASE = 'https://identitytoolkit.googleapis.com/v1';
 function initializeFirebase() {
   const projectId = process.env.FIREBASE_PROJECT_ID;
   const clientEmail = process.env.FIREBASE_CLIENT_EMAIL;
-  const privateKey = (process.env.FIREBASE_PRIVATE_KEY || '').replace(/\\n/g, '\n');
+  let privateKey = process.env.FIREBASE_PRIVATE_KEY || '';
+  // Support three formats: (1) base64 via FIREBASE_PRIVATE_KEY_BASE64, (2) literal \n escapes, (3) actual newlines
+  if (!privateKey.startsWith('-----BEGIN')) {
+    // Try base64 fallback
+    const b64 = process.env.FIREBASE_PRIVATE_KEY_BASE64;
+    if (b64) {
+      privateKey = Buffer.from(b64, 'base64').toString('utf8');
+    }
+  }
+  if (privateKey.includes('\\n')) {
+    privateKey = privateKey.replace(/\\n/g, '\n');
+  }
 
   if (!projectId || !clientEmail || !privateKey) {
     console.warn('⚠️  Firebase credentials missing. Initializing mock DB layer.');
