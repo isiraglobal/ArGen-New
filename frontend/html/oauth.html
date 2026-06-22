@@ -232,56 +232,76 @@
       updateProgress(10);
 
       try {
-        // Extract access_token from URL hash fragment
-        const hash = window.location.hash.substring(1);
-        const params = new URLSearchParams(hash);
-        const accessToken = params.get('access_token');
+        // Extract token and user from URL query parameters (auth-guard may have preserved them for /oauth)
+        const params = new URLSearchParams(window.location.search);
+        let token = params.get('token');
+        const userParam = params.get('user');
+        const redirectParam = params.get('redirect');
 
-        if (!accessToken) {
-          throw new Error('No access token found in the URL. Authentication callback failed.');
+        // If auth-guard already stripped the token from URL, recover from localStorage
+        if (!token) {
+          token = localStorage.getItem('argen_token');
+        }
+
+        if (!token) {
+          throw new Error('No authentication token found. OAuth callback failed.');
         }
 
         logToTerminal('Authentication token received from provider.', 'success');
         updateProgress(40);
 
         // Store token locally
-        localStorage.setItem('argen_token', accessToken);
+        localStorage.setItem('argen_token', token);
+        window.argenApi.setCookie('argen_token', token, 7);
         logToTerminal('Establishing local session cache...');
-        updateProgress(60);
+        updateProgress(50);
 
-        // Clear hash from URL
-        window.history.replaceState({}, document.title, window.location.pathname);
+        // Parse user data from URL if available
+        let user;
+        if (userParam) {
+          try {
+            user = JSON.parse(decodeURIComponent(userParam));
+          } catch (e) {
+            // Fall through to API call
+          }
+        }
 
-        // Verify session by fetching user profile
-        logToTerminal('Synchronizing profile data from ArGen database...');
-        const user = await window.argenApi.getMe();
+        if (!user) {
+          logToTerminal('Synchronizing profile data from ArGen database...');
+          user = await window.argenApi.getMe();
+        } else {
+          logToTerminal(`Profile data received from provider.`, 'success');
+        }
 
-        logToTerminal(`Profile located. Authenticated as: ${user.name} (${user.role})`, 'success');
-        updateProgress(90);
+        logToTerminal(`Authenticated as: ${user.name || user.email} (${user.role})`, 'success');
+        updateProgress(80);
 
         localStorage.setItem('user', JSON.stringify(user));
         window.argenApi.setCookie('user', JSON.stringify(user), 7);
-        window.argenApi.setCookie('argen_token', accessToken, 7);
 
-        if (!user.profileComplete) {
-          logToTerminal('Profile incomplete. Redirecting to onboarding...', 'success');
-          updateProgress(100);
-          setTimeout(() => { window.location.href = '/onboarding'; }, 800);
-          return;
+        // Clean URL
+        window.history.replaceState({}, document.title, window.location.pathname);
+
+        // Superadmins need token under admin key too
+        if (user.role === 'superadmin') {
+          localStorage.setItem('argen_admin_token', token);
+          localStorage.setItem('admin_user', JSON.stringify(user));
+          window.argenApi.setCookie('argen_admin_token', token, 7);
+          window.argenApi.setCookie('admin_user', JSON.stringify(user), 7);
         }
 
-        logToTerminal('Verification complete. Redirecting to dashboard...', 'success');
+        const target = redirectParam || (
+          user.role === 'superadmin' ? '/admin' :
+          !user.profileComplete ? '/onboarding' : '/dashboard'
+        );
+
+        logToTerminal(`Redirecting to ${target}...`, 'success');
         updateProgress(100);
 
         setTimeout(() => {
-          const role = user.role.toLowerCase();
-          if (role === 'superadmin') {
-            window.location.href = '/admin-portal';
-          } else {
-            if (user.companyId) sessionStorage.setItem('team_verified', 'true');
-            window.location.href = '/dashboard';
-          }
-        }, 1000);
+          if (user.companyId) sessionStorage.setItem('team_verified', 'true');
+          window.location.href = target;
+        }, 800);
 
       } catch (err) {
         showFailure(err.message || 'Failed to synchronize user data.');

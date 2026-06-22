@@ -130,9 +130,7 @@ const api = {
         const fullUrl = `${API_BASE_URL}${cleanEndpoint}`;
         console.log(`[API] ${options.method || 'GET'} ${fullUrl}`);
 
-        const isAdminPage = window.location.pathname.includes('admin-portal') || 
-                            window.location.pathname.includes('admin-access') || 
-                            window.location.pathname.includes('admin-dashboard');
+        const isAdminPage = window.location.pathname.includes('/admin');
         const tokenKey = isAdminPage ? 'argen_admin_token' : 'argen_token';
 
         let token = localStorage.getItem(tokenKey);
@@ -147,6 +145,11 @@ const api = {
         if (token && token !== 'undefined' && token !== 'null') {
             headers['Authorization'] = `Bearer ${token}`;
         }
+        // Auto-include active company ID for multi-org support
+        const activeCompanyId = localStorage.getItem('active_company_id');
+        if (activeCompanyId) {
+            headers['x-active-company'] = activeCompanyId;
+        }
 
         let response;
         try {
@@ -157,28 +160,31 @@ const api = {
         }
 
         if (response.status === 401) {
-            const isAdminPage = window.location.pathname.includes('admin-portal') || 
-                                window.location.pathname.includes('admin-access') || 
-                                window.location.pathname.includes('admin-dashboard');
-            if (isAdminPage) {
-                localStorage.removeItem('argen_admin_token');
-                localStorage.removeItem('admin_user');
-                this.eraseCookie('argen_admin_token');
-                this.eraseCookie('admin_user');
-                const path = window.location.pathname;
-                if (!path.includes('admin-access')) {
-                    window.location.href = '/admin-access';
-                }
-            } else {
+            console.warn('[API] 401 on', endpoint);
+            // Try to read the error body to diagnose the root cause
+            response.clone().text().then(body => {
+                console.warn('[API] 401 body:', body);
+            }).catch(() => {});
+            if (window.location.pathname.includes('/admin')) {
                 localStorage.removeItem('argen_token');
                 localStorage.removeItem('user');
-                sessionStorage.removeItem('team_verified');
+                localStorage.removeItem('argen_admin_token');
+                localStorage.removeItem('admin_user');
                 this.eraseCookie('argen_token');
                 this.eraseCookie('user');
-                const path = window.location.pathname;
-                if (!path.includes('login')) {
-                    window.location.href = '/login';
-                }
+                this.eraseCookie('argen_admin_token');
+                this.eraseCookie('admin_user');
+                window.location.href = '/login?cleared=1';
+                return;
+            }
+            localStorage.removeItem('argen_token');
+            localStorage.removeItem('user');
+            sessionStorage.removeItem('team_verified');
+            this.eraseCookie('argen_token');
+            this.eraseCookie('user');
+            const path = window.location.pathname;
+            if (!path.includes('login')) {
+                window.location.href = '/login';
             }
             throw new Error('Session expired. Please log in again.');
         }
@@ -433,15 +439,12 @@ const api = {
             window.location.href = '/login';
             return;
         }
-        const isAdminPage = window.location.pathname.includes('admin-portal') || 
-                            window.location.pathname.includes('admin-access') || 
-                            window.location.pathname.includes('admin-dashboard');
-        if (isAdminPage) {
+        if (window.location.pathname.includes('/admin')) {
             localStorage.removeItem('argen_admin_token');
             localStorage.removeItem('admin_user');
             this.eraseCookie('argen_admin_token');
             this.eraseCookie('admin_user');
-            window.location.href = '/admin-access';
+            window.location.href = '/login';
         } else {
             localStorage.removeItem('argen_token');
             localStorage.removeItem('user');

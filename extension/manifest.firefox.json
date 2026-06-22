@@ -1,0 +1,78 @@
+{
+  "manifest_version": 2,
+  "name": "ArGen — AI Usage Tracker",
+  "short_name": "ArGen Tracker",
+  "version": "1.0.0",
+  "description": "Track AI tool usage across ChatGPT, Claude, Gemini, Copilot & more. Powered by ArGen AI Workflow Intelligence.",
+  "author": "ArGen / Isira Global",
+
+  "icons": {
+    "16": "icons/icon16.png",
+    "48": "icons/icon48.png",
+    "128": "icons/icon128.png"
+  },
+
+  "browser_action": {
+    "default_popup": "popup/popup.html",
+    "default_title": "ArGen AI Tracker",
+    "default_icon": {
+      "16": "icons/icon16.png",
+      "48": "icons/icon48.png",
+      "128": "icons/icon128.png"
+    }
+  },
+
+  "background": {
+    "scripts": ["background/service-worker.js"],
+    "persistent": false
+  },
+
+  "content_scripts": [
+    {
+      "matches": ["https://chat.openai.com/*", "https://chatgpt.com/*"],
+      "js": ["content/providers/chatgpt.js"],
+      "run_at": "document_idle"
+    },
+    {
+      "matches": ["https://claude.ai/*"],
+      "js": ["content/providers/claude.js"],
+      "run_at": "document_idle"
+    },
+    {
+      "matches": ["https://gemini.google.com/*"],
+      "js": ["content/providers/gemini.js"],
+      "run_at": "document_idle"
+    },
+    {
+      "matches": ["https://copilot.microsoft.com/*", "https://www.bing.com/chat*"],
+      "js": ["content/providers/copilot.js"],
+      "run_at": "document_idle"
+    },
+    {
+      "matches": ["https://www.perplexity.ai/*"],
+      "js": ["content/providers/perplexity.js"],
+      "run_at": "document_idle"
+    },
+    {
+      "matches": ["https://github.com/*"],
+      "js": ["content/providers/github.js"],
+      "run_at": "document_idle"
+    }
+  ],
+
+  "permissions": [
+    "storage",
+    "alarms",
+    "https://chat.openai.com/*",
+    "https://chatgpt.com/*",
+    "https://claude.ai/*",
+    "https://gemini.google.com/*",
+    "https://copilot.microsoft.com/*",
+    "https://www.bing.com/chat*",
+    "https://www.perplexity.ai/*",
+    "https://github.com/*",
+    "https://argen.isira.club/*"
+  ],
+
+  "web_accessible_resources": ["icons/*"]
+}

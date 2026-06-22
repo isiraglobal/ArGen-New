@@ -436,10 +436,70 @@ INPUT:
     }
 }
 
+/**
+ * AGENT 6 — CAPTURE DATA ANALYZER
+ * Processes captured AI interaction data through the agent pipeline.
+ * Triggered by the integrations/agents/analyze endpoint.
+ */
+async function analyzeCaptureData(interactions, companyId) {
+    const stats = {
+        totalInteractions: interactions.length,
+        uniqueProviders: [...new Set(interactions.map(i => i.provider))],
+        uniqueModels: [...new Set(interactions.map(i => i.model))],
+        totalTokens: interactions.reduce((sum, i) => sum + (i.inputTokens || 0) + (i.outputTokens || 0), 0),
+        totalCost: interactions.reduce((sum, i) => sum + (i.costUsd || 0), 0),
+        timeRange: interactions.length > 1 ? {
+            start: interactions[interactions.length - 1]?.createdAt,
+            end: interactions[0]?.createdAt
+        } : null,
+        providerBreakdown: {},
+        topUsers: {}
+    };
+
+    // Build provider breakdown
+    for (const i of interactions) {
+        const p = i.provider || 'unknown';
+        if (!stats.providerBreakdown[p]) {
+            stats.providerBreakdown[p] = { count: 0, tokens: 0, cost: 0 };
+        }
+        stats.providerBreakdown[p].count++;
+        stats.providerBreakdown[p].tokens += (i.inputTokens || 0) + (i.outputTokens || 0);
+        stats.providerBreakdown[p].cost += (i.costUsd || 0);
+
+        const uid = i.userId || 'unknown';
+        if (!stats.topUsers[uid]) {
+            stats.topUsers[uid] = { count: 0, tokens: 0, models: new Set() };
+        }
+        stats.topUsers[uid].count++;
+        stats.topUsers[uid].tokens += (i.inputTokens || 0) + (i.outputTokens || 0);
+        if (i.model) stats.topUsers[uid].models.add(i.model);
+    }
+
+    // Convert sets to arrays for serialization
+    for (const uid of Object.keys(stats.topUsers)) {
+        stats.topUsers[uid].models = [...stats.topUsers[uid].models];
+    }
+
+    // Store the analysis in Firestore for future reference
+    try {
+        await db.collection('agent_analyses').add({
+            companyId,
+            type: 'capture_analysis',
+            stats,
+            analyzedAt: new Date().toISOString()
+        });
+    } catch (e) {
+        console.error('[ai-agents] Failed to store capture analysis:', e.message);
+    }
+
+    return stats;
+}
+
 module.exports = { 
     researchCompany, 
     generateChallenge, 
     scoreResponse, 
     generateWeeklyReport, 
-    generateCoachingNudge 
+    generateCoachingNudge,
+    analyzeCaptureData
 };

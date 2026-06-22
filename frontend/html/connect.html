@@ -89,6 +89,9 @@
       <a href="/dashboard" class="back-link">← Back to Dashboard</a>
       <h1 class="section-h2" style="margin-top: 1rem;">Connect Your <i class="soul-text">AI Tools</i></h1>
       <p class="section-sub">Link your company's AI subscriptions. ArGen pulls real usage data and scores quality across your team.</p>
+      <div style="margin-top:12px;padding:10px 16px;background:rgba(0,255,136,0.05);border:1px solid rgba(0,255,136,0.15);border-radius:8px;font-size:0.75rem;color:#aaa;line-height:1.5">
+        🔒 <strong style="color:#00ff88">Zero-cost measurement:</strong> ArGen never forwards AI requests through your keys. All connected keys are used for <strong>read-only analytics</strong> (usage reports, seat counts). Your API credits and budget are never touched.
+      </div>
     </div>
 
     <div id="connectAlert" style="display: none; padding: 1rem; border-radius: 8px; margin-bottom: 1.5rem; font-size: 0.85rem;"></div>
@@ -99,7 +102,7 @@
           <div class="provider-icon">MS</div>
           <div>
             <div class="provider-name">Microsoft 365 / Copilot</div>
-            <p class="provider-copy">OAuth connection for Copilot and Microsoft 365 usage reports.</p>
+            <p class="provider-copy">OAuth connection for Copilot and Microsoft 365 usage reports. Read-only — no costs incurred.</p>
           </div>
         </div>
         <div class="status provider-status disconnected">Not connected</div>
@@ -115,7 +118,7 @@
           <div class="provider-icon">G</div>
           <div>
             <div class="provider-name">Google Workspace / Gemini</div>
-            <p class="provider-copy">OAuth connection for Workspace Admin and Gemini usage signals.</p>
+            <p class="provider-copy">OAuth connection for Workspace Admin and Gemini usage signals. Read-only — no costs incurred.</p>
           </div>
         </div>
         <div class="status provider-status disconnected">Not connected</div>
@@ -131,7 +134,7 @@
           <div class="provider-icon">OA</div>
           <div>
             <div class="provider-name">OpenAI</div>
-            <p class="provider-copy">Admin API key connection for organization usage and cost data.</p>
+            <p class="provider-copy">Read-only admin key for organization-level usage reports. ArGen never uses your key to make API calls — your credits are never touched.</p>
           </div>
         </div>
         <div class="status provider-status disconnected">Not connected</div>
@@ -151,7 +154,7 @@
           <div class="provider-icon">A</div>
           <div>
             <div class="provider-name">Anthropic Claude</div>
-            <p class="provider-copy">Admin key connection for Claude usage and spend intelligence.</p>
+            <p class="provider-copy">Read-only admin key for workspace-level usage analytics. ArGen never uses your key to make API calls — your credits are never touched.</p>
           </div>
         </div>
         <div class="status provider-status disconnected">Not connected</div>
@@ -170,7 +173,7 @@
           <div class="provider-icon">GH</div>
           <div>
             <div class="provider-name">GitHub Copilot</div>
-            <p class="provider-copy">GitHub token connection for Copilot seat and usage telemetry.</p>
+            <p class="provider-copy">GitHub token for Copilot seat and usage telemetry. Read-only — no API calls made through ArGen.</p>
           </div>
         </div>
         <div class="status provider-status disconnected">Not connected</div>

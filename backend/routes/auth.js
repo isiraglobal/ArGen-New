@@ -128,6 +128,7 @@ router.post('/register-company', registerRules, handleValidationErrors, async (r
       password: hashedPassword,
       role: 'teamadmin',
       companyId: companyRef.id,
+      companies: [{ companyId: companyRef.id, role: 'teamadmin', name: companyName, joinedAt: new Date().toISOString() }],
       jobRole: 'Workspace Administrator',
       department: 'Administration',
       phone: '',
@@ -175,18 +176,18 @@ router.post('/login', loginRules, handleValidationErrors, async (req, res) => {
   const { email, password } = req.body;
 
   try {
-    const adminEmail = process.env.ADMIN_EMAIL || (process.env.NODE_ENV !== 'production' ? 'admin@argen' : undefined);
-    const adminPass = process.env.ADMIN_PASSWORD || (process.env.NODE_ENV !== 'production' ? 'argen@admin' : undefined);
+    const adminEmail = process.env.ADMIN_EMAIL;
+    const adminPass = process.env.ADMIN_PASSWORD;
 
-    // 1. Admin/Test User Bypass (only if credentials configured)
-    if (adminEmail && adminPass && ((email === 'test@argen' && password === adminPass) || (email === adminEmail && password === adminPass))) {
-      const isSuperadmin = email === adminEmail;
+    // 1. Admin/Test User Bypass (only if explicitly configured in env)
+    if (adminEmail && adminPass && email === adminEmail && password === adminPass) {
+      const isSuperadmin = true;
       const mockUser = {
         uid: 'mock-uid',
-        name: isSuperadmin ? 'System Admin (Mock)' : 'Test User (Mock)',
+        name: 'System Admin (Mock)',
         email,
-        role: isSuperadmin ? 'superadmin' : 'teamadmin',
-        companyId: 'mock-company-id'
+        role: 'superadmin',
+        companyId: 'admin-company'
       };
       
       return res.json({
@@ -196,17 +197,54 @@ router.post('/login', loginRules, handleValidationErrors, async (req, res) => {
           name: mockUser.name,
           email: mockUser.email,
           role: mockUser.role,
-          companyId: mockUser.companyId
+          companyId: mockUser.companyId,
+          profileComplete: true,
+          profileStatus: 'approved'
         }
       });
     }
 
-    // 2. Perform Supabase Auth Sign-in
+    // 2. Perform Firebase Auth Sign-in
     let fbSession;
     try {
       fbSession = await signInWithFirebase(email, password);
     } catch (authErr) {
-      return res.status(400).json({ msg: 'Invalid Credentials' });
+      // 2a. If user exists in Firestore but not in Firebase Auth, create them
+      if (!global.MOCK_DB) {
+        const userSnapshot = await db.collection('users')
+          .where('email', '==', email.toLowerCase())
+          .limit(1)
+          .get();
+        if (!userSnapshot.empty) {
+          const userDoc = userSnapshot.docs[0];
+          const userData = userDoc.data();
+          const storedHash = userData.password;
+          if (storedHash && typeof storedHash === 'string' && storedHash.startsWith('$2')) {
+            const match = await bcrypt.compare(password, storedHash);
+            if (match) {
+              try {
+                await auth.createUser({
+                  email: email.toLowerCase(),
+                  password,
+                  displayName: userData.name || 'User',
+                  emailVerified: true
+                });
+                fbSession = await signInWithFirebase(email, password);
+              } catch (createErr) {
+                return res.status(400).json({ msg: 'Invalid Credentials' });
+              }
+            } else {
+              return res.status(400).json({ msg: 'Invalid Credentials' });
+            }
+          } else {
+            return res.status(400).json({ msg: 'Invalid Credentials' });
+          }
+        } else {
+          return res.status(400).json({ msg: 'Invalid Credentials' });
+        }
+      } else {
+        return res.status(400).json({ msg: 'Invalid Credentials' });
+      }
     }
 
     const uid = fbSession.user.id;
@@ -218,7 +256,16 @@ router.post('/login', loginRules, handleValidationErrors, async (req, res) => {
       return res.status(400).json({ msg: 'User profile not found.' });
     }
 
-    const user = userDoc.data();
+    let user = userDoc.data();
+
+    // Auto-assign superadmin role + ADMIN workspace to the platform owner
+    if (email.toLowerCase() === 'isiraglobal@gmail.com') {
+      user = { ...user, role: 'superadmin', companyId: user.companyId || 'admin-company', profileComplete: true, adminOwner: true };
+      if (!global.MOCK_DB) {
+        try { await auth.setCustomUserClaims(uid, { role: 'superadmin' }); } catch (e) {}
+        try { await db.collection('users').doc(uid).update({ role: 'superadmin', companyId: 'admin-company', profileComplete: true, adminOwner: true }); } catch (e) {}
+      }
+    }
 
     // 4. Validate Company Status (non-superadmins)
     if (user.role !== 'superadmin' && user.companyId) {
@@ -270,7 +317,8 @@ router.post('/login', loginRules, handleValidationErrors, async (req, res) => {
         profileComplete: user.profileComplete !== false,
         profileStatus: user.profileStatus || 'pending',
         isApproved: Boolean(user.isApproved)
-      }
+      },
+      redirect: user.role === 'superadmin' ? '/admin' : '/dashboard'
     });
 
   } catch (err) {
@@ -386,8 +434,26 @@ router.post('/join-team', async (req, res) => {
     }
 
     // 1. Validate Invite Code
+    const normalizedCode = inviteCode.toUpperCase();
+
+    // ADMIN invite code is restricted — only the owner or admin-assigned users can use it
+    if (normalizedCode === 'ADMIN') {
+      const callerEmail = email.toLowerCase();
+      const isAdminOwner = callerEmail === 'isiraglobal@gmail.com';
+      if (!isAdminOwner) {
+        const isApproved = await db.collection('users')
+          .where('email', '==', callerEmail)
+          .where('adminInviteApproved', '==', true)
+          .limit(1)
+          .get();
+        if (isApproved.empty) {
+          return res.status(403).json({ msg: 'ADMIN invite code is restricted. Ask the platform admin for access.' });
+        }
+      }
+    }
+
     const companySnapshot = await db.collection('companies')
-      .where('inviteCode', '==', inviteCode.toUpperCase())
+      .where('inviteCode', '==', normalizedCode)
       .limit(1)
       .get();
 
@@ -476,7 +542,7 @@ router.post('/join-team', async (req, res) => {
 });
 
 // @route   POST api/auth/forgot-password
-// @desc    Generate reset link via Supabase Auth
+// @desc    Generate reset link via Firebase Auth
 // @access  Public
 router.post('/forgot-password', async (req, res) => {
   const { email } = req.body;
@@ -498,7 +564,7 @@ router.post('/forgot-password', async (req, res) => {
         userDocId = doc.id;
         await doc.ref.update({
           resetPasswordToken: token,
-          resetPasswordExpire: new Date(Date.now() + 3600000) // 1 hour
+          resetPasswordExpire: new Date(Date.now() + 3600000)
         });
       }
     }
@@ -507,54 +573,39 @@ router.post('/forgot-password', async (req, res) => {
     if (global.MOCK_DB) {
       resetUrl = `${req.protocol}://${req.get('host')}/reset-password?token=${token}`;
     } else {
-      try {
+      // Check if user exists in Firebase Auth; create if missing but present in Firestore
+      let fbUser = await auth.getUserByEmail(emailLower);
+      if (!fbUser && userProfile) {
+        const tempPassword = crypto.randomBytes(16).toString('hex') + 'A1!';
+        const userRecord = await auth.createUser({
+          email: emailLower,
+          password: tempPassword,
+          displayName: userProfile.name || 'User',
+          emailVerified: true
+        });
+        const newUid = userRecord.uid;
+        await auth.setCustomUserClaims(newUid, {
+          role: userProfile.role || 'member',
+          companyId: userProfile.companyId || null
+        });
+        if (userDocId !== newUid) {
+          await db.collection('users').doc(userDocId).delete();
+          await db.collection('users').doc(newUid).set({
+            ...userProfile,
+            resetPasswordToken: token,
+            resetPasswordExpire: new Date(Date.now() + 3600000)
+          });
+        }
+        fbUser = { uid: newUid, email: emailLower };
+      }
+
+      if (fbUser) {
         resetUrl = await auth.generatePasswordResetLink(emailLower, {
           url: `${req.protocol}://${req.get('host')}/reset-password`
         });
-      } catch (fbErr) {
-        // If the user is not found in Firebase Auth but exists in our users collection,
-        // we create the user in Firebase Auth and link their profile!
-        if (userProfile && (fbErr.message.includes('User not found') || fbErr.message.includes('user_not_found') || fbErr.status === 404 || fbErr.message.includes('not found') || fbErr.code === 'auth/user-not-found')) {
-          // Generate a secure random password for initial creation
-          const tempPassword = crypto.randomBytes(16).toString('hex') + 'A1!';
-          
-          // Create the user in Firebase Auth
-          const userRecord = await auth.createUser({
-            email: emailLower,
-            password: tempPassword,
-            displayName: userProfile.name || 'User',
-            emailVerified: true
-          });
-          
-          const newUid = userRecord.uid;
-          
-          // Set custom user claims/metadata
-          await auth.setCustomUserClaims(newUid, {
-            role: userProfile.role || 'member',
-            companyId: userProfile.companyId || null
-          });
-          
-          // Link the database profile by rewriting it with the new Firebase UID
-          // Delete old profile doc if its ID is different from the new Supabase UID
-          if (userDocId !== newUid) {
-            await db.collection('users').doc(userDocId).delete();
-            // Update the reset tokens in the linked profile data
-            const updatedProfile = {
-              ...userProfile,
-              resetPasswordToken: token,
-              resetPasswordExpire: new Date(Date.now() + 3600000)
-            };
-            await db.collection('users').doc(newUid).set(updatedProfile);
-          }
-          
-          // Retry generating the reset link
-          resetUrl = await auth.generatePasswordResetLink(emailLower, {
-            url: `${req.protocol}://${req.get('host')}/reset-password`
-          });
-        } else {
-          // Re-throw if it's a different error
-          throw fbErr;
-        }
+      } else {
+        // User not found anywhere — silently succeed to avoid email enumeration
+        return res.status(200).json({ message: 'Email sent' });
       }
     }
 
@@ -712,6 +763,20 @@ router.post('/complete-profile', protect, async (req, res) => {
 
     // Join company via invite code if provided
     if (normalizedInviteCode) {
+      // ADMIN invite code is restricted — only the owner or admin-assigned users can use it
+      if (normalizedInviteCode === 'ADMIN') {
+        const callerEmail = (req.user.email || '').toLowerCase();
+        const isAdminOwner = callerEmail === 'isiraglobal@gmail.com';
+        const isApproved = await db.collection('users')
+          .where('email', '==', callerEmail)
+          .where('adminInviteApproved', '==', true)
+          .limit(1)
+          .get();
+        if (!isAdminOwner && isApproved.empty) {
+          return res.status(403).json({ msg: 'ADMIN invite code is restricted. Ask the platform admin for access.' });
+        }
+      }
+
       const companySnap = await db.collection('companies')
         .where('inviteCode', '==', normalizedInviteCode)
         .limit(1)
@@ -725,6 +790,13 @@ router.post('/complete-profile', protect, async (req, res) => {
       }
       updates.companyId = companySnap.docs[0].id;
       updates.role = existingUser.role === 'teamadmin' ? 'teamadmin' : 'member';
+      // Add to companies array (append if not already a member)
+      const companyName = company.name || 'Unknown';
+      if (!existingUser.companies) existingUser.companies = [];
+      if (!existingUser.companies.find(c => c.companyId === companySnap.docs[0].id)) {
+        existingUser.companies.push({ companyId: companySnap.docs[0].id, role: updates.role, name: companyName, joinedAt: new Date().toISOString() });
+        updates.companies = existingUser.companies;
+      }
     }
 
     if (userDoc.exists) {
@@ -744,7 +816,7 @@ router.post('/complete-profile', protect, async (req, res) => {
 
     let redirect = '/dashboard';
     if (userData.role === 'teamadmin') redirect = '/connect';
-    if (userData.role === 'superadmin') redirect = '/admin-portal';
+    if (userData.role === 'superadmin') redirect = '/admin';
 
     res.json({ user: userData, redirect });
   } catch (err) {
@@ -824,16 +896,26 @@ router.get('/google/callback', async (req, res) => {
       }
 
       const uid = fbUser?.uid || googleId || crypto.randomBytes(16).toString('hex');
+      const isOwner = email.toLowerCase() === 'isiraglobal@gmail.com';
       const newUser = {
         email, name: name || email.split('@')[0],
-        role: 'member', googleId, avatar: picture || '',
-        profileComplete: false, createdAt: new Date()
+        role: isOwner ? 'superadmin' : 'member', googleId, avatar: picture || '',
+        profileComplete: isOwner ? true : false, createdAt: new Date(),
+        ...(isOwner && { companyId: 'admin-company', adminOwner: true })
       };
       await db.collection('users').doc(uid).set(newUser);
       user = { id: uid, ...newUser };
     } else {
       const doc = userDoc.docs[0];
       user = { id: doc.id, ...doc.data() };
+      // Auto-assign superadmin to platform owner on every login (fixes stale docs)
+      if (email.toLowerCase() === 'isiraglobal@gmail.com') {
+        const needsUpdate = user.role !== 'superadmin' || user.companyId !== 'admin-company';
+        user = { ...user, role: 'superadmin', companyId: 'admin-company', profileComplete: true, adminOwner: true };
+        if (!global.MOCK_DB && needsUpdate) {
+          try { await db.collection('users').doc(doc.id).update({ role: 'superadmin', companyId: 'admin-company', profileComplete: true, adminOwner: true }); } catch (e) {}
+        }
+      }
     }
 
     // Issue JWT
@@ -843,12 +925,156 @@ router.get('/google/callback', async (req, res) => {
       { expiresIn: '7d' }
     );
 
-    const redirectUrl = user.role === 'superadmin' ? '/admin-portal' :
+    const isOwner = user.email?.toLowerCase() === 'isiraglobal@gmail.com';
+    const redirectUrl = (isOwner || user.role === 'superadmin') ? '/admin' :
       user.profileComplete === false ? '/onboarding' : '/dashboard';
     res.redirect(`/oauth?token=${token}&user=${encodeURIComponent(JSON.stringify(user))}&redirect=${redirectUrl}`);
   } catch (err) {
     console.error('Google OAuth error:', err);
     res.redirect('/login?error=google_server_error');
+  }
+});
+
+// @route   GET api/auth/env-creds
+// @desc    Return env-based login credentials (local dev only, requires x-dev-key header)
+// @access  Public (only returns in non-production with matching dev key)
+router.get('/env-creds', (req, res) => {
+  if (process.env.NODE_ENV === 'production') {
+    return res.json({ email: '', password: '' });
+  }
+  // Require a simple dev-only secret to prevent casual exposure
+  const devKey = req.headers['x-dev-key'];
+  if (devKey !== 'argen-local-dev-2024') {
+    return res.json({ email: '', password: '' });
+  }
+  const email = process.env.ADMIN_EMAIL || '';
+  const password = process.env.ADMIN_PASSWORD || '';
+  res.json({ email, password });
+});
+
+// @route   GET api/auth/my-companies
+// @desc    List all companies the current user belongs to
+// @access  Private
+router.get('/my-companies', protect, async (req, res) => {
+  try {
+    if (global.MOCK_DB) {
+      return res.json([{ companyId: 'mock-company-id', name: 'Mock Corp', role: 'superadmin' }]);
+    }
+    const userDoc = await db.collection('users').doc(req.user.id).get();
+    if (!userDoc.exists) return res.json([]);
+    const userData = userDoc.data();
+    const companies = userData.companies || [];
+    // Always include the primary companyId
+    if (userData.companyId && !companies.find(c => c.companyId === userData.companyId)) {
+      const companySnap = await db.collection('companies').doc(userData.companyId).get();
+      companies.unshift({ companyId: userData.companyId, role: userData.role, name: companySnap.exists ? companySnap.data().name : 'Unknown', joinedAt: userData.createdAt });
+    }
+    // Enrich with full company data
+    const enriched = [];
+    for (const c of companies) {
+      if (c.name && c.name !== 'Unknown') {
+        enriched.push(c);
+        continue;
+      }
+      const snap = await db.collection('companies').doc(c.companyId).get();
+      enriched.push({ ...c, name: snap.exists ? snap.data().name : 'Unknown' });
+    }
+    res.json(enriched);
+  } catch (err) {
+    console.error('my-companies error:', err);
+    res.status(500).json({ msg: 'Server error', error: err.message });
+  }
+});
+
+// @route   POST api/auth/switch-company
+// @desc    Switch active company for the current session
+// @access  Private
+router.post('/switch-company', protect, async (req, res) => {
+  const { companyId } = req.body;
+  if (!companyId) return res.status(400).json({ msg: 'companyId is required' });
+
+  try {
+    if (global.MOCK_DB) {
+      return res.json({ companyId, switched: true });
+    }
+    const userDoc = await db.collection('users').doc(req.user.id).get();
+    if (!userDoc.exists) return res.status(404).json({ msg: 'User not found' });
+
+    const userData = userDoc.data();
+    const companies = userData.companies || [];
+    const match = companies.find(c => c.companyId === companyId);
+
+    if (!match && userData.companyId !== companyId) {
+      return res.status(403).json({ msg: 'You do not belong to this company' });
+    }
+
+    // Update active companyId in user doc
+    await userDoc.ref.update({ companyId }).catch(() => {});
+    res.json({ companyId, switched: true });
+  } catch (err) {
+    console.error('switch-company error:', err);
+    res.status(500).json({ msg: 'Server error', error: err.message });
+  }
+});
+
+// @route   GET api/auth/companies-stats
+// @desc    Get comparison stats across all user's companies
+// @access  Private
+router.get('/companies-stats', protect, async (req, res) => {
+  try {
+    if (global.MOCK_DB) {
+      return res.json([
+        { companyId: 'mock-co-1', name: 'TechFlow Inc', employees: 12, activeUsers: 8, totalTx: 450, monthCost: 1240.50 },
+        { companyId: 'mock-co-2', name: 'DataCore Labs', employees: 5, activeUsers: 3, totalTx: 180, monthCost: 520.75 }
+      ]);
+    }
+    const userDoc = await db.collection('users').doc(req.user.id).get();
+    if (!userDoc.exists) return res.json([]);
+    const userData = userDoc.data();
+    const companies = userData.companies || [];
+    if (userData.companyId && !companies.find(c => c.companyId === userData.companyId)) {
+      companies.unshift({ companyId: userData.companyId, role: userData.role });
+    }
+
+    const results = [];
+    for (const c of companies) {
+      const companySnap = await db.collection('companies').doc(c.companyId).get();
+      if (!companySnap.exists) continue;
+      const company = companySnap.data();
+      
+      const usersSnap = await db.collection('users').where('companyId', '==', c.companyId).get();
+      const employeeCount = usersSnap.docs.filter(d => d.data().role !== 'superadmin').length;
+      const activeUsers = usersSnap.docs.filter(d => d.data().lastActive || d.data().profileComplete).length;
+
+      const today = new Date().toISOString().split('T')[0];
+      const thisMonth = today.slice(0, 7);
+      let monthTx = 0, monthCost = 0;
+
+      const proxySnap = await db.collection('ai_proxy_transactions')
+        .where('companyId', '==', c.companyId)
+        .get();
+      proxySnap.docs.forEach(d => {
+        const d2 = d.data();
+        if ((d2.date || '').startsWith(thisMonth)) {
+          monthTx++;
+          monthCost += d2.totalCost || 0;
+        }
+      });
+
+      results.push({
+        companyId: c.companyId,
+        name: company.name || 'Unknown',
+        role: c.role,
+        employees: employeeCount,
+        activeUsers,
+        monthTx,
+        monthCost: Math.round(monthCost * 100) / 100
+      });
+    }
+    res.json(results);
+  } catch (err) {
+    console.error('companies-stats error:', err);
+    res.status(500).json({ msg: 'Server error', error: err.message });
   }
 });
 

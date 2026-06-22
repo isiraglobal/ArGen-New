@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <style>
+    :root {
+      --bg: #0a0a0a;
+      --card: #141414;
+      --accent: #00ff88;
+      --text: #e0e0e0;
+      --muted: #666;
+      --border: #222;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      width: 320px;
+      background: var(--bg);
+      color: var(--text);
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Inter, sans-serif;
+      padding: 16px;
+      font-size: 13px;
+    }
+    .logo { font-size: 18px; font-weight: 700; color: var(--accent); margin-bottom: 12px; letter-spacing: -0.5px; }
+    .logo span { color: #fff; }
+    .card { background: var(--card); border: 1px solid var(--border); border-radius: 8px; padding: 12px; margin-bottom: 10px; }
+    .card h3 { font-size: 11px; text-transform: uppercase; letter-spacing: 1px; color: var(--muted); margin-bottom: 6px; }
+    .card .value { font-size: 20px; font-weight: 600; color: var(--accent); }
+    .card .label { font-size: 11px; color: var(--muted); }
+    .status { display: flex; align-items: center; gap: 6px; margin-bottom: 8px; }
+    .status-dot { width: 8px; height: 8px; border-radius: 50%; display: inline-block; }
+    .status-dot.active { background: var(--accent); box-shadow: 0 0 6px var(--accent); }
+    .status-dot.inactive { background: #444; }
+    .input-group { margin-bottom: 10px; }
+    .input-group label { display: block; font-size: 11px; color: var(--muted); margin-bottom: 4px; }
+    .input-group input {
+      width: 100%;
+      padding: 8px 10px;
+      background: #1a1a1a;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      color: var(--text);
+      font-size: 12px;
+      outline: none;
+    }
+    .input-group input:focus { border-color: var(--accent); }
+    .btn {
+      width: 100%;
+      padding: 8px;
+      border: none;
+      border-radius: 6px;
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: opacity 0.2s;
+    }
+    .btn-primary { background: var(--accent); color: #000; }
+    .btn-secondary { background: #222; color: var(--text); margin-bottom: 6px; }
+    .btn:hover { opacity: 0.85; }
+    .btn:disabled { opacity: 0.4; cursor: not-allowed; }
+    .stats { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 10px; }
+    .stat-card { background: var(--card); border: 1px solid var(--border); border-radius: 6px; padding: 10px; text-align: center; }
+    .stat-card .num { font-size: 18px; font-weight: 600; color: var(--accent); }
+    .stat-card .lbl { font-size: 10px; color: var(--muted); margin-top: 2px; }
+    .footer { font-size: 10px; color: var(--muted); text-align: center; margin-top: 8px; }
+    .footer a { color: var(--accent); text-decoration: none; }
+    .error { color: #ff4444; font-size: 11px; margin-top: 4px; display: none; }
+    .success { color: var(--accent); font-size: 11px; margin-top: 4px; display: none; }
+  </style>
+</head>
+<body>
+  <div class="logo">ArGen <span>Capture</span></div>
+
+  <div class="card">
+    <div class="status">
+      <span class="status-dot inactive" id="statusDot"></span>
+      <span id="statusText">Disconnected</span>
+    </div>
+    <div style="font-size:11px;color:var(--muted)" id="currentSite">No AI site detected</div>
+  </div>
+
+  <div class="stats">
+    <div class="stat-card">
+      <div class="num" id="captureCount">0</div>
+      <div class="lbl">Captured Today</div>
+    </div>
+    <div class="stat-card">
+      <div class="num" id="sessionCount">0</div>
+      <div class="lbl">This Session</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3>Configuration</h3>
+    <div class="input-group">
+      <label>API Key</label>
+      <input type="password" id="apiKeyInput" placeholder="ag_xxxxxxxxxxxx">
+    </div>
+    <div class="input-group">
+      <label>API URL (optional)</label>
+      <input type="text" id="apiUrlInput" placeholder="https://argen.isira.club/api">
+    </div>
+    <button class="btn btn-primary" id="saveBtn">Save & Connect</button>
+    <div class="error" id="errorMsg">Please enter a valid API key</div>
+    <div class="success" id="successMsg">Configuration saved</div>
+  </div>
+
+  <button class="btn btn-secondary" id="captureNowBtn">Capture This Page</button>
+  <button class="btn btn-secondary" id="openDashboardBtn">Open ArGen Dashboard</button>
+
+  <div class="footer">
+    <a href="https://argen.isira.club" target="_blank">argen.isira.club</a> &middot; v1.0.0
+  </div>
+
+  <script src="popup.js"></script>
+</body>
+</html>

@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Integrations — ArGen</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/css/style.css">
+  <style>
+    :root { --bg: #0a0a0a; --card: #141414; --accent: #00ff88; --text: #e0e0e0; --muted: #666; --border: #222; }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { background: var(--bg); color: var(--text); font-family: Inter, sans-serif; }
+    .page { max-width: 1100px; margin: 0 auto; padding: 40px 20px 80px; }
+    .page-header { text-align: center; margin-bottom: 48px; }
+    .page-header h1 { font-size: 42px; font-weight: 800; color: #fff; letter-spacing: -1.5px; }
+    .page-header p { color: #888; max-width: 600px; margin: 12px auto 0; font-size: 16px; line-height: 1.6; }
+    .tabs { display: flex; gap: 4px; background: #111; border-radius: 10px; padding: 4px; margin-bottom: 32px; }
+    .tab { flex: 1; padding: 10px 16px; text-align: center; border: none; background: transparent; color: #666; font-size: 14px; font-weight: 500; cursor: pointer; border-radius: 8px; transition: all 0.2s; }
+    .tab.active { background: #1a1a1a; color: #fff; }
+    .tab:hover { color: #fff; }
+    .tab-content { display: none; }
+    .tab-content.active { display: block; }
+    .integration-list { display: grid; gap: 16px; }
+    .integration-item { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 24px; display: flex; align-items: center; gap: 20px; transition: border-color 0.3s; }
+    .integration-item:hover { border-color: rgba(0,255,136,0.2); }
+    .integration-item .icon-box { width: 48px; height: 48px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 22px; flex-shrink: 0; }
+    .integration-item .info { flex: 1; }
+    .integration-item .info h3 { font-size: 16px; font-weight: 600; color: #fff; margin-bottom: 4px; }
+    .integration-item .info p { font-size: 13px; color: #888; }
+    .integration-item .meta { display: flex; gap: 6px; margin-top: 6px; }
+    .integration-item .meta span { padding: 2px 8px; border-radius: 12px; font-size: 10px; background: rgba(255,255,255,0.04); color: #666; }
+    .toggle { position: relative; width: 44px; height: 24px; background: #222; border-radius: 12px; cursor: pointer; transition: background 0.3s; flex-shrink: 0; border: none; }
+    .toggle.on { background: var(--accent); }
+    .toggle::after { content: ''; position: absolute; top: 2px; left: 2px; width: 20px; height: 20px; border-radius: 50%; background: #fff; transition: transform 0.3s; }
+    .toggle.on::after { transform: translateX(20px); }
+    .agent-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 16px; }
+    .agent-card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 24px; }
+    .agent-card h3 { font-size: 15px; font-weight: 600; color: #fff; margin-bottom: 4px; }
+    .agent-card p { font-size: 12px; color: #888; line-height: 1.5; }
+    .agent-card .status-badge { display: inline-block; padding: 3px 10px; border-radius: 12px; font-size: 11px; font-weight: 500; margin-top: 10px; }
+    .status-badge.active { background: rgba(0,255,136,0.1); color: var(--accent); }
+    .status-badge.disabled { background: rgba(255,255,255,0.04); color: #666; }
+    .user-section { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 24px; margin-top: 24px; }
+    .user-section h3 { font-size: 18px; font-weight: 600; color: #fff; margin-bottom: 16px; }
+    .user-section .platform-list { display: flex; gap: 8px; flex-wrap: wrap; }
+    .platform-tag { padding: 6px 14px; border-radius: 20px; font-size: 12px; font-weight: 500; background: rgba(255,255,255,0.04); border: 1px solid var(--border); cursor: pointer; transition: all 0.2s; }
+    .platform-tag.connected { border-color: var(--accent); background: rgba(0,255,136,0.06); color: var(--accent); }
+    .platform-tag:hover { border-color: var(--accent); }
+    .btn { display: inline-flex; align-items: center; gap: 6px; padding: 8px 16px; border-radius: 8px; font-size: 13px; font-weight: 600; cursor: pointer; transition: opacity 0.2s; border: none; text-decoration: none; }
+    .btn-primary { background: var(--accent); color: #000; }
+    .btn-secondary { background: rgba(255,255,255,0.06); color: #fff; border: 1px solid #333; }
+    .btn:hover { opacity: 0.8; }
+    .toast { position: fixed; bottom: 20px; right: 20px; background: #1a1a1a; border: 1px solid #333; border-radius: 8px; padding: 12px 20px; font-size: 13px; display: none; z-index: 9999; }
+    .toast.show { display: block; animation: fadeIn 0.3s; }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+  </style>
+</head>
+<body>
+  <div id="header-placeholder"></div>
+
+  <div class="page">
+    <div class="page-header">
+      <h1>Integrations</h1>
+      <p>Connect your tools and AI agents to ArGen. Manage system-wide settings and your personal preferences.</p>
+    </div>
+
+    <div class="tabs">
+      <button class="tab active" data-tab="extensions">Extensions</button>
+      <button class="tab" data-tab="agents">AI Agents</button>
+      <button class="tab" data-tab="user">My Settings</button>
+    </div>
+
+    <!-- Extensions Tab -->
+    <div class="tab-content active" id="tab-extensions">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px">
+        <h2 style="font-size:20px;font-weight:600;color:#fff">System Integrations</h2>
+        <span id="globalToggleLabel" style="font-size:13px;color:#888">Global: Enabled</span>
+      </div>
+      <div class="integration-list" id="extensionsList">
+        <div class="integration-item">
+          <div class="icon-box" style="background:#1a3a2a;color:var(--accent)">⌨</div>
+          <div class="info">
+            <h3>VS Code Extension</h3>
+            <p>Captures AI-generated code patterns from your editor</p>
+            <div class="meta"><span>IDE</span><span>Auto-capture</span></div>
+          </div>
+          <button class="toggle on" data-type="vscode"></button>
+        </div>
+        <div class="integration-item">
+          <div class="icon-box" style="background:#1a2a3a;color:#4285F4">🌐</div>
+          <div class="info">
+            <h3>Chrome Extension</h3>
+            <p>Captures prompts and completions from ChatGPT, Claude, and more</p>
+            <div class="meta"><span>Browser</span><span>Auto-capture</span></div>
+          </div>
+          <button class="toggle on" data-type="browser_chrome"></button>
+        </div>
+        <div class="integration-item">
+          <div class="icon-box" style="background:#2a1a1a;color:#FF7139">🦊</div>
+          <div class="info">
+            <h3>Firefox Add-on</h3>
+            <p>Same AI usage capture for Firefox browsers</p>
+            <div class="meta"><span>Browser</span><span>Auto-capture</span></div>
+          </div>
+          <button class="toggle on" data-type="browser_firefox"></button>
+        </div>
+        <div class="integration-item">
+          <div class="icon-box" style="background:#1a2a3a;color:#007AFF">🧭</div>
+          <div class="info">
+            <h3>Safari Extension</h3>
+            <p>AI usage capture for Safari browsers on macOS</p>
+            <div class="meta"><span>Browser</span><span>Auto-capture</span></div>
+          </div>
+          <button class="toggle on" data-type="browser_safari"></button>
+        </div>
+      </div>
+      <div style="margin-top:20px;text-align:center">
+        <a href="/extensions" class="btn btn-secondary">⬇ Download Extensions</a>
+      </div>
+    </div>
+
+    <!-- AI Agents Tab -->
+    <div class="tab-content" id="tab-agents">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px">
+        <h2 style="font-size:20px;font-weight:600;color:#fff">AI Agents</h2>
+        <span id="agentPipelineLabel" style="font-size:13px;color:#888">Pipeline: auto</span>
+      </div>
+      <p style="color:#888;font-size:14px;margin-bottom:20px">Enable or disable specific AI agents that analyze captured usage data and generate insights for your team.</p>
+      <div class="agent-grid" id="agentsList">
+        <div class="agent-card">
+          <h3>🔬 Research Agent</h3>
+          <p>Profiles your company's industry, AI tools, tone, and competitors to contextualize scoring.</p>
+          <span class="status-badge active">Active</span>
+          <button class="toggle" style="margin-top:10px" data-agent="research"></button>
+        </div>
+        <div class="agent-card">
+          <h3>⚡ Challenge Generator</h3>
+          <p>Creates personalized daily AI challenges per employee role and department.</p>
+          <span class="status-badge active">Active</span>
+          <button class="toggle" style="margin-top:10px" data-agent="challengeGenerator"></button>
+        </div>
+        <div class="agent-card">
+          <h3>📊 Scoring Agent</h3>
+          <p>Scores submissions 0-100 across Clarity, Constraint Application, Output Specificity, and Iteration Quality.</p>
+          <span class="status-badge active">Active</span>
+          <button class="toggle" style="margin-top:10px" data-agent="scorer"></button>
+        </div>
+        <div class="agent-card">
+          <h3>📈 Report Writer</h3>
+          <p>Generates weekly Markdown executive reports with workflow ROI analysis.</p>
+          <span class="status-badge active">Active</span>
+          <button class="toggle" style="margin-top:10px" data-agent="reportWriter"></button>
+        </div>
+        <div class="agent-card">
+          <h3>🎯 Coaching Agent</h3>
+          <p>Writes personalized 3-5 sentence nudges based on submission performance and streaks.</p>
+          <span class="status-badge active">Active</span>
+          <button class="toggle" style="margin-top:10px" data-agent="coach"></button>
+        </div>
+      </div>
+    </div>
+
+    <!-- User Settings Tab -->
+    <div class="tab-content" id="tab-user">
+      <h2 style="font-size:20px;font-weight:600;color:#fff;margin-bottom:16px">My Integration Settings</h2>
+      <div class="user-section">
+        <h3>Connected Platforms</h3>
+        <p style="color:#888;font-size:13px;margin-bottom:12px">Select the AI platforms you use. This helps our agents personalize insights.</p>
+        <div class="platform-list">
+          <span class="platform-tag" data-platform="chatgpt">ChatGPT</span>
+          <span class="platform-tag" data-platform="claude">Claude</span>
+          <span class="platform-tag" data-platform="perplexity">Perplexity</span>
+          <span class="platform-tag" data-platform="gemini">Gemini</span>
+          <span class="platform-tag" data-platform="copilot">Copilot</span>
+          <span class="platform-tag" data-platform="vscode">VS Code</span>
+        </div>
+      </div>
+      <div class="user-section">
+        <h3>Capture Preferences</h3>
+        <div style="display:grid;gap:12px;margin-top:12px">
+          <label style="display:flex;align-items:center;gap:10px;font-size:14px;cursor:pointer">
+            <input type="checkbox" id="autoCapturePref" checked> Auto-capture AI interactions
+          </label>
+          <label style="display:flex;align-items:center;gap:10px;font-size:14px;cursor:pointer">
+            <input type="checkbox" id="shareWithAgents" checked> Share data with AI agents for analysis
+          </label>
+          <label style="display:flex;align-items:center;gap:10px;font-size:14px;cursor:pointer">
+            <input type="checkbox" id="receiveCoachNudges" checked> Receive coaching nudges
+          </label>
+        </div>
+        <button class="btn btn-primary" style="margin-top:16px" id="saveUserPrefs">Save Preferences</button>
+        <span id="userPrefsStatus" style="margin-left:12px;font-size:13px;color:var(--accent);display:none">✓ Saved</span>
+      </div>
+      <div class="user-section">
+        <h3>My API Key</h3>
+        <p style="color:#888;font-size:13px;margin-bottom:6px">Use this key to authenticate the ArGen browser and editor extensions when submitting captured interactions.</p>
+        <p style="color:#666;font-size:12px;margin-bottom:12px">⚠️ This is an <strong>ArGen-issued key</strong> for extension authentication only. It does <em>not</em> spend your AI provider credits — all measurement is passive and zero-cost.</p>
+        <div style="display:flex;gap:8px">
+          <input type="text" id="myApiKey" readonly style="flex:1;padding:10px;background:#1a1a1a;border:1px solid #333;border-radius:6px;color:#00ff88;font-family:monospace;font-size:12px">
+          <button class="btn btn-secondary" onclick="document.getElementById('myApiKey').select();document.execCommand('copy');this.textContent='Copied!'">Copy</button>
+        </div>
+        <div style="margin-top:8px;font-size:12px;color:#666">Generate or manage keys in <a href="/dashboard" style="color:var(--accent)">Dashboard → API Keys</a></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="toast" id="toast"></div>
+  <div id="footer-placeholder"></div>
+
+  <script src="/js/script.js"></script>
+  <script>
+    const API_URL = window.location.origin + '/api';
+
+    // Tab switching
+    document.querySelectorAll('.tab').forEach(tab => {
+      tab.addEventListener('click', () => {
+        document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+        document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+        tab.classList.add('active');
+        document.getElementById('tab-' + tab.dataset.tab).classList.add('active');
+      });
+    });
+
+    // Load integration config
+    async function loadIntegrations() {
+      try {
+        const res = await fetch(API_URL + '/integrations', { credentials: 'include' });
+        if (!res.ok) return;
+        const data = await res.json();
+        document.querySelectorAll('.toggle[data-type]').forEach(toggle => {
+          const type = toggle.dataset.type;
+          const integration = data.integrations?.[type];
+          if (integration) {
+            toggle.classList.toggle('on', integration.enabled);
+          }
+        });
+        document.getElementById('globalToggleLabel').textContent = 'Global: ' + (data.globalEnabled ? 'Enabled' : 'Disabled');
+      } catch (e) { console.log('Integrations load skipped (not logged in)'); }
+    }
+
+    // Load AI agents config
+    async function loadAgents() {
+      try {
+        const res = await fetch(API_URL + '/integrations/agents', { credentials: 'include' });
+        if (!res.ok) return;
+        const data = await res.json();
+        document.querySelectorAll('.toggle[data-agent]').forEach(toggle => {
+          const agent = toggle.dataset.agent;
+          const agentData = data.agents?.[agent];
+          if (agentData) {
+            toggle.classList.toggle('on', agentData.enabled);
+            const badge = toggle.parentElement.querySelector('.status-badge');
+            if (badge) {
+              badge.textContent = agentData.enabled ? 'Active' : 'Disabled';
+              badge.className = 'status-badge ' + (agentData.enabled ? 'active' : 'disabled');
+            }
+          }
+        });
+        if (data.capturePipeline) document.getElementById('agentPipelineLabel').textContent = 'Pipeline: ' + data.capturePipeline;
+      } catch (e) { console.log('Agents load skipped'); }
+    }
+
+    // Load user preferences
+    async function loadUserPrefs() {
+      try {
+        const res = await fetch(API_URL + '/integrations/user', { credentials: 'include' });
+        if (!res.ok) return;
+        const data = await res.json();
+
+        // Connected platforms
+        const connected = data.connectedPlatforms || [];
+        document.querySelectorAll('.platform-tag').forEach(tag => {
+          tag.classList.toggle('connected', connected.includes(tag.dataset.platform));
+        });
+
+        // Preferences
+        const prefs = data.integrations || {};
+        document.getElementById('autoCapturePref').checked = prefs.autoCapture !== false;
+        document.getElementById('shareWithAgents').checked = prefs.shareWithAgents !== false;
+        document.getElementById('receiveCoachNudges').checked = prefs.receiveCoachNudges !== false;
+      } catch (e) { console.log('User prefs load skipped'); }
+    }
+
+    // Load API key
+    async function loadApiKey() {
+      try {
+        const res = await fetch(API_URL + '/keys', { credentials: 'include' });
+        if (!res.ok) return;
+        const data = await res.json();
+        if (data.keys?.length > 0) {
+          document.getElementById('myApiKey').value = data.keys[0].key;
+        } else {
+          document.getElementById('myApiKey').value = 'No API key yet. Create one in Dashboard.';
+        }
+      } catch (e) { /* not logged in */ }
+    }
+
+    // Toggle integration (system-level)
+    document.querySelectorAll('.toggle[data-type]').forEach(toggle => {
+      toggle.addEventListener('click', async () => {
+        const type = toggle.dataset.type;
+        const enabled = !toggle.classList.contains('on');
+        toggle.classList.toggle('on', enabled);
+
+        try {
+          await fetch(API_URL + '/integrations/' + type, {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            credentials: 'include',
+            body: JSON.stringify({ enabled })
+          });
+          showToast(enabled ? type + ' enabled' : type + ' disabled');
+        } catch (e) {
+          toggle.classList.toggle('on', !enabled);
+        }
+      });
+    });
+
+    // Toggle AI agent
+    document.querySelectorAll('.toggle[data-agent]').forEach(toggle => {
+      toggle.addEventListener('click', async () => {
+        const agent = toggle.dataset.agent;
+        const enabled = !toggle.classList.contains('on');
+        toggle.classList.toggle('on', enabled);
+
+        try {
+          await fetch(API_URL + '/integrations/agents/' + agent, {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            credentials: 'include',
+            body: JSON.stringify({ enabled })
+          });
+          const badge = toggle.parentElement.querySelector('.status-badge');
+          if (badge) {
+            badge.textContent = enabled ? 'Active' : 'Disabled';
+            badge.className = 'status-badge ' + (enabled ? 'active' : 'disabled');
+          }
+          showToast(agent + ' agent ' + (enabled ? 'enabled' : 'disabled'));
+        } catch (e) {
+          toggle.classList.toggle('on', !enabled);
+        }
+      });
+    });
+
+    // Platform tags (user-level)
+    document.querySelectorAll('.platform-tag').forEach(tag => {
+      tag.addEventListener('click', async () => {
+        tag.classList.toggle('connected');
+        const connected = [];
+        document.querySelectorAll('.platform-tag.connected').forEach(t => connected.push(t.dataset.platform));
+        try {
+          const res = await fetch(API_URL + '/integrations/user', {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            credentials: 'include',
+            body: JSON.stringify({ connectedPlatforms: connected })
+          });
+        } catch (e) {}
+      });
+    });
+
+    // Save user preferences
+    document.getElementById('saveUserPrefs').addEventListener('click', async () => {
+      const integrations = {
+        autoCapture: document.getElementById('autoCapturePref').checked,
+        shareWithAgents: document.getElementById('shareWithAgents').checked,
+        receiveCoachNudges: document.getElementById('receiveCoachNudges').checked
+      };
+      try {
+        await fetch(API_URL + '/integrations/user', {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          credentials: 'include',
+          body: JSON.stringify({ integrations })
+        });
+        const status = document.getElementById('userPrefsStatus');
+        status.style.display = 'inline';
+        setTimeout(() => { status.style.display = 'none'; }, 2000);
+      } catch (e) {}
+    });
+
+    function showToast(msg) {
+      const toast = document.getElementById('toast');
+      toast.textContent = msg;
+      toast.classList.add('show');
+      setTimeout(() => toast.classList.remove('show'), 2500);
+    }
+
+    // Init
+    loadIntegrations();
+    loadAgents();
+    loadUserPrefs();
+    loadApiKey();
+  </script>
+</body>
+</html>

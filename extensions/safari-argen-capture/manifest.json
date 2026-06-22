@@ -1,0 +1,65 @@
+{
+  "manifest_version": 3,
+  "name": "ArGen AI Capture",
+  "version": "1.0.0",
+  "description": "Automatically captures AI interactions from ChatGPT, Claude, Perplexity, Gemini, and Copilot for ArGen workflow intelligence.",
+  "permissions": [
+    "storage",
+    "activeTab",
+    "nativeMessaging"
+  ],
+  "host_permissions": [
+    "https://chatgpt.com/*",
+    "https://chat.openai.com/*",
+    "https://claude.ai/*",
+    "https://www.perplexity.ai/*",
+    "https://gemini.google.com/*",
+    "https://github.com/copilot/*",
+    "https://*.isira.club/*"
+  ],
+  "background": {
+    "scripts": ["background.js"],
+    "type": "module"
+  },
+  "content_scripts": [
+    {
+      "matches": ["https://chatgpt.com/*", "https://chat.openai.com/*"],
+      "js": ["content-capturer-chatgpt.js"],
+      "run_at": "document_idle"
+    },
+    {
+      "matches": ["https://claude.ai/*"],
+      "js": ["content-capturer-claude.js"],
+      "run_at": "document_idle"
+    },
+    {
+      "matches": ["https://www.perplexity.ai/*"],
+      "js": ["content-capturer-perplexity.js"],
+      "run_at": "document_idle"
+    },
+    {
+      "matches": ["https://gemini.google.com/*"],
+      "js": ["content-capturer-gemini.js"],
+      "run_at": "document_idle"
+    },
+    {
+      "matches": ["https://github.com/copilot/*"],
+      "js": ["content-capturer-copilot.js"],
+      "run_at": "document_idle"
+    }
+  ],
+  "action": {
+    "default_popup": "popup.html",
+    "default_title": "ArGen AI Capture",
+    "default_icon": {
+      "16": "icons/icon-16.png",
+      "48": "icons/icon-48.png",
+      "128": "icons/icon-128.png"
+    }
+  },
+  "icons": {
+    "16": "icons/icon-16.png",
+    "48": "icons/icon-48.png",
+    "128": "icons/icon-128.png"
+  }
+}

@@ -1,3 +1,4 @@
+const jwt = require('jsonwebtoken');
 const { auth, db } = require('../utils/firebase');
 
 // Helper to parse cookies from headers
@@ -54,23 +55,48 @@ const protect = async (req, res, next) => {
   }
 
   try {
-    // Verify Supabase Auth Token
-    const decodedToken = await auth.verifyIdToken(token);
-    
+    let decodedToken;
+
+    // Try Firebase Auth token verification first
+    try {
+      decodedToken = await auth.verifyIdToken(token);
+    } catch (fbErr) {
+      // Fallback: verify as a custom JWT signed with JWT_SECRET
+      const payload = jwt.verify(token, process.env.JWT_SECRET);
+      decodedToken = {
+        uid: payload.id,
+        email: payload.email,
+        role: payload.role,
+        companyId: payload.companyId
+      };
+    }
+
     // Retrieve additional user info (role, companyId) from database
     const userDoc = await db.collection('users').doc(decodedToken.uid).get();
     
     if (userDoc.exists) {
       const userData = userDoc.data();
+      // Lazily migrate single companyId to companies array
+      if (!userData.companies && userData.companyId) {
+        const companyDoc = await db.collection('companies').doc(userData.companyId).get();
+        const companyName = companyDoc.exists ? companyDoc.data().name : 'Unknown';
+        userData.companies = [{ companyId: userData.companyId, role: userData.role || 'member', name: companyName, joinedAt: userData.createdAt || new Date().toISOString() }];
+        await userDoc.ref.update({ companies: userData.companies }).catch(() => {});
+      }
       req.user = {
         id: decodedToken.uid,
         uid: decodedToken.uid,
         email: decodedToken.email,
         role: userData.role || 'member',
-        companyId: userData.companyId || null
+        companyId: userData.companyId || null,
+        companies: userData.companies || []
       };
+      // Override companyId if x-active-company header matches a user's company
+      const activeCompany = req.headers['x-active-company'];
+      if (activeCompany && req.user.companies.some(c => c.companyId === activeCompany)) {
+        req.user.companyId = activeCompany;
+      }
     } else {
-      // Create lightweight fallback user object from claims
       req.user = {
         id: decodedToken.uid,
         uid: decodedToken.uid,
@@ -81,7 +107,7 @@ const protect = async (req, res, next) => {
     }
     next();
   } catch (err) {
-    console.error('Supabase Auth Token Verification Error:', err);
+    console.error('Auth Token Verification Error:', err.message || err);
     res.status(401).json({ msg: 'Token is not valid' });
   }
 };
@@ -142,15 +168,33 @@ async function verifyTokenFromRequest(req) {
     return { id: 'mock-uid', role: 'superadmin', companyId: 'mock-company-id' };
   }
 
-  const decodedToken = await auth.verifyIdToken(token);
+  let decodedToken;
+  try {
+    decodedToken = await auth.verifyIdToken(token);
+  } catch (fbErr) {
+    const payload = jwt.verify(token, process.env.JWT_SECRET);
+    decodedToken = {
+      uid: payload.id,
+      email: payload.email,
+      role: payload.role,
+      companyId: payload.companyId
+    };
+  }
   const userDoc = await db.collection('users').doc(decodedToken.uid).get();
   if (userDoc.exists) {
     const userData = userDoc.data();
+    if (!userData.companies && userData.companyId) {
+      const companyDoc = await db.collection('companies').doc(userData.companyId).get();
+      const companyName = companyDoc.exists ? companyDoc.data().name : 'Unknown';
+      userData.companies = [{ companyId: userData.companyId, role: userData.role || 'member', name: companyName, joinedAt: userData.createdAt || new Date().toISOString() }];
+      await userDoc.ref.update({ companies: userData.companies }).catch(() => {});
+    }
     return {
       id: decodedToken.uid,
       email: decodedToken.email,
       role: userData.role || 'member',
-      companyId: userData.companyId || null
+      companyId: userData.companyId || null,
+      companies: userData.companies || []
     };
   }
   return {

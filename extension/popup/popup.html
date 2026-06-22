@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ArGen AI Tracker</title>
+  <link rel="stylesheet" href="popup.css" />
+</head>
+<body>
+  <div class="popup-root">
+
+    <!-- ── Header ───────────────────────────────────────── -->
+    <header class="popup-header">
+      <div class="logo-wrap">
+        <img src="../icons/icon48.png" alt="ArGen" class="logo-img" />
+        <div class="logo-text">
+          <span class="logo-name">ArGen</span>
+          <span class="logo-sub">AI WORKFLOW INTELLIGENCE</span>
+        </div>
+      </div>
+      <div class="toggle-wrap" title="Enable/disable tracking on this page">
+        <label class="toggle-switch" id="toggle-label">
+          <input type="checkbox" id="toggle-enabled" checked />
+          <span class="toggle-slider"></span>
+        </label>
+      </div>
+    </header>
+
+    <!-- ── Status Bar ────────────────────────────────────── -->
+    <div class="status-bar" id="status-bar">
+      <div class="status-dot" id="status-dot"></div>
+      <span id="status-text">Checking connection…</span>
+    </div>
+
+    <!-- ── Today's Stats ─────────────────────────────────── -->
+    <div class="stats-row">
+      <div class="stat-card">
+        <div class="stat-value" id="today-count">—</div>
+        <div class="stat-label">Captured Today</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-value" id="queue-count">—</div>
+        <div class="stat-label">Pending Sync</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-value" id="last-flush">—</div>
+        <div class="stat-label">Last Sync</div>
+      </div>
+    </div>
+
+    <!-- ── API Key Config ────────────────────────────────── -->
+    <div class="section" id="config-section">
+      <div class="section-title">API KEY</div>
+      <div class="key-input-row">
+        <input
+          type="password"
+          id="api-key-input"
+          placeholder="ag_xxxxxxxxxxxxxxxxxxxxxxxx"
+          autocomplete="off"
+          spellcheck="false"
+        />
+        <button id="save-key-btn" class="btn-accent">Save</button>
+      </div>
+      <div class="key-hint" id="key-hint">
+        Generate an API key from your <a href="#" id="open-dashboard">ArGen dashboard</a>.
+      </div>
+
+      <div class="optional-row">
+        <label class="field-label" for="user-id-input">User ID <span class="optional">(optional)</span></label>
+        <input
+          type="text"
+          id="user-id-input"
+          placeholder="your-argen-user-id"
+          autocomplete="off"
+        />
+      </div>
+    </div>
+
+    <!-- ── Recent Captures ───────────────────────────────── -->
+    <div class="section">
+      <div class="section-header">
+        <div class="section-title">RECENT CAPTURES</div>
+        <button class="btn-ghost" id="flush-btn" title="Sync now">↑ Sync</button>
+      </div>
+      <div id="recent-list" class="recent-list">
+        <div class="empty-state">No captures yet. Visit ChatGPT, Claude, or Gemini to start.</div>
+      </div>
+    </div>
+
+    <!-- ── Footer ───────────────────────────────────────── -->
+    <footer class="popup-footer">
+      <a href="#" id="open-dashboard-footer" class="footer-link">Open Dashboard ↗</a>
+      <span class="footer-version">v1.0.0</span>
+    </footer>
+
+  </div>
+
+  <script src="popup.js"></script>
+</body>
+</html>

@@ -1006,7 +1006,7 @@ router.patch('/companies/:id', protect, authorize('superadmin'), async (req, res
     const companyDoc = await companyRef.get();
     if (!companyDoc.exists) return res.status(404).json({ msg: 'Company not found' });
 
-    const allowed = ['name', 'industry', 'size', 'country', 'domain', 'seatLimit', 'status'];
+    const allowed = ['name', 'industry', 'size', 'country', 'domain', 'seatLimit', 'status', 'inviteCode', 'primaryContact'];
     const updates = {};
     for (const field of allowed) {
       if (req.body[field] !== undefined) updates[field] = req.body[field];
@@ -1090,6 +1090,77 @@ router.get('/data/:collection', protect, authorize('superadmin'), async (req, re
     res.json(data);
   } catch (err) {
     console.error('Data fetch error:', err);
+    res.status(500).json({ msg: 'Server error', error: err.message });
+  }
+});
+
+// @route   POST api/admin/approve-admin-access
+// @desc    Approve or revoke a user's ADMIN invite code access
+// @access  Private (Superadmin)
+router.post('/approve-admin-access', protect, authorize('superadmin'), async (req, res) => {
+  const { email, approve } = req.body || {};
+  if (!email) return res.status(400).json({ msg: 'Email is required' });
+  if (typeof approve !== 'boolean') return res.status(400).json({ msg: 'approve must be true or false' });
+
+  try {
+    const snap = await db.collection('users').where('email', '==', email.toLowerCase()).limit(1).get();
+    if (snap.empty) return res.status(404).json({ msg: 'User not found' });
+
+    const uid = snap.docs[0].id;
+    await db.collection('users').doc(uid).update({ adminInviteApproved: approve });
+
+    res.json({ msg: approve ? `${email} approved for ADMIN code` : `${email} revoked ADMIN access`, uid });
+  } catch (err) {
+    console.error('approve-admin-access error:', err);
+    res.status(500).json({ msg: 'Server error', error: err.message });
+  }
+});
+
+// @route   GET api/admin/approved-admin-users
+// @desc    List all users approved for the ADMIN invite code
+// @access  Private (Superadmin)
+router.get('/approved-admin-users', protect, authorize('superadmin'), async (req, res) => {
+  try {
+    const snap = await db.collection('users').where('adminInviteApproved', '==', true).get();
+    const users = snap.docs.map(d => ({ uid: d.id, email: d.data().email, name: d.data().name, role: d.data().role }));
+    res.json(users);
+  } catch (err) {
+    console.error('approved-admin-users error:', err);
+    res.status(500).json({ msg: 'Server error', error: err.message });
+  }
+});
+
+// @route   POST api/admin/companies
+// @desc    Create a new organization (superadmin only)
+// @access  Private/Superadmin
+router.post('/companies', protect, authorize('superadmin'), async (req, res) => {
+  if (global.MOCK_DB) {
+    return res.json({ _id: 'mock-company-id', name: req.body.name, status: 'active', inviteCode: 'ADMIN' });
+  }
+  try {
+    const { name, industry, size, country, domain, primaryContact, inviteCode: customCode } = req.body;
+    if (!name) return res.status(400).json({ msg: 'Company name is required' });
+
+    // Use custom invite code if provided, otherwise auto-generate
+    const inviteCode = customCode ? customCode.toUpperCase() : Math.random().toString(36).substring(2, 10).toUpperCase();
+    const companyData = {
+      name,
+      industry: industry || '',
+      size: size || '',
+      country: country || '',
+      domain: domain || '',
+      primaryContact: primaryContact || {},
+      inviteCode,
+      status: 'active',
+      createdAt: new Date(),
+      updatedAt: new Date()
+    };
+
+    const companyRef = await db.collection('companies').add(companyData);
+    const companyDoc = await companyRef.get();
+    res.status(201).json({ _id: companyRef.id, ...companyDoc.data() });
+  } catch (err) {
+    console.error('Company Create Error:', err);
     res.status(500).json({ msg: 'Server error', error: err.message });
   }
 });

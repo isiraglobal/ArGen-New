@@ -3,7 +3,7 @@ Allow: /
 Disallow: /api/
 Disallow: /login
 Disallow: /dashboard
-Disallow: /admin-portal
+Disallow: /admin
 Disallow: /teams
 Disallow: /team/
 

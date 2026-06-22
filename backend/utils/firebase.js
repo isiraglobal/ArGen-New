@@ -8,6 +8,7 @@ dotenv.config({ path: path.join(__dirname, '../../.env') });
 
 let db;
 let auth;
+let rawFirestore;
 
 const FIREBASE_WEB_API_KEY = process.env.FIREBASE_WEB_API_KEY;
 const FIREBASE_AUTH_BASE = 'https://identitytoolkit.googleapis.com/v1';
@@ -45,6 +46,7 @@ function initializeFirebase() {
     });
 
     const firestore = getFirestore('default');
+    rawFirestore = firestore;
     firestore.settings({ ignoreUndefinedProperties: true });
 
     const firebaseAuth = getAuth();
@@ -119,7 +121,7 @@ function initializeFirebase() {
         },
 
         doc(id) {
-          const docRef = ref.doc(id);
+          const docRef = id ? ref.doc(id) : ref.doc();
           return {
             get: async () => {
               const doc = await docRef.get();
@@ -265,6 +267,12 @@ function setupMockLayer() {
   global.MOCK_DB = true;
 
   db = {
+    batch: () => ({
+      set: async () => {},
+      update: async () => {},
+      delete: async () => {},
+      commit: async () => {}
+    }),
     collection: () => {
       const stub = {
         where: () => stub,
@@ -307,9 +315,11 @@ function setupMockLayer() {
     setCustomUserClaims: async () => {},
     generatePasswordResetLink: async () => 'http://localhost:3001/reset-password?token=mock-reset',
     signInWithPassword: async (email, password) => {
-      if (email === 'admin@argen' && password === 'argen@admin') {
+      const adminEmail = process.env.ADMIN_EMAIL;
+      const adminPass = process.env.ADMIN_PASSWORD;
+      if (adminEmail && adminPass && email === adminEmail && password === adminPass) {
         return {
-          user: { id: 'mock-uid', email: 'admin@argen.ai' },
+          user: { id: 'mock-uid', email: adminEmail },
           session: { access_token: 'mock-token', refresh_token: 'mock-refresh' }
         };
       }
@@ -320,4 +330,4 @@ function setupMockLayer() {
 
 initializeFirebase();
 
-module.exports = { admin, db, auth };
+module.exports = { admin, db, auth, firestore: rawFirestore };

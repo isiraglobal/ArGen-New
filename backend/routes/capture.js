@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const { db } = require('../utils/firebase');
+const { checkBillingLimit } = require('../middleware/billing');
 
 // ─────────────────────────────────────────────────────────
 // CAPTURE API — The single ingestion endpoint for all
@@ -126,7 +127,7 @@ function validateInteraction(req, res, next) {
 // POST /api/capture/interaction — Report a single AI interaction
 // Used by: Browser extensions, IDE plugins, CLI agents
 // ─────────────────────────────────────────────────────────
-router.post('/interaction', resolveCompany, validateInteraction, async (req, res) => {
+router.post('/interaction', resolveCompany, checkBillingLimit, validateInteraction, async (req, res) => {
   try {
     const { parsed, companyId, userId, clientInfo } = req;
 
@@ -161,7 +162,8 @@ router.post('/interaction', resolveCompany, validateInteraction, async (req, res
       status: 'captured',
       provider: parsed.provider,
       tokens: parsed.inputTokens + parsed.outputTokens,
-      cost: parsed.costUsd
+      cost: parsed.costUsd,
+      billing: req.billing || null
     });
   } catch (err) {
     res.status(500).json({ error: 'Capture failed: ' + err.message });
@@ -172,7 +174,7 @@ router.post('/interaction', resolveCompany, validateInteraction, async (req, res
 // POST /api/capture/batch — Report multiple interactions at once
 // Used by: Proxy forwarders, batch sync from provider APIs
 // ─────────────────────────────────────────────────────────
-router.post('/batch', resolveCompany, async (req, res) => {
+router.post('/batch', resolveCompany, checkBillingLimit, async (req, res) => {
   try {
     const { interactions } = req.body;
     if (!Array.isArray(interactions) || interactions.length === 0) {

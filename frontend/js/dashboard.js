@@ -139,9 +139,88 @@ async function initAdminDashboard() {
             if (inviteCodeDisplay) inviteCodeDisplay.textContent = company.inviteCode || '—';
         }
         hideLoading();
+        // Load multi-org comparison if user belongs to multiple companies
+        loadMultiOrgComparison();
     } catch (err) {
         hideLoading();
         if (typeof showToast === 'function') showToast('Failed to load workspace data', 'error');
+    }
+}
+
+async function loadMultiOrgComparison() {
+    try {
+        const res = await fetch('/api/auth/companies-stats', {
+            headers: { 'Authorization': 'Bearer ' + localStorage.getItem('argen_token'), 'Content-Type': 'application/json' }
+        });
+        if (!res.ok) return;
+        const companies = await res.json();
+        if (!Array.isArray(companies) || companies.length <= 1) return;
+        
+        const container = document.getElementById('multiOrgComparison');
+        if (!container) return;
+        container.style.display = 'block';
+        
+        const activeId = localStorage.getItem('active_company_id');
+        container.innerHTML = `
+            <div class="stat-card" style="padding:1.5rem;">
+                <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1rem;">
+                    <h3 style="color:#fff;font-size:0.85rem;font-family:var(--font-mono);margin:0;">MULTI-ORG COMPARISON</h3>
+                    <span style="font-size:0.6rem;color:var(--text-sec);">${companies.length} organizations</span>
+                </div>
+                <div style="overflow-x:auto;">
+                    <table style="width:100%;border-collapse:collapse;font-size:0.75rem;">
+                        <thead>
+                            <tr style="border-bottom:1px solid rgba(255,255,255,0.06);">
+                                <th style="text-align:left;padding:8px 12px;color:var(--text-sec);font-family:var(--font-mono);font-weight:400;">Organization</th>
+                                <th style="text-align:center;padding:8px 12px;color:var(--text-sec);font-family:var(--font-mono);font-weight:400;">Role</th>
+                                <th style="text-align:center;padding:8px 12px;color:var(--text-sec);font-family:var(--font-mono);font-weight:400;">Employees</th>
+                                <th style="text-align:center;padding:8px 12px;color:var(--text-sec);font-family:var(--font-mono);font-weight:400;">Active Users</th>
+                                <th style="text-align:center;padding:8px 12px;color:var(--text-sec);font-family:var(--font-mono);font-weight:400;">Monthly Tx</th>
+                                <th style="text-align:right;padding:8px 12px;color:var(--text-sec);font-family:var(--font-mono);font-weight:400;">Monthly Cost</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            ${companies.map(c => `
+                                <tr style="border-bottom:1px solid rgba(255,255,255,0.03);${c.companyId === activeId ? 'background:rgba(0,255,136,0.03);' : ''}">
+                                    <td style="padding:10px 12px;color:#fff;display:flex;align-items:center;gap:8px;">
+                                        <span style="width:6px;height:6px;border-radius:50%;background:${c.companyId === activeId ? 'var(--accent)' : 'rgba(255,255,255,0.15)'};display:inline-block;flex-shrink:0;"></span>
+                                        ${c.name}
+                                        ${c.companyId === activeId ? '<span style="font-size:0.55rem;color:var(--accent);font-family:var(--font-mono);text-transform:uppercase;">Active</span>' : ''}
+                                    </td>
+                                    <td style="text-align:center;padding:10px 12px;color:var(--text-sec);text-transform:capitalize;">${c.role}</td>
+                                    <td style="text-align:center;padding:10px 12px;color:#fff;">${c.employees}</td>
+                                    <td style="text-align:center;padding:10px 12px;color:#fff;">${c.activeUsers}</td>
+                                    <td style="text-align:center;padding:10px 12px;color:#fff;">${c.monthTx}</td>
+                                    <td style="text-align:right;padding:10px 12px;color:${c.monthCost > 0 ? '#22c55e' : 'var(--text-sec)'};">$${c.monthCost.toFixed(2)}</td>
+                                </tr>
+                            `).join('')}
+                        </tbody>
+                    </table>
+                </div>
+                <div style="margin-top:1rem;padding-top:0.75rem;border-top:1px solid rgba(255,255,255,0.05);display:flex;gap:0.5rem;flex-wrap:wrap;">
+                    ${companies.map(c => `
+                        <button class="action-btn" onclick="switchToOrg('${c.companyId}')" style="${c.companyId === activeId ? 'opacity:0.4;pointer-events:none;' : ''}font-size:0.6rem;">
+                            Switch to ${c.name}
+                        </button>
+                    `).join('')}
+                </div>
+            </div>
+        `;
+    } catch (e) { /* silently fail */ }
+}
+
+async function switchToOrg(companyId) {
+    try {
+        const token = localStorage.getItem('argen_token');
+        await fetch('/api/auth/switch-company', {
+            method: 'POST',
+            headers: { 'Authorization': 'Bearer ' + token, 'Content-Type': 'application/json' },
+            body: JSON.stringify({ companyId })
+        });
+        localStorage.setItem('active_company_id', companyId);
+        window.location.reload();
+    } catch (e) {
+        if (typeof showToast === 'function') showToast('Failed to switch organization', 'error');
     }
 }
 

@@ -1,0 +1,62 @@
+{
+  "name": "argen-capture",
+  "displayName": "ArGen AI Workflow Capture",
+  "description": "Capture AI tool usage in VS Code for ArGen workflow intelligence",
+  "version": "1.0.0",
+  "publisher": "ArGen",
+  "engines": {
+    "vscode": "^1.74.0"
+  },
+  "categories": [
+    "Other"
+  ],
+  "activationEvents": [
+    "onStartupFinished"
+  ],
+  "main": "./extension.js",
+  "contributes": {
+    "commands": [
+      {
+        "command": "argen-capture.captureSelection",
+        "title": "ArGen: Capture AI Selection"
+      },
+      {
+        "command": "argen-capture.configureApiKey",
+        "title": "ArGen: Configure API Key"
+      }
+    ],
+    "configuration": {
+      "title": "ArGen Capture",
+      "properties": {
+        "argenCapture.apiKey": {
+          "type": "string",
+          "default": "",
+          "description": "Your ArGen company API key"
+        },
+        "argenCapture.apiUrl": {
+          "type": "string",
+          "default": "https://argen.isira.club/api",
+          "description": "ArGen API base URL"
+        },
+        "argenCapture.autoCapture": {
+          "type": "boolean",
+          "default": true,
+          "description": "Automatically capture AI tool interactions"
+        }
+      }
+    }
+  },
+  "scripts": {
+    "lint": "eslint .",
+    "package": "vsce package"
+  },
+  "devDependencies": {
+    "@types/vscode": "^1.74.0",
+    "@types/node": "^18.0.0",
+    "eslint": "^8.0.0",
+    "@typescript-eslint/eslint-plugin": "^6.0.0",
+    "@typescript-eslint/parser": "^6.0.0",
+    "typescript": "^5.0.0",
+    "vsce": "^2.15.0"
+  }
+}

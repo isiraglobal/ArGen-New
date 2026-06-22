@@ -7,25 +7,11 @@ const path = require('path');
 dotenv.config({ path: path.join(__dirname, '../.env') });
 dotenv.config({ path: path.join(__dirname, '../.env.vercel') });
 
-// Validate required env vars at startup
-const REQUIRED_ENV = [
-  'JWT_SECRET',
-  'TOKEN_ENCRYPTION_KEY',
-  'FIREBASE_PROJECT_ID',
-  'FIREBASE_CLIENT_EMAIL',
-  'FIREBASE_PRIVATE_KEY',
-  'FIREBASE_WEB_API_KEY'
-];
-const optionalWarn = ['ADMIN_EMAIL', 'ADMIN_PASSWORD'];
-const missing = REQUIRED_ENV.filter(k => !process.env[k]);
-if (missing.length > 0) {
-  console.error(`FATAL: Missing required environment variables: ${missing.join(', ')}`);
-  if (process.env.NODE_ENV === 'production') process.exit(1);
-}
-const missingOptional = optionalWarn.filter(k => !process.env[k]);
-if (missingOptional.length > 0 && process.env.NODE_ENV === 'production') {
-  console.warn(`⚠️  Production warning: optional env vars not set: ${missingOptional.join(', ')} (admin login bypass won't work)`);
-}
+// Check critical env vars (log warnings, don't crash in production)
+const criticalEnv = ['JWT_SECRET', 'FIREBASE_PROJECT_ID', 'FIREBASE_CLIENT_EMAIL', 'FIREBASE_WEB_API_KEY'];
+const optionalEnv = ['TOKEN_ENCRYPTION_KEY', 'ADMIN_EMAIL', 'ADMIN_PASSWORD', 'FIREBASE_PRIVATE_KEY', 'FIREBASE_PRIVATE_KEY_BASE64'];
+criticalEnv.forEach(k => { if (!process.env[k]) console.warn(`⚠️  Missing critical env var: ${k}`); });
+optionalEnv.forEach(k => { if (!process.env[k]) console.warn(`  ⚠️  Missing optional env var: ${k}`); });
 
 const { contactRules, handleValidationErrors } = require('./middleware/validate');
 
@@ -70,11 +56,7 @@ const limiter = rateLimit({
 app.use('/api', limiter);
 
 // Whop Webhook — needs raw body so mount before express.json()
-try {
-  app.use('/api/whop', require('./routes/whop'));
-} catch (e) {
-  console.warn('[server] Whop route not available:', e.message);
-}
+app.use('/api/whop', require('./routes/whop'));
 
 app.use(express.json({ limit: '2mb' }));
 
@@ -95,6 +77,9 @@ app.use('/api/apply', require('./routes/apply'));
 app.use('/api/capture', require('./routes/capture'));
 app.use('/api/keys', require('./routes/apikeys'));
 app.use('/api/warehouse', require('./routes/warehouse'));
+app.use('/api/billing', require('./routes/billing'));
+app.use('/api/integrations', require('./routes/integrations'));
+app.use('/api/proxy', require('./routes/proxy'));
 
 // Contact form (public)
 app.post('/api/contact', contactRules, handleValidationErrors, async (req, res) => {
@@ -121,7 +106,7 @@ const frontendDir = path.join(__dirname, '../frontend/html');
 const memberPages = ['dashboard', 'challenges', 'take-evaluation', 'teams', 'team-detail'];
 const teamadminPages = ['connect'];
 const onboardingPages = ['onboarding'];
-const superadminPages = ['admin-portal', 'admin-access'];
+const superadminPages = ['admin'];
 
 // Health Check
 app.get('/api/health', (req, res) => {
@@ -189,7 +174,8 @@ const publicPages = [
   'about', 'pricing', 'contact', 'login', 'oauth', 'forgot-password',
   'reset-password', 'privacy', 'terms', 'waitlist', 'registration',
   'invoice', 'evaluate', 'payment-success', 'payment-failed',
-  'cookie-policy', 'gdpr', 'dpa', 'aup', 'apply'
+  'cookie-policy', 'gdpr', 'dpa', 'aup', 'apply',
+  'integrations', 'extensions'
 ];
 
 publicPages.forEach(page => {
@@ -203,6 +189,38 @@ if (process.env.NODE_ENV !== 'production') {
   const PORT = parseInt(process.env.PORT) || 3001;
   app.listen(PORT, '127.0.0.1', () => console.log(`[server] Running on http://127.0.0.1:${PORT}`));
 }
+
+// Seed ADMIN company on startup (invite-code-only, no public registration)
+(async () => {
+  try {
+    if (global.MOCK_DB) return;
+    const { db } = require('./utils/firebase');
+    const snapshot = await db.collection('companies')
+      .where('inviteCode', '==', 'ADMIN')
+      .limit(1)
+      .get();
+    if (snapshot.empty) {
+      await db.collection('companies').doc('admin-company').set({
+        name: 'ArGen Platform',
+        industry: 'Platform',
+        status: 'active',
+        inviteCode: 'ADMIN',
+        ownerEmail: 'isiraglobal@gmail.com',
+        createdAt: new Date()
+      });
+      console.log('✅ ADMIN company seeded with owner isiraglobal@gmail.com');
+    } else {
+      // Ensure ownerEmail is set even if company already exists
+      const existing = snapshot.docs[0];
+      if (!existing.data().ownerEmail) {
+        await existing.ref.update({ ownerEmail: 'isiraglobal@gmail.com' });
+        console.log('✅ ADMIN company ownerEmail updated');
+      }
+    }
+  } catch (e) {
+    console.error('⚠️  ADMIN seed skipped:', e.message);
+  }
+})();
 
 module.exports = app;
 

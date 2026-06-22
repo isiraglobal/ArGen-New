@@ -318,6 +318,81 @@ if (typeof window.escapeHtml !== 'function') {
         navLinks.appendChild(dashLink);
       }
 
+      if (!document.getElementById('navIntegrationsLink')) {
+        const intLink = document.createElement('a');
+        intLink.href = '/integrations';
+        intLink.className = 'nav-link';
+        intLink.id = 'navIntegrationsLink';
+        intLink.textContent = 'Integrations';
+        navLinks.appendChild(intLink);
+      }
+
+      // Org switcher dropdown
+      (async function initOrgSwitcher() {
+        try {
+          const res = await fetch('/api/auth/my-companies', {
+            headers: { 'Authorization': 'Bearer ' + token, 'Content-Type': 'application/json' }
+          });
+          if (!res.ok) return;
+          const companies = await res.json();
+          if (!Array.isArray(companies) || companies.length <= 1) return;
+          const activeId = localStorage.getItem('active_company_id') || companies[0].companyId;
+          const active = companies.find(c => c.companyId === activeId) || companies[0];
+          if (!localStorage.getItem('active_company_id')) {
+            localStorage.setItem('active_company_id', active.companyId);
+          }
+          const wrapper = document.createElement('div');
+          wrapper.style.cssText = 'position:relative;display:inline-block;margin-left:12px;';
+          wrapper.innerHTML = `
+            <button id="orgSwitcherBtn" style="background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:6px;padding:4px 12px;color:#fff;font-size:0.7rem;font-family:var(--font-mono);cursor:pointer;white-space:nowrap;display:flex;align-items:center;gap:6px;">
+              <span style="width:6px;height:6px;border-radius:50%;background:var(--accent);display:inline-block;"></span>
+              ${active.name}
+              <span style="font-size:0.5rem;opacity:0.5;">▼</span>
+            </button>
+            <div id="orgSwitcherDropdown" style="display:none;position:absolute;top:100%;left:0;margin-top:4px;background:#141414;border:1px solid rgba(255,255,255,0.08);border-radius:8px;min-width:180px;z-index:100;overflow:hidden;box-shadow:0 8px 30px rgba(0,0,0,0.4);">
+              ${companies.map(c => `
+                <div class="org-switcher-item" data-id="${c.companyId}" style="padding:8px 14px;cursor:pointer;font-size:0.75rem;color:${c.companyId === active.companyId ? 'var(--accent)' : '#ccc'};border-bottom:1px solid rgba(255,255,255,0.04);display:flex;align-items:center;gap:8px;transition:background 0.15s;">
+                  <span style="width:6px;height:6px;border-radius:50%;background:${c.companyId === active.companyId ? 'var(--accent)' : 'rgba(255,255,255,0.15)'};display:inline-block;flex-shrink:0;"></span>
+                  <span style="flex:1;">${c.name}</span>
+                  <span style="font-size:0.6rem;opacity:0.4;text-transform:uppercase;">${c.role}</span>
+                </div>
+              `).join('')}
+            </div>
+          `;
+          navLinks.appendChild(wrapper);
+
+          // Toggle dropdown
+          document.getElementById('orgSwitcherBtn').addEventListener('click', (e) => {
+            e.stopPropagation();
+            const dd = document.getElementById('orgSwitcherDropdown');
+            dd.style.display = dd.style.display === 'none' ? 'block' : 'none';
+          });
+          document.addEventListener('click', () => {
+            document.getElementById('orgSwitcherDropdown').style.display = 'none';
+          });
+
+          // Switch company
+          document.querySelectorAll('.org-switcher-item').forEach(el => {
+            el.addEventListener('click', async () => {
+              const companyId = el.dataset.id;
+              if (companyId === activeId) return;
+              try {
+                await fetch('/api/auth/switch-company', {
+                  method: 'POST',
+                  headers: { 'Authorization': 'Bearer ' + token, 'Content-Type': 'application/json' },
+                  body: JSON.stringify({ companyId })
+                });
+                localStorage.setItem('active_company_id', companyId);
+                localStorage.setItem('company_switched', 'true');
+                window.location.reload();
+              } catch (e) {
+                console.error('Switch failed:', e);
+              }
+            });
+          });
+        } catch (e) { /* silently fail */ }
+      })();
+
       if (navCta) {
         navCta.textContent = 'Dashboard →';
         navCta.href = '/dashboard';

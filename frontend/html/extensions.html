@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Download Extensions — ArGen</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/css/style.css">
+  <style>
+    .ext-header { text-align: center; padding: 60px 20px 40px; }
+    .ext-header h1 { font-size: 42px; font-weight: 800; color: #fff; letter-spacing: -1.5px; }
+    .ext-header p { color: #888; max-width: 600px; margin: 12px auto 0; font-size: 16px; line-height: 1.6; }
+    .ext-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 24px; max-width: 1100px; margin: 0 auto; padding: 0 20px 60px; }
+    .ext-card { background: var(--card-bg); border: 1px solid #1a1a1a; border-radius: 12px; padding: 32px; transition: border-color 0.3s; }
+    .ext-card:hover { border-color: var(--accent); }
+    .ext-card .icon { width: 48px; height: 48px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 24px; margin-bottom: 16px; }
+    .ext-card .icon.code { background: #1a3a2a; color: var(--accent); }
+    .ext-card .icon.chrome { background: #1a2a3a; color: #4285F4; }
+    .ext-card .icon.firefox { background: #2a1a1a; color: #FF7139; }
+    .ext-card h3 { font-size: 20px; font-weight: 600; color: #fff; margin-bottom: 8px; }
+    .ext-card p { color: #888; font-size: 14px; line-height: 1.5; margin-bottom: 20px; }
+    .ext-card .meta { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 20px; }
+    .ext-card .meta span { padding: 4px 10px; border-radius: 20px; font-size: 11px; font-weight: 500; background: rgba(255,255,255,0.05); color: #aaa; }
+    .ext-card .btn { display: inline-flex; align-items: center; gap: 8px; padding: 10px 20px; border-radius: 8px; font-size: 14px; font-weight: 600; cursor: pointer; transition: opacity 0.2s; border: none; text-decoration: none; }
+    .ext-card .btn-primary { background: var(--accent); color: #000; }
+    .ext-card .btn-secondary { background: rgba(255,255,255,0.06); color: #fff; border: 1px solid #333; }
+    .ext-card .btn:hover { opacity: 0.8; }
+    .ext-card .btn:disabled { opacity: 0.3; cursor: not-allowed; }
+    .step-list { list-style: none; padding: 0; margin: 20px 0 0; border-top: 1px solid #1a1a1a; padding-top: 16px; }
+    .step-list li { padding: 6px 0; font-size: 13px; color: #aaa; display: flex; align-items: flex-start; gap: 8px; }
+    .step-list li .num { color: var(--accent); font-weight: 600; min-width: 20px; }
+    .api-key-prompt { margin-top: 12px; padding: 12px; background: rgba(0,255,136,0.05); border: 1px solid rgba(0,255,136,0.15); border-radius: 8px; font-size: 13px; color: #ccc; }
+    .api-key-prompt strong { color: var(--accent); }
+    .section-title { text-align: center; font-size: 28px; font-weight: 700; color: #fff; margin: 40px 0 20px; }
+  </style>
+</head>
+<body>
+  <div id="header-placeholder"></div>
+
+    <div class="ext-header">
+      <h1>Download Extensions</h1>
+      <p>Install ArGen's browser and editor extensions to automatically capture AI interactions across your team.</p>
+      <div style="margin-top:16px;padding:10px 16px;background:rgba(0,255,136,0.05);border:1px solid rgba(0,255,136,0.15);border-radius:8px;font-size:0.8rem;color:#aaa;display:inline-block">
+        🔒 <strong style="color:#00ff88">Zero-cost measurement:</strong> Extensions capture interactions passively. ArGen never makes API calls using your keys — your credits are never touched.
+      </div>
+    </div>
+
+  <div class="ext-grid">
+    <!-- VS Code -->
+    <div class="ext-card">
+      <div class="icon code">⌨</div>
+      <h3>VS Code Extension</h3>
+      <p>Automatically captures AI-generated code patterns as you paste them. Detects Copilot, ChatGPT, and other AI completions.</p>
+      <div class="meta">
+        <span>IDE</span>
+        <span>Auto-capture</span>
+        <span>Mac · Windows · Linux</span>
+      </div>
+      <a href="/integrations" class="btn btn-primary" id="vscodeDownloadBtn">⬇ Download .vsix</a>
+      <a href="/integrations" class="btn btn-secondary" style="margin-left:8px" onclick="showInstructions('vscode')">Instructions</a>
+      <div id="vscodeInstructions" style="display:none;">
+        <ul class="step-list">
+          <li><span class="num">1.</span> Open VS Code → Extensions (Cmd+Shift+X)</li>
+          <li><span class="num">2.</span> Click "..." → "Install from VSIX..."</li>
+          <li><span class="num">3.</span> Select the downloaded .vsix file</li>
+          <li><span class="num">4.</span> Press Cmd+Shift+P → "ArGen: Configure API Key"</li>
+          <li><span class="num">5.</span> Enter your API key from Settings → API Keys</li>
+        </ul>
+        <div class="api-key-prompt">💡 <strong>Need an API key?</strong> Go to your <a href="/dashboard" style="color:var(--accent)">Dashboard → API Keys</a> to generate one.</div>
+      </div>
+    </div>
+
+    <!-- Chrome -->
+    <div class="ext-card">
+      <div class="icon chrome">🌐</div>
+      <h3>Chrome Extension</h3>
+      <p>Captures prompts and completions from ChatGPT, Claude, Perplexity, Gemini, and Copilot automatically.</p>
+      <div class="meta">
+        <span>Browser</span>
+        <span>Auto-capture</span>
+        <span>Chrome</span>
+      </div>
+      <a href="/integrations" class="btn btn-primary" id="chromeDownloadBtn">⬇ Download .zip</a>
+      <a href="#" class="btn btn-secondary" style="margin-left:8px" onclick="showInstructions('chrome')">Instructions</a>
+      <div id="chromeInstructions" style="display:none;">
+        <ul class="step-list">
+          <li><span class="num">1.</span> Download the extension zip file</li>
+          <li><span class="num">2.</span> Unzip to a folder on your computer</li>
+          <li><span class="num">3.</span> Open Chrome → chrome://extensions</li>
+          <li><span class="num">4.</span> Enable "Developer mode" (top right)</li>
+          <li><span class="num">5.</span> Click "Load unpacked" → select the unzipped folder</li>
+          <li><span class="num">6.</span> Click the extension icon → enter your API key</li>
+        </ul>
+        <div class="api-key-prompt">💡 <strong>New to Chrome extensions?</strong> "Developer mode" is at the top-right of chrome://extensions.</div>
+      </div>
+    </div>
+
+    <!-- Firefox -->
+    <div class="ext-card">
+      <div class="icon firefox">🦊</div>
+      <h3>Firefox Add-on</h3>
+      <p>Same powerful AI usage capture for Firefox. Supports ChatGPT, Claude, and all major AI platforms.</p>
+      <div class="meta">
+        <span>Browser</span>
+        <span>Auto-capture</span>
+        <span>Firefox</span>
+      </div>
+      <a href="/integrations" class="btn btn-primary" id="firefoxDownloadBtn">⬇ Download .zip</a>
+      <a href="#" class="btn btn-secondary" style="margin-left:8px" onclick="showInstructions('firefox')">Instructions</a>
+      <div id="firefoxInstructions" style="display:none;">
+        <ul class="step-list">
+          <li><span class="num">1.</span> Download the extension zip file</li>
+          <li><span class="num">2.</span> Unzip to a folder</li>
+          <li><span class="num">3.</span> Open Firefox → about:debugging</li>
+          <li><span class="num">4.</span> Click "This Firefox" → "Load Temporary Add-on"</li>
+          <li><span class="num">5.</span> Select the manifest.json from the unzipped folder</li>
+          <li><span class="num">6.</span> Click the extension icon → enter your API key</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- Safari -->
+    <div class="ext-card">
+      <div class="icon" style="background:#1a2a3a;color:#007AFF;width:48px;height:48px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:24px;margin-bottom:16px">🧭</div>
+      <h3>Safari Extension</h3>
+      <p>AI usage capture for Safari on macOS. Works with ChatGPT, Claude, Perplexity, Gemini, and GitHub Copilot.</p>
+      <div class="meta">
+        <span>Browser</span>
+        <span>Auto-capture</span>
+        <span>macOS</span>
+      </div>
+      <a href="/integrations" class="btn btn-primary" id="safariDownloadBtn">⬇ Download .zip</a>
+      <a href="#" class="btn btn-secondary" style="margin-left:8px" onclick="showInstructions('safari')">Instructions</a>
+      <div id="safariInstructions" style="display:none;">
+        <ul class="step-list">
+          <li><span class="num">1.</span> Download the extension zip file above</li>
+          <li><span class="num">2.</span> Unzip to a folder on your computer</li>
+          <li><span class="num">3.</span> Open Safari → Settings → Extensions</li>
+          <li><span class="num">4.</span> Enable "Developer mode" in the Extensions tab</li>
+          <li><span class="num">5.</span> Click the "+" button → select the unzipped .app bundle</li>
+          <li><span class="num">6.</span> Click the extension toolbar icon → enter your API key</li>
+        </ul>
+        <div class="api-key-prompt">💡 <strong>macOS 12+ required.</strong> Safari 15+ supports Web Extensions. For custom builds, open Terminal and run <code style="background:#1a1a1a;padding:2px 6px;border-radius:4px">xcrun safari-web-extension-converter</code> with the unzipped folder.</div>
+      </div>
+    </div>
+  </div>
+
+  <div style="text-align:center;padding-bottom:60px">
+    <h2 class="section-title">Need More Help?</h2>
+    <p style="color:#888;margin-bottom:20px">Visit the <a href="/integrations" style="color:var(--accent)">Integrations Hub</a> for system-wide settings and AI agent configuration.</p>
+    <a href="/dashboard" class="btn btn-primary" style="padding:12px 32px;border-radius:8px;text-decoration:none;font-weight:600;background:var(--accent);color:#000">Go to Dashboard</a>
+  </div>
+
+  <div id="footer-placeholder"></div>
+
+  <script src="/js/script.js"></script>
+  <script>
+    function showInstructions(type) {
+      const el = document.getElementById(type + 'Instructions');
+      if (el) el.style.display = el.style.display === 'none' ? 'block' : 'none';
+    }
+  </script>
+</body>
+</html>

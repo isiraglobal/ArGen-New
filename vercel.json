@@ -24,8 +24,7 @@
     { "source": "/about", "destination": "/frontend/html/about.html" },
     { "source": "/pricing", "destination": "/frontend/html/pricing.html" },
     { "source": "/contact", "destination": "/frontend/html/contact.html" },
-    { "source": "/admin-portal", "destination": "/frontend/html/admin-portal.html" },
-    { "source": "/admin-access", "destination": "/frontend/html/admin-access.html" },
+    { "source": "/admin", "destination": "/frontend/html/admin.html" },
     { "source": "/evaluate", "destination": "/frontend/html/evaluate.html" },
     { "source": "/challenges", "destination": "/frontend/html/challenges.html" },
     { "source": "/login", "destination": "/frontend/html/login.html" },
@@ -50,6 +49,8 @@
     { "source": "/dpa", "destination": "/frontend/html/dpa.html" },
     { "source": "/aup", "destination": "/frontend/html/aup.html" },
     { "source": "/apply", "destination": "/frontend/html/apply.html" },
+    { "source": "/integrations", "destination": "/frontend/html/integrations.html" },
+    { "source": "/extensions", "destination": "/frontend/html/extensions.html" },
     { "source": "/(css|js|images)/(.*)", "destination": "/frontend/$1/$2" }
   ],
   "crons": [

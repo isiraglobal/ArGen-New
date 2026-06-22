@@ -323,6 +323,9 @@
         <div style="text-align: center; margin-top: 1.5rem;">
           <a href="javascript:void(0)" id="demoModeLink" style="color: var(--accent); font-size: 0.72rem; text-decoration: none; font-family: var(--font-mono); letter-spacing: 0.5px; font-weight: 700;">&gt; EXPLORE DEMO WORKSPACE</a>
         </div>
+        <div style="text-align: center; margin-top: 0.75rem;">
+          <a href="javascript:void(0)" id="quickLoginLink" style="color: rgba(255,255,255,0.3); font-size: 0.65rem; text-decoration: none; font-family: var(--font-mono); letter-spacing: 0.5px;">&gt; QUICK LOGIN (ENV CREDS)</a>
+        </div>
       </form>
  
        <div id="authMessage" class="auth-message"></div>
@@ -427,7 +430,7 @@
              const role = data.user.role.toLowerCase();
              if (role === 'superadmin') {
                showMessage('Administrative account detected. Redirecting to secure terminal...', 'success');
-               setTimeout(() => { window.location.href = '/admin-portal'; }, 1500);
+               setTimeout(() => { window.location.href = '/admin'; }, 1500);
              } else if (role === 'teamadmin') {
                const next = new URLSearchParams(window.location.search).get('redirect') || '/dashboard';
                window.location.href = next;
@@ -445,25 +448,49 @@
           window.location.href = '/api/auth/google';
         });
 
-       // Demo Mode Trigger
-       const demoLink = document.getElementById('demoModeLink');
-       if (demoLink) {
-         demoLink.addEventListener('click', () => {
-           localStorage.setItem('is_demo_mode', 'true');
-           localStorage.setItem('argen_token', 'demo-token');
-           localStorage.setItem('user', JSON.stringify({
-             id: 'demo-user-id',
-             name: 'Guest Explorer',
-             email: 'guest@demo.argen',
-             role: 'teamadmin',
-             companyId: 'demo-company-id',
-             profileComplete: true,
-             profileStatus: 'approved'
-           }));
-           sessionStorage.setItem('team_verified', 'true');
-           window.location.href = '/dashboard';
-         });
-       }
+        // Demo Mode Trigger
+        const demoLink = document.getElementById('demoModeLink');
+        if (demoLink) {
+          demoLink.addEventListener('click', () => {
+            localStorage.setItem('is_demo_mode', 'true');
+            localStorage.setItem('argen_token', 'demo-token');
+            localStorage.setItem('user', JSON.stringify({
+              id: 'demo-user-id',
+              name: 'Guest Explorer',
+              email: 'guest@demo.argen',
+              role: 'teamadmin',
+              companyId: 'demo-company-id',
+              profileComplete: true,
+              profileStatus: 'approved'
+            }));
+            sessionStorage.setItem('team_verified', 'true');
+            window.location.href = '/dashboard';
+          });
+        }
+
+        // Quick Login with .env credentials
+        const quickLoginLink = document.getElementById('quickLoginLink');
+        if (quickLoginLink) {
+          quickLoginLink.addEventListener('click', async () => {
+            const emailInput = document.querySelector('#loginForm input[type="email"]');
+            const passwordInput = document.querySelector('#loginForm input[type="password"]');
+            try {
+              const res = await fetch('/api/auth/env-creds', {
+                headers: { 'x-dev-key': 'argen-local-dev-2024' }
+              });
+              const data = await res.json();
+              if (data.email && data.password) {
+                emailInput.value = data.email;
+                passwordInput.value = data.password;
+                showMessage('Credentials loaded from secure config.', 'success');
+              } else {
+                showMessage('No credentials available. Use your own login.', 'error');
+              }
+            } catch (e) {
+              showMessage('Could not load credentials. Server not running?', 'error');
+            }
+          });
+        }
      });
  
      // Forgot Password Logic

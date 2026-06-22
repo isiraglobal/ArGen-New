@@ -1,11 +1,14 @@
 const express = require('express');
 const router = express.Router();
 const crypto = require('crypto');
-const { Whop } = require('@whop/sdk');
 const { db } = require('../utils/firebase');
 const sendEmail = require('../utils/sendEmail');
 const { createEmailTemplate } = require('../utils/emailTemplate');
 const { protect } = require('../middleware/auth');
+
+// NOTE: @whop/sdk is ESM-only on Vercel Node 22 and throws ERR_REQUIRE_ESM.
+// The Whop dependency is optional — all routes handle null safely.
+const Whop = null;
 
 // POST /api/whop/checkout-url
 // Returns a dynamically generated Whop checkout URL
@@ -17,7 +20,7 @@ router.post('/checkout-url', express.json(), async (req, res) => {
   }
 
   // If Whop is not configured, return a demo link so the flow isn't broken
-  if (!process.env.WHOP_API_KEY || !process.env.NEXT_PUBLIC_WHOP_APP_ID) {
+  if (!Whop || !process.env.WHOP_API_KEY || !process.env.NEXT_PUBLIC_WHOP_APP_ID) {
     return res.json({
       checkoutUrl: '#',
       demo: true,

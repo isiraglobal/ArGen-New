@@ -12,8 +12,24 @@
     }
 
     const currentPath = window.location.pathname;
-    const superadminPaths = ['/html/admin-portal.html', '/admin-portal', '/html/admin-dashboard.html', '/admin-dashboard'];
-    const isAdminPath = superadminPaths.some(path => currentPath.includes(path)) || currentPath.includes('admin-access');
+
+    // /oauth is a transitional page — let oauth.html handle all logic, skip auth-guard entirely
+    if (currentPath === '/oauth' || currentPath === '/oauth.html') return;
+
+    // If we arrived via ?cleared=1 (admin 401 redirect), bail immediately.
+    // Must run BEFORE token/user extraction to prevent cookie fallback from restoring the loop.
+    const urlParams = new URLSearchParams(window.location.search);
+    if ((currentPath.includes('login') || currentPath.includes('registration')) && urlParams.get('cleared') === '1') {
+        ['argen_token','user','argen_admin_token','admin_user'].forEach(k => {
+            localStorage.removeItem(k);
+            document.cookie = k + '=; Path=/; Expires=Thu, 01 Jan 1970 00:00:01 GMT;';
+        });
+        console.warn('[AuthGuard] Early exit — ?cleared=1 detected, session wiped');
+        return;
+    }
+
+    const superadminPaths = ['/html/admin.html', '/admin'];
+    const isAdminPath = superadminPaths.some(path => currentPath.includes(path));
     
     // Isolated session keys
     const tokenKey = isAdminPath ? 'argen_admin_token' : 'argen_token';
@@ -28,7 +44,6 @@
     }
 
     // Preserve team invite codes before any auth redirects. Team code is asked after login during onboarding.
-    const urlParams = new URLSearchParams(window.location.search);
     const urlTeamCode = urlParams.get('code');
     if (urlTeamCode) {
         sessionStorage.setItem('pending_team_code', urlTeamCode.toUpperCase());
@@ -52,6 +67,23 @@
         if (userStr && userStr !== 'undefined' && userStr !== 'null') {
             localStorage.setItem(userKey, userStr);
         }
+    }
+
+    // Fallback: on admin pages, if admin namespace is empty, copy from regular namespace
+    if (isAdminPath && (!token || !userStr || userStr === 'undefined')) {
+      const regularToken = localStorage.getItem('argen_token');
+      const regularUserStr = localStorage.getItem('user');
+      if (regularToken && regularUserStr && regularUserStr !== 'undefined') {
+        try {
+          const regularUser = JSON.parse(regularUserStr);
+          if (regularUser && regularUser.role === 'superadmin') {
+            localStorage.setItem('argen_admin_token', regularToken);
+            localStorage.setItem('admin_user', regularUserStr);
+            token = regularToken;
+            userStr = regularUserStr;
+          }
+        } catch(e) {}
+      }
     }
 
     const user = userStr && userStr !== 'undefined' && userStr !== 'null' ? JSON.parse(userStr) : null;
@@ -112,9 +144,9 @@
         }
 
         // If trying to access login or registration while already logged in
-        if (currentPath.includes('login') || currentPath.includes('admin-access') || currentPath.includes('registration')) {
+        if (currentPath.includes('login') || currentPath.includes('registration')) {
             if (role === 'superadmin') {
-                window.location.href = '/admin-portal';
+                window.location.href = '/admin';
             } else if (user.profileComplete === false) {
                 window.location.href = '/onboarding';
             } else {
