@@ -44,21 +44,47 @@ app.use(cors({
   credentials: true
 }));
 
-// Rate Limiting — applied to all API routes
+// Rate Limiting — tiered for security + heavy load
 const rateLimit = require('express-rate-limit');
-const limiter = rateLimit({
+
+// Auth: strict — prevent brute-force
+const authLimiter = rateLimit({
   windowMs: 15 * 60 * 1000,
-  max: 150,
+  max: 20,
+  standardHeaders: true,
+  legacyHeaders: false,
+  message: { msg: 'Too many auth attempts. Please try again later.' }
+});
+
+// Admin/write-heavy: moderate
+const adminLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000,
+  max: 300,
   standardHeaders: true,
   legacyHeaders: false,
   message: { msg: 'Too many requests. Please try again in 15 minutes.' }
 });
-app.use('/api', limiter);
 
-// Whop Webhook — needs raw body so mount before express.json()
+// General API: generous for production multi-tab usage
+const generalLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000,
+  max: 1000,
+  standardHeaders: true,
+  legacyHeaders: false,
+  message: { msg: 'Too many requests. Please try again in 15 minutes.' }
+});
+
+// Webhooks & whop — must not be rate-limited
 app.use('/api/whop', require('./routes/whop'));
 
+// Sensitive routes get strict limits first
+app.use('/api/auth', authLimiter);
+app.use('/api/admin', adminLimiter);
+
 app.use(express.json({ limit: '2mb' }));
+
+// General fallback for all other /api routes
+app.use('/api', generalLimiter);
 
 // Routes
 app.use('/api/auth', require('./routes/auth'));
