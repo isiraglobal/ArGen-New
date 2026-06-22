@@ -1,16 +1,16 @@
 # Graph Report - ArGen - New Look  (2026-06-22)
 
 ## Corpus Check
-- 100 files · ~173,117 words
+- 109 files · ~174,639 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 1137 nodes · 1356 edges · 87 communities (64 shown, 23 thin omitted)
+- 1179 nodes · 1391 edges · 93 communities (70 shown, 23 thin omitted)
 - Extraction: 100% EXTRACTED · 0% INFERRED · 0% AMBIGUOUS · INFERRED: 3 edges (avg confidence: 0.8)
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `b0d21009`
+- Built from commit: `92aab2e5`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -87,18 +87,19 @@
 - [[_COMMUNITY_Community 72|Community 72]]
 - [[_COMMUNITY_Community 73|Community 73]]
 - [[_COMMUNITY_Community 74|Community 74]]
+- [[_COMMUNITY_Community 75|Community 75]]
 - [[_COMMUNITY_Community 76|Community 76]]
 - [[_COMMUNITY_Community 77|Community 77]]
+- [[_COMMUNITY_Community 78|Community 78]]
+- [[_COMMUNITY_Community 79|Community 79]]
 - [[_COMMUNITY_Community 80|Community 80]]
 - [[_COMMUNITY_Community 82|Community 82]]
 - [[_COMMUNITY_Community 83|Community 83]]
 - [[_COMMUNITY_Community 84|Community 84]]
-- [[_COMMUNITY_Community 85|Community 85]]
 - [[_COMMUNITY_Community 86|Community 86]]
 - [[_COMMUNITY_Community 87|Community 87]]
 - [[_COMMUNITY_Community 88|Community 88]]
 - [[_COMMUNITY_Community 89|Community 89]]
-- [[_COMMUNITY_Community 90|Community 90]]
 
 ## God Nodes (most connected - your core abstractions)
 1. `What To Test (hit every endpoint)` - 22 edges
@@ -124,7 +125,7 @@
 - `handleSyncConnections()` --calls--> `syncAllConnections()`  [INFERRED]
   backend/routes/scheduler.js → backend/utils/ai-providers.js
 
-## Communities (87 total, 23 thin omitted)
+## Communities (93 total, 23 thin omitted)
 
 ### Community 0 - "Community 0"
 Cohesion: 0.14
@@ -144,7 +145,7 @@ Nodes (25): benchmarks, byDepartment, byIntent, byUser, d, dailyTrend, { db }, d
 
 ### Community 5 - "Community 5"
 Cohesion: 0.05
-Nodes (35): { auth, db }, autoPassword, bcrypt, callerEmail, company, companyData, { createEmailTemplate }, crypto (+27 more)
+Nodes (44): { body, validationResult }, challengeRules, contactRules, evaluationRules, handleValidationErrors(), invoiceRules, loginRules, registerRules (+36 more)
 
 ### Community 6 - "Community 6"
 Cohesion: 0.09
@@ -155,8 +156,8 @@ Cohesion: 0.08
 Nodes (24): action, default_icon, default_popup, default_title, author, background, service_worker, type (+16 more)
 
 ### Community 8 - "Community 8"
-Cohesion: 0.05
-Nodes (36): dotenv, path, CompanySchema, mongoose, application, { createEmailTemplate }, { db }, embed (+28 more)
+Cohesion: 0.06
+Nodes (29): dotenv, path, InvitationSchema, mongoose, application, { createEmailTemplate }, { db }, embed (+21 more)
 
 ### Community 9 - "Community 9"
 Cohesion: 0.04
@@ -231,8 +232,8 @@ Cohesion: 0.4
 Nodes (4): app, auth, firebaseConfig, googleProvider
 
 ### Community 35 - "Community 35"
-Cohesion: 0.09
-Nodes (21): analyses, { analyzeCaptureData }, companyConfig, config, data, { db }, downloadMap, events (+13 more)
+Cohesion: 0.08
+Nodes (22): analyses, { analyzeCaptureData }, companyConfig, config, data, { db }, downloadMap, events (+14 more)
 
 ### Community 42 - "Community 42"
 Cohesion: 0.05
@@ -275,8 +276,8 @@ Cohesion: 0.08
 Nodes (23): author, background, persistent, scripts, browser_action, default_icon, default_popup, default_title (+15 more)
 
 ### Community 54 - "Community 54"
-Cohesion: 0.08
-Nodes (23): d, dailyRef, { db }, { decrypt }, estimateTokens(), express, getTotalInputTokens(), inputCost (+15 more)
+Cohesion: 0.09
+Nodes (19): d, dailyRef, { db }, estimateTokens(), express, getTotalInputTokens(), inputTokens, limit (+11 more)
 
 ### Community 55 - "Community 55"
 Cohesion: 0.23
@@ -310,6 +311,10 @@ Nodes (3): cloned, notifyTokenData(), parseStreamingResponse()
 Cohesion: 0.08
 Nodes (23): action, default_icon, default_popup, default_title, background, service_worker, type, content_scripts (+15 more)
 
+### Community 70 - "Community 70"
+Cohesion: 0.09
+Nodes (21): action, default_icon, default_popup, default_title, background, scripts, type, content_scripts (+13 more)
+
 ### Community 71 - "Community 71"
 Cohesion: 0.12
 Nodes (16): challengeIds, challengePromises, company, { createEmailTemplate }, data, { db }, evaluationData, evaluations (+8 more)
@@ -326,6 +331,10 @@ Nodes (13): apiKey, apiKeyInput, apiUrlInput, captureCount, captureNowBtn, curre
 Cohesion: 0.17
 Nodes (11): API Endpoints, ArGen VS Code Extension, Auto-Capture, code:bash (# Install dependencies), Development, Disable Auto-Capture, Features, Installation (+3 more)
 
+### Community 75 - "Community 75"
+Cohesion: 0.25
+Nodes (7): ArGen Safari Extension, Building for Safari, code:bash (xcrun safari-web-extension-converter --app-name "ArGen Captu), Development, Manual Install (without Xcode), Prerequisites, Steps
+
 ### Community 76 - "Community 76"
 Cohesion: 0.2
 Nodes (9): API Key, Architecture, ArGen Browser Extension (Manifest V3), code:block1 (popup.html/js ──→ chrome.storage.sync ←── background.js (ser), How It Works, Installation (Developer Mode), License, Permissions (+1 more)
@@ -333,6 +342,10 @@ Nodes (9): API Key, Architecture, ArGen Browser Extension (Manifest V3), code:bl
 ### Community 77 - "Community 77"
 Cohesion: 0.24
 Nodes (6): captureInteraction(), generateSessionId(), http, https, postToArGen(), vscode
+
+### Community 78 - "Community 78"
+Cohesion: 0.6
+Nodes (4): captureInteraction(), extractCompletion(), extractPrompt(), observer
 
 ### Community 80 - "Community 80"
 Cohesion: 0.38
@@ -346,10 +359,6 @@ Nodes (5): captureGeneric(), detectPlatform(), observer, PLATFORM_RULES, sendToA
 Cohesion: 0.67
 Nodes (3): extractMessages(), observer, sendToArGen()
 
-### Community 85 - "Community 85"
-Cohesion: 0.11
-Nodes (14): bcrypt, Company, dotenv, jwt, mongoose, path, User, bcrypt (+6 more)
-
 ### Community 86 - "Community 86"
 Cohesion: 0.38
 Nodes (6): http, httpRequest(), https, logResult(), RESULTS, testAll()
@@ -359,33 +368,29 @@ Cohesion: 0.53
 Nodes (5): buildStats(), createBatch(), path, printStats(), seed()
 
 ### Community 88 - "Community 88"
-Cohesion: 0.18
-Nodes (20): { db }, runTest(), { scoreResponse, generateWeeklyReport, generateCoachingNudge }, analyzeCaptureData(), callAnthropic(), callGemini(), callNvidia(), callOpenAI() (+12 more)
+Cohesion: 0.05
+Nodes (42): { db }, runTest(), { scoreResponse, generateWeeklyReport, generateCoachingNudge }, bcrypt, Company, dotenv, jwt, mongoose (+34 more)
 
 ### Community 89 - "Community 89"
 Cohesion: 0.23
 Nodes (10): { auth, db }, authorize(), jwt, parseCookies(), protect(), verifyTokenFromRequest(), express, { protect, authorize } (+2 more)
 
-### Community 90 - "Community 90"
-Cohesion: 0.2
-Nodes (9): { body, validationResult }, challengeRules, contactRules, evaluationRules, handleValidationErrors(), invoiceRules, loginRules, registerRules (+1 more)
-
 ## Knowledge Gaps
-- **715 isolated node(s):** `Login Credentials`, `1. Auth`, `2. API Keys`, `3. Capture API (core)`, `4. Warehouse` (+710 more)
+- **735 isolated node(s):** `Login Credentials`, `1. Auth`, `2. API Keys`, `3. Capture API (core)`, `4. Warehouse` (+730 more)
   These have ≤1 connection - possible missing edges or undocumented components.
 - **23 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
 
 ## Suggested Questions
 _Questions this graph is uniquely positioned to answer:_
 
-- **Why does `protect()` connect `Community 89` to `Community 32`, `Community 35`, `Community 4`, `Community 5`, `Community 71`, `Community 8`, `Community 9`, `Community 72`, `Community 44`, `Community 49`, `Community 50`, `Community 54`, `Community 56`, `Community 58`, `Community 30`?**
-  _High betweenness centrality (0.036) - this node is a cross-community bridge._
-- **Why does `authorize()` connect `Community 89` to `Community 32`, `Community 35`, `Community 4`, `Community 71`, `Community 72`, `Community 9`, `Community 8`, `Community 44`, `Community 49`, `Community 50`?**
+- **Why does `protect()` connect `Community 89` to `Community 32`, `Community 35`, `Community 4`, `Community 5`, `Community 71`, `Community 8`, `Community 9`, `Community 72`, `Community 44`, `Community 49`, `Community 50`, `Community 54`, `Community 56`, `Community 58`, `Community 88`, `Community 30`?**
+  _High betweenness centrality (0.028) - this node is a cross-community bridge._
+- **Why does `createEmailTemplate()` connect `Community 8` to `Community 88`, `Community 9`, `Community 5`, `Community 71`?**
   _High betweenness centrality (0.010) - this node is a cross-community bridge._
-- **Why does `createEmailTemplate()` connect `Community 8` to `Community 9`, `Community 5`, `Community 71`?**
-  _High betweenness centrality (0.006) - this node is a cross-community bridge._
+- **Why does `authorize()` connect `Community 89` to `Community 32`, `Community 35`, `Community 4`, `Community 71`, `Community 72`, `Community 9`, `Community 44`, `Community 49`, `Community 50`, `Community 88`?**
+  _High betweenness centrality (0.008) - this node is a cross-community bridge._
 - **What connects `Login Credentials`, `1. Auth`, `2. API Keys` to the rest of the system?**
-  _715 weakly-connected nodes found - possible documentation gaps or missing edges._
+  _735 weakly-connected nodes found - possible documentation gaps or missing edges._
 - **Should `Community 0` be split into smaller, more focused modules?**
   _Cohesion score 0.14 - nodes in this community are weakly interconnected._
 - **Should `Community 2` be split into smaller, more focused modules?**

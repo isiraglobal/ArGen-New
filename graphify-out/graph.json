@@ -432,7 +432,7 @@
       "source_file": "backend/middleware/validate.js",
       "source_location": "L1",
       "id": "backend_middleware_validate_js",
-      "community": 90,
+      "community": 5,
       "norm_label": "validate.js"
     },
     {
@@ -441,7 +441,7 @@
       "source_file": "backend/middleware/validate.js",
       "source_location": "L1",
       "id": "middleware_validate_body_validationresult",
-      "community": 90,
+      "community": 5,
       "norm_label": "{ body, validationresult }"
     },
     {
@@ -450,7 +450,7 @@
       "source_file": "backend/middleware/validate.js",
       "source_location": "L3",
       "id": "middleware_validate_handlevalidationerrors",
-      "community": 90,
+      "community": 5,
       "norm_label": "handlevalidationerrors()"
     },
     {
@@ -459,7 +459,7 @@
       "source_file": "backend/middleware/validate.js",
       "source_location": "L11",
       "id": "middleware_validate_registerrules",
-      "community": 90,
+      "community": 5,
       "norm_label": "registerrules"
     },
     {
@@ -468,7 +468,7 @@
       "source_file": "backend/middleware/validate.js",
       "source_location": "L17",
       "id": "middleware_validate_loginrules",
-      "community": 90,
+      "community": 5,
       "norm_label": "loginrules"
     },
     {
@@ -477,7 +477,7 @@
       "source_file": "backend/middleware/validate.js",
       "source_location": "L22",
       "id": "middleware_validate_challengerules",
-      "community": 90,
+      "community": 5,
       "norm_label": "challengerules"
     },
     {
@@ -486,7 +486,7 @@
       "source_file": "backend/middleware/validate.js",
       "source_location": "L28",
       "id": "middleware_validate_evaluationrules",
-      "community": 90,
+      "community": 5,
       "norm_label": "evaluationrules"
     },
     {
@@ -495,7 +495,7 @@
       "source_file": "backend/middleware/validate.js",
       "source_location": "L33",
       "id": "middleware_validate_contactrules",
-      "community": 90,
+      "community": 5,
       "norm_label": "contactrules"
     },
     {
@@ -504,7 +504,7 @@
       "source_file": "backend/middleware/validate.js",
       "source_location": "L39",
       "id": "middleware_validate_invoicerules",
-      "community": 90,
+      "community": 5,
       "norm_label": "invoicerules"
     },
     {
@@ -513,7 +513,7 @@
       "source_file": "backend/middleware/validate.js",
       "source_location": "L47",
       "id": "middleware_validate_teamcoderules",
-      "community": 90,
+      "community": 5,
       "norm_label": "teamcoderules"
     },
     {
@@ -1726,7 +1726,7 @@
       "label": "companyConfig",
       "file_type": "code",
       "source_file": "backend/routes/integrations.js",
-      "source_location": "L29",
+      "source_location": "L30",
       "id": "routes_integrations_companyconfig",
       "community": 35,
       "norm_label": "companyconfig"
@@ -1735,7 +1735,7 @@
       "label": "result",
       "file_type": "code",
       "source_file": "backend/routes/integrations.js",
-      "source_location": "L35",
+      "source_location": "L36",
       "id": "routes_integrations_result",
       "community": 35,
       "norm_label": "result"
@@ -1744,7 +1744,7 @@
       "label": "ref",
       "file_type": "code",
       "source_file": "backend/routes/integrations.js",
-      "source_location": "L69",
+      "source_location": "L70",
       "id": "routes_integrations_ref",
       "community": 35,
       "norm_label": "ref"
@@ -1753,7 +1753,7 @@
       "label": "update",
       "file_type": "code",
       "source_file": "backend/routes/integrations.js",
-      "source_location": "L70",
+      "source_location": "L71",
       "id": "routes_integrations_update",
       "community": 35,
       "norm_label": "update"
@@ -1762,7 +1762,7 @@
       "label": "data",
       "file_type": "code",
       "source_file": "backend/routes/integrations.js",
-      "source_location": "L104",
+      "source_location": "L105",
       "id": "routes_integrations_data",
       "community": 35,
       "norm_label": "data"
@@ -1771,7 +1771,7 @@
       "label": "getExtensionDir()",
       "file_type": "code",
       "source_file": "backend/routes/integrations.js",
-      "source_location": "L122",
+      "source_location": "L123",
       "id": "routes_integrations_getextensiondir",
       "community": 35,
       "norm_label": "getextensiondir()"
@@ -1780,7 +1780,7 @@
       "label": "extDir",
       "file_type": "code",
       "source_file": "backend/routes/integrations.js",
-      "source_location": "L129",
+      "source_location": "L130",
       "id": "routes_integrations_extdir",
       "community": 35,
       "norm_label": "extdir"
@@ -1789,7 +1789,7 @@
       "label": "downloadMap",
       "file_type": "code",
       "source_file": "backend/routes/integrations.js",
-      "source_location": "L131",
+      "source_location": "L132",
       "id": "routes_integrations_downloadmap",
       "community": 35,
       "norm_label": "downloadmap"
@@ -1798,7 +1798,7 @@
       "label": "filePath",
       "file_type": "code",
       "source_file": "backend/routes/integrations.js",
-      "source_location": "L155",
+      "source_location": "L162",
       "id": "routes_integrations_filepath",
       "community": 35,
       "norm_label": "filepath"
@@ -1807,7 +1807,7 @@
       "label": "instructions",
       "file_type": "code",
       "source_file": "backend/routes/integrations.js",
-      "source_location": "L182",
+      "source_location": "L189",
       "id": "routes_integrations_instructions",
       "community": 35,
       "norm_label": "instructions"
@@ -1816,7 +1816,7 @@
       "label": "config",
       "file_type": "code",
       "source_file": "backend/routes/integrations.js",
-      "source_location": "L236",
+      "source_location": "L256",
       "id": "routes_integrations_config",
       "community": 35,
       "norm_label": "config"
@@ -1825,7 +1825,7 @@
       "label": "validAgents",
       "file_type": "code",
       "source_file": "backend/routes/integrations.js",
-      "source_location": "L264",
+      "source_location": "L284",
       "id": "routes_integrations_validagents",
       "community": 35,
       "norm_label": "validagents"
@@ -1834,7 +1834,7 @@
       "label": "events",
       "file_type": "code",
       "source_file": "backend/routes/integrations.js",
-      "source_location": "L298",
+      "source_location": "L318",
       "id": "routes_integrations_events",
       "community": 35,
       "norm_label": "events"
@@ -1843,7 +1843,7 @@
       "label": "analyses",
       "file_type": "code",
       "source_file": "backend/routes/integrations.js",
-      "source_location": "L362",
+      "source_location": "L382",
       "id": "routes_integrations_analyses",
       "community": 35,
       "norm_label": "analyses"
@@ -1861,7 +1861,7 @@
       "label": "express",
       "file_type": "code",
       "source_file": "backend/routes/proxy.js",
-      "source_location": "L6",
+      "source_location": "L7",
       "id": "routes_proxy_express",
       "community": 54,
       "norm_label": "express"
@@ -1870,7 +1870,7 @@
       "label": "router",
       "file_type": "code",
       "source_file": "backend/routes/proxy.js",
-      "source_location": "L7",
+      "source_location": "L8",
       "id": "routes_proxy_router",
       "community": 54,
       "norm_label": "router"
@@ -1879,7 +1879,7 @@
       "label": "{ db }",
       "file_type": "code",
       "source_file": "backend/routes/proxy.js",
-      "source_location": "L8",
+      "source_location": "L9",
       "id": "routes_proxy_db",
       "community": 54,
       "norm_label": "{ db }"
@@ -1888,7 +1888,7 @@
       "label": "{ protect }",
       "file_type": "code",
       "source_file": "backend/routes/proxy.js",
-      "source_location": "L9",
+      "source_location": "L10",
       "id": "routes_proxy_protect",
       "community": 54,
       "norm_label": "{ protect }"
@@ -1897,16 +1897,25 @@
       "label": "increment()",
       "file_type": "code",
       "source_file": "backend/routes/proxy.js",
-      "source_location": "L12",
+      "source_location": "L13",
       "id": "routes_proxy_increment",
       "community": 54,
       "norm_label": "increment()"
     },
     {
+      "label": "getArgenApiKey()",
+      "file_type": "code",
+      "source_file": "backend/routes/proxy.js",
+      "source_location": "L25",
+      "id": "routes_proxy_getargenapikey",
+      "community": 54,
+      "norm_label": "getargenapikey()"
+    },
+    {
       "label": "PROVIDER_CONFIGS",
       "file_type": "code",
       "source_file": "backend/routes/proxy.js",
-      "source_location": "L22",
+      "source_location": "L34",
       "id": "routes_proxy_provider_configs",
       "community": 54,
       "norm_label": "provider_configs"
@@ -1915,7 +1924,7 @@
       "label": "estimateTokens()",
       "file_type": "code",
       "source_file": "backend/routes/proxy.js",
-      "source_location": "L40",
+      "source_location": "L53",
       "id": "routes_proxy_estimatetokens",
       "community": 54,
       "norm_label": "estimatetokens()"
@@ -1924,7 +1933,7 @@
       "label": "getCost()",
       "file_type": "code",
       "source_file": "backend/routes/proxy.js",
-      "source_location": "L45",
+      "source_location": "L58",
       "id": "routes_proxy_getcost",
       "community": 54,
       "norm_label": "getcost()"
@@ -1933,70 +1942,34 @@
       "label": "getTotalInputTokens()",
       "file_type": "code",
       "source_file": "backend/routes/proxy.js",
-      "source_location": "L51",
+      "source_location": "L64",
       "id": "routes_proxy_gettotalinputtokens",
       "community": 54,
       "norm_label": "gettotalinputtokens()"
     },
     {
-      "label": "{ decrypt }",
-      "file_type": "code",
-      "source_file": "backend/routes/proxy.js",
-      "source_location": "L83",
-      "id": "routes_proxy_decrypt",
-      "community": 54,
-      "norm_label": "{ decrypt }"
-    },
-    {
       "label": "inputTokens",
       "file_type": "code",
       "source_file": "backend/routes/proxy.js",
-      "source_location": "L96",
+      "source_location": "L89",
       "id": "routes_proxy_inputtokens",
       "community": 54,
       "norm_label": "inputtokens"
     },
     {
-      "label": "inputCost",
-      "file_type": "code",
-      "source_file": "backend/routes/proxy.js",
-      "source_location": "L122",
-      "id": "routes_proxy_inputcost",
-      "community": 54,
-      "norm_label": "inputcost"
-    },
-    {
-      "label": "outputCost",
-      "file_type": "code",
-      "source_file": "backend/routes/proxy.js",
-      "source_location": "L123",
-      "id": "routes_proxy_outputcost",
-      "community": 54,
-      "norm_label": "outputcost"
-    },
-    {
       "label": "dailyRef",
       "file_type": "code",
       "source_file": "backend/routes/proxy.js",
-      "source_location": "L146",
+      "source_location": "L112",
       "id": "routes_proxy_dailyref",
       "community": 54,
       "norm_label": "dailyref"
     },
     {
-      "label": "tracking",
-      "file_type": "code",
-      "source_file": "backend/routes/proxy.js",
-      "source_location": "L158",
-      "id": "routes_proxy_tracking",
-      "community": 54,
-      "norm_label": "tracking"
-    },
-    {
       "label": "now",
       "file_type": "code",
       "source_file": "backend/routes/proxy.js",
-      "source_location": "L192",
+      "source_location": "L137",
       "id": "routes_proxy_now",
       "community": 54,
       "norm_label": "now"
@@ -2005,7 +1978,7 @@
       "label": "startOfWeek",
       "file_type": "code",
       "source_file": "backend/routes/proxy.js",
-      "source_location": "L194",
+      "source_location": "L139",
       "id": "routes_proxy_startofweek",
       "community": 54,
       "norm_label": "startofweek"
@@ -2014,7 +1987,7 @@
       "label": "userTx",
       "file_type": "code",
       "source_file": "backend/routes/proxy.js",
-      "source_location": "L206",
+      "source_location": "L151",
       "id": "routes_proxy_usertx",
       "community": 54,
       "norm_label": "usertx"
@@ -2023,7 +1996,7 @@
       "label": "userTokens",
       "file_type": "code",
       "source_file": "backend/routes/proxy.js",
-      "source_location": "L207",
+      "source_location": "L152",
       "id": "routes_proxy_usertokens",
       "community": 54,
       "norm_label": "usertokens"
@@ -2032,7 +2005,7 @@
       "label": "providerTx",
       "file_type": "code",
       "source_file": "backend/routes/proxy.js",
-      "source_location": "L208",
+      "source_location": "L153",
       "id": "routes_proxy_providertx",
       "community": 54,
       "norm_label": "providertx"
@@ -2041,7 +2014,7 @@
       "label": "d",
       "file_type": "code",
       "source_file": "backend/routes/proxy.js",
-      "source_location": "L211",
+      "source_location": "L156",
       "id": "routes_proxy_d",
       "community": 54,
       "norm_label": "d"
@@ -2050,7 +2023,7 @@
       "label": "topUsers",
       "file_type": "code",
       "source_file": "backend/routes/proxy.js",
-      "source_location": "L245",
+      "source_location": "L190",
       "id": "routes_proxy_topusers",
       "community": 54,
       "norm_label": "topusers"
@@ -2059,7 +2032,7 @@
       "label": "limit",
       "file_type": "code",
       "source_file": "backend/routes/proxy.js",
-      "source_location": "L281",
+      "source_location": "L226",
       "id": "routes_proxy_limit",
       "community": 54,
       "norm_label": "limit"
@@ -2068,7 +2041,7 @@
       "label": "query",
       "file_type": "code",
       "source_file": "backend/routes/proxy.js",
-      "source_location": "L285",
+      "source_location": "L230",
       "id": "routes_proxy_query",
       "community": 54,
       "norm_label": "query"
@@ -2077,7 +2050,7 @@
       "label": "transactions",
       "file_type": "code",
       "source_file": "backend/routes/proxy.js",
-      "source_location": "L295",
+      "source_location": "L240",
       "id": "routes_proxy_transactions",
       "community": 54,
       "norm_label": "transactions"
@@ -2574,7 +2547,7 @@
       "source_file": "backend/utils/ai-agents.js",
       "source_location": "L444",
       "id": "utils_ai_agents_analyzecapturedata",
-      "community": 88,
+      "community": 35,
       "norm_label": "analyzecapturedata()"
     },
     {
@@ -4668,6 +4641,411 @@
     {
       "label": "README.md",
       "file_type": "document",
+      "source_file": "extensions/safari-argen-capture/README.md",
+      "source_location": "L1",
+      "id": "extensions_safari_argen_capture_readme_md",
+      "community": 75,
+      "norm_label": "readme.md"
+    },
+    {
+      "label": "ArGen Safari Extension",
+      "file_type": "document",
+      "source_file": "extensions/safari-argen-capture/README.md",
+      "source_location": "L1",
+      "id": "safari_argen_capture_readme_argen_safari_extension",
+      "community": 75,
+      "norm_label": "argen safari extension"
+    },
+    {
+      "label": "Building for Safari",
+      "file_type": "document",
+      "source_file": "extensions/safari-argen-capture/README.md",
+      "source_location": "L5",
+      "id": "safari_argen_capture_readme_building_for_safari",
+      "community": 75,
+      "norm_label": "building for safari"
+    },
+    {
+      "label": "Prerequisites",
+      "file_type": "document",
+      "source_file": "extensions/safari-argen-capture/README.md",
+      "source_location": "L9",
+      "id": "safari_argen_capture_readme_prerequisites",
+      "community": 75,
+      "norm_label": "prerequisites"
+    },
+    {
+      "label": "Steps",
+      "file_type": "document",
+      "source_file": "extensions/safari-argen-capture/README.md",
+      "source_location": "L13",
+      "id": "safari_argen_capture_readme_steps",
+      "community": 75,
+      "norm_label": "steps"
+    },
+    {
+      "label": "code:bash (xcrun safari-web-extension-converter --app-name \"ArGen Captu)",
+      "file_type": "document",
+      "source_file": "extensions/safari-argen-capture/README.md",
+      "source_location": "L16",
+      "id": "safari_argen_capture_readme_codeblock_1",
+      "community": 75,
+      "norm_label": "code:bash (xcrun safari-web-extension-converter --app-name \"argen captu)"
+    },
+    {
+      "label": "Manual Install (without Xcode)",
+      "file_type": "document",
+      "source_file": "extensions/safari-argen-capture/README.md",
+      "source_location": "L35",
+      "id": "safari_argen_capture_readme_manual_install_without_xcode",
+      "community": 75,
+      "norm_label": "manual install (without xcode)"
+    },
+    {
+      "label": "Development",
+      "file_type": "document",
+      "source_file": "extensions/safari-argen-capture/README.md",
+      "source_location": "L42",
+      "id": "safari_argen_capture_readme_development",
+      "community": 75,
+      "norm_label": "development"
+    },
+    {
+      "label": "background.js",
+      "file_type": "code",
+      "source_file": "extensions/safari-argen-capture/background.js",
+      "source_location": "L1",
+      "id": "extensions_safari_argen_capture_background_js",
+      "community": 79,
+      "norm_label": "background.js"
+    },
+    {
+      "label": "generateSessionId()",
+      "file_type": "code",
+      "source_file": "extensions/safari-argen-capture/background.js",
+      "source_location": "L5",
+      "id": "safari_argen_capture_background_generatesessionid",
+      "community": 79,
+      "norm_label": "generatesessionid()"
+    },
+    {
+      "label": "aiSites",
+      "file_type": "code",
+      "source_file": "extensions/safari-argen-capture/background.js",
+      "source_location": "L46",
+      "id": "safari_argen_capture_background_aisites",
+      "community": 79,
+      "norm_label": "aisites"
+    },
+    {
+      "label": "isAISite",
+      "file_type": "code",
+      "source_file": "extensions/safari-argen-capture/background.js",
+      "source_location": "L47",
+      "id": "safari_argen_capture_background_isaisite",
+      "community": 79,
+      "norm_label": "isaisite"
+    },
+    {
+      "label": "content-capturer-chatgpt.js",
+      "file_type": "code",
+      "source_file": "extensions/safari-argen-capture/content-capturer-chatgpt.js",
+      "source_location": "L1",
+      "id": "extensions_safari_argen_capture_content_capturer_chatgpt_js",
+      "community": 78,
+      "norm_label": "content-capturer-chatgpt.js"
+    },
+    {
+      "label": "extractPrompt()",
+      "file_type": "code",
+      "source_file": "extensions/safari-argen-capture/content-capturer-chatgpt.js",
+      "source_location": "L3",
+      "id": "safari_argen_capture_content_capturer_chatgpt_extractprompt",
+      "community": 78,
+      "norm_label": "extractprompt()"
+    },
+    {
+      "label": "extractCompletion()",
+      "file_type": "code",
+      "source_file": "extensions/safari-argen-capture/content-capturer-chatgpt.js",
+      "source_location": "L13",
+      "id": "safari_argen_capture_content_capturer_chatgpt_extractcompletion",
+      "community": 78,
+      "norm_label": "extractcompletion()"
+    },
+    {
+      "label": "captureInteraction()",
+      "file_type": "code",
+      "source_file": "extensions/safari-argen-capture/content-capturer-chatgpt.js",
+      "source_location": "L21",
+      "id": "safari_argen_capture_content_capturer_chatgpt_captureinteraction",
+      "community": 78,
+      "norm_label": "captureinteraction()"
+    },
+    {
+      "label": "observer",
+      "file_type": "code",
+      "source_file": "extensions/safari-argen-capture/content-capturer-chatgpt.js",
+      "source_location": "L45",
+      "id": "safari_argen_capture_content_capturer_chatgpt_observer",
+      "community": 78,
+      "norm_label": "observer"
+    },
+    {
+      "label": "content-capturer-claude.js",
+      "file_type": "code",
+      "source_file": "extensions/safari-argen-capture/content-capturer-claude.js",
+      "source_location": "L1",
+      "id": "extensions_safari_argen_capture_content_capturer_claude_js",
+      "community": 85,
+      "norm_label": "content-capturer-claude.js"
+    },
+    {
+      "label": "content-capturer-copilot.js",
+      "file_type": "code",
+      "source_file": "extensions/safari-argen-capture/content-capturer-copilot.js",
+      "source_location": "L1",
+      "id": "extensions_safari_argen_capture_content_capturer_copilot_js",
+      "community": 90,
+      "norm_label": "content-capturer-copilot.js"
+    },
+    {
+      "label": "content-capturer-gemini.js",
+      "file_type": "code",
+      "source_file": "extensions/safari-argen-capture/content-capturer-gemini.js",
+      "source_location": "L1",
+      "id": "extensions_safari_argen_capture_content_capturer_gemini_js",
+      "community": 91,
+      "norm_label": "content-capturer-gemini.js"
+    },
+    {
+      "label": "content-capturer-perplexity.js",
+      "file_type": "code",
+      "source_file": "extensions/safari-argen-capture/content-capturer-perplexity.js",
+      "source_location": "L1",
+      "id": "extensions_safari_argen_capture_content_capturer_perplexity_js",
+      "community": 92,
+      "norm_label": "content-capturer-perplexity.js"
+    },
+    {
+      "label": "manifest.json",
+      "file_type": "code",
+      "source_file": "extensions/safari-argen-capture/manifest.json",
+      "source_location": "L1",
+      "id": "extensions_safari_argen_capture_manifest_json",
+      "community": 70,
+      "norm_label": "manifest.json"
+    },
+    {
+      "label": "manifest_version",
+      "file_type": "code",
+      "source_file": "extensions/safari-argen-capture/manifest.json",
+      "source_location": "L2",
+      "id": "safari_argen_capture_manifest_manifest_version",
+      "community": 70,
+      "norm_label": "manifest_version"
+    },
+    {
+      "label": "name",
+      "file_type": "code",
+      "source_file": "extensions/safari-argen-capture/manifest.json",
+      "source_location": "L3",
+      "id": "safari_argen_capture_manifest_name",
+      "community": 70,
+      "norm_label": "name"
+    },
+    {
+      "label": "version",
+      "file_type": "code",
+      "source_file": "extensions/safari-argen-capture/manifest.json",
+      "source_location": "L4",
+      "id": "safari_argen_capture_manifest_version",
+      "community": 70,
+      "norm_label": "version"
+    },
+    {
+      "label": "description",
+      "file_type": "code",
+      "source_file": "extensions/safari-argen-capture/manifest.json",
+      "source_location": "L5",
+      "id": "safari_argen_capture_manifest_description",
+      "community": 70,
+      "norm_label": "description"
+    },
+    {
+      "label": "permissions",
+      "file_type": "code",
+      "source_file": "extensions/safari-argen-capture/manifest.json",
+      "source_location": "L6",
+      "id": "safari_argen_capture_manifest_permissions",
+      "community": 70,
+      "norm_label": "permissions"
+    },
+    {
+      "label": "host_permissions",
+      "file_type": "code",
+      "source_file": "extensions/safari-argen-capture/manifest.json",
+      "source_location": "L11",
+      "id": "safari_argen_capture_manifest_host_permissions",
+      "community": 70,
+      "norm_label": "host_permissions"
+    },
+    {
+      "label": "background",
+      "file_type": "code",
+      "source_file": "extensions/safari-argen-capture/manifest.json",
+      "source_location": "L20",
+      "id": "safari_argen_capture_manifest_background",
+      "community": 70,
+      "norm_label": "background"
+    },
+    {
+      "label": "scripts",
+      "file_type": "code",
+      "source_file": "extensions/safari-argen-capture/manifest.json",
+      "source_location": "L21",
+      "id": "safari_argen_capture_manifest_background_scripts",
+      "community": 70,
+      "norm_label": "scripts"
+    },
+    {
+      "label": "type",
+      "file_type": "code",
+      "source_file": "extensions/safari-argen-capture/manifest.json",
+      "source_location": "L22",
+      "id": "safari_argen_capture_manifest_background_type",
+      "community": 70,
+      "norm_label": "type"
+    },
+    {
+      "label": "content_scripts",
+      "file_type": "code",
+      "source_file": "extensions/safari-argen-capture/manifest.json",
+      "source_location": "L24",
+      "id": "safari_argen_capture_manifest_content_scripts",
+      "community": 70,
+      "norm_label": "content_scripts"
+    },
+    {
+      "label": "action",
+      "file_type": "code",
+      "source_file": "extensions/safari-argen-capture/manifest.json",
+      "source_location": "L51",
+      "id": "safari_argen_capture_manifest_action",
+      "community": 70,
+      "norm_label": "action"
+    },
+    {
+      "label": "default_popup",
+      "file_type": "code",
+      "source_file": "extensions/safari-argen-capture/manifest.json",
+      "source_location": "L52",
+      "id": "safari_argen_capture_manifest_action_default_popup",
+      "community": 70,
+      "norm_label": "default_popup"
+    },
+    {
+      "label": "default_title",
+      "file_type": "code",
+      "source_file": "extensions/safari-argen-capture/manifest.json",
+      "source_location": "L53",
+      "id": "safari_argen_capture_manifest_action_default_title",
+      "community": 70,
+      "norm_label": "default_title"
+    },
+    {
+      "label": "default_icon",
+      "file_type": "code",
+      "source_file": "extensions/safari-argen-capture/manifest.json",
+      "source_location": "L54",
+      "id": "safari_argen_capture_manifest_action_default_icon",
+      "community": 70,
+      "norm_label": "default_icon"
+    },
+    {
+      "label": "16",
+      "file_type": "code",
+      "source_file": "extensions/safari-argen-capture/manifest.json",
+      "source_location": "L55",
+      "id": "safari_argen_capture_manifest_default_icon_16",
+      "community": 70,
+      "norm_label": "16"
+    },
+    {
+      "label": "48",
+      "file_type": "code",
+      "source_file": "extensions/safari-argen-capture/manifest.json",
+      "source_location": "L56",
+      "id": "safari_argen_capture_manifest_default_icon_48",
+      "community": 70,
+      "norm_label": "48"
+    },
+    {
+      "label": "128",
+      "file_type": "code",
+      "source_file": "extensions/safari-argen-capture/manifest.json",
+      "source_location": "L57",
+      "id": "safari_argen_capture_manifest_default_icon_128",
+      "community": 70,
+      "norm_label": "128"
+    },
+    {
+      "label": "icons",
+      "file_type": "code",
+      "source_file": "extensions/safari-argen-capture/manifest.json",
+      "source_location": "L60",
+      "id": "safari_argen_capture_manifest_icons",
+      "community": 70,
+      "norm_label": "icons"
+    },
+    {
+      "label": "16",
+      "file_type": "code",
+      "source_file": "extensions/safari-argen-capture/manifest.json",
+      "source_location": "L61",
+      "id": "safari_argen_capture_manifest_icons_16",
+      "community": 70,
+      "norm_label": "16"
+    },
+    {
+      "label": "48",
+      "file_type": "code",
+      "source_file": "extensions/safari-argen-capture/manifest.json",
+      "source_location": "L62",
+      "id": "safari_argen_capture_manifest_icons_48",
+      "community": 70,
+      "norm_label": "48"
+    },
+    {
+      "label": "128",
+      "file_type": "code",
+      "source_file": "extensions/safari-argen-capture/manifest.json",
+      "source_location": "L63",
+      "id": "safari_argen_capture_manifest_icons_128",
+      "community": 70,
+      "norm_label": "128"
+    },
+    {
+      "label": "popup.js",
+      "file_type": "code",
+      "source_file": "extensions/safari-argen-capture/popup.js",
+      "source_location": "L1",
+      "id": "extensions_safari_argen_capture_popup_js",
+      "community": 81,
+      "norm_label": "popup.js"
+    },
+    {
+      "label": "init()",
+      "file_type": "code",
+      "source_file": "extensions/safari-argen-capture/popup.js",
+      "source_location": "L3",
+      "id": "safari_argen_capture_popup_init",
+      "community": 81,
+      "norm_label": "init()"
+    },
+    {
+      "label": "README.md",
+      "file_type": "document",
       "source_file": "extensions/vscode-argen-capture/README.md",
       "source_location": "L1",
       "id": "extensions_vscode_argen_capture_readme_md",
@@ -5305,10 +5683,19 @@
       "norm_label": "getcookie()"
     },
     {
+      "label": "urlParams",
+      "file_type": "code",
+      "source_file": "frontend/js/auth-guard.js",
+      "source_location": "L21",
+      "id": "js_auth_guard_urlparams",
+      "community": 14,
+      "norm_label": "urlparams"
+    },
+    {
       "label": "superadminPaths",
       "file_type": "code",
       "source_file": "frontend/js/auth-guard.js",
-      "source_location": "L19",
+      "source_location": "L31",
       "id": "js_auth_guard_superadminpaths",
       "community": 14,
       "norm_label": "superadminpaths"
@@ -5317,7 +5704,7 @@
       "label": "isAdminPath",
       "file_type": "code",
       "source_file": "frontend/js/auth-guard.js",
-      "source_location": "L20",
+      "source_location": "L32",
       "id": "js_auth_guard_isadminpath",
       "community": 14,
       "norm_label": "isadminpath"
@@ -5326,25 +5713,16 @@
       "label": "token",
       "file_type": "code",
       "source_file": "frontend/js/auth-guard.js",
-      "source_location": "L26",
+      "source_location": "L38",
       "id": "js_auth_guard_token",
       "community": 14,
       "norm_label": "token"
     },
     {
-      "label": "urlParams",
-      "file_type": "code",
-      "source_file": "frontend/js/auth-guard.js",
-      "source_location": "L35",
-      "id": "js_auth_guard_urlparams",
-      "community": 14,
-      "norm_label": "urlparams"
-    },
-    {
       "label": "urlTeamCode",
       "file_type": "code",
       "source_file": "frontend/js/auth-guard.js",
-      "source_location": "L36",
+      "source_location": "L47",
       "id": "js_auth_guard_urlteamcode",
       "community": 14,
       "norm_label": "urlteamcode"
@@ -5353,7 +5731,7 @@
       "label": "urlToken",
       "file_type": "code",
       "source_file": "frontend/js/auth-guard.js",
-      "source_location": "L43",
+      "source_location": "L54",
       "id": "js_auth_guard_urltoken",
       "community": 14,
       "norm_label": "urltoken"
@@ -5362,7 +5740,7 @@
       "label": "userStr",
       "file_type": "code",
       "source_file": "frontend/js/auth-guard.js",
-      "source_location": "L53",
+      "source_location": "L64",
       "id": "js_auth_guard_userstr",
       "community": 14,
       "norm_label": "userstr"
@@ -5371,7 +5749,7 @@
       "label": "regularToken",
       "file_type": "code",
       "source_file": "frontend/js/auth-guard.js",
-      "source_location": "L63",
+      "source_location": "L74",
       "id": "js_auth_guard_regulartoken",
       "community": 14,
       "norm_label": "regulartoken"
@@ -5380,7 +5758,7 @@
       "label": "regularUserStr",
       "file_type": "code",
       "source_file": "frontend/js/auth-guard.js",
-      "source_location": "L64",
+      "source_location": "L75",
       "id": "js_auth_guard_regularuserstr",
       "community": 14,
       "norm_label": "regularuserstr"
@@ -5389,7 +5767,7 @@
       "label": "regularUser",
       "file_type": "code",
       "source_file": "frontend/js/auth-guard.js",
-      "source_location": "L67",
+      "source_location": "L78",
       "id": "js_auth_guard_regularuser",
       "community": 14,
       "norm_label": "regularuser"
@@ -5398,7 +5776,7 @@
       "label": "teamadminPaths",
       "file_type": "code",
       "source_file": "frontend/js/auth-guard.js",
-      "source_location": "L81",
+      "source_location": "L92",
       "id": "js_auth_guard_teamadminpaths",
       "community": 14,
       "norm_label": "teamadminpaths"
@@ -5407,7 +5785,7 @@
       "label": "onboardingPaths",
       "file_type": "code",
       "source_file": "frontend/js/auth-guard.js",
-      "source_location": "L82",
+      "source_location": "L93",
       "id": "js_auth_guard_onboardingpaths",
       "community": 14,
       "norm_label": "onboardingpaths"
@@ -5416,7 +5794,7 @@
       "label": "memberPaths",
       "file_type": "code",
       "source_file": "frontend/js/auth-guard.js",
-      "source_location": "L83",
+      "source_location": "L94",
       "id": "js_auth_guard_memberpaths",
       "community": 14,
       "norm_label": "memberpaths"
@@ -5425,7 +5803,7 @@
       "label": "isProtected",
       "file_type": "code",
       "source_file": "frontend/js/auth-guard.js",
-      "source_location": "L86",
+      "source_location": "L97",
       "id": "js_auth_guard_isprotected",
       "community": 14,
       "norm_label": "isprotected"
@@ -5434,7 +5812,7 @@
       "label": "isSuperadminPath",
       "file_type": "code",
       "source_file": "frontend/js/auth-guard.js",
-      "source_location": "L90",
+      "source_location": "L101",
       "id": "js_auth_guard_issuperadminpath",
       "community": 14,
       "norm_label": "issuperadminpath"
@@ -5443,7 +5821,7 @@
       "label": "isOnboardingPath",
       "file_type": "code",
       "source_file": "frontend/js/auth-guard.js",
-      "source_location": "L99",
+      "source_location": "L110",
       "id": "js_auth_guard_isonboardingpath",
       "community": 14,
       "norm_label": "isonboardingpath"
@@ -7658,7 +8036,7 @@
       "file_type": "code",
       "source_file": "backend/routes/scheduler.js",
       "source_location": "L1",
-      "community": 8,
+      "community": 88,
       "norm_label": "scheduler.js",
       "id": "backend_routes_scheduler_js"
     },
@@ -7667,7 +8045,7 @@
       "file_type": "code",
       "source_file": "backend/routes/scheduler.js",
       "source_location": "L1",
-      "community": 8,
+      "community": 88,
       "norm_label": "express",
       "id": "routes_scheduler_express"
     },
@@ -7676,7 +8054,7 @@
       "file_type": "code",
       "source_file": "backend/routes/scheduler.js",
       "source_location": "L2",
-      "community": 8,
+      "community": 88,
       "norm_label": "router",
       "id": "routes_scheduler_router"
     },
@@ -7685,7 +8063,7 @@
       "file_type": "code",
       "source_file": "backend/routes/scheduler.js",
       "source_location": "L3",
-      "community": 8,
+      "community": 88,
       "norm_label": "{ protect, authorize }",
       "id": "routes_scheduler_protect_authorize"
     },
@@ -7694,7 +8072,7 @@
       "file_type": "code",
       "source_file": "backend/routes/scheduler.js",
       "source_location": "L4",
-      "community": 8,
+      "community": 88,
       "norm_label": "{ db }",
       "id": "routes_scheduler_db"
     },
@@ -7703,7 +8081,7 @@
       "file_type": "code",
       "source_file": "backend/routes/scheduler.js",
       "source_location": "L5",
-      "community": 8,
+      "community": 88,
       "norm_label": "{ generateweeklyreport, generatecoachingnudge }",
       "id": "routes_scheduler_generateweeklyreport_generatecoachingnudge"
     },
@@ -7712,7 +8090,7 @@
       "file_type": "code",
       "source_file": "backend/routes/scheduler.js",
       "source_location": "L6",
-      "community": 8,
+      "community": 88,
       "norm_label": "sendemail",
       "id": "routes_scheduler_sendemail"
     },
@@ -7721,7 +8099,7 @@
       "file_type": "code",
       "source_file": "backend/routes/scheduler.js",
       "source_location": "L7",
-      "community": 8,
+      "community": 88,
       "norm_label": "{ createemailtemplate }",
       "id": "routes_scheduler_createemailtemplate"
     },
@@ -7730,7 +8108,7 @@
       "file_type": "code",
       "source_file": "backend/routes/scheduler.js",
       "source_location": "L10",
-      "community": 8,
+      "community": 88,
       "norm_label": "allowcron()",
       "id": "routes_scheduler_allowcron"
     },
@@ -7739,7 +8117,7 @@
       "file_type": "code",
       "source_file": "backend/routes/scheduler.js",
       "source_location": "L21",
-      "community": 8,
+      "community": 88,
       "norm_label": "handledailynudges()",
       "id": "routes_scheduler_handledailynudges"
     },
@@ -7748,7 +8126,7 @@
       "file_type": "code",
       "source_file": "backend/routes/scheduler.js",
       "source_location": "L66",
-      "community": 8,
+      "community": 88,
       "norm_label": "handleweeklyreports()",
       "id": "routes_scheduler_handleweeklyreports"
     },
@@ -7766,7 +8144,7 @@
       "file_type": "code",
       "source_file": "backend/routes/scheduler.js",
       "source_location": "L158",
-      "community": 8,
+      "community": 88,
       "norm_label": "handlestreakcheck()",
       "id": "routes_scheduler_handlestreakcheck"
     },
@@ -9512,7 +9890,7 @@
       "file_type": "code",
       "source_file": "backend/test_db_login.js",
       "source_location": "L1",
-      "community": 85,
+      "community": 88,
       "norm_label": "test_db_login.js",
       "id": "backend_test_db_login_js"
     },
@@ -9521,7 +9899,7 @@
       "file_type": "code",
       "source_file": "backend/test_db_login.js",
       "source_location": "L1",
-      "community": 85,
+      "community": 88,
       "norm_label": "mongoose",
       "id": "backend_test_db_login_mongoose"
     },
@@ -9530,7 +9908,7 @@
       "file_type": "code",
       "source_file": "backend/test_db_login.js",
       "source_location": "L2",
-      "community": 85,
+      "community": 88,
       "norm_label": "dotenv",
       "id": "backend_test_db_login_dotenv"
     },
@@ -9539,7 +9917,7 @@
       "file_type": "code",
       "source_file": "backend/test_db_login.js",
       "source_location": "L3",
-      "community": 85,
+      "community": 88,
       "norm_label": "path",
       "id": "backend_test_db_login_path"
     },
@@ -9548,7 +9926,7 @@
       "file_type": "code",
       "source_file": "backend/test_db_login.js",
       "source_location": "L4",
-      "community": 85,
+      "community": 88,
       "norm_label": "bcrypt",
       "id": "backend_test_db_login_bcrypt"
     },
@@ -9557,7 +9935,7 @@
       "file_type": "code",
       "source_file": "backend/test_db_login.js",
       "source_location": "L5",
-      "community": 85,
+      "community": 88,
       "norm_label": "jwt",
       "id": "backend_test_db_login_jwt"
     },
@@ -9566,7 +9944,7 @@
       "file_type": "code",
       "source_file": "backend/test_db_login.js",
       "source_location": "L9",
-      "community": 85,
+      "community": 88,
       "norm_label": "user",
       "id": "backend_test_db_login_user"
     },
@@ -9575,7 +9953,7 @@
       "file_type": "code",
       "source_file": "backend/test_db_login.js",
       "source_location": "L10",
-      "community": 85,
+      "community": 88,
       "norm_label": "company",
       "id": "backend_test_db_login_company"
     },
@@ -9584,7 +9962,7 @@
       "file_type": "code",
       "source_file": "backend/test_db_login.js",
       "source_location": "L12",
-      "community": 85,
+      "community": 88,
       "norm_label": "test()",
       "id": "backend_test_db_login_test"
     },
@@ -9818,7 +10196,7 @@
       "file_type": "code",
       "source_file": "backend/models/User.js",
       "source_location": "L1",
-      "community": 85,
+      "community": 88,
       "norm_label": "user.js",
       "id": "backend_models_user_js"
     },
@@ -9827,7 +10205,7 @@
       "file_type": "code",
       "source_file": "backend/models/User.js",
       "source_location": "L1",
-      "community": 85,
+      "community": 88,
       "norm_label": "mongoose",
       "id": "models_user_mongoose"
     },
@@ -9836,7 +10214,7 @@
       "file_type": "code",
       "source_file": "backend/models/User.js",
       "source_location": "L2",
-      "community": 85,
+      "community": 88,
       "norm_label": "bcrypt",
       "id": "models_user_bcrypt"
     },
@@ -9845,7 +10223,7 @@
       "file_type": "code",
       "source_file": "backend/models/User.js",
       "source_location": "L4",
-      "community": 85,
+      "community": 88,
       "norm_label": "userschema",
       "id": "models_user_userschema"
     },
@@ -9872,7 +10250,7 @@
       "file_type": "code",
       "source_file": "backend/models/Company.js",
       "source_location": "L1",
-      "community": 8,
+      "community": 88,
       "norm_label": "company.js",
       "id": "backend_models_company_js"
     },
@@ -9881,7 +10259,7 @@
       "file_type": "code",
       "source_file": "backend/models/Company.js",
       "source_location": "L1",
-      "community": 8,
+      "community": 88,
       "norm_label": "mongoose",
       "id": "models_company_mongoose"
     },
@@ -9890,7 +10268,7 @@
       "file_type": "code",
       "source_file": "backend/models/Company.js",
       "source_location": "L3",
-      "community": 8,
+      "community": 88,
       "norm_label": "companyschema",
       "id": "models_company_companyschema"
     },
@@ -9926,7 +10304,7 @@
       "file_type": "code",
       "source_file": "backend/models/Invitation.js",
       "source_location": "L1",
-      "community": 70,
+      "community": 8,
       "norm_label": "invitation.js",
       "id": "backend_models_invitation_js"
     },
@@ -9935,7 +10313,7 @@
       "file_type": "code",
       "source_file": "backend/models/Invitation.js",
       "source_location": "L1",
-      "community": 70,
+      "community": 8,
       "norm_label": "mongoose",
       "id": "models_invitation_mongoose"
     },
@@ -9944,7 +10322,7 @@
       "file_type": "code",
       "source_file": "backend/models/Invitation.js",
       "source_location": "L3",
-      "community": 70,
+      "community": 8,
       "norm_label": "invitationschema",
       "id": "models_invitation_invitationschema"
     },
@@ -9998,7 +10376,7 @@
       "file_type": "code",
       "source_file": "backend/scripts/initAdmin.js",
       "source_location": "L1",
-      "community": 85,
+      "community": 88,
       "norm_label": "initadmin.js",
       "id": "backend_scripts_initadmin_js"
     },
@@ -10007,7 +10385,7 @@
       "file_type": "code",
       "source_file": "backend/scripts/initAdmin.js",
       "source_location": "L1",
-      "community": 85,
+      "community": 88,
       "norm_label": "mongoose",
       "id": "scripts_initadmin_mongoose"
     },
@@ -10016,7 +10394,7 @@
       "file_type": "code",
       "source_file": "backend/scripts/initAdmin.js",
       "source_location": "L2",
-      "community": 85,
+      "community": 88,
       "norm_label": "bcrypt",
       "id": "scripts_initadmin_bcrypt"
     },
@@ -10025,7 +10403,7 @@
       "file_type": "code",
       "source_file": "backend/scripts/initAdmin.js",
       "source_location": "L3",
-      "community": 85,
+      "community": 88,
       "norm_label": "dotenv",
       "id": "scripts_initadmin_dotenv"
     },
@@ -10034,7 +10412,7 @@
       "file_type": "code",
       "source_file": "backend/scripts/initAdmin.js",
       "source_location": "L4",
-      "community": 85,
+      "community": 88,
       "norm_label": "user",
       "id": "scripts_initadmin_user"
     },
@@ -10043,7 +10421,7 @@
       "file_type": "code",
       "source_file": "backend/scripts/initAdmin.js",
       "source_location": "L8",
-      "community": 85,
+      "community": 88,
       "norm_label": "initadmin()",
       "id": "scripts_initadmin_initadmin"
     },
@@ -12593,9 +12971,9 @@
       "source_file": "backend/routes/auth.js",
       "source_location": "L973",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "backend_routes_auth_js",
-      "target": "routes_auth_enriched",
-      "confidence_score": 1.0
+      "target": "routes_auth_enriched"
     },
     {
       "relation": "contains",
@@ -12603,9 +12981,9 @@
       "source_file": "backend/routes/auth.js",
       "source_location": "L1005",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "backend_routes_auth_js",
-      "target": "routes_auth_match",
-      "confidence_score": 1.0
+      "target": "routes_auth_match"
     },
     {
       "relation": "contains",
@@ -12613,9 +12991,9 @@
       "source_file": "backend/routes/auth.js",
       "source_location": "L1039",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "backend_routes_auth_js",
-      "target": "routes_auth_results",
-      "confidence_score": 1.0
+      "target": "routes_auth_results"
     },
     {
       "relation": "contains",
@@ -12623,9 +13001,9 @@
       "source_file": "backend/routes/auth.js",
       "source_location": "L1050",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "backend_routes_auth_js",
-      "target": "routes_auth_thismonth",
-      "confidence_score": 1.0
+      "target": "routes_auth_thismonth"
     },
     {
       "relation": "contains",
@@ -12633,9 +13011,9 @@
       "source_file": "backend/routes/auth.js",
       "source_location": "L1057",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "backend_routes_auth_js",
-      "target": "routes_auth_d2",
-      "confidence_score": 1.0
+      "target": "routes_auth_d2"
     },
     {
       "relation": "imports_from",
@@ -13374,6 +13752,16 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "backend/routes/proxy.js",
+      "source_location": "L25",
+      "weight": 1.0,
+      "source": "backend_routes_proxy_js",
+      "target": "routes_proxy_getargenapikey",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/routes/proxy.js",
       "source_location": "L22",
       "weight": 1.0,
       "confidence_score": 1.0,
@@ -13411,27 +13799,6 @@
       "target": "routes_proxy_gettotalinputtokens"
     },
     {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "backend/routes/proxy.js",
-      "source_location": "L83",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "backend_routes_proxy_js",
-      "target": "utils_ai_providers_decrypt"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "backend/routes/proxy.js",
-      "source_location": "L83",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "backend_routes_proxy_js",
-      "target": "routes_proxy_decrypt"
-    },
-    {
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "backend/routes/proxy.js",
@@ -13445,41 +13812,11 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "backend/routes/proxy.js",
-      "source_location": "L122",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "backend_routes_proxy_js",
-      "target": "routes_proxy_inputcost"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "backend/routes/proxy.js",
-      "source_location": "L123",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "backend_routes_proxy_js",
-      "target": "routes_proxy_outputcost"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "backend/routes/proxy.js",
       "source_location": "L146",
       "weight": 1.0,
       "confidence_score": 1.0,
       "source": "backend_routes_proxy_js",
       "target": "routes_proxy_dailyref"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "backend/routes/proxy.js",
-      "source_location": "L158",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "backend_routes_proxy_js",
-      "target": "routes_proxy_tracking"
     },
     {
       "relation": "contains",
@@ -13580,6 +13917,17 @@
       "confidence_score": 1.0,
       "source": "backend_routes_proxy_js",
       "target": "routes_proxy_transactions"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/routes/proxy.js",
+      "source_location": "L83",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "backend_routes_proxy_js",
+      "target": "utils_ai_providers_decrypt"
     },
     {
       "relation": "calls",
@@ -17290,6 +17638,388 @@
     {
       "relation": "contains",
       "confidence": "EXTRACTED",
+      "source_file": "extensions/safari-argen-capture/README.md",
+      "source_location": "L1",
+      "weight": 1.0,
+      "source": "extensions_safari_argen_capture_readme_md",
+      "target": "safari_argen_capture_readme_argen_safari_extension",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "extensions/safari-argen-capture/README.md",
+      "source_location": "L5",
+      "weight": 1.0,
+      "source": "safari_argen_capture_readme_argen_safari_extension",
+      "target": "safari_argen_capture_readme_building_for_safari",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "extensions/safari-argen-capture/README.md",
+      "source_location": "L9",
+      "weight": 1.0,
+      "source": "safari_argen_capture_readme_building_for_safari",
+      "target": "safari_argen_capture_readme_prerequisites",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "extensions/safari-argen-capture/README.md",
+      "source_location": "L13",
+      "weight": 1.0,
+      "source": "safari_argen_capture_readme_building_for_safari",
+      "target": "safari_argen_capture_readme_steps",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "extensions/safari-argen-capture/README.md",
+      "source_location": "L35",
+      "weight": 1.0,
+      "source": "safari_argen_capture_readme_building_for_safari",
+      "target": "safari_argen_capture_readme_manual_install_without_xcode",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "extensions/safari-argen-capture/README.md",
+      "source_location": "L42",
+      "weight": 1.0,
+      "source": "safari_argen_capture_readme_building_for_safari",
+      "target": "safari_argen_capture_readme_development",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "extensions/safari-argen-capture/README.md",
+      "source_location": "L16",
+      "weight": 1.0,
+      "source": "safari_argen_capture_readme_steps",
+      "target": "safari_argen_capture_readme_codeblock_1",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "extensions/safari-argen-capture/background.js",
+      "source_location": "L5",
+      "weight": 1.0,
+      "source": "extensions_safari_argen_capture_background_js",
+      "target": "safari_argen_capture_background_generatesessionid",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "extensions/safari-argen-capture/background.js",
+      "source_location": "L46",
+      "weight": 1.0,
+      "source": "extensions_safari_argen_capture_background_js",
+      "target": "safari_argen_capture_background_aisites",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "extensions/safari-argen-capture/background.js",
+      "source_location": "L47",
+      "weight": 1.0,
+      "source": "extensions_safari_argen_capture_background_js",
+      "target": "safari_argen_capture_background_isaisite",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "extensions/safari-argen-capture/content-capturer-chatgpt.js",
+      "source_location": "L3",
+      "weight": 1.0,
+      "source": "extensions_safari_argen_capture_content_capturer_chatgpt_js",
+      "target": "safari_argen_capture_content_capturer_chatgpt_extractprompt",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "extensions/safari-argen-capture/content-capturer-chatgpt.js",
+      "source_location": "L13",
+      "weight": 1.0,
+      "source": "extensions_safari_argen_capture_content_capturer_chatgpt_js",
+      "target": "safari_argen_capture_content_capturer_chatgpt_extractcompletion",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "extensions/safari-argen-capture/content-capturer-chatgpt.js",
+      "source_location": "L21",
+      "weight": 1.0,
+      "source": "extensions_safari_argen_capture_content_capturer_chatgpt_js",
+      "target": "safari_argen_capture_content_capturer_chatgpt_captureinteraction",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "extensions/safari-argen-capture/content-capturer-chatgpt.js",
+      "source_location": "L45",
+      "weight": 1.0,
+      "source": "extensions_safari_argen_capture_content_capturer_chatgpt_js",
+      "target": "safari_argen_capture_content_capturer_chatgpt_observer",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "extensions/safari-argen-capture/content-capturer-chatgpt.js",
+      "source_location": "L22",
+      "weight": 1.0,
+      "source": "safari_argen_capture_content_capturer_chatgpt_captureinteraction",
+      "target": "safari_argen_capture_content_capturer_chatgpt_extractprompt",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "extensions/safari-argen-capture/content-capturer-chatgpt.js",
+      "source_location": "L23",
+      "weight": 1.0,
+      "source": "safari_argen_capture_content_capturer_chatgpt_captureinteraction",
+      "target": "safari_argen_capture_content_capturer_chatgpt_extractcompletion",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "extensions/safari-argen-capture/manifest.json",
+      "source_location": "L2",
+      "weight": 1.0,
+      "source": "extensions_safari_argen_capture_manifest_json",
+      "target": "safari_argen_capture_manifest_manifest_version",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "extensions/safari-argen-capture/manifest.json",
+      "source_location": "L3",
+      "weight": 1.0,
+      "source": "extensions_safari_argen_capture_manifest_json",
+      "target": "safari_argen_capture_manifest_name",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "extensions/safari-argen-capture/manifest.json",
+      "source_location": "L4",
+      "weight": 1.0,
+      "source": "extensions_safari_argen_capture_manifest_json",
+      "target": "safari_argen_capture_manifest_version",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "extensions/safari-argen-capture/manifest.json",
+      "source_location": "L5",
+      "weight": 1.0,
+      "source": "extensions_safari_argen_capture_manifest_json",
+      "target": "safari_argen_capture_manifest_description",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "extensions/safari-argen-capture/manifest.json",
+      "source_location": "L6",
+      "weight": 1.0,
+      "source": "extensions_safari_argen_capture_manifest_json",
+      "target": "safari_argen_capture_manifest_permissions",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "extensions/safari-argen-capture/manifest.json",
+      "source_location": "L11",
+      "weight": 1.0,
+      "source": "extensions_safari_argen_capture_manifest_json",
+      "target": "safari_argen_capture_manifest_host_permissions",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "extensions/safari-argen-capture/manifest.json",
+      "source_location": "L20",
+      "weight": 1.0,
+      "source": "extensions_safari_argen_capture_manifest_json",
+      "target": "safari_argen_capture_manifest_background",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "extensions/safari-argen-capture/manifest.json",
+      "source_location": "L24",
+      "weight": 1.0,
+      "source": "extensions_safari_argen_capture_manifest_json",
+      "target": "safari_argen_capture_manifest_content_scripts",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "extensions/safari-argen-capture/manifest.json",
+      "source_location": "L51",
+      "weight": 1.0,
+      "source": "extensions_safari_argen_capture_manifest_json",
+      "target": "safari_argen_capture_manifest_action",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "extensions/safari-argen-capture/manifest.json",
+      "source_location": "L60",
+      "weight": 1.0,
+      "source": "extensions_safari_argen_capture_manifest_json",
+      "target": "safari_argen_capture_manifest_icons",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "extensions/safari-argen-capture/manifest.json",
+      "source_location": "L21",
+      "weight": 1.0,
+      "source": "safari_argen_capture_manifest_background",
+      "target": "safari_argen_capture_manifest_background_scripts",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "extensions/safari-argen-capture/manifest.json",
+      "source_location": "L22",
+      "weight": 1.0,
+      "source": "safari_argen_capture_manifest_background",
+      "target": "safari_argen_capture_manifest_background_type",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "extensions/safari-argen-capture/manifest.json",
+      "source_location": "L52",
+      "weight": 1.0,
+      "source": "safari_argen_capture_manifest_action",
+      "target": "safari_argen_capture_manifest_action_default_popup",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "extensions/safari-argen-capture/manifest.json",
+      "source_location": "L53",
+      "weight": 1.0,
+      "source": "safari_argen_capture_manifest_action",
+      "target": "safari_argen_capture_manifest_action_default_title",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "extensions/safari-argen-capture/manifest.json",
+      "source_location": "L54",
+      "weight": 1.0,
+      "source": "safari_argen_capture_manifest_action",
+      "target": "safari_argen_capture_manifest_action_default_icon",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "extensions/safari-argen-capture/manifest.json",
+      "source_location": "L55",
+      "weight": 1.0,
+      "source": "safari_argen_capture_manifest_action_default_icon",
+      "target": "safari_argen_capture_manifest_default_icon_16",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "extensions/safari-argen-capture/manifest.json",
+      "source_location": "L56",
+      "weight": 1.0,
+      "source": "safari_argen_capture_manifest_action_default_icon",
+      "target": "safari_argen_capture_manifest_default_icon_48",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "extensions/safari-argen-capture/manifest.json",
+      "source_location": "L57",
+      "weight": 1.0,
+      "source": "safari_argen_capture_manifest_action_default_icon",
+      "target": "safari_argen_capture_manifest_default_icon_128",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "extensions/safari-argen-capture/manifest.json",
+      "source_location": "L61",
+      "weight": 1.0,
+      "source": "safari_argen_capture_manifest_icons",
+      "target": "safari_argen_capture_manifest_icons_16",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "extensions/safari-argen-capture/manifest.json",
+      "source_location": "L62",
+      "weight": 1.0,
+      "source": "safari_argen_capture_manifest_icons",
+      "target": "safari_argen_capture_manifest_icons_48",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "extensions/safari-argen-capture/manifest.json",
+      "source_location": "L63",
+      "weight": 1.0,
+      "source": "safari_argen_capture_manifest_icons",
+      "target": "safari_argen_capture_manifest_icons_128",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "extensions/safari-argen-capture/popup.js",
+      "source_location": "L3",
+      "weight": 1.0,
+      "source": "extensions_safari_argen_capture_popup_js",
+      "target": "safari_argen_capture_popup_init",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
       "source_file": "extensions/vscode-argen-capture/README.md",
       "source_location": "L1",
       "weight": 1.0,
@@ -17973,6 +18703,16 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "frontend/js/auth-guard.js",
+      "source_location": "L31",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "frontend_js_auth_guard_js",
+      "target": "js_auth_guard_urlparams"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/js/auth-guard.js",
       "source_location": "L26",
       "weight": 1.0,
       "confidence_score": 1.0,
@@ -17998,16 +18738,6 @@
       "confidence_score": 1.0,
       "source": "frontend_js_auth_guard_js",
       "target": "js_auth_guard_token"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/js/auth-guard.js",
-      "source_location": "L31",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "frontend_js_auth_guard_js",
-      "target": "js_auth_guard_urlparams"
     },
     {
       "relation": "contains",
@@ -18285,9 +19015,9 @@
       "source_file": "frontend/js/dashboard.js",
       "source_location": "L150",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "frontend_js_dashboard_js",
-      "target": "js_dashboard_loadmultiorgcomparison",
-      "confidence_score": 1.0
+      "target": "js_dashboard_loadmultiorgcomparison"
     },
     {
       "relation": "contains",
@@ -18295,9 +19025,9 @@
       "source_file": "frontend/js/dashboard.js",
       "source_location": "L212",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "frontend_js_dashboard_js",
-      "target": "js_dashboard_switchtoorg",
-      "confidence_score": 1.0
+      "target": "js_dashboard_switchtoorg"
     },
     {
       "relation": "contains",
@@ -18590,9 +19320,9 @@
       "source_file": "frontend/js/dashboard.js",
       "source_location": "L143",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "js_dashboard_initadmindashboard",
-      "target": "js_dashboard_loadmultiorgcomparison",
-      "confidence_score": 1.0
+      "target": "js_dashboard_loadmultiorgcomparison"
     },
     {
       "relation": "calls",
@@ -24091,5 +24821,5 @@
     }
   ],
   "hyperedges": [],
-  "built_at_commit": "b0d210091f9ce25aba8248cdb59e16200d1a6c31"
+  "built_at_commit": "92aab2e5f173e86bf9a9d53da08423b452b570c4"
 }

@@ -75,10 +75,12 @@ The `frontend/js/api.js` file auto-detects the environment:
 
 ## 🗄️ Database
 
-- **Provider:** Supabase (PostgreSQL)
-- **Auth:** Supabase Auth with JWT tokens
-- **Connection:** Configured via `SUPABASE_URL` and `SUPABASE_SERVICE_ROLE_KEY` in `.env`
-- **Fallback:** If Supabase connection fails, `global.MOCK_DB = true` — all routes return hardcoded mock data (only for local dev; production blocks mock mode)
+- **Provider:** Firebase Firestore (PostgreSQL via Supabase was removed)
+- **Auth:** Firebase Auth (Admin SDK v14 with JWT tokens + custom JWT fallback)
+- **Connection:** Configured via `FIREBASE_PROJECT_ID`, `FIREBASE_CLIENT_EMAIL`, `FIREBASE_PRIVATE_KEY_BASE64` in `.env`
+- **Firestore database name:** `default` (not `(default)`) — the REST API and gcloud CLI require explicit `--database=default` flag
+- **Admin SDK call:** `getFirestore('default')` — v14 requires explicit database ID
+- **Mock fallback:** If Firebase connection fails, `global.MOCK_DB = true` — mock data only for local dev, blocked in production
 
 ---
 
@@ -120,8 +122,10 @@ All agents use a primary provider chain prioritizing NVIDIA NIM models (Llama 3.
 |-----|---------|
 | Key | Purpose | Required |
 |-----|---------|----------|
-| `SUPABASE_URL` | Supabase project URL | ✅ |
-| `SUPABASE_SERVICE_ROLE_KEY` | Supabase service role private API key | ✅ |
+| `FIREBASE_PROJECT_ID` | Firebase project ID | ✅ |
+| `FIREBASE_CLIENT_EMAIL` | Firebase Admin SDK service account email | ✅ |
+| `FIREBASE_PRIVATE_KEY_BASE64` | Firebase Admin SDK private key (base64) | ✅ |
+| `FIREBASE_WEB_API_KEY` | Firebase Web API key (for client-side auth) | ✅ |
 | `JWT_SECRET` | JSON Web Token signing secret | ✅ |
 | `TOKEN_ENCRYPTION_KEY` | Encryption key for OAuth tokens (ai_connections) | ✅ |
 | `ADMIN_EMAIL` / `ADMIN_PASSWORD` | Superadmin login bypass credentials | Optional |
@@ -152,6 +156,9 @@ All agents use a primary provider chain prioritizing NVIDIA NIM models (Llama 3.
 ## 🐛 Known Issues & History
 
 ### Resolved
+- ✅ **Firestore indexes deployed (all 18):** All composite indexes for `where()`+`orderBy()` queries across `ai_usage_events`, `ai_proxy_transactions`, `ai_usage_daily`, `workflow_sessions`, `system_metrics`, `agent_analyses`, `api_keys`, `users`, `responses` are now in `CREATING` state. Deployed via `gcloud firestore indexes composite create --database=default`. Database name is literally `default` (not `(default)` as `gcloud` docs claim).
+- ✅ **Redirect loop fixed:** Root cause was missing Firestore composite indexes causing API 500 errors. Fixes: (1) `?cleared=1` URL param guard in auth-guard.js (replaces broken sessionStorage), (2) 18 indexes deployed, (3) proxy.js orderBy-before-where bug fixed, (4) duplicate `const urlParams` fixed
+- ✅ **Proxy reworked to zero-cost:** No longer uses user API keys from `ai_connections` — only records transaction metadata passively. `getArgenApiKey()` uses ArGen's own env vars for internal analysis only.
 - ✅ `api/index.js` had a literal `\n` instead of a real newline (caused `FUNCTION_INVOCATION_FAILED` on all Vercel API calls). Fixed.
 - ✅ Root `package.json` was missing `helmet`, `express-rate-limit`, `@whop/sdk`. Fixed.
 - ✅ macOS EPERM port binding — resolved by removing Screen Time/content restrictions on user's machine
@@ -159,8 +166,8 @@ All agents use a primary provider chain prioritizing NVIDIA NIM models (Llama 3.
 - ✅ Scroll indicator obscuring UI clicks — fixed with `pointer-events: none` in `style.css`
 - ✅ Admin portal layout broken — refactored to CSS grid sidebar layout
 - ✅ Missing mockup images causing 404 — replaced with working remote images
-- ✅ **MongoDB removal:** Deleted all Mongoose models, scripts, deps. Backend now uses only Supabase (PostgreSQL).
-- ✅ **Supabase frontend cleanup:** Removed "Supabase" from all visible UI text across login, onboarding, forgot-password, reset-password, oauth, and index pages.
+- ✅ **MongoDB removal:** Deleted all Mongoose models, scripts, deps. Backend now uses only Firebase/Firestore.
+- ✅ **Firebase frontend cleanup:** Removed "Supabase" from all visible UI text across login, onboarding, forgot-password, reset-password, oauth, and index pages.
 - ✅ **Header visibility:** Nav is now always visible (`transform: translateY(0)` by default). Removed scroll-hide behavior.
 - ✅ **Admin portal redesign:** Clean layout with sidebar tabs (Dashboard, Organizations, Users, Invitations, Monitor, Invoices), search/filter bars, edit/delete capabilities, organized modals.
 - ✅ **PDF report:** Branded standalone PDF with exec summary, dimension scores (with progress bars), recommendations, activity summary — generated in an iframe from `dashboard.js`.
@@ -239,6 +246,7 @@ GEMINI_API_KEY=<YOUR_GEMINI_API_KEY> graphify extract . --backend gemini
 |-----------|--------|---------|
 | **Firebase Auth** | ✅ 100% | createUser, getUser, updateUser, deleteUser, verifyIdToken, setCustomUserClaims, generatePasswordResetLink, signInWithPassword |
 | **Firestore** | ✅ 100% | CRUD, queries, where/orderBy/limit chaining — `eur3` Native mode, `getFirestore('default')` in Admin SDK v14 |
+| **Firestore Indexes** | ✅ 18 deployed | All composite indexes for `where()`+`orderBy()` across 9 collections — deployed via gcloud with `--database=default` |
 | **Admin Portal** | ✅ Working | Two-layer auth fixed, mock-token → superadmin, passcode accepts ADMIN_PASSWORD |
 | **Capture API** | ✅ Working | POST interaction/batch/session, mock-token + API key auth |
 | **API Keys** | ✅ Working | Generate/L/Revoke with `ag_` prefix |

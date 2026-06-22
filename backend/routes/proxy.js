@@ -227,17 +227,23 @@ router.get('/transactions', protect, async (req, res) => {
   const { provider, status, userId } = req.query;
 
   try {
-    let query = db.collection('ai_proxy_transactions')
+    // Firestore requires all .where() equality filters before .orderBy().
+    // To handle optional filters without requiring N composite indexes,
+    // we query with the required filter + orderBy (using (companyId, timestamp DESC) index)
+    // and apply optional filters client-side.
+    const snapshot = await db.collection('ai_proxy_transactions')
       .where('companyId', '==', companyId)
       .orderBy('timestamp', 'desc')
-      .limit(limit);
+      .limit(limit * 3)
+      .get();
 
-    if (provider) query = query.where('provider', '==', provider);
-    if (status) query = query.where('status', '==', status);
-    if (userId) query = query.where('userId', '==', userId);
+    let transactions = snapshot.docs.map(d => ({ id: d.id, ...d.data() }));
 
-    const snapshot = await query.get();
-    const transactions = snapshot.docs.map(d => ({ id: d.id, ...d.data() }));
+    if (provider) transactions = transactions.filter(t => t.provider === provider);
+    if (status) transactions = transactions.filter(t => t.status === status);
+    if (userId) transactions = transactions.filter(t => t.userId === userId);
+
+    transactions = transactions.slice(0, limit);
     res.json({ transactions, total: transactions.length });
   } catch (err) {
     console.error('[proxy/transactions] Error:', err.message);
